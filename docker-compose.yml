@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+  backend:
+    container_name: api-nestjs-auth-boilerplate
+    build: .
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    networks:
+      - network
+    ports:
+      - '${PORT}:${PORT}'
+    volumes:
+      - .:/home/api/nestjs/auth-boilerplate
+    restart: always
+    command: sh -c 'npx prisma migrate deploy & pnpm run start:dev'
+
+  postgres:
+    container_name: postgres-auth-boilerplate
+    image: postgres:16.3-alpine
+    networks:
+      - network
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+networks:
+  network:
+
+
+volumes:
+  postgres_data:
