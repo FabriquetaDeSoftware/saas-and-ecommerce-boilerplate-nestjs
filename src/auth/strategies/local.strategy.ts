@@ -1,8 +1,8 @@
 import { Strategy } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { Auth } from '../entities/auth.entity';
-import { SignInUseCase } from '../use_cases/sign_in.use_case';
+import { Auth } from '@auth/entities/auth.entity';
+import { SignInUseCase } from '@auth/use_cases/sign_in.use_case';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {

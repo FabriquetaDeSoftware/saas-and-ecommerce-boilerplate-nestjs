@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
-import { AuthController } from './auth.controller';
+import { AuthController } from '@auth/auth.controller';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtKeysConstants } from './constants/jwt_keys.constants';
-import { JwtAuthGuard } from './guards/jwt_auth.guard';
+import { jwtKeysConstants } from '@auth/constants/jwt_keys.constants';
+import { JwtAuthGuard } from '@auth/guards/jwt_auth.guard';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthRepository } from './repository/auth.repository';
-import { SignInUseCase } from './use_cases/sign_in.use_case';
-import { SignUpUseCase } from './use_cases/sign_up.use_case';
+import { AuthRepository } from '@auth/repository/auth.repository';
+import { SignInUseCase } from '@auth/use_cases/sign_in.use_case';
+import { SignUpUseCase } from '@auth/use_cases/sign_up.use_case';
+import { FindUserByEmailHelper } from './helpers/find_user_by_email.helper';
 
 @Module({
   imports: [
@@ -30,6 +31,10 @@ import { SignUpUseCase } from './use_cases/sign_up.use_case';
     {
       provide: 'IAuthRepository',
       useExisting: AuthRepository,
+    },
+    {
+      provide: 'IFindUserByEmailHelper',
+      useClass: FindUserByEmailHelper,
     },
     {
       provide: APP_GUARD,
