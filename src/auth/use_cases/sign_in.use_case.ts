@@ -1,15 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { SignInAuthDto } from '@auth/dto/ sign_in_auth.dto';
-import { Auth } from '@auth/entities/auth.entity';
-import { IGenericExecutable } from '@src/shared/interfaces/generic_executable.interface';
+import { SignInAuthDto } from '@src/auth/dto/sign_in_auth.dto';
+import { Auth } from '@src/auth/entities/auth.entity';
+import { ISignInUseCase } from '@src/auth/interfaces/use_cases/sign_in.use_case.interface';
+import { IFindUserByEmailHelper } from '../interfaces/helpers/find_user_by_email.helper.interface';
 
 @Injectable()
-export class SignInUseCase implements IGenericExecutable<SignInAuthDto, Auth> {
+export class SignInUseCase implements ISignInUseCase {
   @Inject('IFindUserByEmailHelper')
-  private readonly findUserByEmailHelper: IGenericExecutable<
-    string,
-    Auth | void
-  >;
+  private readonly findUserByEmailHelper: IFindUserByEmailHelper;
 
   public async execute(input: SignInAuthDto): Promise<Auth> {
     return await this.intermediary(input.email);

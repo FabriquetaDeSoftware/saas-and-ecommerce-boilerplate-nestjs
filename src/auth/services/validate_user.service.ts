@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { SignInAuthDto } from '../dto/ sign_in_auth.dto';
+import { SignInAuthDto } from '../dto/sign_in_auth.dto';
 import { Auth } from '../entities/auth.entity';
 import { IGenericExecutable } from '@src/shared/interfaces/generic_executable.interface';
 

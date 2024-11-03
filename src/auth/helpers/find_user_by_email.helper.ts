@@ -1,12 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Auth } from '../entities/auth.entity';
-import { IGenericExecutable } from '@src/shared/interfaces/generic_executable.interface';
-import { IAuthRepository } from '../interfaces/repository/auth.repository.interface';
+import { Auth } from '@src/auth/entities/auth.entity';
+import { IAuthRepository } from '@src/auth/interfaces/repository/auth.repository.interface';
+import { IFindUserByEmailHelper } from '@src/auth/interfaces/helpers/find_user_by_email.helper.interface';
 
 @Injectable()
-export class FindUserByEmailHelper
-  implements IGenericExecutable<string, Auth | void>
-{
+export class FindUserByEmailHelper implements IFindUserByEmailHelper {
   @Inject('IAuthRepository')
   private readonly authRepository: IAuthRepository;
 

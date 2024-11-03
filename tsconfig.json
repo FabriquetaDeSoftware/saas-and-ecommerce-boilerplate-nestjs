@@ -19,8 +19,6 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@src/*": ["src/*"],
-      "@shared/*": ["src/shared/*"],
-      "@auth/*": ["src/auth/*"],
     }
   }
 }
