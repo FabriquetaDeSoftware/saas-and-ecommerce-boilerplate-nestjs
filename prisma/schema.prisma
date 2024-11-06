@@ -12,6 +12,10 @@ model Auth {
   email    String @unique
   password String
 
+  // isAccountVerified          Boolean @default(false)
+  // newsletterSubscription     Boolean
+  // termsAndConditionsAccepted Boolean
+
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }

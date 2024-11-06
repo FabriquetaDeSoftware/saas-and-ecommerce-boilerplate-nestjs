@@ -5,7 +5,8 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ValidationPipe } from '@nestjs/common';
+import { ForbiddenException, ValidationPipe } from '@nestjs/common';
+import { serverConstant } from './shared/constants/server.constant';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -19,6 +20,18 @@ async function bootstrap() {
     }),
   );
 
+  const host = serverConstant.host;
+
+  app.enableCors({
+    origin: (origin, callback) => {
+      if (!origin || host.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new ForbiddenException('Not allowed by CORS'));
+      }
+    },
+  });
+
   const config = new DocumentBuilder()
     .setTitle('Api To Auth Boilerplate')
     .setDescription('API for testing auth boilerplate routes')
@@ -28,7 +41,8 @@ async function bootstrap() {
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
 
-  const PORT = parseInt(process.env.PORT);
-  await app.listen({ port: PORT, host: '0.0.0.0' });
+  const port = parseInt(serverConstant.port);
+
+  await app.listen({ port, host: '0.0.0.0' });
 }
 bootstrap();
