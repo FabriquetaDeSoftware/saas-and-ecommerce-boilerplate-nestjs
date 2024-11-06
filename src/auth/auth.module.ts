@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AuthController } from '@src/auth/auth.controller';
 import { PassportModule } from '@nestjs/passport';
-import { JwtModule } from '@nestjs/jwt';
-import { jwtKeysConstants } from '@src/auth/constants/jwt_keys.constants';
 import { JwtAuthGuard } from '@src/auth/guards/jwt_auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthRepository } from '@src/auth/repository/auth.repository';
@@ -15,15 +13,7 @@ import { SharedModule } from '@src/shared/shared.module';
 import { LocalStrategy } from './strategies/local.strategy';
 
 @Module({
-  imports: [
-    PrismaModule,
-    SharedModule,
-    PassportModule,
-    JwtModule.register({
-      secret: jwtKeysConstants.secret_token_key,
-      signOptions: { expiresIn: '30m' },
-    }),
-  ],
+  imports: [PrismaModule, SharedModule, PassportModule],
   controllers: [AuthController],
   providers: [
     LocalStrategy,

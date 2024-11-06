@@ -1,6 +1,6 @@
 import { SignInAuthDto } from '@src/auth/dto/sign_in_auth.dto';
-import { Auth } from '@src/auth/entities/auth.entity';
+import { ITokensReturns } from '@src/shared/interfaces/tokens_returns.interface';
 
 export interface ISignInUseCase {
-  execute(input: SignInAuthDto): Promise<Auth>;
+  execute(input: SignInAuthDto): Promise<ITokensReturns>;
 }

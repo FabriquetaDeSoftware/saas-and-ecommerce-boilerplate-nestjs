@@ -7,6 +7,7 @@ import { Auth } from './entities/auth.entity';
 import { IsPublicRoute } from '@src/shared/decorators/is_public_route.decorator';
 import { SignInAuthDto } from './dto/sign_in_auth.dto';
 import { LocalAuthGuard } from './guards/local_auth.guard';
+import { ITokensReturns } from '@src/shared/interfaces/tokens_returns.interface';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -20,7 +21,7 @@ export class AuthController {
   @IsPublicRoute()
   @UseGuards(LocalAuthGuard)
   @Post('sign-in')
-  public async signIn(@Body() input: SignInAuthDto): Promise<Auth> {
+  public async signIn(@Body() input: SignInAuthDto): Promise<ITokensReturns> {
     return await this.signInUseCase.execute(input);
   }
 
