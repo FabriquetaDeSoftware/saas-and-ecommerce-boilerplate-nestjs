@@ -1,4 +1,4 @@
 export interface ICryptoUtil {
-  encryptData(data: string): string;
-  decryptData(data: string): string;
+  encryptData(data: string): Promise<Buffer>;
+  decryptData(data: Buffer): Promise<Buffer>;
 }

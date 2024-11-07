@@ -3,6 +3,7 @@ import { HashUtil } from './utils/hash.util';
 import { GenerateTokenUtil } from './utils/generate_token.util';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtKeysConstants } from '@src/auth/constants/jwt_keys.constants';
+import { CryptoUtil } from './utils/crypto.util';
 
 @Module({
   imports: [
@@ -12,6 +13,11 @@ import { jwtKeysConstants } from '@src/auth/constants/jwt_keys.constants';
     }),
   ],
   providers: [
+    CryptoUtil,
+    {
+      provide: 'ICryptoUtil',
+      useExisting: CryptoUtil,
+    },
     GenerateTokenUtil,
     {
       provide: 'IGenerateTokenUtil',
@@ -23,6 +29,6 @@ import { jwtKeysConstants } from '@src/auth/constants/jwt_keys.constants';
       useExisting: HashUtil,
     },
   ],
-  exports: ['IHashUtil', 'IGenerateTokenUtil'],
+  exports: ['IHashUtil', 'IGenerateTokenUtil', 'ICryptoUtil'],
 })
 export class SharedModule {}
