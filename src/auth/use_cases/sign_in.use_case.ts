@@ -23,7 +23,7 @@ export class SignInUseCase implements ISignInUseCase {
 
     const { access_token, refresh_token } =
       await this.generateTokenUtil.execute({
-        sub: findUserByEmail.id,
+        sub: findUserByEmail.public_id,
         email: findUserByEmail.email,
       });
 

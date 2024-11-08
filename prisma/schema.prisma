@@ -8,9 +8,10 @@ datasource db {
 }
 
 model Auth {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
-  password String
+  id        Int    @id @default(autoincrement())
+  public_id String @unique @default(uuid())
+  email     String @unique
+  password  String
 
   // isAccountVerified          Boolean @default(false)
   // newsletterSubscription     Boolean

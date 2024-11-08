@@ -11,20 +11,10 @@ import { ValidateUserService } from './services/validate_user.service';
 import { PrismaModule } from '@src/prisma/prisma.module';
 import { SharedModule } from '@src/shared/shared.module';
 import { LocalStrategy } from './strategies/local.strategy';
-import { JwtModule } from '@nestjs/jwt';
-import { jwtKeysConstants } from './constants/jwt_keys.constants';
 import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
-  imports: [
-    PrismaModule,
-    SharedModule,
-    PassportModule,
-    JwtModule.register({
-      secret: jwtKeysConstants.secret_token_key,
-      signOptions: { expiresIn: '5m' },
-    }),
-  ],
+  imports: [PrismaModule, SharedModule, PassportModule],
   controllers: [AuthController],
   providers: [
     JwtStrategy,

@@ -14,13 +14,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: IJwtUserPayload) {
+  public async validate(payload: IJwtUserPayload): Promise<IJwtUserPayload> {
     if (payload.type !== 'access_token') {
       throw new UnauthorizedException('Invalid token');
     }
 
     return {
-      userId: payload.sub,
+      sub: payload.sub,
       email: payload.email,
     };
   }

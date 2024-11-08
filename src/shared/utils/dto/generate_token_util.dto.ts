@@ -1,10 +1,9 @@
-import { IsEmail, IsInt, IsNotEmpty, IsPositive } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 export class GenerateTokenUtilDto {
   @IsNotEmpty()
-  @IsInt()
-  @IsPositive()
-  sub: number;
+  @IsString()
+  sub: string;
 
   @IsNotEmpty()
   @IsEmail()

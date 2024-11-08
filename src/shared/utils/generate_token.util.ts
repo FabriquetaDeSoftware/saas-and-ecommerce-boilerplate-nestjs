@@ -5,16 +5,30 @@ import { JwtService } from '@nestjs/jwt';
 import { IJwtUserPayload } from '../interfaces/jwt_user_payload.interface';
 import { jwtKeysConstants } from '@src/auth/constants/jwt_keys.constants';
 import { IGenerateTokenUtil } from './interfaces/generate_token.util.interface';
+import { ICryptoUtil } from './interfaces/crypto.util.interface';
 
 @Injectable()
 export class GenerateTokenUtil implements IGenerateTokenUtil {
   @Inject()
-  private jwtService: JwtService;
+  private readonly jwtService: JwtService;
 
-  async execute(input: GenerateTokenUtilDto): Promise<ITokensReturns> {
+  @Inject('ICryptoUtil')
+  private readonly cryptoUtil: ICryptoUtil;
+
+  public async execute(input: GenerateTokenUtilDto): Promise<ITokensReturns> {
+    const [subBuffer, emailBuffer] = await Promise.all([
+      this.encryptPayload(input.sub),
+      this.encryptPayload(input.email),
+    ]);
+
+    const [subBase64, emailBase64] = [
+      subBuffer.toString('base64'),
+      emailBuffer.toString('base64'),
+    ];
+
     const payload: IJwtUserPayload = {
-      sub: input.sub,
-      email: input.email,
+      sub: subBase64,
+      email: emailBase64,
     };
 
     const [access_token, refresh_token] = [
@@ -29,5 +43,9 @@ export class GenerateTokenUtil implements IGenerateTokenUtil {
       access_token,
       refresh_token,
     };
+  }
+
+  public async encryptPayload(data: string): Promise<Buffer> {
+    return await this.cryptoUtil.encryptData(data);
   }
 }

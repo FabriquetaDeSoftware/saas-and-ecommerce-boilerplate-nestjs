@@ -1,5 +1,6 @@
 export class Auth {
   id: number;
+  public_id: string;
   email: string;
   password: string;
 
