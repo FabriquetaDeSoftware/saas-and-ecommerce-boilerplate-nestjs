@@ -36,7 +36,8 @@ async function bootstrap() {
     .setTitle('Api To Auth Boilerplate')
     .setDescription('API for testing auth boilerplate routes')
     .setVersion('1.0')
-    .addTag('Auth')
+    .addBearerAuth()
+    .addTag('auth')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);

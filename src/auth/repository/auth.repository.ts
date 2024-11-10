@@ -3,6 +3,7 @@ import { IAuthRepository } from '@src/auth/interfaces/repository/auth.repository
 import { Auth } from '@src/auth/entities/auth.entity';
 import { PrismaService } from '@src/prisma/prisma.service';
 import { SignUpAuthDto } from '@src/auth/dto/sign_up_auth.dto';
+import { RolesAuth } from '@src/shared/enum/roles_auth.enum';
 
 @Injectable()
 export class AuthRepository implements IAuthRepository {
@@ -14,7 +15,7 @@ export class AuthRepository implements IAuthRepository {
       data: signUpAuthDto,
     });
 
-    return result;
+    return { ...result, role: result.role as RolesAuth };
   }
 
   public async findOneByEmail(email: string): Promise<Auth> {
@@ -24,6 +25,10 @@ export class AuthRepository implements IAuthRepository {
       },
     });
 
-    return result;
+    if (!result) {
+      return null;
+    }
+
+    return { ...result, role: result.role as RolesAuth };
   }
 }

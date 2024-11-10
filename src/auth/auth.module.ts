@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AuthController } from '@src/auth/auth.controller';
 import { PassportModule } from '@nestjs/passport';
-import { JwtAuthGuard } from '@src/auth/guards/jwt_auth.guard';
-import { APP_GUARD } from '@nestjs/core';
 import { AuthRepository } from '@src/auth/repository/auth.repository';
 import { SignInUseCase } from '@src/auth/use_cases/sign_in.use_case';
 import { SignUpUseCase } from '@src/auth/use_cases/sign_up.use_case';
@@ -43,10 +41,6 @@ import { JwtStrategy } from './strategies/jwt.strategy';
     {
       provide: 'IValidateUserService',
       useExisting: ValidateUserService,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: JwtAuthGuard,
     },
   ],
 })

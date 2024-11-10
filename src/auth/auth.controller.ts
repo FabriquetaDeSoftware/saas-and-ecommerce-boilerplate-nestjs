@@ -1,15 +1,18 @@
-import { Body, Controller, Inject, Post, UseGuards } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Inject, Post, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ISignUpUseCase } from './interfaces/use_cases/sign_up.use_case.interface';
 import { ISignInUseCase } from './interfaces/use_cases/sign_in.use_case.interface';
 import { SignUpAuthDto } from './dto/sign_up_auth.dto';
 import { Auth } from './entities/auth.entity';
 import { IsPublicRoute } from '@src/shared/decorators/is_public_route.decorator';
 import { SignInAuthDto } from './dto/sign_in_auth.dto';
-import { LocalAuthGuard } from './guards/local_auth.guard';
+import { LocalAuthGuard } from '@src/shared/guards/local_auth.guard';
 import { ITokensReturns } from '@src/shared/interfaces/tokens_returns.interface';
+import { Roles } from '@src/shared/decorators/roles.decorator';
+import { RolesAuth } from '@src/shared/enum/roles_auth.enum';
+import { RolesGuard } from '@src/shared/guards/roles.guard';
 
-@ApiTags('Auth')
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   @Inject('ISignUpUseCase')
@@ -28,6 +31,29 @@ export class AuthController {
   @IsPublicRoute()
   @Post('sign-up')
   public async signUp(@Body() input: SignUpAuthDto): Promise<Auth> {
+    console.log('input', input.role);
     return await this.signUpUseCase.execute(input);
+  }
+
+  @ApiBearerAuth()
+  @Get('all')
+  public all(): string {
+    return 'All route';
+  }
+
+  @ApiBearerAuth()
+  @Get('admin')
+  @Roles(RolesAuth.ADMIN)
+  @UseGuards(RolesGuard)
+  public admin(): string {
+    return 'Admin route';
+  }
+
+  @ApiBearerAuth()
+  @Get('user')
+  @Roles(RolesAuth.USER)
+  @UseGuards(RolesGuard)
+  public user(): string {
+    return 'User route';
   }
 }

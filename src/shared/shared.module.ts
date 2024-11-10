@@ -4,6 +4,9 @@ import { GenerateTokenUtil } from './utils/generate_token.util';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtKeysConstants } from '@src/auth/constants/jwt_keys.constants';
 import { CryptoUtil } from './utils/crypto.util';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './guards/jwt_auth.guard';
+import { RolesGuard } from './guards/roles.guard';
 
 @Module({
   imports: [
@@ -27,6 +30,14 @@ import { CryptoUtil } from './utils/crypto.util';
     {
       provide: 'IHashUtil',
       useExisting: HashUtil,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
   ],
   exports: ['IHashUtil', 'IGenerateTokenUtil', 'ICryptoUtil'],

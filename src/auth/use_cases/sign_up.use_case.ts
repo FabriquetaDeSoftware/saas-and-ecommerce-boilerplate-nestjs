@@ -18,6 +18,7 @@ export class SignUpUseCase implements ISignUpUseCase {
   private readonly hashUtil: IHashUtil;
 
   public async execute(input: SignUpAuthDto): Promise<Auth> {
+    console.log('input', input.role);
     return await this.intermediary(input);
   }
 

@@ -8,15 +8,21 @@ datasource db {
 }
 
 model Auth {
-  id        Int    @id @default(autoincrement())
-  public_id String @unique @default(uuid())
-  email     String @unique
+  id        Int       @id @default(autoincrement())
+  public_id String    @unique @default(uuid())
+  email     String    @unique
   password  String
-
-  // isAccountVerified          Boolean @default(false)
-  // newsletterSubscription     Boolean
-  // termsAndConditionsAccepted Boolean
+  role      RolesAuth
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }
+
+enum RolesAuth {
+  ADMIN
+  USER
+}
+
+// isAccountVerified          Boolean @default(false)
+// newsletterSubscription     Boolean
+// termsAndConditionsAccepted Boolean
