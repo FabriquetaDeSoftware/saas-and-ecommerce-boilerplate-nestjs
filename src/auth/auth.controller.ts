@@ -51,7 +51,7 @@ export class AuthController {
 
   @ApiBearerAuth()
   @Get('user')
-  @Roles(RolesAuth.USER)
+  @Roles(RolesAuth.USER, RolesAuth.ADMIN)
   @UseGuards(RolesGuard)
   public user(): string {
     return 'User route';

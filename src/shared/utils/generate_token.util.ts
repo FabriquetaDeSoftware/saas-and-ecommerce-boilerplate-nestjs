@@ -29,6 +29,7 @@ export class GenerateTokenUtil implements IGenerateTokenUtil {
     const payload: IJwtUserPayload = {
       sub: subBase64,
       email: emailBase64,
+      role: input.role,
     };
 
     const [access_token, refresh_token] = [

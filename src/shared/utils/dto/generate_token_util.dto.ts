@@ -8,4 +8,8 @@ export class GenerateTokenUtilDto {
   @IsNotEmpty()
   @IsEmail()
   email: string;
+
+  @IsNotEmpty()
+  @IsString()
+  role: string;
 }

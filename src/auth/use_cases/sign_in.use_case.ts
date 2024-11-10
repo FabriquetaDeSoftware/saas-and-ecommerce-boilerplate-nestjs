@@ -25,6 +25,7 @@ export class SignInUseCase implements ISignInUseCase {
       await this.generateTokenUtil.execute({
         sub: findUserByEmail.public_id,
         email: findUserByEmail.email,
+        role: findUserByEmail.role,
       });
 
     return { access_token, refresh_token };
