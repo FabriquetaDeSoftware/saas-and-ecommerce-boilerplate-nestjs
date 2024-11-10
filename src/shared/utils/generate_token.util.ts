@@ -16,20 +16,12 @@ export class GenerateTokenUtil implements IGenerateTokenUtil {
   private readonly cryptoUtil: ICryptoUtil;
 
   public async execute(input: GenerateTokenUtilDto): Promise<ITokensReturns> {
-    const [subBuffer, emailBuffer] = await Promise.all([
-      this.encryptPayload(input.sub),
-      this.encryptPayload(input.email),
-    ]);
-
-    const [subBase64, emailBase64] = [
-      subBuffer.toString('base64'),
-      emailBuffer.toString('base64'),
-    ];
+    const { sub, email, role } = await this.intermediry(input);
 
     const payload: IJwtUserPayload = {
-      sub: subBase64,
-      email: emailBase64,
-      role: input.role,
+      sub,
+      email,
+      role,
     };
 
     const [access_token, refresh_token] = [
@@ -46,7 +38,22 @@ export class GenerateTokenUtil implements IGenerateTokenUtil {
     };
   }
 
-  public async encryptPayload(data: string): Promise<Buffer> {
-    return await this.cryptoUtil.encryptData(data);
+  private async intermediry(
+    data: GenerateTokenUtilDto,
+  ): Promise<IJwtUserPayload> {
+    const [sub, email, role] = await Promise.all([
+      this.encryptPayload(data.sub),
+      this.encryptPayload(data.email),
+      this.encryptPayload(data.role),
+    ]);
+
+    return { sub, email, role };
+  }
+
+  private async encryptPayload(data: string): Promise<string> {
+    const dataBuffer = await this.cryptoUtil.encryptData(data);
+    const dataBase64 = dataBuffer.toString('base64');
+
+    return dataBase64;
   }
 }
