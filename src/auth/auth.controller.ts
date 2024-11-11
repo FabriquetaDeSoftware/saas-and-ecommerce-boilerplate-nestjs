@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Inject, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ISignUpUseCase } from './interfaces/use_cases/sign_up.use_case.interface';
-import { ISignInWithCredentialsUseCase } from './interfaces/use_cases/sign_in.use_case.interface';
+import { ISignInWithCredentialsUseCase } from './interfaces/use_cases/sign_in_with_credentials.use_case.interface';
 import { SignUpAuthDto } from './dto/sign_up_auth.dto';
 import { Auth } from './entities/auth.entity';
 import { IsPublicRoute } from '@src/shared/decorators/is_public_route.decorator';

@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { SignInWithCredentialsAuthDto } from '@src/auth/dto/sign_in_auth.dto';
 import { Auth } from '@src/auth/entities/auth.entity';
-import { ISignInWithCredentialsUseCase } from '@src/auth/interfaces/use_cases/sign_in.use_case.interface';
+import { ISignInWithCredentialsUseCase } from '@src/auth/interfaces/use_cases/sign_in_with_credentials.use_case.interface';
 import { IFindUserByEmailHelper } from '../interfaces/helpers/find_user_by_email.helper.interface';
 import { IGenerateTokenUtil } from '@src/shared/utils/interfaces/generate_token.util.interface';
 import { ITokensReturns } from '@src/shared/interfaces/tokens_returns.interface';

@@ -1,7 +1,7 @@
 import { Strategy } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { ISignInWithCredentialsUseCase } from '../interfaces/use_cases/sign_in.use_case.interface';
+import { ISignInWithCredentialsUseCase } from '../interfaces/use_cases/sign_in_with_credentials.use_case.interface';
 import { ITokensReturns } from '@src/shared/interfaces/tokens_returns.interface';
 
 @Injectable()
