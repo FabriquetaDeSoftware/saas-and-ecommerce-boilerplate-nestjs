@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { SignInAuthDto } from '../dto/sign_in_auth.dto';
+import { SignInWithCredentialsAuthDto } from '../dto/sign_in_auth.dto';
 import { Auth } from '../entities/auth.entity';
 import { IFindUserByEmailHelper } from '../interfaces/helpers/find_user_by_email.helper.interface';
 import { IHashUtil } from '@src/shared/utils/interfaces/hash.util.interface';
@@ -13,11 +13,13 @@ export class ValidateUserService implements IValidateUserService {
   @Inject('IHashUtil')
   private readonly hashUtil: IHashUtil;
 
-  public async execute(input: SignInAuthDto): Promise<Auth> {
+  public async execute(input: SignInWithCredentialsAuthDto): Promise<Auth> {
     return await this.intermediary(input);
   }
 
-  private async intermediary(data: SignInAuthDto): Promise<Auth> {
+  private async intermediary(
+    data: SignInWithCredentialsAuthDto,
+  ): Promise<Auth> {
     const findUserByEmail = await this.findUserByEmail(data.email);
     if (!findUserByEmail) {
       return null;

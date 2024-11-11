@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AuthController } from '@src/auth/auth.controller';
 import { PassportModule } from '@nestjs/passport';
 import { AuthRepository } from '@src/auth/repository/auth.repository';
-import { SignInUseCase } from '@src/auth/use_cases/sign_in.use_case';
+import { SignInWithCredentialsUseCase } from '@src/auth/use_cases/sign_in_with_credentials.use_case';
 import { SignUpUseCase } from '@src/auth/use_cases/sign_up.use_case';
 import { FindUserByEmailHelper } from './helpers/find_user_by_email.helper';
 import { ValidateUserService } from './services/validate_user.service';
@@ -22,10 +22,10 @@ import { JwtStrategy } from './strategies/jwt.strategy';
       provide: 'ISignUpUseCase',
       useExisting: SignUpUseCase,
     },
-    SignInUseCase,
+    SignInWithCredentialsUseCase,
     {
-      provide: 'ISignInUseCase',
-      useExisting: SignInUseCase,
+      provide: 'ISignInWithCredentialsUseCase',
+      useExisting: SignInWithCredentialsUseCase,
     },
     AuthRepository,
     {

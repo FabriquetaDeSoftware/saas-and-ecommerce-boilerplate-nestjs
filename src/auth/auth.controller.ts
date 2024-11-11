@@ -1,11 +1,11 @@
 import { Body, Controller, Get, Inject, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ISignUpUseCase } from './interfaces/use_cases/sign_up.use_case.interface';
-import { ISignInUseCase } from './interfaces/use_cases/sign_in.use_case.interface';
+import { ISignInWithCredentialsUseCase } from './interfaces/use_cases/sign_in.use_case.interface';
 import { SignUpAuthDto } from './dto/sign_up_auth.dto';
 import { Auth } from './entities/auth.entity';
 import { IsPublicRoute } from '@src/shared/decorators/is_public_route.decorator';
-import { SignInAuthDto } from './dto/sign_in_auth.dto';
+import { SignInWithCredentialsAuthDto } from './dto/sign_in_auth.dto';
 import { LocalAuthGuard } from '@src/shared/guards/local_auth.guard';
 import { ITokensReturns } from '@src/shared/interfaces/tokens_returns.interface';
 import { Roles } from '@src/shared/decorators/roles.decorator';
@@ -18,14 +18,25 @@ export class AuthController {
   @Inject('ISignUpUseCase')
   private readonly signUpUseCase: ISignUpUseCase;
 
-  @Inject('ISignInUseCase')
-  private readonly signInUseCase: ISignInUseCase;
+  @Inject('ISignInWithCredentialsUseCase')
+  private readonly signInWithCredentialsUseCase: ISignInWithCredentialsUseCase;
 
   @IsPublicRoute()
   @UseGuards(LocalAuthGuard)
-  @Post('sign-in')
-  public async signIn(@Body() input: SignInAuthDto): Promise<ITokensReturns> {
-    return await this.signInUseCase.execute(input);
+  @Post('sign-in/credentials ')
+  public async signInWithCredentials(
+    @Body() input: SignInWithCredentialsAuthDto,
+  ): Promise<ITokensReturns> {
+    return await this.signInWithCredentialsUseCase.execute(input);
+  }
+
+  @IsPublicRoute()
+  @UseGuards(LocalAuthGuard)
+  @Post('sign-in/magic-link ')
+  public async signInWithMagicLink(
+    @Body() input: SignInWithCredentialsAuthDto,
+  ): Promise<ITokensReturns> {
+    return await this.signInWithCredentialsUseCase.execute(input);
   }
 
   @IsPublicRoute()
