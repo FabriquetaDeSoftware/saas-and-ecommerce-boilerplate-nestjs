@@ -10,6 +10,7 @@ import { PrismaModule } from '@src/prisma/prisma.module';
 import { SharedModule } from '@src/shared/shared.module';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { SignInWithMagicLinkUseCase } from './use_cases/sign_in_with_magic_link.use_case';
 
 @Module({
   imports: [PrismaModule, SharedModule, PassportModule],
@@ -17,6 +18,11 @@ import { JwtStrategy } from './strategies/jwt.strategy';
   providers: [
     JwtStrategy,
     LocalStrategy,
+    SignInWithMagicLinkUseCase,
+    {
+      provide: 'ISignInWithMagicLinkUseCase',
+      useExisting: SignInWithMagicLinkUseCase,
+    },
     SignUpUseCase,
     {
       provide: 'ISignUpUseCase',

@@ -11,15 +11,19 @@ import { ITokensReturns } from '@src/shared/interfaces/tokens_returns.interface'
 import { Roles } from '@src/shared/decorators/roles.decorator';
 import { RolesAuth } from '@src/shared/enum/roles_auth.enum';
 import { RolesGuard } from '@src/shared/guards/roles.guard';
+import { ISignInWithMagicLinkUseCase } from './interfaces/use_cases/sign_in_with_magic_link.use_case.interface';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   @Inject('ISignUpUseCase')
-  private readonly signUpUseCase: ISignUpUseCase;
+  private readonly _signUpUseCase: ISignUpUseCase;
 
   @Inject('ISignInWithCredentialsUseCase')
-  private readonly signInWithCredentialsUseCase: ISignInWithCredentialsUseCase;
+  private readonly _signInWithCredentialsUseCase: ISignInWithCredentialsUseCase;
+
+  @Inject('ISignInWithMagicLinkUseCase')
+  private readonly _signInWithMagicLinkUseCase: ISignInWithMagicLinkUseCase;
 
   @IsPublicRoute()
   @UseGuards(LocalAuthGuard)
@@ -27,7 +31,7 @@ export class AuthController {
   public async signInWithCredentials(
     @Body() input: SignInWithCredentialsAuthDto,
   ): Promise<ITokensReturns> {
-    return await this.signInWithCredentialsUseCase.execute(input);
+    return await this._signInWithCredentialsUseCase.execute(input);
   }
 
   @IsPublicRoute()
@@ -36,14 +40,15 @@ export class AuthController {
   public async signInWithMagicLink(
     @Body() input: SignInWithCredentialsAuthDto,
   ): Promise<ITokensReturns> {
-    return await this.signInWithCredentialsUseCase.execute(input);
+    await this._signInWithMagicLinkUseCase.execute();
+    return;
   }
 
   @IsPublicRoute()
   @Post('sign-up')
   public async signUp(@Body() input: SignUpAuthDto): Promise<Auth> {
     console.log('input', input.role);
-    return await this.signUpUseCase.execute(input);
+    return await this._signUpUseCase.execute(input);
   }
 
   @ApiBearerAuth()
