@@ -27,7 +27,7 @@ export class AuthController {
 
   @IsPublicRoute()
   @UseGuards(LocalAuthGuard)
-  @Post('sign-in/credentials ')
+  @Post('sign-in/credentials')
   public async signInWithCredentials(
     @Body() input: SignInWithCredentialsAuthDto,
   ): Promise<ITokensReturns> {
@@ -36,7 +36,7 @@ export class AuthController {
 
   @IsPublicRoute()
   @UseGuards(LocalAuthGuard)
-  @Post('sign-in/magic-link ')
+  @Post('sign-in/magic-link')
   public async signInWithMagicLink(
     @Body() input: SignInWithCredentialsAuthDto,
   ): Promise<ITokensReturns> {

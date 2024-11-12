@@ -20,32 +20,36 @@ export class ValidateUserService implements IValidateUserService {
   private async intermediary(
     data: SignInWithCredentialsAuthDto,
   ): Promise<Auth> {
-    const findUserByEmail = await this.findUserByEmail(data.email);
-    if (!findUserByEmail) {
-      return null;
-    }
+    const findUserByEmail = await this.findUserByEmailAndValidate(data.email);
 
-    const isMatch = await this.decryptPassword(
+    await this.decryptAndValidatePassword(
       data.password,
       findUserByEmail.password,
     );
-    if (!isMatch) {
-      return null;
-    }
 
     return { ...findUserByEmail, password: undefined };
   }
 
-  private async findUserByEmail(email: string): Promise<Auth | void> {
-    const findUserEmail = await this.findUserByEmailHelper.execute(email);
+  private async findUserByEmailAndValidate(email: string): Promise<Auth> {
+    const findUserByEmail = await this.findUserByEmailHelper.execute(email);
 
-    return findUserEmail;
+    if (!findUserByEmail) {
+      return null;
+    }
+
+    return findUserByEmail;
   }
 
-  private async decryptPassword(
+  private async decryptAndValidatePassword(
     password: string,
     encrypted: string,
   ): Promise<boolean> {
-    return await this.hashUtil.compareHash(password, encrypted);
+    const isMatch = await this.hashUtil.compareHash(password, encrypted);
+
+    if (!isMatch) {
+      return null;
+    }
+
+    return isMatch;
   }
 }

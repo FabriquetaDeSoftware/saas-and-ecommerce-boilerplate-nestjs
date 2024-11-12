@@ -1,13 +1,13 @@
 import { Strategy } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { ISignInWithCredentialsUseCase } from '../interfaces/use_cases/sign_in_with_credentials.use_case.interface';
-import { ITokensReturns } from '@src/shared/interfaces/tokens_returns.interface';
+import { IValidateUserService } from '../interfaces/services/validate_user.service.interface';
+import { Auth } from '../entities/auth.entity';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
   @Inject('IValidateUserService')
-  private validateUserService: ISignInWithCredentialsUseCase;
+  private validateUserService: IValidateUserService;
 
   constructor() {
     super({
@@ -15,7 +15,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(email: string, password: string): Promise<ITokensReturns> {
+  async validate(email: string, password: string): Promise<Auth> {
     const user = await this.validateUserService.execute({ email, password });
 
     if (!user) {
