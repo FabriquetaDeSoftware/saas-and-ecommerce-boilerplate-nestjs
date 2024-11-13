@@ -8,11 +8,14 @@ datasource db {
 }
 
 model Auth {
-  id        Int       @id @default(autoincrement())
-  public_id String    @unique @default(uuid())
-  email     String    @unique
-  password  String
-  role      RolesAuth
+  id        Int    @id @default(autoincrement())
+  public_id String @unique @default(uuid())
+
+  role     RolesAuth
+  email    String    @unique
+  password String
+
+  is_verified_account Boolean @default(false)
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
