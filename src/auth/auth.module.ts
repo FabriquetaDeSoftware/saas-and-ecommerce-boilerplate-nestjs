@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AuthController } from '@src/auth/auth.controller';
 import { PassportModule } from '@nestjs/passport';
 import { AuthRepository } from '@src/auth/repository/auth.repository';
-import { SignInWithCredentialsUseCase } from '@src/auth/use_cases/sign_in_with_credentials.use_case';
+import { SignInUseCase } from '@src/auth/use_cases/sign_in.use_case';
 import { SignUpUseCase } from '@src/auth/use_cases/sign_up.use_case';
 import { FindUserByEmailHelper } from './helpers/find_user_by_email.helper';
 import { ValidateUserService } from './services/validate_user.service';
@@ -10,7 +10,6 @@ import { PrismaModule } from '@src/prisma/prisma.module';
 import { SharedModule } from '@src/shared/shared.module';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
-import { SignInWithMagicLinkUseCase } from './use_cases/sign_in_with_magic_link.use_case';
 
 @Module({
   imports: [PrismaModule, SharedModule, PassportModule],
@@ -18,20 +17,15 @@ import { SignInWithMagicLinkUseCase } from './use_cases/sign_in_with_magic_link.
   providers: [
     JwtStrategy,
     LocalStrategy,
-    SignInWithMagicLinkUseCase,
-    {
-      provide: 'ISignInWithMagicLinkUseCase',
-      useExisting: SignInWithMagicLinkUseCase,
-    },
     SignUpUseCase,
     {
       provide: 'ISignUpUseCase',
       useExisting: SignUpUseCase,
     },
-    SignInWithCredentialsUseCase,
+    SignInUseCase,
     {
-      provide: 'ISignInWithCredentialsUseCase',
-      useExisting: SignInWithCredentialsUseCase,
+      provide: 'ISignInUseCase',
+      useExisting: SignInUseCase,
     },
     AuthRepository,
     {

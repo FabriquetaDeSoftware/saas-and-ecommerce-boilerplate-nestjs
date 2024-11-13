@@ -1,24 +1,20 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { SignInWithCredentialsAuthDto } from '@src/auth/dto/sign_in_auth.dto';
+import { SignInAuthDto } from '@src/auth/dto/sign_in_auth.dto';
 import { Auth } from '@src/auth/entities/auth.entity';
-import { ISignInWithCredentialsUseCase } from '@src/auth/interfaces/use_cases/sign_in_with_credentials.use_case.interface';
+import { ISignInUseCase } from '@src/auth/interfaces/use_cases/sign_in.use_case.interface';
 import { IFindUserByEmailHelper } from '../interfaces/helpers/find_user_by_email.helper.interface';
 import { IGenerateTokenUtil } from '@src/shared/utils/interfaces/generate_token.util.interface';
 import { ITokensReturns } from '@src/shared/interfaces/tokens_returns.interface';
 
 @Injectable()
-export class SignInWithCredentialsUseCase
-  implements ISignInWithCredentialsUseCase
-{
+export class SignInUseCase implements ISignInUseCase {
   @Inject('IFindUserByEmailHelper')
   private readonly findUserByEmailHelper: IFindUserByEmailHelper;
 
   @Inject('IGenerateTokenUtil')
   private readonly generateTokenUtil: IGenerateTokenUtil;
 
-  public async execute(
-    input: SignInWithCredentialsAuthDto,
-  ): Promise<ITokensReturns> {
+  public async execute(input: SignInAuthDto): Promise<ITokensReturns> {
     return await this.intermediary(input.email);
   }
 

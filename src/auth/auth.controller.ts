@@ -1,17 +1,16 @@
 import { Body, Controller, Get, Inject, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ISignUpUseCase } from './interfaces/use_cases/sign_up.use_case.interface';
-import { ISignInWithCredentialsUseCase } from './interfaces/use_cases/sign_in_with_credentials.use_case.interface';
+import { ISignInUseCase } from './interfaces/use_cases/sign_in.use_case.interface';
 import { SignUpAuthDto } from './dto/sign_up_auth.dto';
 import { Auth } from './entities/auth.entity';
 import { IsPublicRoute } from '@src/shared/decorators/is_public_route.decorator';
-import { SignInWithCredentialsAuthDto } from './dto/sign_in_auth.dto';
+import { SignInAuthDto } from './dto/sign_in_auth.dto';
 import { LocalAuthGuard } from '@src/shared/guards/local_auth.guard';
 import { ITokensReturns } from '@src/shared/interfaces/tokens_returns.interface';
 import { Roles } from '@src/shared/decorators/roles.decorator';
 import { RolesAuth } from '@src/shared/enum/roles_auth.enum';
 import { RolesGuard } from '@src/shared/guards/roles.guard';
-import { ISignInWithMagicLinkUseCase } from './interfaces/use_cases/sign_in_with_magic_link.use_case.interface';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -19,29 +18,14 @@ export class AuthController {
   @Inject('ISignUpUseCase')
   private readonly _signUpUseCase: ISignUpUseCase;
 
-  @Inject('ISignInWithCredentialsUseCase')
-  private readonly _signInWithCredentialsUseCase: ISignInWithCredentialsUseCase;
-
-  @Inject('ISignInWithMagicLinkUseCase')
-  private readonly _signInWithMagicLinkUseCase: ISignInWithMagicLinkUseCase;
+  @Inject('ISignInUseCase')
+  private readonly _signInUseCase: ISignInUseCase;
 
   @IsPublicRoute()
   @UseGuards(LocalAuthGuard)
   @Post('sign-in/credentials')
-  public async signInWithCredentials(
-    @Body() input: SignInWithCredentialsAuthDto,
-  ): Promise<ITokensReturns> {
-    return await this._signInWithCredentialsUseCase.execute(input);
-  }
-
-  @IsPublicRoute()
-  @UseGuards(LocalAuthGuard)
-  @Post('sign-in/magic-link')
-  public async signInWithMagicLink(
-    @Body() input: SignInWithCredentialsAuthDto,
-  ): Promise<ITokensReturns> {
-    await this._signInWithMagicLinkUseCase.execute();
-    return;
+  public async signIn(@Body() input: SignInAuthDto): Promise<ITokensReturns> {
+    return await this._signInUseCase.execute(input);
   }
 
   @IsPublicRoute()
