@@ -15,7 +15,9 @@ model Auth {
   email    String    @unique
   password String
 
-  is_verified_account Boolean @default(false)
+  is_verified_account           Boolean @default(false)
+  newsletter_subscription       Boolean @default(false)
+  terms_and_conditions_accepted Boolean
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -25,7 +27,3 @@ enum RolesAuth {
   ADMIN
   USER
 }
-
-// isAccountVerified          Boolean @default(false)
-// newsletterSubscription     Boolean
-// termsAndConditionsAccepted Boolean
