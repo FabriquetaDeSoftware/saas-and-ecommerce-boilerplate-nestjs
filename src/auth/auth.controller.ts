@@ -31,7 +31,6 @@ export class AuthController {
   @IsPublicRoute()
   @Post('sign-up')
   public async signUp(@Body() input: SignUpAuthDto): Promise<Auth> {
-    console.log('input', input.role);
     return await this._signUpUseCase.execute(input);
   }
 
