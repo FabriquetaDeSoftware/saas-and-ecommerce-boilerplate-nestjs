@@ -22,7 +22,7 @@ export class RefreshTokenService implements IRefreshTokenService {
   private readonly _generateTokenUtil: IGenerateTokenUtil;
 
   @Inject('ICryptoUtil')
-  private readonly cryptoUtil: ICryptoUtil;
+  private readonly _cryptoUtil: ICryptoUtil;
 
   async execute(input: RefreshTokenAuthDto): Promise<ITokensReturns> {
     return await this.intermediary(input.refresh_token);
@@ -73,7 +73,7 @@ export class RefreshTokenService implements IRefreshTokenService {
   }
 
   private async decryptPayload(data: Buffer): Promise<string> {
-    const dataBuffer = await this.cryptoUtil.decryptData(data);
+    const dataBuffer = await this._cryptoUtil.decryptData(data);
     const dataBase64 = dataBuffer.toString();
 
     return dataBase64;
