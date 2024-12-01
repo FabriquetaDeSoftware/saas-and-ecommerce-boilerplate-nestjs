@@ -10,6 +10,7 @@ import { PrismaModule } from '@src/prisma/prisma.module';
 import { SharedModule } from '@src/shared/shared.module';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { RefreshTokenService } from './services/refresh_token.service';
 
 @Module({
   imports: [PrismaModule, SharedModule, PassportModule],
@@ -17,6 +18,11 @@ import { JwtStrategy } from './strategies/jwt.strategy';
   providers: [
     JwtStrategy,
     LocalStrategy,
+    RefreshTokenService,
+    {
+      provide: 'IRefreshTokenService',
+      useExisting: RefreshTokenService,
+    },
     SignUpUseCase,
     {
       provide: 'ISignUpUseCase',

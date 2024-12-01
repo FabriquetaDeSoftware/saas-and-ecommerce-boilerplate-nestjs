@@ -40,6 +40,6 @@ import { RolesGuard } from './guards/roles.guard';
       useClass: RolesGuard,
     },
   ],
-  exports: ['IHashUtil', 'IGenerateTokenUtil', 'ICryptoUtil'],
+  exports: ['IHashUtil', 'IGenerateTokenUtil', 'ICryptoUtil', JwtModule],
 })
 export class SharedModule {}

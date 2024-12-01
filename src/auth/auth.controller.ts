@@ -12,6 +12,8 @@ import { Roles } from '@src/shared/decorators/roles.decorator';
 import { RolesAuth } from '@src/shared/enum/roles_auth.enum';
 import { RolesGuard } from '@src/shared/guards/roles.guard';
 import { VerificationCodeAuthDto } from './dto/verification_code_auth.dto';
+import { RefreshTokenAuthDto } from './dto/refresh_token_auth.dto';
+import { IRefreshTokenService } from './interfaces/services/refresh_token.service.interface';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -22,11 +24,22 @@ export class AuthController {
   @Inject('ISignInUseCase')
   private readonly _signInUseCase: ISignInUseCase;
 
+  @Inject('IRefreshTokenService')
+  private readonly _refreshTokenService: IRefreshTokenService;
+
   @IsPublicRoute()
   @UseGuards(LocalAuthGuard)
   @Post('sign-in')
   public async signIn(@Body() input: SignInAuthDto): Promise<ITokensReturns> {
     return await this._signInUseCase.execute(input);
+  }
+
+  @IsPublicRoute()
+  @Post('refresh-token')
+  public async refreshToken(
+    @Body() input: RefreshTokenAuthDto,
+  ): Promise<ITokensReturns> {
+    return await this._refreshTokenService.execute(input);
   }
 
   @IsPublicRoute()
