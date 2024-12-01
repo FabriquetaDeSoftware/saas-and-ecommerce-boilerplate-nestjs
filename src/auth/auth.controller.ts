@@ -11,6 +11,7 @@ import { ITokensReturns } from '@src/shared/interfaces/tokens_returns.interface'
 import { Roles } from '@src/shared/decorators/roles.decorator';
 import { RolesAuth } from '@src/shared/enum/roles_auth.enum';
 import { RolesGuard } from '@src/shared/guards/roles.guard';
+import { VerificationCodeAuthDto } from './dto/verification_code_auth.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -23,7 +24,7 @@ export class AuthController {
 
   @IsPublicRoute()
   @UseGuards(LocalAuthGuard)
-  @Post('sign-in/credentials')
+  @Post('sign-in')
   public async signIn(@Body() input: SignInAuthDto): Promise<ITokensReturns> {
     return await this._signInUseCase.execute(input);
   }
@@ -32,6 +33,14 @@ export class AuthController {
   @Post('sign-up')
   public async signUp(@Body() input: SignUpAuthDto): Promise<Auth> {
     return await this._signUpUseCase.execute(input);
+  }
+
+  @IsPublicRoute()
+  @Post('verification-code')
+  public verificationCode(
+    @Body() input: VerificationCodeAuthDto,
+  ): VerificationCodeAuthDto {
+    return input;
   }
 
   @ApiBearerAuth()
