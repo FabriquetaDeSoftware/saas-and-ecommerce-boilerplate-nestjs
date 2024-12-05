@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { SignInAuthDto } from '../dto/sign_in_auth.dto';
 import { Auth } from '../entities/auth.entity';
-import { IHashUtil } from '@src/shared/utils/interfaces/hash.util.interface';
-import { IGenericExecute } from '@src/shared/interfaces/generic_execute.interface';
+import { IHashUtil } from '../../shared/utils/interfaces/hash.util.interface';
+import { IGenericExecute } from '../../shared/interfaces/generic_execute.interface';
 
 @Injectable()
 export class ValidateUserService

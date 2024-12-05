@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Auth } from '@src/auth/entities/auth.entity';
-import { SignUpAuthDto } from '@src/auth/dto/sign_up_auth.dto';
-import { IAuthRepository } from '@src/auth/interfaces/repository/auth.repository.interface';
-import { IHashUtil } from '@src/shared/utils/interfaces/hash.util.interface';
-import { IGenericExecute } from '@src/shared/interfaces/generic_execute.interface';
+import { Auth } from '../entities/auth.entity';
+import { SignUpAuthDto } from '../dto/sign_up_auth.dto';
+import { IAuthRepository } from '../interfaces/repository/auth.repository.interface';
+import { IHashUtil } from '../../shared/utils/interfaces/hash.util.interface';
+import { IGenericExecute } from '../../shared/interfaces/generic_execute.interface';
 
 @Injectable()
 export class SignUpUseCase implements IGenericExecute<SignUpAuthDto, Auth> {

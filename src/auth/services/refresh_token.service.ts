@@ -1,13 +1,13 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { ITokensReturns } from '@src/shared/interfaces/tokens_returns.interface';
+import { ITokensReturns } from '../../shared/interfaces/tokens_returns.interface';
 import { JwtService } from '@nestjs/jwt';
-import { IJwtUserPayload } from '@src/shared/interfaces/jwt_user_payload.interface';
-import { jwtKeysConstants } from '../constants/jwt_keys.constants';
+import { IJwtUserPayload } from '../../shared/interfaces/jwt_user_payload.interface';
+import { jwtKeysConstants } from '../../shared/constants/jwt_keys.constants';
 import { Auth } from '../entities/auth.entity';
 import { RefreshTokenAuthDto } from '../dto/refresh_token_auth.dto';
-import { ICryptoUtil } from '@src/shared/utils/interfaces/crypto.util.interface';
-import { GenerateTokenUtilDto } from '@src/shared/utils/dto/generate_token_util.dto';
-import { IGenericExecute } from '@src/shared/interfaces/generic_execute.interface';
+import { ICryptoUtil } from '../../shared/utils/interfaces/crypto.util.interface';
+import { GenerateTokenUtilDto } from '../../shared/utils/dto/generate_token_util.dto';
+import { IGenericExecute } from '../../shared/interfaces/generic_execute.interface';
 
 @Injectable()
 export class RefreshTokenService

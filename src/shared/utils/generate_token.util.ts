@@ -3,7 +3,7 @@ import { GenerateTokenUtilDto } from './dto/generate_token_util.dto';
 import { ITokensReturns } from '../interfaces/tokens_returns.interface';
 import { JwtService } from '@nestjs/jwt';
 import { IJwtUserPayload } from '../interfaces/jwt_user_payload.interface';
-import { jwtKeysConstants } from '@src/auth/constants/jwt_keys.constants';
+import { jwtKeysConstants } from '../constants/jwt_keys.constants';
 import { ICryptoUtil } from './interfaces/crypto.util.interface';
 import { IGenericExecute } from '../interfaces/generic_execute.interface';
 

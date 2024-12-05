@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Auth } from '@src/auth/entities/auth.entity';
-import { IAuthRepository } from '@src/auth/interfaces/repository/auth.repository.interface';
-import { IGenericExecute } from '@src/shared/interfaces/generic_execute.interface';
+import { Auth } from '../entities/auth.entity';
+import { IAuthRepository } from '../interfaces/repository/auth.repository.interface';
+import { IGenericExecute } from '../../shared/interfaces/generic_execute.interface';
 
 @Injectable()
 export class FindUserByEmailHelper
