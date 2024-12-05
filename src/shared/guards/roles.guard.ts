@@ -16,7 +16,7 @@ export class RolesGuard implements CanActivate {
   @Inject('ICryptoUtil')
   private readonly cryptoUtil: ICryptoUtil;
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
+  public async canActivate(context: ExecutionContext): Promise<boolean> {
     const requiredRoles = this.reflector.getAllAndOverride<RolesAuth[]>(
       ROLES_KEY,
       [context.getHandler(), context.getClass()],

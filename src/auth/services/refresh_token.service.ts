@@ -1,7 +1,6 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { IRefreshTokenService } from '../interfaces/services/refresh_token.service.interface';
 import { ITokensReturns } from '@src/shared/interfaces/tokens_returns.interface';
-import { IGenerateTokenUtil } from '@src/shared/utils/interfaces/generate_token.util.interface';
 import { IFindUserByEmailHelper } from '../interfaces/helpers/find_user_by_email.helper.interface';
 import { JwtService } from '@nestjs/jwt';
 import { IJwtUserPayload } from '@src/shared/interfaces/jwt_user_payload.interface';
@@ -9,6 +8,8 @@ import { jwtKeysConstants } from '../constants/jwt_keys.constants';
 import { Auth } from '../entities/auth.entity';
 import { RefreshTokenAuthDto } from '../dto/refresh_token_auth.dto';
 import { ICryptoUtil } from '@src/shared/utils/interfaces/crypto.util.interface';
+import { GenerateTokenUtilDto } from '@src/shared/utils/dto/generate_token_util.dto';
+import { IGenericExecute } from '@src/shared/interfaces/generic_execute.interface';
 
 @Injectable()
 export class RefreshTokenService implements IRefreshTokenService {
@@ -19,12 +20,15 @@ export class RefreshTokenService implements IRefreshTokenService {
   private readonly _findUserByEmailHelper: IFindUserByEmailHelper;
 
   @Inject('IGenerateTokenUtil')
-  private readonly _generateTokenUtil: IGenerateTokenUtil;
+  private readonly _generateTokenUtil: IGenericExecute<
+    GenerateTokenUtilDto,
+    ITokensReturns
+  >;
 
   @Inject('ICryptoUtil')
   private readonly _cryptoUtil: ICryptoUtil;
 
-  async execute(input: RefreshTokenAuthDto): Promise<ITokensReturns> {
+  public async execute(input: RefreshTokenAuthDto): Promise<ITokensReturns> {
     return await this.intermediary(input.refresh_token);
   }
 
