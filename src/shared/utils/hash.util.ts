@@ -4,7 +4,7 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class HashUtil implements IHashUtil {
-  async generateHash(data: string | Buffer): Promise<string> {
+  public async generateHash(data: string | Buffer): Promise<string> {
     const salt = await bcrypt.genSalt();
 
     const hashedData = await bcrypt.hash(data, salt);
@@ -12,7 +12,10 @@ export class HashUtil implements IHashUtil {
     return hashedData;
   }
 
-  async compareHash(data: string | Buffer, hash: string): Promise<boolean> {
+  public async compareHash(
+    data: string | Buffer,
+    hash: string,
+  ): Promise<boolean> {
     const isMatch = await bcrypt.compare(data, hash);
 
     return isMatch;

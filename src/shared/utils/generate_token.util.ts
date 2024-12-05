@@ -4,11 +4,13 @@ import { ITokensReturns } from '../interfaces/tokens_returns.interface';
 import { JwtService } from '@nestjs/jwt';
 import { IJwtUserPayload } from '../interfaces/jwt_user_payload.interface';
 import { jwtKeysConstants } from '@src/auth/constants/jwt_keys.constants';
-import { IGenerateTokenUtil } from './interfaces/generate_token.util.interface';
 import { ICryptoUtil } from './interfaces/crypto.util.interface';
+import { IGenericExecute } from '../interfaces/generic_execute.interface';
 
 @Injectable()
-export class GenerateTokenUtil implements IGenerateTokenUtil {
+export class GenerateTokenUtil
+  implements IGenericExecute<GenerateTokenUtilDto, ITokensReturns>
+{
   @Inject()
   private readonly jwtService: JwtService;
 
