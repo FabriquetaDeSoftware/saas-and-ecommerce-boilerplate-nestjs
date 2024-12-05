@@ -15,9 +15,51 @@ describe('AuthController from AppModule (e2e)', () => {
     await app.init();
   });
 
-  it('/ (GET)', () => {
+  it('/auth/sign-in/ (POST)', () => {
     return request(app.getHttpServer())
-      .get('/')
+      .get('/auth/sign-in/')
+      .expect(200)
+      .expect('Hello World!');
+  });
+
+  it('/auth/refresh-token/ (POST)', () => {
+    return request(app.getHttpServer())
+      .get('/auth/refresh-token/')
+      .expect(200)
+      .expect('Hello World!');
+  });
+
+  it('/auth/sign-up/ (POST)', () => {
+    return request(app.getHttpServer())
+      .get('/auth/sign-up/')
+      .expect(200)
+      .expect('Hello World!');
+  });
+
+  it('/auth/verification-code/ (POST)', () => {
+    return request(app.getHttpServer())
+      .get('/auth/verification-code/')
+      .expect(200)
+      .expect('Hello World!');
+  });
+
+  it('/auth/all/ (GET)', () => {
+    return request(app.getHttpServer())
+      .get('/auth/sign-up/')
+      .expect(200)
+      .expect('Hello World!');
+  });
+
+  it('/auth/admin/ (GET)', () => {
+    return request(app.getHttpServer())
+      .get('/auth/admin/')
+      .expect(200)
+      .expect('Hello World!');
+  });
+
+  it('/auth/user/ (GET)', () => {
+    return request(app.getHttpServer())
+      .get('/auth/user/')
       .expect(200)
       .expect('Hello World!');
   });
