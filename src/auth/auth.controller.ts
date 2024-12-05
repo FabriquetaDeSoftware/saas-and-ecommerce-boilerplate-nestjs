@@ -1,7 +1,5 @@
 import { Body, Controller, Get, Inject, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { ISignUpUseCase } from './interfaces/use_cases/sign_up.use_case.interface';
-import { ISignInUseCase } from './interfaces/use_cases/sign_in.use_case.interface';
 import { SignUpAuthDto } from './dto/sign_up_auth.dto';
 import { Auth } from './entities/auth.entity';
 import { IsPublicRoute } from '@src/shared/decorators/is_public_route.decorator';
@@ -13,19 +11,25 @@ import { RolesAuth } from '@src/shared/enum/roles_auth.enum';
 import { RolesGuard } from '@src/shared/guards/roles.guard';
 import { VerificationCodeAuthDto } from './dto/verification_code_auth.dto';
 import { RefreshTokenAuthDto } from './dto/refresh_token_auth.dto';
-import { IRefreshTokenService } from './interfaces/services/refresh_token.service.interface';
+import { IGenericExecute } from '@src/shared/interfaces/generic_execute.interface';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   @Inject('ISignUpUseCase')
-  private readonly _signUpUseCase: ISignUpUseCase;
+  private readonly _signUpUseCase: IGenericExecute<SignUpAuthDto, Auth>;
 
   @Inject('ISignInUseCase')
-  private readonly _signInUseCase: ISignInUseCase;
+  private readonly _signInUseCase: IGenericExecute<
+    SignInAuthDto,
+    ITokensReturns
+  >;
 
   @Inject('IRefreshTokenService')
-  private readonly _refreshTokenService: IRefreshTokenService;
+  private readonly _refreshTokenService: IGenericExecute<
+    RefreshTokenAuthDto,
+    ITokensReturns
+  >;
 
   @IsPublicRoute()
   @UseGuards(LocalAuthGuard)

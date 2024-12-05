@@ -1,13 +1,14 @@
 import { Strategy } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { IValidateUserService } from '../interfaces/services/validate_user.service.interface';
 import { Auth } from '../entities/auth.entity';
+import { SignInAuthDto } from '../dto/sign_in_auth.dto';
+import { IGenericExecute } from '@src/shared/interfaces/generic_execute.interface';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
   @Inject('IValidateUserService')
-  private validateUserService: IValidateUserService;
+  private validateUserService: IGenericExecute<SignInAuthDto, Auth>;
 
   constructor() {
     super({

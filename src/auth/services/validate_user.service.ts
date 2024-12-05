@@ -1,14 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { SignInAuthDto } from '../dto/sign_in_auth.dto';
 import { Auth } from '../entities/auth.entity';
-import { IFindUserByEmailHelper } from '../interfaces/helpers/find_user_by_email.helper.interface';
 import { IHashUtil } from '@src/shared/utils/interfaces/hash.util.interface';
-import { IValidateUserService } from '../interfaces/services/validate_user.service.interface';
+import { IGenericExecute } from '@src/shared/interfaces/generic_execute.interface';
 
 @Injectable()
-export class ValidateUserService implements IValidateUserService {
+export class ValidateUserService
+  implements IGenericExecute<SignInAuthDto, Auth>
+{
   @Inject('IFindUserByEmailHelper')
-  private readonly findUserByEmailHelper: IFindUserByEmailHelper;
+  private readonly findUserByEmailHelper: IGenericExecute<string, Auth | void>;
 
   @Inject('IHashUtil')
   private readonly hashUtil: IHashUtil;

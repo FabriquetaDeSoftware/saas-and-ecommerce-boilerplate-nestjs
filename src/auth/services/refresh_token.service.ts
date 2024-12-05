@@ -1,7 +1,5 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { IRefreshTokenService } from '../interfaces/services/refresh_token.service.interface';
 import { ITokensReturns } from '@src/shared/interfaces/tokens_returns.interface';
-import { IFindUserByEmailHelper } from '../interfaces/helpers/find_user_by_email.helper.interface';
 import { JwtService } from '@nestjs/jwt';
 import { IJwtUserPayload } from '@src/shared/interfaces/jwt_user_payload.interface';
 import { jwtKeysConstants } from '../constants/jwt_keys.constants';
@@ -12,12 +10,14 @@ import { GenerateTokenUtilDto } from '@src/shared/utils/dto/generate_token_util.
 import { IGenericExecute } from '@src/shared/interfaces/generic_execute.interface';
 
 @Injectable()
-export class RefreshTokenService implements IRefreshTokenService {
+export class RefreshTokenService
+  implements IGenericExecute<RefreshTokenAuthDto, ITokensReturns>
+{
   @Inject()
   private readonly jwtService: JwtService;
 
   @Inject('IFindUserByEmailHelper')
-  private readonly _findUserByEmailHelper: IFindUserByEmailHelper;
+  private readonly _findUserByEmailHelper: IGenericExecute<string, Auth | void>;
 
   @Inject('IGenerateTokenUtil')
   private readonly _generateTokenUtil: IGenericExecute<

@@ -2,17 +2,16 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Auth } from '@src/auth/entities/auth.entity';
 import { SignUpAuthDto } from '@src/auth/dto/sign_up_auth.dto';
 import { IAuthRepository } from '@src/auth/interfaces/repository/auth.repository.interface';
-import { ISignUpUseCase } from '@src/auth/interfaces/use_cases/sign_up.use_case.interface';
-import { IFindUserByEmailHelper } from '../interfaces/helpers/find_user_by_email.helper.interface';
 import { IHashUtil } from '@src/shared/utils/interfaces/hash.util.interface';
+import { IGenericExecute } from '@src/shared/interfaces/generic_execute.interface';
 
 @Injectable()
-export class SignUpUseCase implements ISignUpUseCase {
+export class SignUpUseCase implements IGenericExecute<SignUpAuthDto, Auth> {
   @Inject('IAuthRepository')
   private readonly authRepository: IAuthRepository;
 
   @Inject('IFindUserByEmailHelper')
-  private readonly findUserByEmailHelper: IFindUserByEmailHelper;
+  private readonly findUserByEmailHelper: IGenericExecute<string, Auth | void>;
 
   @Inject('IHashUtil')
   private readonly hashUtil: IHashUtil;
