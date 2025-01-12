@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { SignUpAuthDto } from './dto/sign_up_auth.dto';
 import { Auth } from './entities/auth.entity';
@@ -11,26 +11,11 @@ import { RolesAuth } from '../shared/enum/roles_auth.enum';
 import { RolesGuard } from '../shared/guards/roles.guard';
 import { VerificationCodeAuthDto } from './dto/verification_code_auth.dto';
 import { RefreshTokenAuthDto } from './dto/refresh_token_auth.dto';
-import { IGenericExecute } from '../shared/interfaces/generic_execute.interface';
+import { AuthAbstractController } from './abstracts/controller/auth.abstract.controller';
 
 @ApiTags('auth')
 @Controller('auth')
-export class AuthController {
-  @Inject('ISignUpUseCase')
-  private readonly _signUpUseCase: IGenericExecute<SignUpAuthDto, Auth>;
-
-  @Inject('ISignInUseCase')
-  private readonly _signInUseCase: IGenericExecute<
-    SignInAuthDto,
-    ITokensReturns
-  >;
-
-  @Inject('IRefreshTokenService')
-  private readonly _refreshTokenService: IGenericExecute<
-    RefreshTokenAuthDto,
-    ITokensReturns
-  >;
-
+export class AuthController extends AuthAbstractController {
   @IsPublicRoute()
   @UseGuards(LocalAuthGuard)
   @Post('sign-in')
