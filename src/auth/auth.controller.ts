@@ -11,11 +11,11 @@ import { RolesAuth } from '../shared/enum/roles_auth.enum';
 import { RolesGuard } from '../shared/guards/roles.guard';
 import { VerificationCodeAuthDto } from './dto/verification_code_auth.dto';
 import { RefreshTokenAuthDto } from './dto/refresh_token_auth.dto';
-import { AuthAbstractController } from './abstracts/controller/auth.abstract.controller';
+import { AuthControllerAbstract } from './abstracts/controller/auth.controller.abstract';
 
 @ApiTags('auth')
 @Controller('auth')
-export class AuthController extends AuthAbstractController {
+export class AuthController extends AuthControllerAbstract {
   @IsPublicRoute()
   @UseGuards(LocalAuthGuard)
   @Post('sign-in')

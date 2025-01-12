@@ -1,19 +1,14 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { SignInAuthDto } from '../dto/sign_in_auth.dto';
 import { Auth } from '../entities/auth.entity';
-import { IHashUtil } from '../../shared/utils/interfaces/hash.util.interface';
 import { IGenericExecute } from '../../shared/interfaces/generic_execute.interface';
+import { ValidateUserServiceAbstract } from '../abstracts/services/validate_user.service.abstract';
 
 @Injectable()
 export class ValidateUserService
+  extends ValidateUserServiceAbstract
   implements IGenericExecute<SignInAuthDto, Auth>
 {
-  @Inject('IFindUserByEmailHelper')
-  private readonly findUserByEmailHelper: IGenericExecute<string, Auth | void>;
-
-  @Inject('IHashUtil')
-  private readonly hashUtil: IHashUtil;
-
   public async execute(input: SignInAuthDto): Promise<Auth> {
     return await this.intermediary(input);
   }

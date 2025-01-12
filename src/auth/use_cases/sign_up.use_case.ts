@@ -4,18 +4,13 @@ import { SignUpAuthDto } from '../dto/sign_up_auth.dto';
 import { IAuthRepository } from '../interfaces/repository/auth.repository.interface';
 import { IHashUtil } from '../../shared/utils/interfaces/hash.util.interface';
 import { IGenericExecute } from '../../shared/interfaces/generic_execute.interface';
+import { SignUpUseCaseAbstract } from '../abstracts/use_cases/sign_up.use_case.abstract';
 
 @Injectable()
-export class SignUpUseCase implements IGenericExecute<SignUpAuthDto, Auth> {
-  @Inject('IAuthRepository')
-  private readonly authRepository: IAuthRepository;
-
-  @Inject('IFindUserByEmailHelper')
-  private readonly findUserByEmailHelper: IGenericExecute<string, Auth | void>;
-
-  @Inject('IHashUtil')
-  private readonly hashUtil: IHashUtil;
-
+export class SignUpUseCase
+  extends SignUpUseCaseAbstract
+  implements IGenericExecute<SignUpAuthDto, Auth>
+{
   public async execute(input: SignUpAuthDto): Promise<Auth> {
     console.log('input', input.role);
     return await this.intermediary(input);

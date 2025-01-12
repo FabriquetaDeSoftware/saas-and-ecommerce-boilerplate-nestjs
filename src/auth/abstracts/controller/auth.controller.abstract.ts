@@ -6,7 +6,7 @@ import { ITokensReturns } from 'src/shared/interfaces/tokens_returns.interface';
 import { SignInAuthDto } from '../../dto/sign_in_auth.dto';
 import { RefreshTokenAuthDto } from '../../dto/refresh_token_auth.dto';
 
-export class AuthAbstractController {
+export class AuthControllerAbstract {
   @Inject('ISignUpUseCase')
   protected readonly _signUpUseCase: IGenericExecute<SignUpAuthDto, Auth>;
 

@@ -11,6 +11,14 @@ import { SharedModule } from '../shared/shared.module';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { RefreshTokenService } from './services/refresh_token.service';
+import { FindUserByEmailHelperAbstract } from './abstracts/helpers/find_user_by_email.helper.abstract';
+import { AuthControllerAbstract } from './abstracts/controller/auth.controller.abstract';
+import { AuthRepositoryAbstract } from './abstracts/repository/auth.repository.abstract';
+import { RefreshTokenServiceAbstract } from './abstracts/services/refresh_token.service.abstract';
+import { ValidateUserServiceAbstract } from './abstracts/services/validate_user.service.abstract';
+import { LocalStrategyAbstract } from './abstracts/strategies/local.strategy.abstract';
+import { SignInUseCaseAbstract } from './abstracts/use_cases/sign_in.use_case.abstract';
+import { SignUpUseCaseAbstract } from './abstracts/use_cases/sign_up.use_case.abstract';
 
 @Module({
   imports: [PrismaModule, SharedModule, PassportModule],
@@ -18,6 +26,14 @@ import { RefreshTokenService } from './services/refresh_token.service';
   providers: [
     JwtStrategy,
     LocalStrategy,
+    FindUserByEmailHelperAbstract,
+    AuthControllerAbstract,
+    AuthRepositoryAbstract,
+    RefreshTokenServiceAbstract,
+    ValidateUserServiceAbstract,
+    LocalStrategyAbstract,
+    SignInUseCaseAbstract,
+    SignUpUseCaseAbstract,
     RefreshTokenService,
     {
       provide: 'IRefreshTokenService',
