@@ -1,21 +1,10 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Inject,
-  Injectable,
-} from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { RolesAuth } from '../enum/roles_auth.enum';
 import { ROLES_KEY } from '../decorators/roles.decorator';
-import { ICryptoUtil } from '../utils/interfaces/crypto.util.interface';
+import { RolesGuardAbstract } from '../abstracts/guards/roles.guard.abstract';
 
 @Injectable()
-export class RolesGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
-
-  @Inject('ICryptoUtil')
-  private readonly cryptoUtil: ICryptoUtil;
-
+export class RolesGuard extends RolesGuardAbstract implements CanActivate {
   public async canActivate(context: ExecutionContext): Promise<boolean> {
     const requiredRoles = this.reflector.getAllAndOverride<RolesAuth[]>(
       ROLES_KEY,

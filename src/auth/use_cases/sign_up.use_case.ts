@@ -1,8 +1,6 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Auth } from '../entities/auth.entity';
 import { SignUpAuthDto } from '../dto/sign_up_auth.dto';
-import { IAuthRepository } from '../interfaces/repository/auth.repository.interface';
-import { IHashUtil } from '../../shared/utils/interfaces/hash.util.interface';
 import { IGenericExecute } from '../../shared/interfaces/generic_execute.interface';
 import { SignUpUseCaseAbstract } from '../abstracts/use_cases/sign_up.use_case.abstract';
 

@@ -7,6 +7,8 @@ import { CryptoUtil } from './utils/crypto.util';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './guards/jwt_auth.guard';
 import { RolesGuard } from './guards/roles.guard';
+import { GenerateTokenUtilAbstract } from './abstracts/utils/generate_token.util.abstract';
+import { RolesGuardAbstract } from './abstracts/guards/roles.guard.abstract';
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import { RolesGuard } from './guards/roles.guard';
     }),
   ],
   providers: [
+    GenerateTokenUtilAbstract,
+    RolesGuardAbstract,
     CryptoUtil,
     {
       provide: 'ICryptoUtil',
