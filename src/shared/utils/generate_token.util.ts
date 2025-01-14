@@ -1,16 +1,22 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { GenerateTokenUtilDto } from './dto/generate_token_util.dto';
 import { ITokensReturns } from '../interfaces/tokens_returns.interface';
 import { IJwtUserPayload } from '../interfaces/jwt_user_payload.interface';
 import { jwtKeysConstants } from '../constants/jwt_keys.constants';
 import { IGenericExecute } from '../interfaces/generic_execute.interface';
-import { GenerateTokenUtilAbstract } from '../abstracts/utils/generate_token.util.abstract';
+import { ICryptoUtil } from './interfaces/crypto.util.interface';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class GenerateTokenUtil
-  extends GenerateTokenUtilAbstract
   implements IGenericExecute<GenerateTokenUtilDto, ITokensReturns>
 {
+  @Inject()
+  private readonly jwtService: JwtService;
+
+  @Inject('ICryptoUtil')
+  private readonly cryptoUtil: ICryptoUtil;
+
   public async execute(input: GenerateTokenUtilDto): Promise<ITokensReturns> {
     const { sub, email, role } = await this.intermediry(input);
 

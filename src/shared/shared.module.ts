@@ -7,8 +7,7 @@ import { CryptoUtil } from './utils/crypto.util';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './guards/jwt_auth.guard';
 import { RolesGuard } from './guards/roles.guard';
-import { GenerateTokenUtilAbstract } from './abstracts/utils/generate_token.util.abstract';
-import { RolesGuardAbstract } from './abstracts/guards/roles.guard.abstract';
+import { GenerateCodeOfVerificationUtil } from './utils/generate_code_of_verification.util';
 
 @Module({
   imports: [
@@ -18,8 +17,11 @@ import { RolesGuardAbstract } from './abstracts/guards/roles.guard.abstract';
     }),
   ],
   providers: [
-    GenerateTokenUtilAbstract,
-    RolesGuardAbstract,
+    GenerateCodeOfVerificationUtil,
+    {
+      provide: 'IGenerateCodeOfVerificationUtil',
+      useExisting: GenerateCodeOfVerificationUtil,
+    },
     CryptoUtil,
     {
       provide: 'ICryptoUtil',
@@ -44,6 +46,12 @@ import { RolesGuardAbstract } from './abstracts/guards/roles.guard.abstract';
       useClass: RolesGuard,
     },
   ],
-  exports: ['IHashUtil', 'IGenerateTokenUtil', 'ICryptoUtil', JwtModule],
+  exports: [
+    'IHashUtil',
+    'IGenerateTokenUtil',
+    'ICryptoUtil',
+    'IGenerateCodeOfVerificationUtil',
+    JwtModule,
+  ],
 })
 export class SharedModule {}

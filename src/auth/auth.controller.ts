@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { SignUpAuthDto } from './dto/sign_up_auth.dto';
 import { Auth } from './entities/auth.entity';
@@ -9,13 +9,33 @@ import { ITokensReturns } from '../shared/interfaces/tokens_returns.interface';
 import { Roles } from '../shared/decorators/roles.decorator';
 import { RolesAuth } from '../shared/enum/roles_auth.enum';
 import { RolesGuard } from '../shared/guards/roles.guard';
-import { VerificationCodeAuthDto } from './dto/verification_code_auth.dto';
 import { RefreshTokenAuthDto } from './dto/refresh_token_auth.dto';
-import { AuthControllerAbstract } from './abstracts/controller/auth.controller.abstract';
+import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
 
 @ApiTags('auth')
 @Controller('auth')
-export class AuthController extends AuthControllerAbstract {
+export class AuthController {
+  @Inject('ISignUpUseCase')
+  private readonly _signUpUseCase: IGenericExecute<SignUpAuthDto, Auth>;
+
+  @Inject('ISignInUseCase')
+  private readonly _signInUseCase: IGenericExecute<
+    SignInAuthDto,
+    ITokensReturns
+  >;
+
+  @Inject('IRefreshTokenService')
+  private readonly _refreshTokenService: IGenericExecute<
+    RefreshTokenAuthDto,
+    ITokensReturns
+  >;
+
+  @Inject('IGenerateCodeOfVerificationUtil')
+  private readonly _generateCodeOfVerificationUtil: IGenericExecute<
+    void,
+    string
+  >;
+
   @IsPublicRoute()
   @UseGuards(LocalAuthGuard)
   @Post('sign-in')
@@ -37,13 +57,14 @@ export class AuthController extends AuthControllerAbstract {
     return await this._signUpUseCase.execute(input);
   }
 
-  @IsPublicRoute()
-  @Post('verification-code')
-  public verificationCode(
-    @Body() input: VerificationCodeAuthDto,
-  ): VerificationCodeAuthDto {
-    return input;
-  }
+  // @IsPublicRoute()
+  // @Post('verification-code')
+  // public async verificationCode(
+  //   @Body() input: VerificationCodeAuthDto,
+  // ): Promise<string> {
+  //   const code = this._generateCodeOfVerificationUtil.execute();
+  //   return code;
+  // }
 
   @ApiBearerAuth()
   @Get('all')
