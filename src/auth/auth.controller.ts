@@ -11,6 +11,7 @@ import { RolesAuth } from '../shared/enum/roles_auth.enum';
 import { RolesGuard } from '../shared/guards/roles.guard';
 import { RefreshTokenAuthDto } from './dto/refresh_token_auth.dto';
 import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
+import { VerificationCodeAuthDto } from './dto/verification_code_auth.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -57,14 +58,14 @@ export class AuthController {
     return await this._signUpUseCase.execute(input);
   }
 
-  // @IsPublicRoute()
-  // @Post('verification-code')
-  // public async verificationCode(
-  //   @Body() input: VerificationCodeAuthDto,
-  // ): Promise<string> {
-  //   const code = this._generateCodeOfVerificationUtil.execute();
-  //   return code;
-  // }
+  @IsPublicRoute()
+  @Post('verification-code')
+  public async verificationCode(
+    @Body() input: VerificationCodeAuthDto,
+  ): Promise<string> {
+    const code = this._generateCodeOfVerificationUtil.execute();
+    return code;
+  }
 
   @ApiBearerAuth()
   @Get('all')
