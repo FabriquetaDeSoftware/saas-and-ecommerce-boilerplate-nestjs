@@ -16,21 +16,33 @@ export class SignUpUseCase implements IGenericExecute<SignUpAuthDto, Auth> {
   @Inject('IHashUtil')
   private readonly hashUtil: IHashUtil;
 
+  @Inject('IGenerateCodeOfVerificationUtil')
+  private readonly _generateCodeOfVerificationUtil: IGenericExecute<
+    void,
+    string
+  >;
+
   public async execute(input: SignUpAuthDto): Promise<Auth> {
     console.log('input', input.role);
     return await this.intermediary(input);
   }
 
   private async intermediary(data: SignUpAuthDto): Promise<Auth> {
-    const [, hashedPassword] = await Promise.all([
-      this.checkEmailExistsAndError(data.email),
-      this.hashPassword(data.password),
-    ]);
+    const [, hashedPassword, verificationCodeAndExpiresDate] =
+      await Promise.all([
+        this.checkEmailExistsAndError(data.email),
+        this.hashPassword(data.password),
+        this.generateCodeOfVerificationAndExpiresDate(),
+      ]);
 
-    const result = await this.authRepository.create({
-      ...data,
-      password: hashedPassword,
-    });
+    const result = await this.authRepository.create(
+      {
+        ...data,
+        password: hashedPassword,
+      },
+      verificationCodeAndExpiresDate.hashedCode,
+      verificationCodeAndExpiresDate.expiresDate,
+    );
 
     return { ...result, password: undefined };
   }
@@ -45,5 +57,22 @@ export class SignUpUseCase implements IGenericExecute<SignUpAuthDto, Auth> {
 
   private async hashPassword(password: string): Promise<string> {
     return await this.hashUtil.generateHash(password);
+  }
+
+  private async generateCodeOfVerificationAndExpiresDate(): Promise<{
+    expiresDate: Date;
+    hashedCode: string;
+  }> {
+    const twentyFourHoursInMilliseconds = 24 * 60 * 60 * 1000;
+    const expiresDate = new Date(
+      new Date().getTime() + twentyFourHoursInMilliseconds,
+    );
+
+    const verificationCode =
+      await this._generateCodeOfVerificationUtil.execute();
+
+    const hashedCode = await this.hashUtil.generateHash(verificationCode);
+
+    return { expiresDate, hashedCode };
   }
 }
