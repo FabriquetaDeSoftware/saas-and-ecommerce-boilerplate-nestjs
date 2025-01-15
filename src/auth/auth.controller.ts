@@ -31,10 +31,10 @@ export class AuthController {
     ITokensReturns
   >;
 
-  @Inject('IGenerateCodeOfVerificationUtil')
-  private readonly _generateCodeOfVerificationUtil: IGenericExecute<
-    void,
-    string
+  @Inject('IVerifyAccountUseCase')
+  private readonly _verifyAccountUseCase: IGenericExecute<
+    VerificationCodeAuthDto,
+    boolean
   >;
 
   @IsPublicRoute()
@@ -62,9 +62,8 @@ export class AuthController {
   @Post('verification-code')
   public async verificationCode(
     @Body() input: VerificationCodeAuthDto,
-  ): Promise<string> {
-    const code = this._generateCodeOfVerificationUtil.execute();
-    return code;
+  ): Promise<boolean> {
+    return await this._verifyAccountUseCase.execute(input);
   }
 
   @ApiBearerAuth()

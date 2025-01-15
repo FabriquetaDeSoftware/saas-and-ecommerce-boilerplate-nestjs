@@ -11,6 +11,8 @@ import { SharedModule } from '../shared/shared.module';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { RefreshTokenService } from './services/refresh_token.service';
+import { VerifyAccountUseCase } from './use_cases/verify_account.use_case';
+import { VerificationCodesRepository } from './repository/verification_codes.repository';
 
 @Module({
   imports: [PrismaModule, SharedModule, PassportModule],
@@ -18,6 +20,16 @@ import { RefreshTokenService } from './services/refresh_token.service';
   providers: [
     JwtStrategy,
     LocalStrategy,
+    VerificationCodesRepository,
+    {
+      provide: 'IVerificationCodesRepository',
+      useExisting: VerificationCodesRepository,
+    },
+    VerifyAccountUseCase,
+    {
+      provide: 'IVerifyAccountUseCase',
+      useExisting: VerifyAccountUseCase,
+    },
     RefreshTokenService,
     {
       provide: 'IRefreshTokenService',

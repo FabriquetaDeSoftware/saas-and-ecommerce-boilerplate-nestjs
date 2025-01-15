@@ -1,7 +1,22 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsNotEmpty, IsPositive, Max, Min } from 'class-validator';
+import {
+  IsEmail,
+  IsInt,
+  IsNotEmpty,
+  IsPositive,
+  Max,
+  Min,
+} from 'class-validator';
 
 export class VerificationCodeAuthDto {
+  @ApiProperty({
+    description: 'Email of the user to verify account',
+    example: 'teste@gmail.com',
+  })
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
+
   @ApiProperty({
     description: 'Code to verify new user account',
     example: '123456',

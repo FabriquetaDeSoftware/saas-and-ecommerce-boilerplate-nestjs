@@ -4,7 +4,7 @@ import { Auth } from '../entities/auth.entity';
 import { SignUpAuthDto } from '../dto/sign_up_auth.dto';
 import { RolesAuth } from '../../shared/enum/roles_auth.enum';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { VerificationCodeAuthDto } from '../dto/verification_code_auth.dto';
+import { UpdateAuthInfoDto } from '../dto/update_info_auth.dto';
 
 @Injectable()
 export class AuthRepository implements IAuthRepository {
@@ -41,6 +41,19 @@ export class AuthRepository implements IAuthRepository {
     if (!result) {
       return null;
     }
+
+    return { ...result, role: result.role as RolesAuth };
+  }
+
+  public async updateInfoAuth(
+    updateAuthInfoDto: Partial<UpdateAuthInfoDto>,
+  ): Promise<Auth> {
+    const result = await this.prismaService.auth.update({
+      where: {
+        id: updateAuthInfoDto.id,
+      },
+      data: updateAuthInfoDto,
+    });
 
     return { ...result, role: result.role as RolesAuth };
   }
