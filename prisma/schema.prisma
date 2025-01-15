@@ -11,13 +11,13 @@ model Auth {
   id        Int    @id @default(autoincrement())
   public_id String @unique @default(uuid())
 
-  role     RolesAuth
+  role     RolesAuth @default(USER)
   email    String    @unique
   password String
 
   is_verified_account           Boolean @default(false)
-  newsletter_subscription       Boolean @default(false)
-  terms_and_conditions_accepted Boolean
+  newsletter_subscription       Boolean @default(true)
+  terms_and_conditions_accepted Boolean @default(true)
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt

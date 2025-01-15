@@ -5,12 +5,12 @@ CREATE TYPE "RolesAuth" AS ENUM ('ADMIN', 'USER');
 CREATE TABLE "Auth" (
     "id" SERIAL NOT NULL,
     "public_id" TEXT NOT NULL,
-    "role" "RolesAuth" NOT NULL,
+    "role" "RolesAuth" NOT NULL DEFAULT 'USER',
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "is_verified_account" BOOLEAN NOT NULL DEFAULT false,
-    "newsletter_subscription" BOOLEAN NOT NULL DEFAULT false,
-    "terms_and_conditions_accepted" BOOLEAN NOT NULL,
+    "newsletter_subscription" BOOLEAN NOT NULL DEFAULT true,
+    "terms_and_conditions_accepted" BOOLEAN NOT NULL DEFAULT true,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
