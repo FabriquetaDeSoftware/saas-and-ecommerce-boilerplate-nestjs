@@ -36,15 +36,17 @@ export class VerifyAccountUseCase
 
     await this.verifyCode(data.code.toString(), verificationCode.code);
 
-    await this.updateAccountIsVerify(true);
+    await this.updateAccountIsVerify(user.id, true);
 
     return true;
   }
 
   private async updateAccountIsVerify(
+    id: number,
     is_verified_account: boolean,
   ): Promise<Auth> {
     const result = await this._authRepository.updateInfoAuth({
+      id,
       is_verified_account,
     });
 

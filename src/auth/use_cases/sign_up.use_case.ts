@@ -23,7 +23,6 @@ export class SignUpUseCase implements IGenericExecute<SignUpAuthDto, Auth> {
   >;
 
   public async execute(input: SignUpAuthDto): Promise<Auth> {
-    console.log('input', input.role);
     return await this.intermediary(input);
   }
 
