@@ -4,12 +4,12 @@ import { Auth } from '../entities/auth.entity';
 import { SignUpAuthDto } from '../dto/sign_up_auth.dto';
 import { RolesAuth } from 'src/shared/enum/roles_auth.enum';
 import { UpdateAuthInfoDto } from '../dto/update_info_auth.dto';
-import { DatabaseAdapter } from 'src/databases/adapters/database.adapter';
+import { IDatabaseAdapter } from 'src/databases/interfaces/database.adapter.interface';
 
 @Injectable()
 export class AuthRepository implements IAuthRepository {
   @Inject('IDatabaseAdapter')
-  private readonly _databaseAdapter: DatabaseAdapter;
+  private readonly _databaseAdapter: IDatabaseAdapter;
 
   private readonly _model = 'auth';
 

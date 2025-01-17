@@ -1,14 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { VerificationCodes } from '../entities/verification_codes.entity';
 import { IVerificationCodesRepository } from '../interfaces/repository/verification_codes.repository.interface';
-import { DatabaseAdapter } from 'src/databases/adapters/database.adapter';
+import { IDatabaseAdapter } from 'src/databases/interfaces/database.adapter.interface';
 
 @Injectable()
 export class VerificationCodesRepository
   implements IVerificationCodesRepository
 {
   @Inject('IDatabaseAdapter')
-  private readonly _databaseAdapter: DatabaseAdapter;
+  private readonly _databaseAdapter: IDatabaseAdapter;
 
   private readonly _model = 'verificationCodes';
 

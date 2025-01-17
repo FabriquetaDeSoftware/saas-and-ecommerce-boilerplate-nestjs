@@ -1,10 +1,10 @@
 import { Global, Inject, Injectable } from '@nestjs/common';
-import { IDatabase } from 'src/databases/interfaces/database.interface';
+import { IDatabaseAdapter } from 'src/databases/interfaces/database.adapter.interface';
 import { PrismaService } from '../modules/prisma/prisma.service';
 
 @Global()
 @Injectable()
-export class DatabaseAdapter implements IDatabase {
+export class DatabaseAdapter implements IDatabaseAdapter {
   @Inject()
   private readonly _prismaService: PrismaService;
 

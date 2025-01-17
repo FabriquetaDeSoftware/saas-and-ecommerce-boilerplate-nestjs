@@ -70,8 +70,6 @@ export class SignUpUseCase implements IGenericExecute<SignUpAuthDto, Auth> {
     const verificationCode =
       await this._generateCodeOfVerificationUtil.execute();
 
-    console.log('verificationCode', verificationCode);
-
     const hashedCode = await this.hashUtil.generateHash(verificationCode);
 
     return { expiresDate, hashedCode };

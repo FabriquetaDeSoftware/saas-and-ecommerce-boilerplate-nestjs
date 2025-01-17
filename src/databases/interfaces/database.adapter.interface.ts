@@ -1,4 +1,4 @@
-export interface IDatabase {
+export interface IDatabaseAdapter {
   findOne<R>(model: string, where: object): Promise<R | null>;
   findMany<R>(model: string, where?: object): Promise<R[]>;
   create<R>(model: string, data: object): Promise<R>;
