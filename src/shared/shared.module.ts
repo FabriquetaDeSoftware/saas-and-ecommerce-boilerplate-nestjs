@@ -1,21 +1,14 @@
-import { Module } from '@nestjs/common';
-import { HashUtil } from './utils/hash.util';
-import { GenerateTokenUtil } from './utils/generate_token.util';
-import { JwtModule } from '@nestjs/jwt';
-import { jwtKeysConstants } from './constants/jwt_keys.constants';
-import { CryptoUtil } from './utils/crypto.util';
+import { forwardRef, Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from './guards/jwt_auth.guard';
 import { RolesGuard } from './guards/roles.guard';
+import { AuthModule } from 'src/auth/auth.module';
 import { GenerateCodeOfVerificationUtil } from './utils/generate_code_of_verification.util';
+import { CryptoUtil } from './utils/crypto.util';
+import { GenerateTokenUtil } from './utils/generate_token.util';
+import { HashUtil } from './utils/hash.util';
 
 @Module({
-  imports: [
-    JwtModule.register({
-      secret: jwtKeysConstants.secret_token_key,
-      signOptions: { expiresIn: '30m' },
-    }),
-  ],
+  imports: [forwardRef(() => AuthModule)],
   providers: [
     GenerateCodeOfVerificationUtil,
     {
@@ -39,10 +32,6 @@ import { GenerateCodeOfVerificationUtil } from './utils/generate_code_of_verific
     },
     {
       provide: APP_GUARD,
-      useClass: JwtAuthGuard,
-    },
-    {
-      provide: APP_GUARD,
       useClass: RolesGuard,
     },
   ],
@@ -51,7 +40,6 @@ import { GenerateCodeOfVerificationUtil } from './utils/generate_code_of_verific
     'IGenerateTokenUtil',
     'ICryptoUtil',
     'IGenerateCodeOfVerificationUtil',
-    JwtModule,
   ],
 })
 export class SharedModule {}

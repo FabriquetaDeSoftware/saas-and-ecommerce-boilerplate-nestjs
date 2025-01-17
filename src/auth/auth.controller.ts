@@ -4,7 +4,7 @@ import { SignUpAuthDto } from './dto/sign_up_auth.dto';
 import { Auth } from './entities/auth.entity';
 import { IsPublicRoute } from '../shared/decorators/is_public_route.decorator';
 import { SignInAuthDto } from './dto/sign_in_auth.dto';
-import { LocalAuthGuard } from '../shared/guards/local_auth.guard';
+import { LocalAuthGuard } from './guards/local_auth.guard';
 import { ITokensReturns } from '../shared/interfaces/tokens_returns.interface';
 import { Roles } from '../shared/decorators/roles.decorator';
 import { RolesAuth } from '../shared/enum/roles_auth.enum';

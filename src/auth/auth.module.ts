@@ -13,13 +13,23 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { RefreshTokenService } from './services/refresh_token.service';
 import { VerifyAccountUseCase } from './use_cases/verify_account.use_case';
 import { VerificationCodesRepository } from './repository/verification_codes.repository';
+import { JwtModule } from '@nestjs/jwt';
+import { jwtKeysConstants } from 'src/shared/constants/jwt_keys.constants';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './guards/jwt_auth.guard';
 
 @Module({
-  imports: [PrismaModule, SharedModule, PassportModule],
+  imports: [
+    JwtModule.register({
+      secret: jwtKeysConstants.secret_token_key,
+      signOptions: { expiresIn: '30m' },
+    }),
+    SharedModule,
+    PrismaModule,
+    PassportModule,
+  ],
   controllers: [AuthController],
   providers: [
-    JwtStrategy,
-    LocalStrategy,
     VerificationCodesRepository,
     {
       provide: 'IVerificationCodesRepository',
@@ -60,6 +70,13 @@ import { VerificationCodesRepository } from './repository/verification_codes.rep
       provide: 'IValidateUserService',
       useExisting: ValidateUserService,
     },
+    JwtStrategy,
+    LocalStrategy,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
   ],
+  exports: [JwtModule],
 })
 export class AuthModule {}
