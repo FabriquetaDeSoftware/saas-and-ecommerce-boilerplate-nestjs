@@ -3,7 +3,7 @@ import { IAuthRepository } from '../interfaces/repository/auth.repository.interf
 import { Auth } from '../entities/auth.entity';
 import { SignUpAuthDto } from '../dto/sign_up_auth.dto';
 import { RolesAuth } from '../../shared/enum/roles_auth.enum';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from 'src/shared/modules/prisma/prisma.service';
 import { UpdateAuthInfoDto } from '../dto/update_info_auth.dto';
 
 @Injectable()
