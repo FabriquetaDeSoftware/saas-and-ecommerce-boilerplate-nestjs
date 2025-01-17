@@ -4,9 +4,13 @@ import { SignUpDto } from '../dto/sign_up.dto';
 import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
 import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
 import { IAuthRepository } from '../interfaces/repository/auth.repository.interface';
+import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 
 @Injectable()
 export class SignUpUseCase implements IGenericExecute<SignUpDto, Auth> {
+  @Inject(CACHE_MANAGER)
+  private readonly cacheManager: Cache;
+
   @Inject('IAuthRepository')
   private readonly authRepository: IAuthRepository;
 
@@ -33,6 +37,14 @@ export class SignUpUseCase implements IGenericExecute<SignUpDto, Auth> {
         this.hashPassword(data.password),
         this.generateCodeOfVerificationAndExpiresDate(),
       ]);
+
+    const twentyFourHoursInSeconds = 86400;
+
+    await this.cacheManager.set(
+      `verification:${data.email}`,
+      verificationCodeAndExpiresDate.hashedCode,
+      twentyFourHoursInSeconds,
+    );
 
     const result = await this.authRepository.create(
       {
@@ -62,7 +74,7 @@ export class SignUpUseCase implements IGenericExecute<SignUpDto, Auth> {
     expiresDate: Date;
     hashedCode: string;
   }> {
-    const twentyFourHoursInMilliseconds = 24 * 60 * 60 * 1000;
+    const twentyFourHoursInMilliseconds = 86400000;
     const expiresDate = new Date(
       new Date().getTime() + twentyFourHoursInMilliseconds,
     );

@@ -6,9 +6,10 @@ import { GenerateCodeOfVerificationUtil } from './utils/generate_code_of_verific
 import { CryptoUtil } from './utils/crypto.util';
 import { GenerateTokenUtil } from './utils/generate_token.util';
 import { HashUtil } from './utils/hash.util';
+import { EmailModule } from './modules/email/email.module';
 
 @Module({
-  imports: [forwardRef(() => AuthModule)],
+  imports: [forwardRef(() => AuthModule), EmailModule],
   providers: [
     GenerateCodeOfVerificationUtil,
     {
@@ -40,6 +41,7 @@ import { HashUtil } from './utils/hash.util';
     'IGenerateTokenUtil',
     'ICryptoUtil',
     'IGenerateCodeOfVerificationUtil',
+    EmailModule,
   ],
 })
 export class SharedModule {}

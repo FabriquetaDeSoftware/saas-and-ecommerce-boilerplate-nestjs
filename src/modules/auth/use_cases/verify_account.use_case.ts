@@ -1,15 +1,20 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
 import { VerificationCodeDto } from '../dto/verification_code.dto';
 import { IAuthRepository } from '../interfaces/repository/auth.repository.interface';
 import { IVerificationCodesRepository } from '../interfaces/repository/verification_codes.repository.interface';
 import { Auth } from '../entities/auth.entity';
 import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
+import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
+import { VerificationCodes } from '../entities/verification_codes.entity';
 
 @Injectable()
 export class VerifyAccountUseCase
   implements IGenericExecute<VerificationCodeDto, boolean>
 {
+  @Inject(CACHE_MANAGER)
+  private readonly cacheManager: Cache;
+
   @Inject('IVerificationCodesRepository')
   private readonly _verificationCodesRepository: IVerificationCodesRepository;
 
@@ -29,16 +34,38 @@ export class VerifyAccountUseCase
   private async intermediary(data: VerificationCodeDto): Promise<boolean> {
     const user = await this.findUserByEmail(data.email);
 
-    const verificationCode =
-      await this._verificationCodesRepository.findVerificationCodeByEmail(
-        user.id,
-      );
+    const verifyCodeByCache = await this.verifyCodeByCache(
+      data.email,
+      data.code.toString(),
+    );
+
+    if (verifyCodeByCache) {
+      await this.updateAccountIsVerify(user.id, true);
+
+      return true;
+    }
+
+    const verificationCode = await this.verifyExpiresDateOfCode(user.id);
 
     await this.verifyCode(data.code.toString(), verificationCode.code);
 
     await this.updateAccountIsVerify(user.id, true);
 
     return true;
+  }
+
+  private async verifyCodeByCache(key: string, code: string): Promise<boolean> {
+    const cachedCode = await this.cacheManager.get<string>(
+      `verification:${key}`,
+    );
+
+    if (!cachedCode) {
+      return null;
+    }
+
+    const isMatch = await this._hashUtil.compareHash(code, cachedCode);
+
+    return isMatch;
   }
 
   private async updateAccountIsVerify(
@@ -71,5 +98,20 @@ export class VerifyAccountUseCase
     }
 
     return user;
+  }
+
+  private async verifyExpiresDateOfCode(
+    user_id: number,
+  ): Promise<VerificationCodes> {
+    const verificationCode =
+      await this._verificationCodesRepository.findVerificationCodeByEmail(
+        user_id,
+      );
+
+    if (new Date() > verificationCode.expires_at) {
+      throw new BadRequestException('Invalid or expired code');
+    }
+
+    return verificationCode;
   }
 }
