@@ -1,21 +1,22 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/databases/modules/prisma/prisma.service';
 import { VerificationCodes } from '../entities/verification_codes.entity';
 import { IVerificationCodesRepository } from '../interfaces/repository/verification_codes.repository.interface';
+import { DatabaseAdapter } from 'src/databases/adapters/database.adapter';
 
 @Injectable()
 export class VerificationCodesRepository
   implements IVerificationCodesRepository
 {
-  @Inject()
-  private readonly prismaService: PrismaService;
+  @Inject('IDatabaseAdapter')
+  private readonly _databaseAdapter: DatabaseAdapter;
 
   public async findVerificationCodeByEmail(
     auth_id: number,
   ): Promise<VerificationCodes> {
-    const result = await this.prismaService.verificationCodes.findUnique({
-      where: { auth_id },
-    });
+    const result = await this._databaseAdapter.findOne<VerificationCodes>(
+      'verificationCodes',
+      { auth_id },
+    );
 
     return result;
   }

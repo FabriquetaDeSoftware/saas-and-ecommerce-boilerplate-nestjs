@@ -17,6 +17,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { jwtKeysConstants } from 'src/shared/constants/jwt_keys.constants';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './guards/jwt_auth.guard';
+import { DatabaseModule } from 'src/databases/database.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { JwtAuthGuard } from './guards/jwt_auth.guard';
     }),
     SharedModule,
     PrismaModule,
+    DatabaseModule,
     PassportModule,
   ],
   controllers: [AuthController],

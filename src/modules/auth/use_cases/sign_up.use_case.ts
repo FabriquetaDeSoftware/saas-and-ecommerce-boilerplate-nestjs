@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, BadRequestException } from '@nestjs/common';
 import { Auth } from '../entities/auth.entity';
 import { SignUpAuthDto } from '../dto/sign_up_auth.dto';
 import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
@@ -50,7 +50,7 @@ export class SignUpUseCase implements IGenericExecute<SignUpAuthDto, Auth> {
     const findUserByEmail = await this.findUserByEmailHelper.execute(email);
 
     if (findUserByEmail) {
-      throw new Error('Email already exists');
+      throw new BadRequestException('Email already exists');
     }
   }
 
@@ -69,6 +69,8 @@ export class SignUpUseCase implements IGenericExecute<SignUpAuthDto, Auth> {
 
     const verificationCode =
       await this._generateCodeOfVerificationUtil.execute();
+
+    console.log('verificationCode', verificationCode);
 
     const hashedCode = await this.hashUtil.generateHash(verificationCode);
 
