@@ -10,11 +10,13 @@ export class VerificationCodesRepository
   @Inject('IDatabaseAdapter')
   private readonly _databaseAdapter: DatabaseAdapter;
 
+  private readonly _model = 'verificationCodes';
+
   public async findVerificationCodeByEmail(
     auth_id: number,
   ): Promise<VerificationCodes> {
     const result = await this._databaseAdapter.findOne<VerificationCodes>(
-      'verificationCodes',
+      this._model,
       { auth_id },
     );
 
