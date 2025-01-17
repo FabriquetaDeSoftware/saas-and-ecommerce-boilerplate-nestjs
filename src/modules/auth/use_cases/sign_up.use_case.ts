@@ -1,12 +1,12 @@
 import { Inject, Injectable, BadRequestException } from '@nestjs/common';
 import { Auth } from '../entities/auth.entity';
-import { SignUpAuthDto } from '../dto/sign_up_auth.dto';
+import { SignUpDto } from '../dto/sign_up.dto';
 import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
 import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
 import { IAuthRepository } from '../interfaces/repository/auth.repository.interface';
 
 @Injectable()
-export class SignUpUseCase implements IGenericExecute<SignUpAuthDto, Auth> {
+export class SignUpUseCase implements IGenericExecute<SignUpDto, Auth> {
   @Inject('IAuthRepository')
   private readonly authRepository: IAuthRepository;
 
@@ -22,11 +22,11 @@ export class SignUpUseCase implements IGenericExecute<SignUpAuthDto, Auth> {
     string
   >;
 
-  public async execute(input: SignUpAuthDto): Promise<Auth> {
+  public async execute(input: SignUpDto): Promise<Auth> {
     return await this.intermediary(input);
   }
 
-  private async intermediary(data: SignUpAuthDto): Promise<Auth> {
+  private async intermediary(data: SignUpDto): Promise<Auth> {
     const [, hashedPassword, verificationCodeAndExpiresDate] =
       await Promise.all([
         this.checkEmailExistsAndError(data.email),

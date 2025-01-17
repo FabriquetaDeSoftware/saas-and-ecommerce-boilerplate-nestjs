@@ -10,7 +10,7 @@ import {
   MinLength,
 } from 'class-validator';
 
-export class SignUpAuthDto {
+export class SignUpDto {
   @ApiProperty({
     description: 'Email of the user',
     example: 'teste@gmail.com',

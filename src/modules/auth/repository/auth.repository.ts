@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { IAuthRepository } from '../interfaces/repository/auth.repository.interface';
 import { Auth } from '../entities/auth.entity';
-import { SignUpAuthDto } from '../dto/sign_up_auth.dto';
+import { SignUpDto } from '../dto/sign_up.dto';
 import { RolesAuth } from 'src/shared/enum/roles_auth.enum';
-import { UpdateAuthInfoDto } from '../dto/update_info_auth.dto';
+import { UpdateInfoDto } from '../dto/update_info.dto';
 import { IDatabaseAdapter } from 'src/databases/interfaces/database.adapter.interface';
 
 @Injectable()
@@ -14,12 +14,12 @@ export class AuthRepository implements IAuthRepository {
   private readonly _model = 'auth';
 
   public async create(
-    signUpAuthDto: SignUpAuthDto,
+    signUpDto: SignUpDto,
     code: string,
     expires_at: Date,
   ): Promise<Auth> {
     const result = await this._databaseAdapter.create<Auth>(this._model, {
-      ...signUpAuthDto,
+      ...signUpDto,
       verification_code: {
         create: {
           code,
@@ -44,12 +44,12 @@ export class AuthRepository implements IAuthRepository {
   }
 
   public async updateInfoAuth(
-    updateAuthInfoDto: Partial<UpdateAuthInfoDto>,
+    updateInfoDto: Partial<UpdateInfoDto>,
   ): Promise<Auth> {
     const result = await this._databaseAdapter.update<Auth>(
       this._model,
-      { id: updateAuthInfoDto.id },
-      { ...updateAuthInfoDto },
+      { id: updateInfoDto.id },
+      { ...updateInfoDto },
     );
 
     return { ...result, role: result.role as RolesAuth };

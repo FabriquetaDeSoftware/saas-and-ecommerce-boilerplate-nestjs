@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { GenerateTokenUtilDto } from './dto/generate_token_util.dto';
+import { GenerateTokenDto } from './dto/generate_token.dto';
 import { ITokensReturns } from '../interfaces/tokens_returns.interface';
 import { IJwtUserPayload } from '../interfaces/jwt_user_payload.interface';
 import { jwtKeysConstants } from '../constants/jwt_keys.constants';
@@ -9,7 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class GenerateTokenUtil
-  implements IGenericExecute<GenerateTokenUtilDto, ITokensReturns>
+  implements IGenericExecute<GenerateTokenDto, ITokensReturns>
 {
   @Inject()
   private readonly jwtService: JwtService;
@@ -17,7 +17,7 @@ export class GenerateTokenUtil
   @Inject('ICryptoUtil')
   private readonly cryptoUtil: ICryptoUtil;
 
-  public async execute(input: GenerateTokenUtilDto): Promise<ITokensReturns> {
+  public async execute(input: GenerateTokenDto): Promise<ITokensReturns> {
     const { sub, email, role } = await this.intermediry(input);
 
     const payload: IJwtUserPayload = {
@@ -40,9 +40,7 @@ export class GenerateTokenUtil
     };
   }
 
-  private async intermediry(
-    data: GenerateTokenUtilDto,
-  ): Promise<IJwtUserPayload> {
+  private async intermediry(data: GenerateTokenDto): Promise<IJwtUserPayload> {
     const [sub, email, role] = await Promise.all([
       this.encryptPayload(data.sub),
       this.encryptPayload(data.email),

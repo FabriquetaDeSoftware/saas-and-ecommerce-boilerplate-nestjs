@@ -4,14 +4,14 @@ import { JwtService } from '@nestjs/jwt';
 import { IJwtUserPayload } from 'src/shared/interfaces/jwt_user_payload.interface';
 import { jwtKeysConstants } from 'src/shared/constants/jwt_keys.constants';
 import { Auth } from '../entities/auth.entity';
-import { RefreshTokenAuthDto } from '../dto/refresh_token_auth.dto';
+import { RefreshTokenDto } from '../dto/refresh_token.dto';
 import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
 import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
-import { GenerateTokenUtilDto } from 'src/shared/utils/dto/generate_token_util.dto';
+import { GenerateTokenDto } from 'src/shared/utils/dto/generate_token.dto';
 
 @Injectable()
 export class RefreshTokenService
-  implements IGenericExecute<RefreshTokenAuthDto, ITokensReturns>
+  implements IGenericExecute<RefreshTokenDto, ITokensReturns>
 {
   @Inject()
   private readonly jwtService: JwtService;
@@ -21,14 +21,14 @@ export class RefreshTokenService
 
   @Inject('IGenerateTokenUtil')
   private readonly _generateTokenUtil: IGenericExecute<
-    GenerateTokenUtilDto,
+    GenerateTokenDto,
     ITokensReturns
   >;
 
   @Inject('ICryptoUtil')
   private readonly _cryptoUtil: ICryptoUtil;
 
-  public async execute(input: RefreshTokenAuthDto): Promise<ITokensReturns> {
+  public async execute(input: RefreshTokenDto): Promise<ITokensReturns> {
     return await this.intermediary(input.refresh_token);
   }
 

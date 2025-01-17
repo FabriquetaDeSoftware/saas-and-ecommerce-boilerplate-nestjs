@@ -8,7 +8,7 @@ import {
   MinLength,
 } from 'class-validator';
 
-export class UpdateAuthInfoDto {
+export class UpdateInfoDto {
   id: number;
 
   @ApiProperty({

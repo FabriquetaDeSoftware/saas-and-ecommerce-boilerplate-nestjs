@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
-import { VerificationCodeAuthDto } from '../dto/verification_code_auth.dto';
+import { VerificationCodeDto } from '../dto/verification_code.dto';
 import { IAuthRepository } from '../interfaces/repository/auth.repository.interface';
 import { IVerificationCodesRepository } from '../interfaces/repository/verification_codes.repository.interface';
 import { Auth } from '../entities/auth.entity';
@@ -8,7 +8,7 @@ import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
 
 @Injectable()
 export class VerifyAccountUseCase
-  implements IGenericExecute<VerificationCodeAuthDto, boolean>
+  implements IGenericExecute<VerificationCodeDto, boolean>
 {
   @Inject('IVerificationCodesRepository')
   private readonly _verificationCodesRepository: IVerificationCodesRepository;
@@ -22,11 +22,11 @@ export class VerifyAccountUseCase
   @Inject('IAuthRepository')
   private readonly _authRepository: IAuthRepository;
 
-  public async execute(data: VerificationCodeAuthDto): Promise<boolean> {
+  public async execute(data: VerificationCodeDto): Promise<boolean> {
     return await this.intermediary(data);
   }
 
-  private async intermediary(data: VerificationCodeAuthDto): Promise<boolean> {
+  private async intermediary(data: VerificationCodeDto): Promise<boolean> {
     const user = await this.findUserByEmail(data.email);
 
     const verificationCode =

@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
-export class GenerateTokenUtilDto {
+export class GenerateTokenDto {
   @IsNotEmpty()
   @IsString()
   sub: string;

@@ -8,7 +8,7 @@ import {
   Min,
 } from 'class-validator';
 
-export class VerificationCodeAuthDto {
+export class VerificationCodeDto {
   @ApiProperty({
     description: 'Email of the user to verify account',
     example: 'teste@gmail.com',
