@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AuthModule } from './modules/auth/auth.module';
 import { SharedModule } from './shared/shared.module';
-import { PrismaModule } from './prisma/prisma.module';
+import { PrismaModule } from './databases/modules/prisma/prisma.module';
 import { EmailModule } from './shared/modules/email/email.module';
 
 @Module({

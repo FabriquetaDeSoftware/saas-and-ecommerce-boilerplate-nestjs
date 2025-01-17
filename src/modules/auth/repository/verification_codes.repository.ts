@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from 'src/databases/modules/prisma/prisma.service';
 import { VerificationCodes } from '../entities/verification_codes.entity';
 import { IVerificationCodesRepository } from '../interfaces/repository/verification_codes.repository.interface';
 
