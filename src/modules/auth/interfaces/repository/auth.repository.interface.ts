@@ -1,4 +1,4 @@
-import { UpdateAuthInfoDto } from 'src/auth/dto/update_info_auth.dto';
+import { UpdateAuthInfoDto } from '../../dto/update_info_auth.dto';
 import { SignUpAuthDto } from '../../dto/sign_up_auth.dto';
 import { Auth } from '../../entities/auth.entity';
 

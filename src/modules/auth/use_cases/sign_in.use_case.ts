@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { SignInAuthDto } from '../dto/sign_in_auth.dto';
 import { Auth } from '../entities/auth.entity';
-import { ITokensReturns } from '../../shared/interfaces/tokens_returns.interface';
-import { IGenericExecute } from '../../shared/interfaces/generic_execute.interface';
+import { ITokensReturns } from 'src/shared/interfaces/tokens_returns.interface';
+import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
 import { GenerateTokenUtilDto } from 'src/shared/utils/dto/generate_token_util.dto';
 
 @Injectable()

@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Auth } from '../entities/auth.entity';
-import { IGenericExecute } from '../../shared/interfaces/generic_execute.interface';
+import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
 import { IAuthRepository } from '../interfaces/repository/auth.repository.interface';
 
 @Injectable()

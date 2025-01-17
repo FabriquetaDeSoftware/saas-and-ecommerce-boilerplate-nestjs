@@ -1,7 +1,7 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './guards/roles.guard';
-import { AuthModule } from 'src/auth/auth.module';
+import { AuthModule } from 'src/modules/auth/auth.module';
 import { GenerateCodeOfVerificationUtil } from './utils/generate_code_of_verification.util';
 import { CryptoUtil } from './utils/crypto.util';
 import { GenerateTokenUtil } from './utils/generate_token.util';
