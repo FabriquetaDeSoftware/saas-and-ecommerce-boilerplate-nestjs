@@ -6,10 +6,9 @@ import { GenerateCodeOfVerificationUtil } from './utils/generate_code_of_verific
 import { CryptoUtil } from './utils/crypto.util';
 import { GenerateTokenUtil } from './utils/generate_token.util';
 import { HashUtil } from './utils/hash.util';
-import { PrismaModule } from './modules/prisma/prisma.module';
 
 @Module({
-  imports: [forwardRef(() => AuthModule), PrismaModule],
+  imports: [forwardRef(() => AuthModule)],
   providers: [
     GenerateCodeOfVerificationUtil,
     {
@@ -41,7 +40,6 @@ import { PrismaModule } from './modules/prisma/prisma.module';
     'IGenerateTokenUtil',
     'ICryptoUtil',
     'IGenerateCodeOfVerificationUtil',
-    PrismaModule,
   ],
 })
 export class SharedModule {}
