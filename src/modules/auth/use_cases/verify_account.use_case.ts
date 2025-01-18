@@ -1,32 +1,15 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
 import { VerificationCodeDto } from '../dto/verification_code.dto';
-import { IAuthRepository } from '../interfaces/repository/auth.repository.interface';
-import { IVerificationCodesRepository } from '../interfaces/repository/verification_codes.repository.interface';
 import { Auth } from '../entities/auth.entity';
-import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
-import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { VerificationCodes } from '../entities/verification_codes.entity';
+import { VerifyAccountUseCaseAbstract } from '../abstracts/use_cases/veriify_account.use_case';
 
 @Injectable()
 export class VerifyAccountUseCase
+  extends VerifyAccountUseCaseAbstract
   implements IGenericExecute<VerificationCodeDto, boolean>
 {
-  @Inject(CACHE_MANAGER)
-  private readonly cacheManager: Cache;
-
-  @Inject('IVerificationCodesRepository')
-  private readonly _verificationCodesRepository: IVerificationCodesRepository;
-
-  @Inject('IFindUserByEmailHelper')
-  private readonly _findUserByEmailHelper: IGenericExecute<string, Auth | void>;
-
-  @Inject('IHashUtil')
-  private readonly _hashUtil: IHashUtil;
-
-  @Inject('IAuthRepository')
-  private readonly _authRepository: IAuthRepository;
-
   public async execute(data: VerificationCodeDto): Promise<boolean> {
     return await this.intermediary(data);
   }
@@ -55,7 +38,7 @@ export class VerifyAccountUseCase
   }
 
   private async verifyCodeByCache(key: string, code: string): Promise<boolean> {
-    const cachedCode = await this.cacheManager.get<string>(
+    const cachedCode = await this._cacheManager.get<string>(
       `verification:${key}`,
     );
 
