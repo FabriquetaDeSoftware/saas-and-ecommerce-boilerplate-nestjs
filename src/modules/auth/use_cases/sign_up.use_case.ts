@@ -1,31 +1,14 @@
-import { Inject, Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { Auth } from '../entities/auth.entity';
 import { SignUpDto } from '../dto/sign_up.dto';
 import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
-import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
-import { IAuthRepository } from '../interfaces/repository/auth.repository.interface';
-import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
+import { SignUpUseCaseAbstract } from '../abstracts/use_cases/sign_up.use_case.abstract';
 
 @Injectable()
-export class SignUpUseCase implements IGenericExecute<SignUpDto, Auth> {
-  @Inject(CACHE_MANAGER)
-  private readonly cacheManager: Cache;
-
-  @Inject('IAuthRepository')
-  private readonly authRepository: IAuthRepository;
-
-  @Inject('IFindUserByEmailHelper')
-  private readonly findUserByEmailHelper: IGenericExecute<string, Auth | void>;
-
-  @Inject('IHashUtil')
-  private readonly hashUtil: IHashUtil;
-
-  @Inject('IGenerateCodeOfVerificationUtil')
-  private readonly _generateCodeOfVerificationUtil: IGenericExecute<
-    void,
-    string
-  >;
-
+export class SignUpUseCase
+  extends SignUpUseCaseAbstract
+  implements IGenericExecute<SignUpDto, Auth>
+{
   public async execute(input: SignUpDto): Promise<Auth> {
     return await this.intermediary(input);
   }
@@ -40,13 +23,13 @@ export class SignUpUseCase implements IGenericExecute<SignUpDto, Auth> {
 
     const twentyFourHoursInSeconds = 86400;
 
-    await this.cacheManager.set(
+    await this._cacheManager.set(
       `verification:${data.email}`,
       verificationCodeAndExpiresDate.hashedCode,
       twentyFourHoursInSeconds,
     );
 
-    const result = await this.authRepository.create(
+    const result = await this._authRepository.create(
       {
         ...data,
         password: hashedPassword,
@@ -59,7 +42,7 @@ export class SignUpUseCase implements IGenericExecute<SignUpDto, Auth> {
   }
 
   private async checkEmailExistsAndError(email: string): Promise<void> {
-    const findUserByEmail = await this.findUserByEmailHelper.execute(email);
+    const findUserByEmail = await this._findUserByEmailHelper.execute(email);
 
     if (findUserByEmail) {
       throw new BadRequestException('Email already exists');
@@ -67,7 +50,7 @@ export class SignUpUseCase implements IGenericExecute<SignUpDto, Auth> {
   }
 
   private async hashPassword(password: string): Promise<string> {
-    return await this.hashUtil.generateHash(password);
+    return await this._hashUtil.generateHash(password);
   }
 
   private async generateCodeOfVerificationAndExpiresDate(): Promise<{
@@ -82,7 +65,7 @@ export class SignUpUseCase implements IGenericExecute<SignUpDto, Auth> {
     const verificationCode =
       await this._generateCodeOfVerificationUtil.execute();
 
-    const hashedCode = await this.hashUtil.generateHash(verificationCode);
+    const hashedCode = await this._hashUtil.generateHash(verificationCode);
 
     return { expiresDate, hashedCode };
   }
