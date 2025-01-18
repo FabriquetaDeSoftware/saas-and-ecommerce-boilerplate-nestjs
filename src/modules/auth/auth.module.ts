@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { PassportModule } from '@nestjs/passport';
-import { AuthRepository } from './repository/auth.repository';
+import { AuthRepository } from './repositories/auth.repository';
 import { SignInUseCase } from './use_cases/sign_in.use_case';
 import { SignUpUseCase } from './use_cases/sign_up.use_case';
 import { FindUserByEmailHelper } from './helpers/find_user_by_email.helper';
@@ -12,7 +12,7 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { RefreshTokenService } from './services/refresh_token.service';
 import { VerifyAccountUseCase } from './use_cases/verify_account.use_case';
-import { VerificationCodesRepository } from './repository/verification_codes.repository';
+import { VerificationCodesRepository } from './repositories/verification_codes.repository';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtKeysConstants } from 'src/shared/constants/jwt_keys.constants';
 import { APP_GUARD } from '@nestjs/core';
