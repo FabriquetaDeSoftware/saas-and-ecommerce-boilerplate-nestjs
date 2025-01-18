@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ICryptoUtil } from './interfaces/crypto.util.interface';
 import { createCipheriv, createDecipheriv, randomBytes, scrypt } from 'crypto';
 import { promisify } from 'util';
-import { serverConstant } from '../constants/server.constant';
+import { serverConstants } from '../constants/server.constant';
 
 @Injectable()
 export class CryptoUtil implements ICryptoUtil {
@@ -38,8 +38,8 @@ export class CryptoUtil implements ICryptoUtil {
   }
 
   private async generateKey(): Promise<Buffer> {
-    const password = serverConstant.encrypt_password;
-    const salt = serverConstant.encrypt_salt;
+    const password = serverConstants.encrypt_password;
+    const salt = serverConstants.encrypt_salt;
     const key = (await promisify(scrypt)(password, salt, 32)) as Buffer;
 
     return key;

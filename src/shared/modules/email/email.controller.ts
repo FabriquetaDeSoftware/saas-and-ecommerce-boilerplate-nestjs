@@ -12,5 +12,7 @@ export class EmailController {
 
   @IsPublicRoute()
   @Post('email-sender')
-  public async emailSender(@Body() input: EmailServiceDto): Promise<void> {}
+  public async emailSender(@Body() input: EmailServiceDto): Promise<void> {
+    await this._emailService.sendEmail(input);
+  }
 }

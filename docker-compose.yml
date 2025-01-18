@@ -1,13 +1,14 @@
 version: '3.9'
 
 services:
-  backend:
+  api:
     container_name: api-nestjs-auth-boilerplate
     build: .
     env_file:
       - .env
     depends_on:
       - postgres
+      - redis
     networks:
       - network
     ports:
@@ -18,7 +19,7 @@ services:
     command: sh -c 'npx prisma migrate deploy & pnpm run start:dev'
 
   postgres:
-    container_name: postgres-auth-boilerplate
+    container_name: postgres-nestjs-auth-boilerplate
     image: postgres:16.3-alpine
     networks:
       - network
@@ -32,9 +33,27 @@ services:
       - postgres_data:/var/lib/postgresql/data
     restart: always
 
+  redis:
+    container_name: redis-nestjs-auth-boilerplate
+    image: redis:7.0-alpine
+    networks:
+      - network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: '512M'
+    ports:
+      - '${MAPPED_PORT_REDIS}:6379'
+    volumes:
+      - redis_data:/data
+    restart: always
+    command: redis-server --loglevel warning
+
 networks:
   network:
 
 
 volumes:
   postgres_data:
+  redis_data:

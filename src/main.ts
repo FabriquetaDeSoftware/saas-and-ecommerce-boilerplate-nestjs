@@ -6,7 +6,7 @@ import {
 } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ForbiddenException, ValidationPipe } from '@nestjs/common';
-import { serverConstant } from './shared/constants/server.constant';
+import { serverConstants } from './shared/constants/server.constant';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -20,7 +20,7 @@ async function bootstrap() {
     }),
   );
 
-  const host = serverConstant.host;
+  const host = serverConstants.host;
 
   app.enableCors({
     origin: (origin, callback) => {
@@ -44,7 +44,7 @@ async function bootstrap() {
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
 
-  const port = parseInt(serverConstant.port);
+  const port = parseInt(serverConstants.port_api);
 
   await app.listen({ port, host: '0.0.0.0' });
 }
