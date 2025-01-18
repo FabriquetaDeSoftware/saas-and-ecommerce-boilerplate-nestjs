@@ -1,33 +1,17 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ITokensReturns } from 'src/shared/interfaces/tokens_returns.interface';
-import { JwtService } from '@nestjs/jwt';
 import { IJwtUserPayload } from 'src/shared/interfaces/jwt_user_payload.interface';
 import { jwtKeysConstants } from 'src/shared/constants/jwt_keys.constants';
 import { Auth } from '../entities/auth.entity';
 import { RefreshTokenDto } from '../dto/refresh_token.dto';
 import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
-import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
-import { GenerateTokenDto } from 'src/shared/utils/dto/generate_token.dto';
+import { RefreshTokenServiceAbstract } from '../abstracts/services/refresh_token.service.abstract';
 
 @Injectable()
 export class RefreshTokenService
+  extends RefreshTokenServiceAbstract
   implements IGenericExecute<RefreshTokenDto, ITokensReturns>
 {
-  @Inject()
-  private readonly jwtService: JwtService;
-
-  @Inject('IFindUserByEmailHelper')
-  private readonly _findUserByEmailHelper: IGenericExecute<string, Auth | void>;
-
-  @Inject('IGenerateTokenUtil')
-  private readonly _generateTokenUtil: IGenericExecute<
-    GenerateTokenDto,
-    ITokensReturns
-  >;
-
-  @Inject('ICryptoUtil')
-  private readonly _cryptoUtil: ICryptoUtil;
-
   public async execute(input: RefreshTokenDto): Promise<ITokensReturns> {
     return await this.intermediary(input.refresh_token);
   }
@@ -52,7 +36,7 @@ export class RefreshTokenService
   private async verifyRefreshTokenIsValid(
     refreshToken: string,
   ): Promise<IJwtUserPayload> {
-    const payload: IJwtUserPayload = await this.jwtService.verify(
+    const payload: IJwtUserPayload = await this._jwtService.verify(
       refreshToken,
       {
         secret: jwtKeysConstants.secret_refresh_token_key,
