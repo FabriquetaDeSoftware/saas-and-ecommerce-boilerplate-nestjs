@@ -9,4 +9,4 @@ RUN npm install -g pnpm
 RUN pnpm i
 RUN npx prisma generate
 
-EXPOSE ${PORT}
+EXPOSE ${PORT_API}

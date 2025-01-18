@@ -11,7 +11,7 @@ services:
     networks:
       - network
     ports:
-      - '${PORT}:${PORT}'
+      - '${MAPPED_PORT_API}:${PORT_API}'
     volumes:
       - .:/home/api/nestjs/auth-boilerplate
     restart: always
@@ -23,7 +23,7 @@ services:
     networks:
       - network
     ports:
-      - '5432:5432'
+      - '${MAPPED_PORT_DB}:5432'
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
