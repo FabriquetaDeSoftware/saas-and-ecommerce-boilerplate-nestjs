@@ -1,14 +1,31 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, Inject } from '@nestjs/common';
 import { Auth } from '../entities/auth.entity';
 import { SignUpDto } from '../dto/sign_up.dto';
 import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
-import { SignUpUseCaseAbstract } from '../abstracts/use_cases/sign_up.use_case.abstract';
+import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
+import { IAuthRepository } from '../interfaces/repository/auth.repository.interface';
+import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
 
 @Injectable()
-export class SignUpUseCase
-  extends SignUpUseCaseAbstract
-  implements IGenericExecute<SignUpDto, Auth>
-{
+export class SignUpUseCase implements IGenericExecute<SignUpDto, Auth> {
+  @Inject(CACHE_MANAGER)
+  private readonly _cacheManager: Cache;
+
+  @Inject('IAuthRepository')
+  private readonly _authRepository: IAuthRepository;
+
+  @Inject('IFindUserByEmailHelper')
+  private readonly _findUserByEmailHelper: IGenericExecute<string, Auth | void>;
+
+  @Inject('IHashUtil')
+  private readonly _hashUtil: IHashUtil;
+
+  @Inject('IGenerateCodeOfVerificationUtil')
+  private readonly _generateCodeOfVerificationUtil: IGenericExecute<
+    void,
+    string
+  >;
+
   public async execute(input: SignUpDto): Promise<Auth> {
     return await this.intermediary(input);
   }

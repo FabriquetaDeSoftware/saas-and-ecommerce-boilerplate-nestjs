@@ -3,13 +3,30 @@ import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface
 import { VerificationCodeDto } from '../dto/verification_code.dto';
 import { Auth } from '../entities/auth.entity';
 import { VerificationCodes } from '../entities/verification_codes.entity';
-import { VerifyAccountUseCaseAbstract } from '../abstracts/use_cases/veriify_account.use_case';
+import { IAuthRepository } from '../interfaces/repository/auth.repository.interface';
+import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
+import { IVerificationCodesRepository } from '../interfaces/repository/verification_codes.repository.interface';
+import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 
 @Injectable()
 export class VerifyAccountUseCase
-  extends VerifyAccountUseCaseAbstract
   implements IGenericExecute<VerificationCodeDto, boolean>
 {
+  @Inject(CACHE_MANAGER)
+  private readonly _cacheManager: Cache;
+
+  @Inject('IVerificationCodesRepository')
+  private readonly _verificationCodesRepository: IVerificationCodesRepository;
+
+  @Inject('IFindUserByEmailHelper')
+  private readonly _findUserByEmailHelper: IGenericExecute<string, Auth | void>;
+
+  @Inject('IHashUtil')
+  private readonly _hashUtil: IHashUtil;
+
+  @Inject('IAuthRepository')
+  private readonly _authRepository: IAuthRepository;
+
   public async execute(data: VerificationCodeDto): Promise<boolean> {
     return await this.intermediary(data);
   }
