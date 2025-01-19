@@ -1,5 +1,5 @@
 import { Body, Controller, Inject, Post } from '@nestjs/common';
-import { EmailService } from './email.service';
+import { SendEmailQueueJob } from './jobs/send_email_queue.job';
 import { ApiTags } from '@nestjs/swagger';
 import { IsPublicRoute } from 'src/shared/decorators/is_public_route.decorator';
 import { EmailServiceDto } from './dto/email.service.dto';
@@ -8,11 +8,11 @@ import { EmailServiceDto } from './dto/email.service.dto';
 @Controller('email')
 export class EmailController {
   @Inject()
-  private readonly _emailService: EmailService;
+  private readonly _emailService: SendEmailQueueJob;
 
   @IsPublicRoute()
   @Post('email-sender')
   public async emailSender(@Body() input: EmailServiceDto): Promise<void> {
-    await this._emailService.sendEmail(input);
+    await this._emailService.execute();
   }
 }

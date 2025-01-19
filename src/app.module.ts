@@ -13,7 +13,6 @@ import { BullModule } from '@nestjs/bullmq';
         port: 6379,
       },
     }),
-    BullModule.registerQueue({ name: 'SEND_EMAIL_QUEUE' }),
     CacheModule.register({
       isGlobal: true,
     }),
