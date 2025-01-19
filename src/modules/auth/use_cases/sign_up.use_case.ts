@@ -41,7 +41,7 @@ export class SignUpUseCase implements IGenericExecute<SignUpDto, Auth> {
     const twentyFourHoursInSeconds = 86400;
 
     await this._cacheManager.set(
-      `verification:${data.email}`,
+      `accountVerificationCode:${data.email}`,
       verificationCodeAndExpiresDate.hashedCode,
       twentyFourHoursInSeconds,
     );

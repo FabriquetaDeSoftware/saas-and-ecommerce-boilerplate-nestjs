@@ -56,12 +56,14 @@ export class VerifyAccountUseCase
 
   private async verifyCodeByCache(key: string, code: string): Promise<boolean> {
     const cachedCode = await this._cacheManager.get<string>(
-      `verification:${key}`,
+      `accountVerificationCode:${key}`,
     );
 
     if (!cachedCode) {
       return null;
     }
+
+    await this._cacheManager.del(`accountVerificationCode:${key}`);
 
     const isMatch = await this._hashUtil.compareHash(code, cachedCode);
 
