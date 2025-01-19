@@ -1,16 +1,22 @@
 import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable } from '@nestjs/common';
 import { Queue } from 'bullmq';
+import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
+import { EmailServiceDto } from '../dto/email.service.dto';
 
 @Injectable()
-export class SendEmailQueueJob {
-  private readonly _nameQueue: string = 'SEND_EMAIL_QUEUE';
-
+export class SendEmailQueueJob
+  implements IGenericExecute<EmailServiceDto, void>
+{
   constructor(
     @InjectQueue('SEND_EMAIL_QUEUE') private readonly _sendEmailQueue: Queue,
   ) {}
 
-  async execute(): Promise<void> {
-    await this._sendEmailQueue.add(this._nameQueue, {});
+  private readonly _nameQueue: string = 'SEND_EMAIL_QUEUE';
+
+  async execute(input: EmailServiceDto): Promise<void> {
+    await this._sendEmailQueue.add(this._nameQueue, input);
+
+    return;
   }
 }

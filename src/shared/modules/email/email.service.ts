@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { EmailServiceDto } from './dto/email.service.dto';
 import * as nodemailer from 'nodemailer';
+import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
 
 @Injectable()
-export class EmailService {
-  public async sendEmail(input: EmailServiceDto) {
+export class EmailService implements IGenericExecute<EmailServiceDto, void> {
+  public async execute(input: EmailServiceDto) {
     const transporter = nodemailer.createTransport({
       host: 'sandbox.smtp.mailtrap.io',
       port: 2525,
@@ -19,9 +20,11 @@ export class EmailService {
       to: 'lobohipster52@gmail.com',
       subject: 'email assunto',
       text: 'email texto',
-      html: '<h1>email html</h1>',
+      html: `<h1>email ${input.name}</h1>`,
     };
 
     await transporter.sendMail(mailOptions);
+
+    return;
   }
 }
