@@ -53,22 +53,46 @@ export class SignUpUseCase implements IGenericExecute<SignUpDto, Auth> {
       twentyFourHoursInSeconds,
     );
 
-    const result = await this._authRepository.create(
-      {
-        ...data,
-        password: hashedPassword,
-      },
+    const result = await this.createAccount(
+      data,
+      hashedPassword,
       verificationCodeAndExpiresDate.hashedCode,
       verificationCodeAndExpiresDate.expiresDate,
     );
 
-    await this._sendEmailQueueJob.execute({
-      name: 'result.name',
+    await this.emailSender({
       email: result.email,
       code: verificationCodeAndExpiresDate.verificationCode,
+      name: 'new name',
     });
 
     return { ...result, password: undefined };
+  }
+
+  private async createAccount(
+    data: SignUpDto,
+    hashedPassword: string,
+    hashedCode: string,
+    expiresDate: Date,
+  ): Promise<Auth> {
+    const response = await this._authRepository.create(
+      {
+        ...data,
+        password: hashedPassword,
+      },
+      hashedCode,
+      expiresDate,
+    );
+
+    return response;
+  }
+
+  private async emailSender(data: EmailServiceDto): Promise<void> {
+    await this._sendEmailQueueJob.execute({
+      name: data.name,
+      email: data.email,
+      code: data.code,
+    });
   }
 
   private async checkEmailExistsAndError(email: string): Promise<void> {

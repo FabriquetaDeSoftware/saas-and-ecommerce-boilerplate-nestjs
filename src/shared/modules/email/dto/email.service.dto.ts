@@ -8,7 +8,7 @@ export class EmailServiceDto {
   })
   @IsOptional()
   @IsString()
-  name: string;
+  name?: string;
 
   @ApiProperty({
     description: 'Email the person who will receive the email',
