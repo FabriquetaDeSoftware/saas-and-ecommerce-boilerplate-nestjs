@@ -6,7 +6,7 @@ import { EmailServiceDto } from '../dto/email.service.dto';
 
 @Injectable()
 export class SendEmailQueueJob
-  implements IGenericExecute<EmailServiceDto, void>
+  implements IGenericExecute<EmailServiceDto, { message: string }>
 {
   constructor(
     @InjectQueue('SEND_EMAIL_QUEUE') private readonly _sendEmailQueue: Queue,
@@ -14,9 +14,9 @@ export class SendEmailQueueJob
 
   private readonly _nameQueue: string = 'SEND_EMAIL_QUEUE';
 
-  async execute(input: EmailServiceDto): Promise<void> {
+  async execute(input: EmailServiceDto): Promise<{ message: string }> {
     await this._sendEmailQueue.add(this._nameQueue, input);
 
-    return;
+    return { message: 'Email sent successfully' };
   }
 }

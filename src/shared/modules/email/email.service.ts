@@ -16,11 +16,11 @@ export class EmailService implements IGenericExecute<EmailServiceDto, void> {
     });
 
     const mailOptions = {
-      from: '"Seu Nome" <seu-email@example.com>', // Remetente
-      to: 'lobohipster52@gmail.com',
+      from: '"Seu Nome" <seu-email@example.com>',
+      to: input.email,
       subject: 'email assunto',
       text: 'email texto',
-      html: `<h1>email ${input.name}</h1>`,
+      html: `<h1>email para ${input.name}, enviado para ${input.email}, code ${input.code}</h1>`,
     };
 
     await transporter.sendMail(mailOptions);

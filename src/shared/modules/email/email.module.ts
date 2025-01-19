@@ -21,5 +21,6 @@ import { BullModule } from '@nestjs/bullmq';
       useExisting: SendEmailQueueJob,
     },
   ],
+  exports: ['ISendEmailQueueJob'],
 })
 export class EmailModule {}

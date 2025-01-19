@@ -5,6 +5,7 @@ import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { IAuthRepository } from '../interfaces/repository/auth.repository.interface';
 import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
+import { EmailServiceDto } from 'src/shared/modules/email/dto/email.service.dto';
 
 @Injectable()
 export class SignUpUseCase implements IGenericExecute<SignUpDto, Auth> {
@@ -24,6 +25,12 @@ export class SignUpUseCase implements IGenericExecute<SignUpDto, Auth> {
   private readonly _generateCodeOfVerificationUtil: IGenericExecute<
     void,
     string
+  >;
+
+  @Inject('ISendEmailQueueJob')
+  private readonly _sendEmailQueueJob: IGenericExecute<
+    EmailServiceDto,
+    { message: string }
   >;
 
   public async execute(input: SignUpDto): Promise<Auth> {
@@ -55,6 +62,12 @@ export class SignUpUseCase implements IGenericExecute<SignUpDto, Auth> {
       verificationCodeAndExpiresDate.expiresDate,
     );
 
+    await this._sendEmailQueueJob.execute({
+      name: 'result.name',
+      email: result.email,
+      code: verificationCodeAndExpiresDate.verificationCode,
+    });
+
     return { ...result, password: undefined };
   }
 
@@ -73,6 +86,7 @@ export class SignUpUseCase implements IGenericExecute<SignUpDto, Auth> {
   private async generateCodeOfVerificationAndExpiresDate(): Promise<{
     expiresDate: Date;
     hashedCode: string;
+    verificationCode: string;
   }> {
     const twentyFourHoursInMilliseconds = 86400000;
     const expiresDate = new Date(
@@ -84,6 +98,6 @@ export class SignUpUseCase implements IGenericExecute<SignUpDto, Auth> {
 
     const hashedCode = await this._hashUtil.generateHash(verificationCode);
 
-    return { expiresDate, hashedCode };
+    return { expiresDate, hashedCode, verificationCode };
   }
 }
