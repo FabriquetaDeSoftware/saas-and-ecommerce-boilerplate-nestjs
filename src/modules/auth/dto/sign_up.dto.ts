@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { RolesEnum } from 'src/shared/enum/roles_auth.enum';
+import { RolesEnum } from 'src/shared/enum/roles.enum';
 import {
   IsBoolean,
   IsEmail,

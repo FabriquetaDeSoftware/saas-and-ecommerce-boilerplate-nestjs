@@ -7,7 +7,7 @@ import { SignInDto } from './dto/sign_in.dto';
 import { LocalAuthGuard } from './guards/local_auth.guard';
 import { ITokensReturns } from 'src/shared/interfaces/tokens_returns.interface';
 import { Roles } from 'src/shared/decorators/roles.decorator';
-import { RolesEnum } from 'src/shared/enum/roles_auth.enum';
+import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { RolesGuard } from 'src/shared/guards/roles.guard';
 import { RefreshTokenDto } from './dto/refresh_token.dto';
 import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
