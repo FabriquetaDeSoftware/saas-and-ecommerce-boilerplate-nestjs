@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { IAuthRepository } from '../interfaces/repository/auth.repository.interface';
 import { Auth } from '../entities/auth.entity';
 import { SignUpDto } from '../dto/sign_up.dto';
-import { RolesAuth } from 'src/shared/enum/roles_auth.enum';
+import { RolesEnum } from 'src/shared/enum/roles_auth.enum';
 import { UpdateInfoDto } from '../dto/update_info.dto';
 import { IDatabaseAdapter } from 'src/databases/interfaces/database.adapter.interface';
 
@@ -28,7 +28,7 @@ export class AuthRepository implements IAuthRepository {
       },
     });
 
-    return { ...result, role: result.role as RolesAuth };
+    return { ...result, role: result.role as RolesEnum };
   }
 
   public async findOneByEmail(email: string): Promise<Auth> {
@@ -40,7 +40,7 @@ export class AuthRepository implements IAuthRepository {
       return null;
     }
 
-    return { ...result, role: result.role as RolesAuth };
+    return { ...result, role: result.role as RolesEnum };
   }
 
   public async updateInfoAuth(
@@ -52,6 +52,6 @@ export class AuthRepository implements IAuthRepository {
       { ...updateInfoDto },
     );
 
-    return { ...result, role: result.role as RolesAuth };
+    return { ...result, role: result.role as RolesEnum };
   }
 }

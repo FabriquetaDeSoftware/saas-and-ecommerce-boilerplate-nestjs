@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { RolesAuth } from 'src/shared/enum/roles_auth.enum';
+import { RolesEnum } from 'src/shared/enum/roles_auth.enum';
 import {
   IsBoolean,
   IsEmail,
@@ -30,12 +30,12 @@ export class SignUpDto {
 
   @ApiProperty({
     description: 'Role of the user',
-    enum: RolesAuth,
-    example: RolesAuth.USER,
+    enum: RolesEnum,
+    example: RolesEnum.USER,
   })
   @IsNotEmpty()
-  @IsEnum(RolesAuth)
-  role: RolesAuth;
+  @IsEnum(RolesEnum)
+  role: RolesEnum;
 
   @ApiProperty({
     description: 'Accepts or not the newsletter subscription',

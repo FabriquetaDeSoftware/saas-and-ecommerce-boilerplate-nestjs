@@ -7,7 +7,7 @@ import { SignInDto } from './dto/sign_in.dto';
 import { LocalAuthGuard } from './guards/local_auth.guard';
 import { ITokensReturns } from 'src/shared/interfaces/tokens_returns.interface';
 import { Roles } from 'src/shared/decorators/roles.decorator';
-import { RolesAuth } from 'src/shared/enum/roles_auth.enum';
+import { RolesEnum } from 'src/shared/enum/roles_auth.enum';
 import { RolesGuard } from 'src/shared/guards/roles.guard';
 import { RefreshTokenDto } from './dto/refresh_token.dto';
 import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
@@ -71,7 +71,7 @@ export class AuthController {
 
   @ApiBearerAuth()
   @Get('admin')
-  @Roles(RolesAuth.ADMIN)
+  @Roles(RolesEnum.ADMIN)
   @UseGuards(RolesGuard)
   public admin(): string {
     return 'Admin route';
@@ -79,7 +79,7 @@ export class AuthController {
 
   @ApiBearerAuth()
   @Get('user')
-  @Roles(RolesAuth.USER, RolesAuth.ADMIN)
+  @Roles(RolesEnum.USER, RolesEnum.ADMIN)
   @UseGuards(RolesGuard)
   public user(): string {
     return 'User route';

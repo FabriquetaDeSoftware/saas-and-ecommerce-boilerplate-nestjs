@@ -4,7 +4,7 @@ import {
   Inject,
   Injectable,
 } from '@nestjs/common';
-import { RolesAuth } from '../enum/roles_auth.enum';
+import { RolesEnum } from '../enum/roles_auth.enum';
 import { ROLES_KEY } from '../decorators/roles.decorator';
 import { Reflector } from '@nestjs/core';
 import { ICryptoUtil } from '../utils/interfaces/crypto.util.interface';
@@ -17,7 +17,7 @@ export class RolesGuard implements CanActivate {
   protected readonly cryptoUtil: ICryptoUtil;
 
   public async canActivate(context: ExecutionContext): Promise<boolean> {
-    const requiredRoles = this.reflector.getAllAndOverride<RolesAuth[]>(
+    const requiredRoles = this.reflector.getAllAndOverride<RolesEnum[]>(
       ROLES_KEY,
       [context.getHandler(), context.getClass()],
     );
