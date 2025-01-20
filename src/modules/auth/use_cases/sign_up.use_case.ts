@@ -6,6 +6,7 @@ import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { IAuthRepository } from '../interfaces/repository/auth.repository.interface';
 import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
 import { EmailServiceDto } from 'src/shared/modules/email/dto/email.service.dto';
+import { LanguageEnum } from 'src/shared/enum/language.enum';
 
 @Injectable()
 export class SignUpUseCase implements IGenericExecute<SignUpDto, Auth> {
@@ -61,9 +62,9 @@ export class SignUpUseCase implements IGenericExecute<SignUpDto, Auth> {
     );
 
     await this.emailSender({
-      email: result.email,
-      code: verificationCodeAndExpiresDate.verificationCode,
-      name: 'new name',
+      emailTo: result.email,
+      language: LanguageEnum.PT_BR,
+      subject: 'sujeito',
     });
 
     return { ...result, password: undefined };
@@ -89,9 +90,9 @@ export class SignUpUseCase implements IGenericExecute<SignUpDto, Auth> {
 
   private async emailSender(data: EmailServiceDto): Promise<void> {
     await this._sendEmailQueueJob.execute({
-      name: data.name,
-      email: data.email,
-      code: data.code,
+      emailTo: data.emailTo,
+      language: data.language,
+      subject: data.subject,
     });
   }
 

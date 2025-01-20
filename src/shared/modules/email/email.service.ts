@@ -17,10 +17,10 @@ export class EmailService implements IGenericExecute<EmailServiceDto, void> {
 
     const mailOptions = {
       from: '"Seu Nome" <seu-email@example.com>',
-      to: input.email,
-      subject: 'email assunto',
+      to: input.emailTo,
+      subject: input.subject,
       text: 'email texto',
-      html: `<h1>email para ${input.name}, enviado para ${input.email}, code ${input.code}</h1>`,
+      html: `<h1>email enviado para ${input.emailTo}</h1>`,
     };
 
     await transporter.sendMail(mailOptions);
