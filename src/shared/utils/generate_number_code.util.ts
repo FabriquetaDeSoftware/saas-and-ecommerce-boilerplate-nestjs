@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { IGenericExecute } from '../interfaces/generic_execute.interface';
+import { IGenerateNumberCodeUtil } from './interfaces/generate_number_code.util.interface';
 
 @Injectable()
-export class GenerateCodeOfVerificationUtil
-  implements IGenericExecute<void, string>
-{
+export class GenerateNumberCodeUtil implements IGenerateNumberCodeUtil {
   public async execute(): Promise<string> {
     const code = Math.floor(100000 + Math.random() * 900000).toString();
 

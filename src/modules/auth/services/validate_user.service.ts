@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { SignInDto } from '../dto/sign_in.dto';
 import { Auth } from '../entities/auth.entity';
-import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
 import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
 import { IValidateUserService } from '../interfaces/services/validate_user.service.interface';
 import { IFindUserByEmailHelper } from '../interfaces/helpers/find_user_by_email.helper.interface';

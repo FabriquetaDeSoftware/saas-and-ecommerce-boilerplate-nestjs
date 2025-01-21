@@ -10,7 +10,6 @@ import { Roles } from 'src/shared/decorators/roles.decorator';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { RolesGuard } from 'src/shared/guards/roles.guard';
 import { RefreshTokenDto } from './dto/refresh_token.dto';
-import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
 import { VerificationCodeDto } from './dto/verification_code.dto';
 import { ISignInUseCase } from './interfaces/use_cases/sign_in.use_case.interface';
 import { ISignUpUseCase } from './interfaces/use_cases/sign_up.use_case.interface';

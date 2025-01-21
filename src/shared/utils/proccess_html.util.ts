@@ -1,15 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { IGenericExecute } from '../interfaces/generic_execute.interface';
 import * as fs from 'node:fs/promises';
-import { HtmlProcessParams } from './interfaces/proccess_html.interface';
+import { IProcessHTMLUtil } from './interfaces/proccess_html.interface';
 
 @Injectable()
-export class ProccessHtmlUtil
-  implements IGenericExecute<HtmlProcessParams, string>
-{
-  public async execute(params: HtmlProcessParams): Promise<string> {
-    const { pathHTML, variables } = params;
-
+export class ProccessHtmlUtil implements IProcessHTMLUtil {
+  public async execute(
+    pathHTML: string,
+    variables?: Record<string, string>,
+  ): Promise<string> {
     const htmlContent = await fs.readFile(pathHTML, 'utf-8');
 
     if (!variables) {

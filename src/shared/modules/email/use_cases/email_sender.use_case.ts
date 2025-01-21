@@ -1,13 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { EmailSenderDto } from '../dto/email_sender.dto';
 import * as nodemailer from 'nodemailer';
-import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
+import { IEmailSenderUseCase } from '../interfaces/use_cases/email_sender.use_case.interface';
 
 @Injectable()
-export class EmailSenderUseCase
-  implements IGenericExecute<EmailSenderDto, void>
-{
-  public async execute(input: EmailSenderDto) {
+export class EmailSenderUseCase implements IEmailSenderUseCase {
+  public async execute(input: EmailSenderDto): Promise<void> {
     const transporter = nodemailer.createTransport({
       host: 'sandbox.smtp.mailtrap.io',
       port: 2525,

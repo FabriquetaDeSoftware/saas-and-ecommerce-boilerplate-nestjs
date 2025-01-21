@@ -1,7 +1,6 @@
 import { Injectable, BadRequestException, Inject } from '@nestjs/common';
 import { Auth } from '../entities/auth.entity';
 import { SignUpDto } from '../dto/sign_up.dto';
-import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { IAuthRepository } from '../interfaces/repository/auth.repository.interface';
 import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
@@ -10,6 +9,8 @@ import { LanguageEnum } from 'src/shared/enum/language.enum';
 import { TemplateEnum } from 'src/shared/modules/email/enum/template.enum';
 import { ISignUpUseCase } from '../interfaces/use_cases/sign_up.use_case.interface';
 import { IFindUserByEmailHelper } from '../interfaces/helpers/find_user_by_email.helper.interface';
+import { IGenerateNumberCodeUtil } from 'src/shared/utils/interfaces/generate_number_code.util.interface';
+import { ISendEmailQueueJob } from 'src/shared/modules/email/interfaces/jobs/send_email_queue.job.interface';
 
 @Injectable()
 export class SignUpUseCase implements ISignUpUseCase {
@@ -25,17 +26,11 @@ export class SignUpUseCase implements ISignUpUseCase {
   @Inject('IHashUtil')
   private readonly _hashUtil: IHashUtil;
 
-  @Inject('IGenerateCodeOfVerificationUtil')
-  private readonly _generateCodeOfVerificationUtil: IGenericExecute<
-    void,
-    string
-  >;
+  @Inject('IGenerateNumberCodeUtil')
+  private readonly _generateCodeOfVerificationUtil: IGenerateNumberCodeUtil;
 
   @Inject('ISendEmailQueueJob')
-  private readonly _sendEmailQueueJob: IGenericExecute<
-    EmailSenderDto,
-    { message: string }
-  >;
+  private readonly _sendEmailQueueJob: ISendEmailQueueJob;
 
   public async execute(input: SignUpDto): Promise<Auth> {
     return await this.intermediary(input);

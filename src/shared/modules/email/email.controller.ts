@@ -2,16 +2,13 @@ import { Body, Controller, Inject, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { IsPublicRoute } from 'src/shared/decorators/is_public_route.decorator';
 import { EmailSenderDto } from './dto/email_sender.dto';
-import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
+import { ISendEmailQueueJob } from './interfaces/jobs/send_email_queue.job.interface';
 
 @ApiTags('email')
 @Controller('email')
 export class EmailController {
   @Inject('ISendEmailQueueJob')
-  private readonly _sendEmailQueueJob: IGenericExecute<
-    EmailSenderDto,
-    { message: string }
-  >;
+  private readonly _sendEmailQueueJob: ISendEmailQueueJob;
 
   @IsPublicRoute()
   @Post('email-sender')
