@@ -5,7 +5,7 @@ import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { IAuthRepository } from '../interfaces/repository/auth.repository.interface';
 import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
-import { EmailServiceDto } from 'src/shared/modules/email/dto/email.service.dto';
+import { EmailSenderDto } from 'src/shared/modules/email/dto/email.service.dto';
 import { LanguageEnum } from 'src/shared/enum/language.enum';
 import { TemplateEnum } from 'src/shared/modules/email/enum/template.enum';
 
@@ -31,7 +31,7 @@ export class SignUpUseCase implements IGenericExecute<SignUpDto, Auth> {
 
   @Inject('ISendEmailQueueJob')
   private readonly _sendEmailQueueJob: IGenericExecute<
-    EmailServiceDto,
+    EmailSenderDto,
     { message: string }
   >;
 
@@ -90,7 +90,7 @@ export class SignUpUseCase implements IGenericExecute<SignUpDto, Auth> {
     return response;
   }
 
-  private async emailSender(data: EmailServiceDto): Promise<void> {
+  private async emailSender(data: EmailSenderDto): Promise<void> {
     await this._sendEmailQueueJob.execute({
       emailTo: data.emailTo,
       language: data.language,

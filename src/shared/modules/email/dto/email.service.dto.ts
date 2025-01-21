@@ -3,7 +3,7 @@ import { IsEmail, IsEnum, IsNotEmpty, IsString } from 'class-validator';
 import { LanguageEnum } from 'src/shared/enum/language.enum';
 import { TemplateEnum } from '../enum/template.enum';
 
-export class EmailServiceDto {
+export class EmailSenderDto {
   @ApiProperty({
     description: 'Email the person who will receive the email',
     example: 'emailtest@gmail.com',

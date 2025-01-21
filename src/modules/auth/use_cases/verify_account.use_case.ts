@@ -7,7 +7,7 @@ import { IAuthRepository } from '../interfaces/repository/auth.repository.interf
 import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
 import { IVerificationCodesRepository } from '../interfaces/repository/verification_codes.repository.interface';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
-import { EmailServiceDto } from 'src/shared/modules/email/dto/email.service.dto';
+import { EmailSenderDto } from 'src/shared/modules/email/dto/email.service.dto';
 
 @Injectable()
 export class VerifyAccountUseCase
@@ -30,7 +30,7 @@ export class VerifyAccountUseCase
 
   @Inject('ISendEmailQueueJob')
   private readonly _sendEmailQueueJob: IGenericExecute<
-    EmailServiceDto,
+    EmailSenderDto,
     { message: string }
   >;
 
