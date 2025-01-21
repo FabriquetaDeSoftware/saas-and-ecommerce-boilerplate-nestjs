@@ -7,10 +7,16 @@ import { CryptoUtil } from './utils/crypto.util';
 import { GenerateTokenUtil } from './utils/generate_token.util';
 import { HashUtil } from './utils/hash.util';
 import { EmailModule } from './modules/email/email.module';
+import { ProccessHtmlUtil } from './utils/proccess_html.util';
 
 @Module({
   imports: [forwardRef(() => AuthModule), EmailModule],
   providers: [
+    ProccessHtmlUtil,
+    {
+      provide: 'IProccessHtmlUtil',
+      useExisting: ProccessHtmlUtil,
+    },
     GenerateCodeOfVerificationUtil,
     {
       provide: 'IGenerateCodeOfVerificationUtil',
@@ -41,6 +47,7 @@ import { EmailModule } from './modules/email/email.module';
     'IGenerateTokenUtil',
     'ICryptoUtil',
     'IGenerateCodeOfVerificationUtil',
+    'IProccessHtmlUtil',
     EmailModule,
   ],
 })
