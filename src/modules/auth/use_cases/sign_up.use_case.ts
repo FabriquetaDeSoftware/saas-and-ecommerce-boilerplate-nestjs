@@ -7,6 +7,7 @@ import { IAuthRepository } from '../interfaces/repository/auth.repository.interf
 import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
 import { EmailServiceDto } from 'src/shared/modules/email/dto/email.service.dto';
 import { LanguageEnum } from 'src/shared/enum/language.enum';
+import { TemplateEnum } from 'src/shared/modules/email/enum/template.enum';
 
 @Injectable()
 export class SignUpUseCase implements IGenericExecute<SignUpDto, Auth> {
@@ -65,6 +66,7 @@ export class SignUpUseCase implements IGenericExecute<SignUpDto, Auth> {
       emailTo: result.email,
       language: LanguageEnum.PT_BR,
       subject: 'sujeito',
+      template: TemplateEnum.ACCOUNT_VERIFICATION,
     });
 
     return { ...result, password: undefined };
@@ -93,6 +95,7 @@ export class SignUpUseCase implements IGenericExecute<SignUpDto, Auth> {
       emailTo: data.emailTo,
       language: data.language,
       subject: data.subject,
+      template: data.template,
     });
   }
 

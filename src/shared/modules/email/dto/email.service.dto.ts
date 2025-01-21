@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, IsString } from 'class-validator';
 import { LanguageEnum } from 'src/shared/enum/language.enum';
+import { TemplateEnum } from '../enum/template.enum';
 
 export class EmailServiceDto {
   @ApiProperty({
@@ -24,5 +25,16 @@ export class EmailServiceDto {
     enum: LanguageEnum,
     example: LanguageEnum.PT_BR,
   })
+  @IsNotEmpty()
+  @IsEnum(LanguageEnum)
   language: LanguageEnum;
+
+  @ApiProperty({
+    description: 'Template of the email',
+    enum: TemplateEnum,
+    example: TemplateEnum.ACCOUNT_VERIFICATION,
+  })
+  @IsNotEmpty()
+  @IsEnum(TemplateEnum)
+  template: TemplateEnum;
 }

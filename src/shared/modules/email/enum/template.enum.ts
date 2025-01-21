@@ -1,0 +1,5 @@
+export enum TemplateEnum {
+  ACCOUNT_VERIFICATION = 'ACCOUNT_VERIFICATION.html',
+  PASSWORD_RECOVERY = 'PASSWORD_RECOVERY.html',
+  WELCOME = 'WELCOME.html',
+}

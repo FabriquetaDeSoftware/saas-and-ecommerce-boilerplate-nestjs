@@ -8,13 +8,16 @@ import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface
 @Controller('email')
 export class EmailController {
   @Inject('ISendEmailQueueJob')
-  private readonly _sendEmailQueueJob: IGenericExecute<EmailServiceDto, void>;
+  private readonly _sendEmailQueueJob: IGenericExecute<
+    EmailServiceDto,
+    { message: string }
+  >;
 
   @IsPublicRoute()
   @Post('email-sender')
-  public async emailSender(@Body() input: EmailServiceDto): Promise<void> {
-    await this._sendEmailQueueJob.execute(input);
-
-    return;
+  public async emailSender(
+    @Body() input: EmailServiceDto,
+  ): Promise<{ message: string }> {
+    return await this._sendEmailQueueJob.execute(input);
   }
 }
