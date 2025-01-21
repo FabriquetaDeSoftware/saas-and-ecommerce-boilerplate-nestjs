@@ -9,6 +9,7 @@ import { IVerificationCodesRepository } from '../interfaces/repository/verificat
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { EmailSenderDto } from 'src/shared/modules/email/dto/email_sender.dto';
 import { IVerifyAccountUseCase } from '../interfaces/use_cases/verify_account.use_case.interface';
+import { IFindUserByEmailHelper } from '../interfaces/helpers/find_user_by_email.helper.interface';
 
 @Injectable()
 export class VerifyAccountUseCase implements IVerifyAccountUseCase {
@@ -19,7 +20,7 @@ export class VerifyAccountUseCase implements IVerifyAccountUseCase {
   private readonly _verificationCodesRepository: IVerificationCodesRepository;
 
   @Inject('IFindUserByEmailHelper')
-  private readonly _findUserByEmailHelper: IGenericExecute<string, Auth | void>;
+  private readonly _findUserByEmailHelper: IFindUserByEmailHelper;
 
   @Inject('IHashUtil')
   private readonly _hashUtil: IHashUtil;

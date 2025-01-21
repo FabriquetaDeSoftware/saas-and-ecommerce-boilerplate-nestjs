@@ -8,16 +8,16 @@ import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface
 import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
 import { GenerateTokenDto } from 'src/shared/utils/dto/generate_token.dto';
 import { JwtService } from '@nestjs/jwt';
+import { IRefreshTokenService } from '../interfaces/services/refresh_token.service.interface';
+import { IFindUserByEmailHelper } from '../interfaces/helpers/find_user_by_email.helper.interface';
 
 @Injectable()
-export class RefreshTokenService
-  implements IGenericExecute<RefreshTokenDto, ITokensReturns>
-{
+export class RefreshTokenService implements IRefreshTokenService {
   @Inject()
   private readonly _jwtService: JwtService;
 
   @Inject('IFindUserByEmailHelper')
-  private readonly _findUserByEmailHelper: IGenericExecute<string, Auth | void>;
+  private readonly _findUserByEmailHelper: IFindUserByEmailHelper;
 
   @Inject('IGenerateTokenUtil')
   private readonly _generateTokenUtil: IGenericExecute<

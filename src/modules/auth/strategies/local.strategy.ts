@@ -4,6 +4,7 @@ import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface
 import { SignInDto } from '../dto/sign_in.dto';
 import { Strategy } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
+import { IValidateUserService } from '../interfaces/services/validate_user.service.interface';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
@@ -14,12 +15,12 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   }
 
   @Inject('IValidateUserService')
-  private validateUserService: IGenericExecute<SignInDto, Auth>;
+  private _validateUserService: IValidateUserService;
 
   public async validate(email: string, password: string): Promise<Auth> {
-    const user = await this.validateUserService.execute({ email, password });
+    const user = await this._validateUserService.execute({ email, password });
 
-    if (!user || !user.is_verified_account) {
+    if (!user) {
       throw new UnauthorizedException(
         'Invalid credentials or account not verified',
       );

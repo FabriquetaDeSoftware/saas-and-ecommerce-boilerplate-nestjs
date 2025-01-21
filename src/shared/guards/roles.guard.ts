@@ -11,13 +11,13 @@ import { ICryptoUtil } from '../utils/interfaces/crypto.util.interface';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-  constructor(private readonly reflector: Reflector) {}
+  constructor(private readonly _reflector: Reflector) {}
 
   @Inject('ICryptoUtil')
   protected readonly cryptoUtil: ICryptoUtil;
 
   public async canActivate(context: ExecutionContext): Promise<boolean> {
-    const requiredRoles = this.reflector.getAllAndOverride<RolesEnum[]>(
+    const requiredRoles = this._reflector.getAllAndOverride<RolesEnum[]>(
       ROLES_KEY,
       [context.getHandler(), context.getClass()],
     );

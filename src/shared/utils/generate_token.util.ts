@@ -12,10 +12,10 @@ export class GenerateTokenUtil
   implements IGenericExecute<GenerateTokenDto, ITokensReturns>
 {
   @Inject()
-  private readonly jwtService: JwtService;
+  private readonly _jwtService: JwtService;
 
   @Inject('ICryptoUtil')
-  private readonly cryptoUtil: ICryptoUtil;
+  private readonly _cryptoUtil: ICryptoUtil;
 
   public async execute(input: GenerateTokenDto): Promise<ITokensReturns> {
     const { sub, email, role } = await this.intermediry(input);
@@ -27,8 +27,8 @@ export class GenerateTokenUtil
     };
 
     const [access_token, refresh_token] = [
-      this.jwtService.sign({ ...payload, type: 'access_token' }),
-      this.jwtService.sign(
+      this._jwtService.sign({ ...payload, type: 'access_token' }),
+      this._jwtService.sign(
         { ...payload, type: 'refresh_token' },
         { expiresIn: '7d', secret: jwtKeysConstants.secret_refresh_token_key },
       ),
@@ -51,7 +51,7 @@ export class GenerateTokenUtil
   }
 
   private async encryptPayload(data: string): Promise<string> {
-    const dataBuffer = await this.cryptoUtil.encryptData(data);
+    const dataBuffer = await this._cryptoUtil.encryptData(data);
     const dataBase64 = dataBuffer.toString('base64');
 
     return dataBase64;

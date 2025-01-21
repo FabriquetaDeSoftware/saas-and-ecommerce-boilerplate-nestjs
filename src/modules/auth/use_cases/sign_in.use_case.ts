@@ -5,11 +5,12 @@ import { ITokensReturns } from 'src/shared/interfaces/tokens_returns.interface';
 import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
 import { GenerateTokenDto } from 'src/shared/utils/dto/generate_token.dto';
 import { ISignInUseCase } from '../interfaces/use_cases/sign_in.use_case.interface';
+import { IFindUserByEmailHelper } from '../interfaces/helpers/find_user_by_email.helper.interface';
 
 @Injectable()
 export class SignInUseCase implements ISignInUseCase {
   @Inject('IFindUserByEmailHelper')
-  private readonly _findUserByEmailHelper: IGenericExecute<string, Auth | void>;
+  private readonly _findUserByEmailHelper: IFindUserByEmailHelper;
 
   @Inject('IGenerateTokenUtil')
   private readonly _generateTokenUtil: IGenericExecute<

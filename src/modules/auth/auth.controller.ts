@@ -15,6 +15,7 @@ import { VerificationCodeDto } from './dto/verification_code.dto';
 import { ISignInUseCase } from './interfaces/use_cases/sign_in.use_case.interface';
 import { ISignUpUseCase } from './interfaces/use_cases/sign_up.use_case.interface';
 import { IVerifyAccountUseCase } from './interfaces/use_cases/verify_account.use_case.interface';
+import { IRefreshTokenService } from './interfaces/services/refresh_token.service.interface';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -26,10 +27,7 @@ export class AuthController {
   private readonly _signInUseCase: ISignInUseCase;
 
   @Inject('IRefreshTokenService')
-  private readonly _refreshTokenService: IGenericExecute<
-    RefreshTokenDto,
-    ITokensReturns
-  >;
+  private readonly _refreshTokenService: IRefreshTokenService;
 
   @Inject('IVerifyAccountUseCase')
   private readonly _verifyAccountUseCase: IVerifyAccountUseCase;

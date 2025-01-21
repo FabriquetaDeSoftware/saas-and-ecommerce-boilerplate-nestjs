@@ -9,6 +9,7 @@ import { EmailSenderDto } from 'src/shared/modules/email/dto/email_sender.dto';
 import { LanguageEnum } from 'src/shared/enum/language.enum';
 import { TemplateEnum } from 'src/shared/modules/email/enum/template.enum';
 import { ISignUpUseCase } from '../interfaces/use_cases/sign_up.use_case.interface';
+import { IFindUserByEmailHelper } from '../interfaces/helpers/find_user_by_email.helper.interface';
 
 @Injectable()
 export class SignUpUseCase implements ISignUpUseCase {
@@ -19,7 +20,7 @@ export class SignUpUseCase implements ISignUpUseCase {
   private readonly _authRepository: IAuthRepository;
 
   @Inject('IFindUserByEmailHelper')
-  private readonly _findUserByEmailHelper: IGenericExecute<string, Auth | void>;
+  private readonly _findUserByEmailHelper: IFindUserByEmailHelper;
 
   @Inject('IHashUtil')
   private readonly _hashUtil: IHashUtil;

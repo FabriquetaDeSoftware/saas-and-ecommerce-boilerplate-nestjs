@@ -1,17 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Auth } from '../entities/auth.entity';
-import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
 import { IAuthRepository } from '../interfaces/repository/auth.repository.interface';
+import { IFindUserByEmailHelper } from '../interfaces/helpers/find_user_by_email.helper.interface';
 
 @Injectable()
-export class FindUserByEmailHelper
-  implements IGenericExecute<string, Auth | void>
-{
+export class FindUserByEmailHelper implements IFindUserByEmailHelper {
   @Inject('IAuthRepository')
-  private readonly authRepository: IAuthRepository;
+  private readonly _authRepository: IAuthRepository;
 
   public async execute(input: string): Promise<Auth | void> {
-    const findUserByEmail = await this.authRepository.findOneByEmail(input);
+    const findUserByEmail = await this._authRepository.findOneByEmail(input);
 
     return findUserByEmail;
   }
