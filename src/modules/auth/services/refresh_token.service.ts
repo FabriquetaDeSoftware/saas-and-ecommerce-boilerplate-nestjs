@@ -4,12 +4,11 @@ import { IJwtUserPayload } from 'src/shared/interfaces/jwt_user_payload.interfac
 import { jwtKeysConstants } from 'src/shared/constants/jwt_keys.constants';
 import { Auth } from '../entities/auth.entity';
 import { RefreshTokenDto } from '../dto/refresh_token.dto';
-import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
 import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
-import { GenerateTokenDto } from 'src/shared/utils/dto/generate_token.dto';
 import { JwtService } from '@nestjs/jwt';
 import { IRefreshTokenService } from '../interfaces/services/refresh_token.service.interface';
 import { IFindUserByEmailHelper } from '../interfaces/helpers/find_user_by_email.helper.interface';
+import { IGenerateTokenUtil } from 'src/shared/utils/interfaces/generate_token.util.interface';
 
 @Injectable()
 export class RefreshTokenService implements IRefreshTokenService {
@@ -20,10 +19,7 @@ export class RefreshTokenService implements IRefreshTokenService {
   private readonly _findUserByEmailHelper: IFindUserByEmailHelper;
 
   @Inject('IGenerateTokenUtil')
-  private readonly _generateTokenUtil: IGenericExecute<
-    GenerateTokenDto,
-    ITokensReturns
-  >;
+  private readonly _generateTokenUtil: IGenerateTokenUtil;
 
   @Inject('ICryptoUtil')
   private readonly _cryptoUtil: ICryptoUtil;

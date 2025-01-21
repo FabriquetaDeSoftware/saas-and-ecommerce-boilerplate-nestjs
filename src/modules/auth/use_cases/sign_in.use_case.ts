@@ -2,10 +2,9 @@ import { Inject, Injectable } from '@nestjs/common';
 import { SignInDto } from '../dto/sign_in.dto';
 import { Auth } from '../entities/auth.entity';
 import { ITokensReturns } from 'src/shared/interfaces/tokens_returns.interface';
-import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
-import { GenerateTokenDto } from 'src/shared/utils/dto/generate_token.dto';
 import { ISignInUseCase } from '../interfaces/use_cases/sign_in.use_case.interface';
 import { IFindUserByEmailHelper } from '../interfaces/helpers/find_user_by_email.helper.interface';
+import { IGenerateTokenUtil } from 'src/shared/utils/interfaces/generate_token.util.interface';
 
 @Injectable()
 export class SignInUseCase implements ISignInUseCase {
@@ -13,10 +12,7 @@ export class SignInUseCase implements ISignInUseCase {
   private readonly _findUserByEmailHelper: IFindUserByEmailHelper;
 
   @Inject('IGenerateTokenUtil')
-  private readonly _generateTokenUtil: IGenericExecute<
-    GenerateTokenDto,
-    ITokensReturns
-  >;
+  private readonly _generateTokenUtil: IGenerateTokenUtil;
 
   public async execute(input: SignInDto): Promise<ITokensReturns> {
     return await this.intermediary(input.email);
