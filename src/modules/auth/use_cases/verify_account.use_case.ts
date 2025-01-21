@@ -7,7 +7,7 @@ import { IAuthRepository } from '../interfaces/repository/auth.repository.interf
 import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
 import { IVerificationCodesRepository } from '../interfaces/repository/verification_codes.repository.interface';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
-import { EmailSenderDto } from 'src/shared/modules/email/dto/email.service.dto';
+import { EmailSenderDto } from 'src/shared/modules/email/dto/email_sender.dto';
 
 @Injectable()
 export class VerifyAccountUseCase

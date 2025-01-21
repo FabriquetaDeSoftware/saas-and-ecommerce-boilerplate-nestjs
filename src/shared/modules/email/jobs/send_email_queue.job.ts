@@ -2,7 +2,7 @@ import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable } from '@nestjs/common';
 import { Queue } from 'bullmq';
 import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
-import { EmailSenderDto } from '../dto/email.service.dto';
+import { EmailSenderDto } from '../dto/email_sender.dto';
 
 @Injectable()
 export class SendEmailQueueJob

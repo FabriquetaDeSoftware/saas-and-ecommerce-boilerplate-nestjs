@@ -1,7 +1,7 @@
 import { Body, Controller, Inject, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { IsPublicRoute } from 'src/shared/decorators/is_public_route.decorator';
-import { EmailSenderDto } from './dto/email.service.dto';
+import { EmailSenderDto } from './dto/email_sender.dto';
 import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
 
 @ApiTags('email')

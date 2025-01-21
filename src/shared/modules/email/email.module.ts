@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { EmailSender } from './email.service';
+import { EmailSenderUseCase } from './use_cases/email_sender.use_case';
 import { EmailController } from './email.controller';
 import { SendEmailQueueJob } from './jobs/send_email_queue.job';
 import { SendEmailConsumerJob } from './jobs/send_email_consumer.job';
@@ -10,10 +10,10 @@ import { BullModule } from '@nestjs/bullmq';
   controllers: [EmailController],
   providers: [
     SendEmailConsumerJob,
-    EmailSender,
+    EmailSenderUseCase,
     {
-      provide: 'IEmailSender',
-      useExisting: EmailSender,
+      provide: 'IEmailSenderUseCase',
+      useExisting: EmailSenderUseCase,
     },
     SendEmailQueueJob,
     {

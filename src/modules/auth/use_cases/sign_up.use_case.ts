@@ -5,7 +5,7 @@ import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { IAuthRepository } from '../interfaces/repository/auth.repository.interface';
 import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
-import { EmailSenderDto } from 'src/shared/modules/email/dto/email.service.dto';
+import { EmailSenderDto } from 'src/shared/modules/email/dto/email_sender.dto';
 import { LanguageEnum } from 'src/shared/enum/language.enum';
 import { TemplateEnum } from 'src/shared/modules/email/enum/template.enum';
 
