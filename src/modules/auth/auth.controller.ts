@@ -13,12 +13,14 @@ import { RefreshTokenDto } from './dto/refresh_token.dto';
 import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
 import { VerificationCodeDto } from './dto/verification_code.dto';
 import { ISignInUseCase } from './interfaces/use_cases/sign_in.use_case.interface';
+import { ISignUpUseCase } from './interfaces/use_cases/sign_up.use_case.interface';
+import { IVerifyAccountUseCase } from './interfaces/use_cases/verify_account.use_case.interface';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   @Inject('ISignUpUseCase')
-  private readonly _signUpUseCase: IGenericExecute<SignUpDto, Auth>;
+  private readonly _signUpUseCase: ISignUpUseCase;
 
   @Inject('ISignInUseCase')
   private readonly _signInUseCase: ISignInUseCase;
@@ -30,10 +32,7 @@ export class AuthController {
   >;
 
   @Inject('IVerifyAccountUseCase')
-  private readonly _verifyAccountUseCase: IGenericExecute<
-    VerificationCodeDto,
-    boolean
-  >;
+  private readonly _verifyAccountUseCase: IVerifyAccountUseCase;
 
   @IsPublicRoute()
   @UseGuards(LocalAuthGuard)

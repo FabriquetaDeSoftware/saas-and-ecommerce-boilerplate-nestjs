@@ -8,9 +8,10 @@ import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
 import { EmailSenderDto } from 'src/shared/modules/email/dto/email_sender.dto';
 import { LanguageEnum } from 'src/shared/enum/language.enum';
 import { TemplateEnum } from 'src/shared/modules/email/enum/template.enum';
+import { ISignUpUseCase } from '../interfaces/use_cases/sign_up.use_case.interface';
 
 @Injectable()
-export class SignUpUseCase implements IGenericExecute<SignUpDto, Auth> {
+export class SignUpUseCase implements ISignUpUseCase {
   @Inject(CACHE_MANAGER)
   private readonly _cacheManager: Cache;
 

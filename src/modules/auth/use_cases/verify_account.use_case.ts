@@ -8,11 +8,10 @@ import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
 import { IVerificationCodesRepository } from '../interfaces/repository/verification_codes.repository.interface';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { EmailSenderDto } from 'src/shared/modules/email/dto/email_sender.dto';
+import { IVerifyAccountUseCase } from '../interfaces/use_cases/verify_account.use_case.interface';
 
 @Injectable()
-export class VerifyAccountUseCase
-  implements IGenericExecute<VerificationCodeDto, boolean>
-{
+export class VerifyAccountUseCase implements IVerifyAccountUseCase {
   @Inject(CACHE_MANAGER)
   private readonly _cacheManager: Cache;
 
