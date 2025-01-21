@@ -4,11 +4,10 @@ import { Auth } from '../entities/auth.entity';
 import { ITokensReturns } from 'src/shared/interfaces/tokens_returns.interface';
 import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
 import { GenerateTokenDto } from 'src/shared/utils/dto/generate_token.dto';
+import { ISignInUseCase } from '../interfaces/use_cases/sign_in.use_case.interface';
 
 @Injectable()
-export class SignInUseCase
-  implements IGenericExecute<SignInDto, ITokensReturns>
-{
+export class SignInUseCase implements ISignInUseCase {
   @Inject('IFindUserByEmailHelper')
   private readonly _findUserByEmailHelper: IGenericExecute<string, Auth | void>;
 

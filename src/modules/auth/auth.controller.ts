@@ -12,6 +12,7 @@ import { RolesGuard } from 'src/shared/guards/roles.guard';
 import { RefreshTokenDto } from './dto/refresh_token.dto';
 import { IGenericExecute } from 'src/shared/interfaces/generic_execute.interface';
 import { VerificationCodeDto } from './dto/verification_code.dto';
+import { ISignInUseCase } from './interfaces/use_cases/sign_in.use_case.interface';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -20,7 +21,7 @@ export class AuthController {
   private readonly _signUpUseCase: IGenericExecute<SignUpDto, Auth>;
 
   @Inject('ISignInUseCase')
-  private readonly _signInUseCase: IGenericExecute<SignInDto, ITokensReturns>;
+  private readonly _signInUseCase: ISignInUseCase;
 
   @Inject('IRefreshTokenService')
   private readonly _refreshTokenService: IGenericExecute<
