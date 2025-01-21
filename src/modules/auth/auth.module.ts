@@ -17,6 +17,7 @@ import { jwtKeysConstants } from 'src/shared/constants/jwt_keys.constants';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './guards/jwt_auth.guard';
 import { DatabaseModule } from 'src/databases/database.module';
+import { EmailModule } from 'src/shared/modules/email/email.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { DatabaseModule } from 'src/databases/database.module';
     SharedModule,
     DatabaseModule,
     PassportModule,
+    EmailModule,
   ],
   controllers: [AuthController],
   providers: [

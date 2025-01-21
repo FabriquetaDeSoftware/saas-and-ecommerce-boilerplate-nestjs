@@ -6,11 +6,10 @@ import { GenerateNumberCodeUtil } from './utils/generate_number_code.util';
 import { CryptoUtil } from './utils/crypto.util';
 import { GenerateTokenUtil } from './utils/generate_token.util';
 import { HashUtil } from './utils/hash.util';
-import { EmailModule } from './modules/email/email.module';
 import { ProccessHtmlUtil } from './utils/proccess_html.util';
 
 @Module({
-  imports: [forwardRef(() => AuthModule), EmailModule],
+  imports: [forwardRef(() => AuthModule)],
   providers: [
     ProccessHtmlUtil,
     {
@@ -48,7 +47,6 @@ import { ProccessHtmlUtil } from './utils/proccess_html.util';
     'ICryptoUtil',
     'IGenerateNumberCodeUtil',
     'IProccessHtmlUtil',
-    EmailModule,
   ],
 })
 export class SharedModule {}

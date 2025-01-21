@@ -16,7 +16,6 @@ export class ProccessHtmlUtil implements IProcessHTMLUtil {
 
     const processedHtml = this.replacePlaceholders(htmlContent, variables);
 
-    console.log(processedHtml);
     return processedHtml;
   }
 
@@ -34,12 +33,3 @@ export class ProccessHtmlUtil implements IProcessHTMLUtil {
     return resultHtml;
   }
 }
-/*    
-  const placeholders = { NAME: 'João Silva', LINK: 'https://example.com' };
-
-  await this._proccessHtmlUtil.execute({
-    pathHTML:
-      '/home/api/nestjs/auth-boilerplate/src/shared/modules/email/templates/pt_br/WELCOME.html',
-    variables: placeholders,
-  });
-*/

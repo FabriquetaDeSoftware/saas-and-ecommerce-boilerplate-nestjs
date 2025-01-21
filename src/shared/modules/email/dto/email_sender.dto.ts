@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsObject,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { LanguageEnum } from 'src/shared/enum/language.enum';
 import { TemplateEnum } from '../enum/template.enum';
 
@@ -37,4 +44,13 @@ export class EmailSenderDto {
   @IsNotEmpty()
   @IsEnum(TemplateEnum)
   template: TemplateEnum;
+
+  @ApiProperty({
+    description: 'Variables to be replaced in the email template',
+    example: { NAME: 'John Doe', CODE: '123456' },
+    type: Object,
+  })
+  @IsOptional()
+  @IsObject()
+  variables?: Record<string, string>;
 }
