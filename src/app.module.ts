@@ -4,6 +4,7 @@ import { SharedModule } from './shared/shared.module';
 import { DatabaseModule } from './databases/database.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { BullModule } from '@nestjs/bullmq';
+import { EmailModule } from './shared/modules/email/email.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { BullModule } from '@nestjs/bullmq';
     AuthModule,
     SharedModule,
     DatabaseModule,
+    EmailModule,
   ],
   controllers: [],
   providers: [],
