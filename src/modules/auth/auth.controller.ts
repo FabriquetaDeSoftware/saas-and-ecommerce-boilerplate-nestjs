@@ -56,7 +56,7 @@ export class AuthController {
   @Post('verification-code')
   public async verificationCode(
     @Body() input: VerificationCodeDto,
-  ): Promise<boolean> {
+  ): Promise<{ message: string }> {
     return await this._verifyAccountUseCase.execute(input);
   }
 

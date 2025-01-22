@@ -10,6 +10,8 @@ import { EmailSenderDto } from 'src/shared/modules/email/dto/email_sender.dto';
 import { IVerifyAccountUseCase } from '../interfaces/use_cases/verify_account.use_case.interface';
 import { IFindUserByEmailHelper } from '../interfaces/helpers/find_user_by_email.helper.interface';
 import { ISendEmailQueueJob } from 'src/shared/modules/email/interfaces/jobs/send_email_queue.job.interface';
+import { LanguageEnum } from 'src/shared/enum/language.enum';
+import { TemplateEnum } from 'src/shared/modules/email/enum/template.enum';
 
 @Injectable()
 export class VerifyAccountUseCase implements IVerifyAccountUseCase {
@@ -31,11 +33,15 @@ export class VerifyAccountUseCase implements IVerifyAccountUseCase {
   @Inject('ISendEmailQueueJob')
   private readonly _sendEmailQueueJob: ISendEmailQueueJob;
 
-  public async execute(data: VerificationCodeDto): Promise<boolean> {
+  public async execute(
+    data: VerificationCodeDto,
+  ): Promise<{ message: string }> {
     return await this.intermediary(data);
   }
 
-  private async intermediary(data: VerificationCodeDto): Promise<boolean> {
+  private async intermediary(
+    data: VerificationCodeDto,
+  ): Promise<{ message: string }> {
     const user = await this.findUserByEmail(data.email);
 
     const verifyCodeByCache = await this.verifyCodeByCache(
@@ -46,7 +52,13 @@ export class VerifyAccountUseCase implements IVerifyAccountUseCase {
     if (verifyCodeByCache) {
       await this.updateAccountIsVerify(user.id, true);
 
-      return true;
+      return await this.sendEmailVerificationCode({
+        emailTo: user.email,
+        language: LanguageEnum.PT_BR,
+        subject: 'Seja Bem Vindo a Plataforma',
+        template: TemplateEnum.WELCOME,
+        variables: { NAME: user.email, LINK: 'https://example.com' },
+      });
     }
 
     const verificationCode = await this.verifyExpiresDateOfCode(user.id);
@@ -55,7 +67,19 @@ export class VerifyAccountUseCase implements IVerifyAccountUseCase {
 
     await this.updateAccountIsVerify(user.id, true);
 
-    return true;
+    return await this.sendEmailVerificationCode({
+      emailTo: user.email,
+      language: LanguageEnum.PT_BR,
+      subject: 'Seja Bem Vindo a Plataforma',
+      template: TemplateEnum.WELCOME,
+      variables: { NAME: user.email, LINK: 'https://example.com' },
+    });
+  }
+
+  private async sendEmailVerificationCode(
+    data: EmailSenderDto,
+  ): Promise<{ message: string }> {
+    return await this._sendEmailQueueJob.execute(data);
   }
 
   private async verifyCodeByCache(key: string, code: string): Promise<boolean> {

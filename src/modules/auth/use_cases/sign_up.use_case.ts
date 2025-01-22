@@ -40,7 +40,7 @@ export class SignUpUseCase implements ISignUpUseCase {
     const [, hashedPassword, verificationCodeAndExpiresDate] =
       await Promise.all([
         this.checkEmailExistsAndError(data.email),
-        this.hashPassword(data.password),
+        this._hashUtil.generateHash(data.password),
         this.generateCodeOfVerificationAndExpiresDate(),
       ]);
 
@@ -59,11 +59,15 @@ export class SignUpUseCase implements ISignUpUseCase {
       verificationCodeAndExpiresDate.expiresDate,
     );
 
-    await this.emailSender({
+    await this._sendEmailQueueJob.execute({
       emailTo: result.email,
       language: LanguageEnum.PT_BR,
-      subject: 'sujeito',
+      subject: 'Código de Verificação da Plataforma',
       template: TemplateEnum.ACCOUNT_VERIFICATION,
+      variables: {
+        NAME: result.email,
+        CODE: verificationCodeAndExpiresDate.verificationCode,
+      },
     });
 
     return { ...result, password: undefined };
@@ -87,25 +91,12 @@ export class SignUpUseCase implements ISignUpUseCase {
     return response;
   }
 
-  private async emailSender(data: EmailSenderDto): Promise<void> {
-    await this._sendEmailQueueJob.execute({
-      emailTo: data.emailTo,
-      language: data.language,
-      subject: data.subject,
-      template: data.template,
-    });
-  }
-
   private async checkEmailExistsAndError(email: string): Promise<void> {
     const findUserByEmail = await this._findUserByEmailHelper.execute(email);
 
     if (findUserByEmail) {
       throw new BadRequestException('Email already exists');
     }
-  }
-
-  private async hashPassword(password: string): Promise<string> {
-    return await this._hashUtil.generateHash(password);
   }
 
   private async generateCodeOfVerificationAndExpiresDate(): Promise<{
