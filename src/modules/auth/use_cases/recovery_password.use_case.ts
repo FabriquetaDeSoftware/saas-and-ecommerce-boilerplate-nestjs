@@ -3,5 +3,5 @@ import { IRecoveryPasswordUseCase } from '../interfaces/use_cases/recovery_passw
 
 @Injectable()
 export class RecoveryPasswordUseCase implements IRecoveryPasswordUseCase {
-  public async execute(email: string): Promise<void> {}
+  public async execute(email: string, newPassword: string): Promise<void> {}
 }

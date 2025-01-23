@@ -1,3 +1,3 @@
 export interface IRecoveryPasswordUseCase {
-  execute(email: string): Promise<void>;
+  execute(email: string, newPassword: string): Promise<void>;
 }

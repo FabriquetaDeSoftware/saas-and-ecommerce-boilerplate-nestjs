@@ -15,6 +15,7 @@ import { ISignInUseCase } from './interfaces/use_cases/sign_in.use_case.interfac
 import { ISignUpUseCase } from './interfaces/use_cases/sign_up.use_case.interface';
 import { IVerifyAccountUseCase } from './interfaces/use_cases/verify_account.use_case.interface';
 import { IRefreshTokenService } from './interfaces/services/refresh_token.service.interface';
+import { IForgotPasswordService } from './interfaces/services/forgot_password.service.interface';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -30,6 +31,9 @@ export class AuthController {
 
   @Inject('IVerifyAccountUseCase')
   private readonly _verifyAccountUseCase: IVerifyAccountUseCase;
+
+  @Inject('IForgotPasswordService')
+  private readonly _forgotPasswordService: IForgotPasswordService;
 
   @IsPublicRoute()
   @UseGuards(LocalAuthGuard)
@@ -65,7 +69,7 @@ export class AuthController {
   public async forgotPassword(
     @Body() email: string,
   ): Promise<{ message: string }> {
-    return { message: 'Forgot password route' };
+    return await this._forgotPasswordService.execute(email);
   }
 
   @ApiBearerAuth()
