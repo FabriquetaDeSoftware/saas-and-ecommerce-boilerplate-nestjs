@@ -60,6 +60,20 @@ export class AuthController {
     return await this._verifyAccountUseCase.execute(input);
   }
 
+  @IsPublicRoute()
+  @Post('forgot-password')
+  public async forgotPassword(
+    @Body() email: string,
+  ): Promise<{ message: string }> {
+    return { message: 'Forgot password route' };
+  }
+
+  @ApiBearerAuth()
+  @Post('recovery-password')
+  public async recoveryPassword(): Promise<{ message: string }> {
+    return { message: 'Reset password route' };
+  }
+
   @ApiBearerAuth()
   @Get('all')
   public all(): string {

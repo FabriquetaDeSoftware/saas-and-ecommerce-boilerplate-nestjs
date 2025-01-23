@@ -18,6 +18,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './guards/jwt_auth.guard';
 import { DatabaseModule } from 'src/databases/database.module';
 import { EmailModule } from 'src/shared/modules/email/email.module';
+import { ForgotPasswordService } from './services/forgot_password.service';
+import { RecoveryPasswordUseCase } from './use_cases/recovery_password.use_case';
 
 @Module({
   imports: [
@@ -32,6 +34,16 @@ import { EmailModule } from 'src/shared/modules/email/email.module';
   ],
   controllers: [AuthController],
   providers: [
+    ForgotPasswordService,
+    {
+      provide: 'IForgotPasswordService',
+      useExisting: ForgotPasswordService,
+    },
+    RecoveryPasswordUseCase,
+    {
+      provide: 'IRecoveryPasswordUseCase',
+      useExisting: RecoveryPasswordUseCase,
+    },
     VerificationCodesRepository,
     {
       provide: 'IVerificationCodesRepository',
