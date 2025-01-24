@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { SignInDto } from '../dto/sign_in.dto';
 import { Auth } from '../entities/auth.entity';
 import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
@@ -32,7 +32,7 @@ export class ValidateUserService implements IValidateUserService {
     const findUserByEmail = await this._findUserByEmailHelper.execute(email);
 
     if (!findUserByEmail) {
-      return null;
+      throw new UnauthorizedException('Invalid credentials');
     }
 
     return findUserByEmail;
@@ -45,7 +45,7 @@ export class ValidateUserService implements IValidateUserService {
     const isMatch = await this._hashUtil.compareHash(password, encrypted);
 
     if (!isMatch) {
-      return null;
+      throw new UnauthorizedException('Invalid credentials');
     }
 
     return isMatch;

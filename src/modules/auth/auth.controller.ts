@@ -26,6 +26,7 @@ import { IRefreshTokenService } from './interfaces/services/refresh_token.servic
 import { IForgotPasswordService } from './interfaces/services/forgot_password.service.interface';
 import { RecoveryPasswordDto } from './dto/recovery_password.dto';
 import { ForgotPasswordDto } from './dto/forgot_password.dto';
+import { IRecoveryPasswordUseCase } from './interfaces/use_cases/recovery_password.use_case.interface';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -44,6 +45,9 @@ export class AuthController {
 
   @Inject('IForgotPasswordService')
   private readonly _forgotPasswordService: IForgotPasswordService;
+
+  @Inject('IRecoveryPasswordUseCase')
+  private readonly _recoveryPasswordUseCase: IRecoveryPasswordUseCase;
 
   @IsPublicRoute()
   @UseGuards(LocalAuthGuard)
@@ -87,7 +91,7 @@ export class AuthController {
   public async recoveryPassword(
     @Query() input: RecoveryPasswordDto,
   ): Promise<{ message: string }> {
-    return { message: input.password };
+    return await this._recoveryPasswordUseCase.execute(input);
   }
 
   @ApiBearerAuth()

@@ -1,3 +1,5 @@
+import { RecoveryPasswordDto } from '../../dto/recovery_password.dto';
+
 export interface IRecoveryPasswordUseCase {
-  execute(email: string, newPassword: string): Promise<void>;
+  execute(input: RecoveryPasswordDto): Promise<{ message: string }>;
 }
