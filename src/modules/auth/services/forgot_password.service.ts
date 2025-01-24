@@ -5,6 +5,7 @@ import { LanguageEnum } from 'src/shared/enum/language.enum';
 import { TemplateEnum } from 'src/shared/modules/email/enum/template.enum';
 import { IFindUserByEmailHelper } from '../interfaces/helpers/find_user_by_email.helper.interface';
 import { IGenerateTokenUtil } from 'src/shared/utils/interfaces/generate_token.util.interface';
+import { TokenEnum } from 'src/shared/enum/token.enum';
 
 @Injectable()
 export class ForgotPasswordService implements IForgotPasswordService {
@@ -28,10 +29,11 @@ export class ForgotPasswordService implements IForgotPasswordService {
       throw new NotFoundException('User not found');
     }
 
-    const r = await this._generateTokenUtil.execute({
+    const { token } = await this._generateTokenUtil.execute({
       email: findUserByEmail.email,
       role: findUserByEmail.role,
       sub: findUserByEmail.public_id,
+      type: TokenEnum.RECOVERY_PASSWORD_TOKEN,
     });
 
     return await this._sendEmailQueueJob.execute({
@@ -39,7 +41,10 @@ export class ForgotPasswordService implements IForgotPasswordService {
       language: LanguageEnum.PT_BR,
       subject: 'Recuperação de senha',
       template: TemplateEnum.PASSWORD_RECOVERY,
-      variables: { NAME: email, LINK: 'http://example.com' },
+      variables: {
+        NAME: email,
+        LINK: `http://example.com/recovery-password?token=${token}`,
+      },
     });
   }
 }
