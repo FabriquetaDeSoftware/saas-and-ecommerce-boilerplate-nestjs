@@ -24,7 +24,7 @@ import { RecoveryPasswordUseCase } from './use_cases/recovery_password.use_case'
 @Module({
   imports: [
     JwtModule.register({
-      secret: jwtKeysConstants.secret_token_key,
+      secret: jwtKeysConstants.secret_access_token_key,
       signOptions: { expiresIn: '30m' },
     }),
     SharedModule,

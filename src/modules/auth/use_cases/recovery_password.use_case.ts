@@ -75,7 +75,7 @@ export class RecoveryPasswordUseCase implements IRecoveryPasswordUseCase {
     token: string,
   ): Promise<IJwtUserPayload> {
     const payload: IJwtUserPayload = await this._jwtService.verify(token, {
-      secret: jwtKeysConstants.secret_token_key,
+      secret: jwtKeysConstants.secret_recovery_password_token_key,
     });
 
     const payloadType = await this.decryptPayload(
