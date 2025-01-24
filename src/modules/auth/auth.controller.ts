@@ -1,5 +1,13 @@
-import { Body, Controller, Get, Inject, Post, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiTags, ApiQuery, ApiProperty } from '@nestjs/swagger';
 import { SignUpDto } from './dto/sign_up.dto';
 import { Auth } from './entities/auth.entity';
 import { IsPublicRoute } from 'src/shared/decorators/is_public_route.decorator';
@@ -72,10 +80,18 @@ export class AuthController {
     return await this._forgotPasswordService.execute(email);
   }
 
-  @ApiBearerAuth()
+  @ApiQuery({
+    name: 'token',
+    description: 'Token for password recovery',
+    required: true,
+    type: String,
+  })
+  @IsPublicRoute()
   @Post('recovery-password')
-  public async recoveryPassword(): Promise<{ message: string }> {
-    return { message: 'Reset password route' };
+  public async recoveryPassword(
+    @Query() token: string,
+  ): Promise<{ message: string }> {
+    return { message: token };
   }
 
   @ApiBearerAuth()
