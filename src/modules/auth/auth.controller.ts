@@ -24,6 +24,8 @@ import { ISignUpUseCase } from './interfaces/use_cases/sign_up.use_case.interfac
 import { IVerifyAccountUseCase } from './interfaces/use_cases/verify_account.use_case.interface';
 import { IRefreshTokenService } from './interfaces/services/refresh_token.service.interface';
 import { IForgotPasswordService } from './interfaces/services/forgot_password.service.interface';
+import { RecoveryPasswordDto } from './dto/recovery_password.dto';
+import { ForgotPasswordDto } from './dto/forgot_password.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -75,23 +77,17 @@ export class AuthController {
   @IsPublicRoute()
   @Post('forgot-password')
   public async forgotPassword(
-    @Body() email: string,
+    @Body() input: ForgotPasswordDto,
   ): Promise<{ message: string }> {
-    return await this._forgotPasswordService.execute(email);
+    return await this._forgotPasswordService.execute(input);
   }
 
-  @ApiQuery({
-    name: 'token',
-    description: 'Token for password recovery',
-    required: true,
-    type: String,
-  })
   @IsPublicRoute()
   @Post('recovery-password')
   public async recoveryPassword(
-    @Query() token: string,
+    @Query() input: RecoveryPasswordDto,
   ): Promise<{ message: string }> {
-    return { message: token };
+    return { message: input.password };
   }
 
   @ApiBearerAuth()

@@ -9,6 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 import { IRefreshTokenService } from '../interfaces/services/refresh_token.service.interface';
 import { IFindUserByEmailHelper } from '../interfaces/helpers/find_user_by_email.helper.interface';
 import { IGenerateTokenUtil } from 'src/shared/utils/interfaces/generate_token.util.interface';
+import { TokenEnum } from 'src/shared/enum/token.enum';
 
 @Injectable()
 export class RefreshTokenService implements IRefreshTokenService {
@@ -55,7 +56,11 @@ export class RefreshTokenService implements IRefreshTokenService {
       },
     );
 
-    if (payload.type !== 'refresh_token') {
+    const payloadType = await this.decryptPayload(
+      Buffer.from(payload.type, 'base64'),
+    );
+
+    if (payloadType !== TokenEnum.REFRESH_TOKEN) {
       throw new UnauthorizedException('Invalid token');
     }
 

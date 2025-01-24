@@ -1,3 +1,5 @@
+import { ForgotPasswordDto } from '../../dto/forgot_password.dto';
+
 export interface IForgotPasswordService {
-  execute(email: string): Promise<{ message: string }>;
+  execute(email: ForgotPasswordDto): Promise<{ message: string }>;
 }

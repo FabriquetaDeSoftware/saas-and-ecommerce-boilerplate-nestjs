@@ -6,6 +6,7 @@ import { TemplateEnum } from 'src/shared/modules/email/enum/template.enum';
 import { IFindUserByEmailHelper } from '../interfaces/helpers/find_user_by_email.helper.interface';
 import { IGenerateTokenUtil } from 'src/shared/utils/interfaces/generate_token.util.interface';
 import { TokenEnum } from 'src/shared/enum/token.enum';
+import { ForgotPasswordDto } from '../dto/forgot_password.dto';
 
 @Injectable()
 export class ForgotPasswordService implements IForgotPasswordService {
@@ -18,12 +19,16 @@ export class ForgotPasswordService implements IForgotPasswordService {
   @Inject('IGenerateTokenUtil')
   private readonly _generateTokenUtil: IGenerateTokenUtil;
 
-  public async execute(email: string): Promise<{ message: string }> {
-    return await this.intermediary(email);
+  public async execute(input: ForgotPasswordDto): Promise<{ message: string }> {
+    return await this.intermediary(input);
   }
 
-  private async intermediary(email: string): Promise<{ message: string }> {
-    const findUserByEmail = await this._findUserByEmailHelper.execute(email);
+  private async intermediary(
+    data: ForgotPasswordDto,
+  ): Promise<{ message: string }> {
+    const findUserByEmail = await this._findUserByEmailHelper.execute(
+      data.email,
+    );
 
     if (!findUserByEmail) {
       throw new NotFoundException('User not found');
@@ -37,12 +42,12 @@ export class ForgotPasswordService implements IForgotPasswordService {
     });
 
     return await this._sendEmailQueueJob.execute({
-      emailTo: email,
+      emailTo: data.email,
       language: LanguageEnum.PT_BR,
       subject: 'Recuperação de senha',
       template: TemplateEnum.PASSWORD_RECOVERY,
       variables: {
-        NAME: email,
+        NAME: data.email,
         LINK: `http://example.com/recovery-password?token=${token}`,
       },
     });
