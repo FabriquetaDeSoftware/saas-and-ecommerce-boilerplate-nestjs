@@ -53,15 +53,22 @@ export class GenerateTokenUtil implements IGenerateTokenUtil {
     type?: TokenEnum,
   ): Promise<ITokensReturns> {
     if (type) {
-      const token = this._jwtService.sign({ ...payload, type });
+      const typeEcripted = await this.encryptPayload(type);
+
+      const token = this._jwtService.sign({ ...payload, type: typeEcripted });
 
       return { token };
     }
 
+    const [ACCESS_TOKEN_ENUM, REFRESH_TOKEN_ENUM] = await Promise.all([
+      this.encryptPayload(TokenEnum.ACCESS_TOKEN),
+      this.encryptPayload(TokenEnum.REFRESH_TOKEN),
+    ]);
+
     const [access_token, refresh_token] = [
-      this._jwtService.sign({ ...payload, type: TokenEnum.ACCESS_TOKEN }),
+      this._jwtService.sign({ ...payload, type: ACCESS_TOKEN_ENUM }),
       this._jwtService.sign(
-        { ...payload, type: TokenEnum.REFRESH_TOKEN },
+        { ...payload, type: REFRESH_TOKEN_ENUM },
         { expiresIn: '7d', secret: jwtKeysConstants.secret_refresh_token_key },
       ),
     ];
