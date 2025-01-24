@@ -6,6 +6,7 @@ import { jwtKeysConstants } from '../constants/jwt_keys.constants';
 import { ICryptoUtil } from './interfaces/crypto.util.interface';
 import { JwtService } from '@nestjs/jwt';
 import { IGenerateTokenUtil } from './interfaces/generate_token.util.interface';
+import { TokenEnum } from '../enum/token.enum';
 
 @Injectable()
 export class GenerateTokenUtil implements IGenerateTokenUtil {
@@ -16,7 +17,22 @@ export class GenerateTokenUtil implements IGenerateTokenUtil {
   private readonly _cryptoUtil: ICryptoUtil;
 
   public async execute(input: GenerateTokenDto): Promise<ITokensReturns> {
-    const { sub, email, role } = await this.intermediry(input);
+    const { access_token, refresh_token, token } =
+      await this.intermediry(input);
+
+    return {
+      access_token,
+      refresh_token,
+      token,
+    };
+  }
+
+  private async intermediry(data: GenerateTokenDto): Promise<ITokensReturns> {
+    const [sub, email, role] = await Promise.all([
+      this.encryptPayload(data.sub),
+      this.encryptPayload(data.email),
+      this.encryptPayload(data.role),
+    ]);
 
     const payload: IJwtUserPayload = {
       sub,
@@ -24,28 +40,33 @@ export class GenerateTokenUtil implements IGenerateTokenUtil {
       role,
     };
 
+    const { access_token, refresh_token, token } = await this.generateTokens(
+      payload,
+      data.type,
+    );
+
+    return { access_token, refresh_token, token };
+  }
+
+  private async generateTokens(
+    payload: IJwtUserPayload,
+    type?: TokenEnum,
+  ): Promise<ITokensReturns> {
+    if (type) {
+      const token = this._jwtService.sign({ ...payload, type });
+
+      return { token };
+    }
+
     const [access_token, refresh_token] = [
-      this._jwtService.sign({ ...payload, type: 'access_token' }),
+      this._jwtService.sign({ ...payload, type: TokenEnum.ACCESS_TOKEN }),
       this._jwtService.sign(
-        { ...payload, type: 'refresh_token' },
+        { ...payload, type: TokenEnum.REFRESH_TOKEN },
         { expiresIn: '7d', secret: jwtKeysConstants.secret_refresh_token_key },
       ),
     ];
 
-    return {
-      access_token,
-      refresh_token,
-    };
-  }
-
-  private async intermediry(data: GenerateTokenDto): Promise<IJwtUserPayload> {
-    const [sub, email, role] = await Promise.all([
-      this.encryptPayload(data.sub),
-      this.encryptPayload(data.email),
-      this.encryptPayload(data.role),
-    ]);
-
-    return { sub, email, role };
+    return { access_token, refresh_token };
   }
 
   private async encryptPayload(data: string): Promise<string> {

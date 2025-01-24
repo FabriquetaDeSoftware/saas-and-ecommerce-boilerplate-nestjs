@@ -1,4 +1,11 @@
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import { TokenEnum } from 'src/shared/enum/token.enum';
 
 export class GenerateTokenDto {
   @IsNotEmpty()
@@ -12,4 +19,8 @@ export class GenerateTokenDto {
   @IsNotEmpty()
   @IsString()
   role: string;
+
+  @IsOptional()
+  @IsEnum(TokenEnum)
+  type?: TokenEnum;
 }

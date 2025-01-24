@@ -3,6 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { jwtKeysConstants } from 'src/shared/constants/jwt_keys.constants';
 import { IJwtUserPayload } from 'src/shared/interfaces/jwt_user_payload.interface';
+import { TokenEnum } from 'src/shared/enum/token.enum';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -15,7 +16,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   public async validate(payload: IJwtUserPayload): Promise<IJwtUserPayload> {
-    if (payload.type !== 'access_token') {
+    if (payload.type !== TokenEnum.ACCESS_TOKEN) {
       throw new UnauthorizedException('Invalid token');
     }
 

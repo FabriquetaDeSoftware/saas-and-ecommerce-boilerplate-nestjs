@@ -4,6 +4,7 @@ import { ISendEmailQueueJob } from 'src/shared/modules/email/interfaces/jobs/sen
 import { LanguageEnum } from 'src/shared/enum/language.enum';
 import { TemplateEnum } from 'src/shared/modules/email/enum/template.enum';
 import { IFindUserByEmailHelper } from '../interfaces/helpers/find_user_by_email.helper.interface';
+import { IGenerateTokenUtil } from 'src/shared/utils/interfaces/generate_token.util.interface';
 
 @Injectable()
 export class ForgotPasswordService implements IForgotPasswordService {
@@ -12,6 +13,9 @@ export class ForgotPasswordService implements IForgotPasswordService {
 
   @Inject('IFindUserByEmailHelper')
   private readonly _findUserByEmailHelper: IFindUserByEmailHelper;
+
+  @Inject('IGenerateTokenUtil')
+  private readonly _generateTokenUtil: IGenerateTokenUtil;
 
   public async execute(email: string): Promise<{ message: string }> {
     return await this.intermediary(email);
@@ -23,6 +27,12 @@ export class ForgotPasswordService implements IForgotPasswordService {
     if (!findUserByEmail) {
       throw new NotFoundException('User not found');
     }
+
+    const r = await this._generateTokenUtil.execute({
+      email: findUserByEmail.email,
+      role: findUserByEmail.role,
+      sub: findUserByEmail.public_id,
+    });
 
     return await this._sendEmailQueueJob.execute({
       emailTo: email,
