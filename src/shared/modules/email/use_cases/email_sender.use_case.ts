@@ -9,46 +9,49 @@ export class EmailSenderUseCase implements IEmailSenderUseCase {
   @Inject('IProccessHtmlUtil')
   private readonly _processHTMLUtil: IProcessHTMLUtil;
 
+  private readonly _templateBasePath =
+    '/home/api/nestjs/auth-boilerplate/src/shared/modules/email/templates';
+
   public async execute(input: EmailSenderDto): Promise<void> {
     return await this.intermediary(input);
   }
 
   private async intermediary(input: EmailSenderDto): Promise<void> {
-    const proccedTemplate = await this.generateTemplate(input);
+    const processedTemplate = await this.generateTemplate(input);
 
-    return await this.sendEmail(input, proccedTemplate);
+    return await this.sendEmail(input, processedTemplate);
   }
 
   private async sendEmail(
     input: EmailSenderDto,
-    proccedTemplate: string,
+    processedTemplate: string,
   ): Promise<void> {
     const mailOptions = {
       from: '"Seu Nome" <seu-email@example.com>',
       to: input.emailTo,
       subject: input.subject,
-      html: proccedTemplate,
+      html: processedTemplate,
     };
 
-    const trasnporter = this.trasnporter();
+    const transporter = this.transporter();
 
-    trasnporter.sendMail(mailOptions);
+    await transporter.sendMail(mailOptions);
 
     return;
   }
 
   private async generateTemplate(input: EmailSenderDto): Promise<string> {
-    const templatePath = `/home/api/nestjs/auth-boilerplate/src/shared/modules/email/templates/${input.language}/${input.template}`;
+    const templatePath = `${this._templateBasePath}/${input.language}/${input.template}`;
 
-    const proccedTemplate = await this._processHTMLUtil.execute(
+    const processedTemplate = await this._processHTMLUtil.execute(
       templatePath,
       input.variables,
     );
 
-    return proccedTemplate;
+    return processedTemplate;
   }
 
-  private trasnporter(): nodemailer.Transporter {
+  private transporter(): nodemailer.Transporter {
     const transporter = nodemailer.createTransport({
       host: 'sandbox.smtp.mailtrap.io',
       port: 2525,
