@@ -1,26 +1,26 @@
 import { Module } from '@nestjs/common';
-import { AuthController } from './auth.controller';
 import { PassportModule } from '@nestjs/passport';
-import { AuthRepository } from './repositories/auth.repository';
-import { SignInDefaultUseCase } from './use_cases/sign_in_default.use_case';
-import { SignUpUseCase } from './use_cases/sign_up.use_case';
-import { FindUserByEmailHelper } from './helpers/find_user_by_email.helper';
-import { ValidateUserService } from './services/validate_user.service';
-import { SharedModule } from 'src/shared/shared.module';
-import { LocalStrategy } from './strategies/local.strategy';
-import { JwtStrategy } from './strategies/jwt.strategy';
-import { RefreshTokenService } from './services/refresh_token.service';
-import { VerifyAccountUseCase } from './use_cases/verify_account.use_case';
-import { VerificationCodesRepository } from './repositories/verification_codes.repository';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtKeysConstants } from 'src/shared/constants/jwt_keys.constants';
 import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from './guards/jwt_auth.guard';
-import { DatabaseModule } from 'src/databases/database.module';
 import { EmailModule } from 'src/shared/modules/email/email.module';
-import { ForgotPasswordService } from './services/forgot_password.service';
-import { RecoveryPasswordUseCase } from './use_cases/recovery_password.use_case';
-import { GenerateTokenHelper } from './helpers/generate_token.helper';
+import { CommonModule } from 'src/common/common.module';
+import { AuthController } from './interface/controllers/auth.controller';
+import { SharedModule } from 'src/shared/shared.module';
+import { ForgotPasswordService } from './infrastructure/services/forgot_password.service';
+import { RecoveryPasswordUseCase } from './application/use_cases/recovery_password.use_case';
+import { VerificationCodesRepository } from './infrastructure/repositories/verification_codes.repository';
+import { VerifyAccountUseCase } from './application/use_cases/verify_account.use_case';
+import { RefreshTokenService } from './infrastructure/services/refresh_token.service';
+import { SignUpUseCase } from './application/use_cases/sign_up.use_case';
+import { SignInDefaultUseCase } from './application/use_cases/sign_in_default.use_case';
+import { AuthRepository } from './infrastructure/repositories/auth.repository';
+import { FindUserByEmailHelper } from './shared/helpers/find_user_by_email.helper';
+import { ValidateUserService } from './infrastructure/services/validate_user.service';
+import { GenerateTokenHelper } from './shared/helpers/generate_token.helper';
+import { JwtStrategy } from './infrastructure/strategies/jwt.strategy';
+import { LocalStrategy } from './infrastructure/strategies/local.strategy';
+import { JwtAuthGuard } from './interface/guards/jwt_auth.guard';
 
 @Module({
   imports: [
@@ -29,7 +29,7 @@ import { GenerateTokenHelper } from './helpers/generate_token.helper';
       signOptions: { expiresIn: '30m' },
     }),
     SharedModule,
-    DatabaseModule,
+    CommonModule,
     PassportModule,
     EmailModule,
   ],

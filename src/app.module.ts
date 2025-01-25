@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { AuthModule } from './modules/auth/auth.module';
 import { SharedModule } from './shared/shared.module';
-import { DatabaseModule } from './databases/database.module';
+import { DatabaseModule } from './common/databases/database.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { BullModule } from '@nestjs/bullmq';
 import { EmailModule } from './shared/modules/email/email.module';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { EmailModule } from './shared/modules/email/email.module';
     SharedModule,
     DatabaseModule,
     EmailModule,
+    CommonModule,
   ],
   controllers: [],
   providers: [],

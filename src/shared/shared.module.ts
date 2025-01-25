@@ -1,7 +1,4 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { APP_GUARD } from '@nestjs/core';
-import { RolesGuard } from './guards/roles.guard';
-import { AuthModule } from 'src/modules/auth/auth.module';
 import { GenerateNumberCodeUtil } from './utils/generate_number_code.util';
 import { CryptoUtil } from './utils/crypto.util';
 import { HashUtil } from './utils/hash.util';
@@ -29,10 +26,6 @@ import { ProccessHtmlUtil } from './utils/proccess_html.util';
     {
       provide: 'IHashUtil',
       useExisting: HashUtil,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
     },
   ],
   exports: [
