@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { EmailSenderUseCase } from './application/use_cases/email_sender.use_case';
+import { EmailSenderService } from './infrastructure/services/email_sender.services';
 import { EmailController } from './interface/controllers/email.controller';
 import { SendEmailQueueJob } from './infrastructure/jobs/send_email_queue.job';
 import { SendEmailConsumerJob } from './infrastructure/jobs/send_email_consumer.job';
@@ -14,10 +14,10 @@ import { SharedModule } from 'src/shared/shared.module';
   controllers: [EmailController],
   providers: [
     SendEmailConsumerJob,
-    EmailSenderUseCase,
+    EmailSenderService,
     {
-      provide: 'IEmailSenderUseCase',
-      useExisting: EmailSenderUseCase,
+      provide: 'IEmailSenderService',
+      useExisting: EmailSenderService,
     },
     SendEmailQueueJob,
     {

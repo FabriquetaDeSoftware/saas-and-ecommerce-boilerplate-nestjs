@@ -1,11 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { EmailSenderDto } from '../dto/email_sender.dto';
+import { EmailSenderDto } from '../../application/dto/email_sender.dto';
 import * as nodemailer from 'nodemailer';
-import { IEmailSenderUseCase } from '../../domain/interfaces/use_cases/email_sender.use_case.interface';
+import { IEmailSenderService } from '../../domain/interfaces/services/email_sender.service.interface';
 import { IProcessHTMLUtil } from 'src/shared/utils/interfaces/proccess_html.interface';
 
 @Injectable()
-export class EmailSenderUseCase implements IEmailSenderUseCase {
+export class EmailSenderService implements IEmailSenderService {
   @Inject('IProccessHtmlUtil')
   private readonly _processHTMLUtil: IProcessHTMLUtil;
 
