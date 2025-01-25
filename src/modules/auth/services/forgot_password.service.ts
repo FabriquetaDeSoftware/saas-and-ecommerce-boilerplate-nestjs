@@ -6,7 +6,7 @@ import { TemplateEnum } from 'src/shared/modules/email/enum/template.enum';
 import { IFindUserByEmailHelper } from '../interfaces/helpers/find_user_by_email.helper.interface';
 import { IGenerateTokenHelper } from 'src/modules/auth/interfaces/helpers/generate_token.helper.interface';
 import { TokenEnum } from 'src/shared/enum/token.enum';
-import { ForgotPasswordDto } from '../dto/forgot_password.dto';
+import { EmailDto } from '../dto/email.dto';
 
 @Injectable()
 export class ForgotPasswordService implements IForgotPasswordService {
@@ -19,13 +19,11 @@ export class ForgotPasswordService implements IForgotPasswordService {
   @Inject('IGenerateTokenHelper')
   private readonly _generateTokenUtil: IGenerateTokenHelper;
 
-  public async execute(input: ForgotPasswordDto): Promise<{ message: string }> {
+  public async execute(input: EmailDto): Promise<{ message: string }> {
     return await this.intermediary(input);
   }
 
-  private async intermediary(
-    data: ForgotPasswordDto,
-  ): Promise<{ message: string }> {
+  private async intermediary(data: EmailDto): Promise<{ message: string }> {
     const findUserByEmail = await this._findUserByEmailHelper.execute(
       data.email,
     );

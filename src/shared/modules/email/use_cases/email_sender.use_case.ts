@@ -10,6 +10,10 @@ export class EmailSenderUseCase implements IEmailSenderUseCase {
   private readonly _processHTMLUtil: IProcessHTMLUtil;
 
   public async execute(input: EmailSenderDto): Promise<void> {
+    return await this.intermediary(input);
+  }
+
+  private async intermediary(input: EmailSenderDto): Promise<void> {
     const transporter = nodemailer.createTransport({
       host: 'sandbox.smtp.mailtrap.io',
       port: 2525,
@@ -21,7 +25,7 @@ export class EmailSenderUseCase implements IEmailSenderUseCase {
 
     const templatePath = `/home/api/nestjs/auth-boilerplate/src/shared/modules/email/templates/${input.language}/${input.template}`;
 
-    const proccedTemplate = await this.intermediary(
+    const proccedTemplate = await this._processHTMLUtil.execute(
       templatePath,
       input.variables,
     );
@@ -36,19 +40,5 @@ export class EmailSenderUseCase implements IEmailSenderUseCase {
     await transporter.sendMail(mailOptions);
 
     return;
-  }
-
-  private async intermediary(
-    pathHTML: string,
-    variables?: Record<string, string>,
-  ): Promise<string> {
-    return await this.proccessTemplate(pathHTML, variables);
-  }
-
-  private async proccessTemplate(
-    pathHTML: string,
-    variables?: Record<string, string>,
-  ): Promise<string> {
-    return await this._processHTMLUtil.execute(pathHTML, variables);
   }
 }

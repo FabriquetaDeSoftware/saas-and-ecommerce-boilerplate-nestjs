@@ -1,4 +1,4 @@
-export interface IJwtUserPayload {
+export interface IJwtUserPayloadHelper {
   sub: string;
   email: string;
   role: string;

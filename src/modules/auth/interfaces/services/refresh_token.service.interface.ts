@@ -1,6 +1,6 @@
-import { ITokensReturns } from 'src/modules/auth/interfaces/helpers/tokens_returns.interface';
+import { ITokensReturnsHelper } from '../helpers/tokens_returns.helper.interface';
 import { RefreshTokenDto } from '../../dto/refresh_token.dto';
 
 export interface IRefreshTokenService {
-  execute(input: RefreshTokenDto): Promise<ITokensReturns>;
+  execute(input: RefreshTokenDto): Promise<ITokensReturnsHelper>;
 }

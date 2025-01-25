@@ -13,7 +13,7 @@ import { Auth } from './entities/auth.entity';
 import { IsPublicRoute } from 'src/shared/decorators/is_public_route.decorator';
 import { SignInDto } from './dto/sign_in.dto';
 import { LocalAuthGuard } from './guards/local_auth.guard';
-import { ITokensReturns } from 'src/modules/auth/interfaces/helpers/tokens_returns.interface';
+import { ITokensReturnsHelper } from './interfaces/helpers/tokens_returns.helper.interface';
 import { Roles } from 'src/shared/decorators/roles.decorator';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { RolesGuard } from 'src/shared/guards/roles.guard';
@@ -25,7 +25,7 @@ import { IVerifyAccountUseCase } from './interfaces/use_cases/verify_account.use
 import { IRefreshTokenService } from './interfaces/services/refresh_token.service.interface';
 import { IForgotPasswordService } from './interfaces/services/forgot_password.service.interface';
 import { RecoveryPasswordDto } from './dto/recovery_password.dto';
-import { ForgotPasswordDto } from './dto/forgot_password.dto';
+import { EmailDto } from './dto/email.dto';
 import { IRecoveryPasswordUseCase } from './interfaces/use_cases/recovery_password.use_case.interface';
 
 @ApiTags('auth')
@@ -66,7 +66,7 @@ export class AuthController {
   @IsPublicRoute()
   @UseGuards(LocalAuthGuard)
   @Post('sign-in-default')
-  public async signIn(@Body() input: SignInDto): Promise<ITokensReturns> {
+  public async signIn(@Body() input: SignInDto): Promise<ITokensReturnsHelper> {
     return await this._signInDefaultUseCase.execute(input);
   }
 
@@ -82,14 +82,14 @@ export class AuthController {
   @Post('refresh-token')
   public async refreshToken(
     @Body() input: RefreshTokenDto,
-  ): Promise<ITokensReturns> {
+  ): Promise<ITokensReturnsHelper> {
     return await this._refreshTokenService.execute(input);
   }
 
   @IsPublicRoute()
   @Post('forgot-password')
   public async forgotPassword(
-    @Body() input: ForgotPasswordDto,
+    @Body() input: EmailDto,
   ): Promise<{ message: string }> {
     return await this._forgotPasswordService.execute(input);
   }

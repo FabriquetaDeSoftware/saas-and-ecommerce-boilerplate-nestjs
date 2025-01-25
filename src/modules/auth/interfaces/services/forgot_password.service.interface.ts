@@ -1,5 +1,5 @@
-import { ForgotPasswordDto } from '../../dto/forgot_password.dto';
+import { EmailDto } from '../../dto/email.dto';
 
 export interface IForgotPasswordService {
-  execute(email: ForgotPasswordDto): Promise<{ message: string }>;
+  execute(email: EmailDto): Promise<{ message: string }>;
 }

@@ -1,6 +1,6 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { ITokensReturns } from 'src/modules/auth/interfaces/helpers/tokens_returns.interface';
-import { IJwtUserPayload } from 'src/modules/auth/interfaces/helpers/jwt_user_payload.interface';
+import { ITokensReturnsHelper } from '../interfaces/helpers/tokens_returns.helper.interface';
+import { IJwtUserPayloadHelper } from 'src/modules/auth/interfaces/helpers/jwt_user_payload.helper.interface';
 import { jwtKeysConstants } from 'src/shared/constants/jwt_keys.constants';
 import { Auth } from '../entities/auth.entity';
 import { RefreshTokenDto } from '../dto/refresh_token.dto';
@@ -25,11 +25,13 @@ export class RefreshTokenService implements IRefreshTokenService {
   @Inject('ICryptoUtil')
   private readonly _cryptoUtil: ICryptoUtil;
 
-  public async execute(input: RefreshTokenDto): Promise<ITokensReturns> {
+  public async execute(input: RefreshTokenDto): Promise<ITokensReturnsHelper> {
     return await this.intermediary(input.refresh_token);
   }
 
-  private async intermediary(refreshToken: string): Promise<ITokensReturns> {
+  private async intermediary(
+    refreshToken: string,
+  ): Promise<ITokensReturnsHelper> {
     const payload = await this.verifyRefreshTokenIsValid(refreshToken);
 
     const [sub, email, role] = await Promise.all([
@@ -48,8 +50,8 @@ export class RefreshTokenService implements IRefreshTokenService {
 
   private async verifyRefreshTokenIsValid(
     refreshToken: string,
-  ): Promise<IJwtUserPayload> {
-    const payload: IJwtUserPayload = await this._jwtService.verify(
+  ): Promise<IJwtUserPayloadHelper> {
+    const payload: IJwtUserPayloadHelper = await this._jwtService.verify(
       refreshToken,
       {
         secret: jwtKeysConstants.secret_refresh_token_key,

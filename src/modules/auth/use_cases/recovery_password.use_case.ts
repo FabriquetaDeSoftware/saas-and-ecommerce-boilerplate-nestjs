@@ -10,10 +10,9 @@ import { JwtService } from '@nestjs/jwt';
 import { jwtKeysConstants } from 'src/shared/constants/jwt_keys.constants';
 import { TokenEnum } from 'src/shared/enum/token.enum';
 import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
-import { IJwtUserPayload } from 'src/modules/auth/interfaces/helpers/jwt_user_payload.interface';
+import { IJwtUserPayloadHelper } from 'src/modules/auth/interfaces/helpers/jwt_user_payload.helper.interface';
 import { IAuthRepository } from '../interfaces/repository/auth.repository.interface';
 import { Auth } from '../entities/auth.entity';
-import { WhereRepositoryEnum } from 'src/shared/enum/where_repository.enum';
 import { IFindUserByEmailHelper } from '../interfaces/helpers/find_user_by_email.helper.interface';
 import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
 
@@ -73,10 +72,13 @@ export class RecoveryPasswordUseCase implements IRecoveryPasswordUseCase {
 
   private async verifyRefreshTokenIsValid(
     token: string,
-  ): Promise<IJwtUserPayload> {
-    const payload: IJwtUserPayload = await this._jwtService.verify(token, {
-      secret: jwtKeysConstants.secret_recovery_password_token_key,
-    });
+  ): Promise<IJwtUserPayloadHelper> {
+    const payload: IJwtUserPayloadHelper = await this._jwtService.verify(
+      token,
+      {
+        secret: jwtKeysConstants.secret_recovery_password_token_key,
+      },
+    );
 
     const payloadType = await this.decryptPayload(
       Buffer.from(payload.type, 'base64'),

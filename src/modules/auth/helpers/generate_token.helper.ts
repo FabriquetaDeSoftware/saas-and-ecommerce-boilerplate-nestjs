@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { GenerateTokenDto } from './dto/generate_token.dto';
-import { ITokensReturns } from '../interfaces/helpers/tokens_returns.interface';
-import { IJwtUserPayload } from '../interfaces/helpers/jwt_user_payload.interface';
+import { GenerateTokenDto } from '../dto/generate_token.dto';
+import { ITokensReturnsHelper } from '../interfaces/helpers/tokens_returns.helper.interface';
+import { IJwtUserPayloadHelper } from '../interfaces/helpers/jwt_user_payload.helper.interface';
 import { jwtKeysConstants } from '../../../shared/constants/jwt_keys.constants';
 import { ICryptoUtil } from '../../../shared/utils/interfaces/crypto.util.interface';
 import { JwtService } from '@nestjs/jwt';
@@ -16,7 +16,7 @@ export class GenerateTokenHelper implements IGenerateTokenHelper {
   @Inject('ICryptoUtil')
   private readonly _cryptoUtil: ICryptoUtil;
 
-  public async execute(input: GenerateTokenDto): Promise<ITokensReturns> {
+  public async execute(input: GenerateTokenDto): Promise<ITokensReturnsHelper> {
     const { access_token, refresh_token, token } =
       await this.intermediry(input);
 
@@ -27,14 +27,16 @@ export class GenerateTokenHelper implements IGenerateTokenHelper {
     };
   }
 
-  private async intermediry(data: GenerateTokenDto): Promise<ITokensReturns> {
+  private async intermediry(
+    data: GenerateTokenDto,
+  ): Promise<ITokensReturnsHelper> {
     const [sub, email, role] = await Promise.all([
       this.encryptPayload(data.sub),
       this.encryptPayload(data.email),
       this.encryptPayload(data.role),
     ]);
 
-    const payload: IJwtUserPayload = {
+    const payload: IJwtUserPayloadHelper = {
       sub,
       email,
       role,
@@ -49,9 +51,9 @@ export class GenerateTokenHelper implements IGenerateTokenHelper {
   }
 
   private async generateTokens(
-    payload: IJwtUserPayload,
+    payload: IJwtUserPayloadHelper,
     type?: TokenEnum,
-  ): Promise<ITokensReturns> {
+  ): Promise<ITokensReturnsHelper> {
     if (type) {
       const typeEcripted = await this.encryptPayload(type);
 
