@@ -1,8 +1,8 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Inject } from '@nestjs/common';
 import { Job } from 'bullmq';
-import { EmailSenderDto } from '../application/dto/email_sender.dto';
-import { IEmailSenderUseCase } from '../interfaces/use_cases/email_sender.use_case.interface';
+import { EmailSenderDto } from '../../application/dto/email_sender.dto';
+import { IEmailSenderUseCase } from '../../domain/interfaces/use_cases/email_sender.use_case.interface';
 
 @Processor('SEND_EMAIL_QUEUE')
 export class SendEmailConsumerJob extends WorkerHost {

@@ -1,4 +1,4 @@
-import { EmailDto } from '../../dto/email.dto';
+import { EmailDto } from 'src/modules/auth/application/dto/email.dto';
 
 export interface IForgotPasswordService {
   execute(email: EmailDto): Promise<{ message: string }>;

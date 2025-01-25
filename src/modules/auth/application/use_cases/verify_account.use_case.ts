@@ -9,7 +9,7 @@ import { VerificationCodeDto } from '../dto/verification_code.dto';
 import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { EmailSenderDto } from 'src/shared/modules/email/application/dto/email_sender.dto';
-import { ISendEmailQueueJob } from 'src/shared/modules/email/interfaces/jobs/send_email_queue.job.interface';
+import { ISendEmailQueueJob } from 'src/shared/modules/email/domain/interfaces/jobs/send_email_queue.job.interface';
 import { LanguageEnum } from 'src/shared/enum/language.enum';
 import { TemplateEnum } from 'src/shared/modules/email/application/enum/template.enum';
 import { IVerifyAccountUseCase } from '../../domain/interfaces/use_cases/verify_account.use_case.interface';

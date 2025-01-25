@@ -1,5 +1,5 @@
-import { UpdateInfoDto } from '../../dto/update_info.dto';
-import { SignUpDto } from '../../dto/sign_up.dto';
+import { UpdateInfoDto } from 'src/modules/auth/application/dto/update_info.dto';
+import { SignUpDto } from 'src/modules/auth/application/dto/sign_up.dto';
 import { Auth } from '../../entities/auth.entity';
 
 export interface IAuthRepository {

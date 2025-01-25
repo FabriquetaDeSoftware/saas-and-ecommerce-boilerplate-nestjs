@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { EmailSenderDto } from '../dto/email_sender.dto';
 import * as nodemailer from 'nodemailer';
-import { IEmailSenderUseCase } from '../../interfaces/use_cases/email_sender.use_case.interface';
+import { IEmailSenderUseCase } from '../../domain/interfaces/use_cases/email_sender.use_case.interface';
 import { IProcessHTMLUtil } from 'src/shared/utils/interfaces/proccess_html.interface';
 
 @Injectable()
@@ -10,7 +10,7 @@ export class EmailSenderUseCase implements IEmailSenderUseCase {
   private readonly _processHTMLUtil: IProcessHTMLUtil;
 
   private readonly _templateBasePath =
-    '/home/api/nestjs/auth-boilerplate/src/shared/modules/email/templates';
+    '/home/api/nestjs/auth-boilerplate/src/shared/modules/email/infrastructure/templates';
 
   public async execute(input: EmailSenderDto): Promise<void> {
     return await this.intermediary(input);

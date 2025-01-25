@@ -1,4 +1,4 @@
-import { SignInDto } from '../../dto/sign_in.dto';
+import { SignInDto } from 'src/modules/auth/application/dto/sign_in.dto';
 import { Auth } from '../../entities/auth.entity';
 
 export interface IValidateUserService {

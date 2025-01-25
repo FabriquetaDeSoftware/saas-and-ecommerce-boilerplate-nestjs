@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { SignUpDto } from '../../application/dto/sign_up.dto';
-import { Auth } from '@prisma/client';
+import { Auth } from '../../domain/entities/auth.entity';
 import { IsPublicRoute } from 'src/common/decorators/is_public_route.decorator';
 import { SignInDto } from '../../application/dto/sign_in.dto';
 import { LocalAuthGuard } from '../guards/local_auth.guard';
