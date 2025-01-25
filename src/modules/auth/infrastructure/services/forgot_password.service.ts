@@ -1,7 +1,7 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { ISendEmailQueueJob } from 'src/shared/modules/email/interfaces/jobs/send_email_queue.job.interface';
 import { LanguageEnum } from 'src/shared/enum/language.enum';
-import { TemplateEnum } from 'src/shared/modules/email/enum/template.enum';
+import { TemplateEnum } from 'src/shared/modules/email/application/enum/template.enum';
 import { TokenEnum } from 'src/shared/enum/token.enum';
 import { IForgotPasswordService } from '../../domain/interfaces/services/forgot_password.service.interface';
 import { IFindUserByEmailHelper } from '../../domain/interfaces/helpers/find_user_by_email.helper.interface';

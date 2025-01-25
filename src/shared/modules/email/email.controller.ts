@@ -1,7 +1,7 @@
 import { Body, Controller, Inject, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { IsPublicRoute } from 'src/common/decorators/is_public_route.decorator';
-import { EmailSenderDto } from './dto/email_sender.dto';
+import { EmailSenderDto } from './application/dto/email_sender.dto';
 import { ISendEmailQueueJob } from './interfaces/jobs/send_email_queue.job.interface';
 
 @ApiTags('email')

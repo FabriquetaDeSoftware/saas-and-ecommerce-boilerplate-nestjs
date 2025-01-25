@@ -1,7 +1,7 @@
 import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable } from '@nestjs/common';
 import { Queue } from 'bullmq';
-import { EmailSenderDto } from '../dto/email_sender.dto';
+import { EmailSenderDto } from '../application/dto/email_sender.dto';
 import { ISendEmailQueueJob } from '../interfaces/jobs/send_email_queue.job.interface';
 
 @Injectable()

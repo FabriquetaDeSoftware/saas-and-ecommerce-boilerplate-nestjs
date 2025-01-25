@@ -8,10 +8,10 @@ import {
 import { VerificationCodeDto } from '../dto/verification_code.dto';
 import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
-import { EmailSenderDto } from 'src/shared/modules/email/dto/email_sender.dto';
+import { EmailSenderDto } from 'src/shared/modules/email/application/dto/email_sender.dto';
 import { ISendEmailQueueJob } from 'src/shared/modules/email/interfaces/jobs/send_email_queue.job.interface';
 import { LanguageEnum } from 'src/shared/enum/language.enum';
-import { TemplateEnum } from 'src/shared/modules/email/enum/template.enum';
+import { TemplateEnum } from 'src/shared/modules/email/application/enum/template.enum';
 import { IVerifyAccountUseCase } from '../../domain/interfaces/use_cases/verify_account.use_case.interface';
 import { IVerificationCodesRepository } from '../../domain/interfaces/repository/verification_codes.repository.interface';
 import { IFindUserByEmailHelper } from '../../domain/interfaces/helpers/find_user_by_email.helper.interface';

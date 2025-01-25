@@ -3,7 +3,7 @@ import { SignUpDto } from '../dto/sign_up.dto';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
 import { LanguageEnum } from 'src/shared/enum/language.enum';
-import { TemplateEnum } from 'src/shared/modules/email/enum/template.enum';
+import { TemplateEnum } from 'src/shared/modules/email/application/enum/template.enum';
 import { IGenerateNumberCodeUtil } from 'src/shared/utils/interfaces/generate_number_code.util.interface';
 import { ISendEmailQueueJob } from 'src/shared/modules/email/interfaces/jobs/send_email_queue.job.interface';
 import { ISignUpUseCase } from '../../domain/interfaces/use_cases/sign_up.use_case.interface';

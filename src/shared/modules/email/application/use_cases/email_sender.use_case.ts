@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { EmailSenderDto } from '../dto/email_sender.dto';
 import * as nodemailer from 'nodemailer';
-import { IEmailSenderUseCase } from '../interfaces/use_cases/email_sender.use_case.interface';
+import { IEmailSenderUseCase } from '../../interfaces/use_cases/email_sender.use_case.interface';
 import { IProcessHTMLUtil } from 'src/shared/utils/interfaces/proccess_html.interface';
 
 @Injectable()
