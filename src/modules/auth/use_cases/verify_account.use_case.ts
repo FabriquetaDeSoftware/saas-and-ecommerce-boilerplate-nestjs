@@ -1,4 +1,10 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { VerificationCodeDto } from '../dto/verification_code.dto';
 import { Auth } from '../entities/auth.entity';
 import { VerificationCodes } from '../entities/verification_codes.entity';
@@ -95,6 +101,10 @@ export class VerifyAccountUseCase implements IVerifyAccountUseCase {
 
     const isMatch = await this._hashUtil.compareHash(code, cachedCode);
 
+    if (!isMatch) {
+      throw new UnauthorizedException('Invalid code');
+    }
+
     return isMatch;
   }
 
@@ -114,7 +124,7 @@ export class VerifyAccountUseCase implements IVerifyAccountUseCase {
     const isMatch = await this._hashUtil.compareHash(code, hashedCode);
 
     if (!isMatch) {
-      return null;
+      throw new UnauthorizedException('Invalid code');
     }
 
     return isMatch;
@@ -124,7 +134,7 @@ export class VerifyAccountUseCase implements IVerifyAccountUseCase {
     const user = await this._findUserByEmailHelper.execute(email);
 
     if (!user) {
-      throw new Error('User not found');
+      throw new NotFoundException('User not found');
     }
 
     return user;

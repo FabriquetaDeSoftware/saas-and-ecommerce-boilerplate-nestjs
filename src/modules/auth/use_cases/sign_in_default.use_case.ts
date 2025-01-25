@@ -2,12 +2,12 @@ import { Inject, Injectable } from '@nestjs/common';
 import { SignInDto } from '../dto/sign_in.dto';
 import { Auth } from '../entities/auth.entity';
 import { ITokensReturns } from 'src/shared/interfaces/tokens_returns.interface';
-import { ISignInUseCase } from '../interfaces/use_cases/sign_in.use_case.interface';
+import { ISignInDefaultUseCase } from '../interfaces/use_cases/sign_in.use_case.interface';
 import { IFindUserByEmailHelper } from '../interfaces/helpers/find_user_by_email.helper.interface';
 import { IGenerateTokenUtil } from 'src/shared/utils/interfaces/generate_token.util.interface';
 
 @Injectable()
-export class SignInUseCase implements ISignInUseCase {
+export class SignInDefaultUseCase implements ISignInDefaultUseCase {
   @Inject('IFindUserByEmailHelper')
   private readonly _findUserByEmailHelper: IFindUserByEmailHelper;
 

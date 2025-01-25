@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { PassportModule } from '@nestjs/passport';
 import { AuthRepository } from './repositories/auth.repository';
-import { SignInUseCase } from './use_cases/sign_in.use_case';
+import { SignInDefaultUseCase } from './use_cases/sign_in_default.use_case';
 import { SignUpUseCase } from './use_cases/sign_up.use_case';
 import { FindUserByEmailHelper } from './helpers/find_user_by_email.helper';
 import { ValidateUserService } from './services/validate_user.service';
@@ -64,10 +64,10 @@ import { RecoveryPasswordUseCase } from './use_cases/recovery_password.use_case'
       provide: 'ISignUpUseCase',
       useExisting: SignUpUseCase,
     },
-    SignInUseCase,
+    SignInDefaultUseCase,
     {
-      provide: 'ISignInUseCase',
-      useExisting: SignInUseCase,
+      provide: 'ISignInDefaultUseCase',
+      useExisting: SignInDefaultUseCase,
     },
     AuthRepository,
     {

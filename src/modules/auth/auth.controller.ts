@@ -19,7 +19,7 @@ import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { RolesGuard } from 'src/shared/guards/roles.guard';
 import { RefreshTokenDto } from './dto/refresh_token.dto';
 import { VerificationCodeDto } from './dto/verification_code.dto';
-import { ISignInUseCase } from './interfaces/use_cases/sign_in.use_case.interface';
+import { ISignInDefaultUseCase } from './interfaces/use_cases/sign_in.use_case.interface';
 import { ISignUpUseCase } from './interfaces/use_cases/sign_up.use_case.interface';
 import { IVerifyAccountUseCase } from './interfaces/use_cases/verify_account.use_case.interface';
 import { IRefreshTokenService } from './interfaces/services/refresh_token.service.interface';
@@ -34,8 +34,8 @@ export class AuthController {
   @Inject('ISignUpUseCase')
   private readonly _signUpUseCase: ISignUpUseCase;
 
-  @Inject('ISignInUseCase')
-  private readonly _signInUseCase: ISignInUseCase;
+  @Inject('ISignInDefaultUseCase')
+  private readonly _signInDefaultUseCase: ISignInDefaultUseCase;
 
   @Inject('IRefreshTokenService')
   private readonly _refreshTokenService: IRefreshTokenService;
@@ -50,10 +50,32 @@ export class AuthController {
   private readonly _recoveryPasswordUseCase: IRecoveryPasswordUseCase;
 
   @IsPublicRoute()
+  @Post('sign-up')
+  public async signUp(@Body() input: SignUpDto): Promise<Auth> {
+    return await this._signUpUseCase.execute(input);
+  }
+
+  @IsPublicRoute()
+  @Post('verify-account')
+  public async verifyAccount(
+    @Body() input: VerificationCodeDto,
+  ): Promise<{ message: string }> {
+    return await this._verifyAccountUseCase.execute(input);
+  }
+
+  @IsPublicRoute()
   @UseGuards(LocalAuthGuard)
-  @Post('sign-in')
+  @Post('sign-in-default')
   public async signIn(@Body() input: SignInDto): Promise<ITokensReturns> {
-    return await this._signInUseCase.execute(input);
+    return await this._signInDefaultUseCase.execute(input);
+  }
+
+  @IsPublicRoute()
+  @Post('sign-in-with-magic-link')
+  public async signInWithMagicLink(
+    @Body() input: SignInDto,
+  ): Promise<{ message: string }> {
+    return { message: 'Magic lin sent to your email' };
   }
 
   @IsPublicRoute()
@@ -62,20 +84,6 @@ export class AuthController {
     @Body() input: RefreshTokenDto,
   ): Promise<ITokensReturns> {
     return await this._refreshTokenService.execute(input);
-  }
-
-  @IsPublicRoute()
-  @Post('sign-up')
-  public async signUp(@Body() input: SignUpDto): Promise<Auth> {
-    return await this._signUpUseCase.execute(input);
-  }
-
-  @IsPublicRoute()
-  @Post('verification-code')
-  public async verificationCode(
-    @Body() input: VerificationCodeDto,
-  ): Promise<{ message: string }> {
-    return await this._verifyAccountUseCase.execute(input);
   }
 
   @IsPublicRoute()
