@@ -4,12 +4,11 @@ import { RolesGuard } from './guards/roles.guard';
 import { AuthModule } from 'src/modules/auth/auth.module';
 import { GenerateNumberCodeUtil } from './utils/generate_number_code.util';
 import { CryptoUtil } from './utils/crypto.util';
-import { GenerateTokenUtil } from './utils/generate_token.util';
 import { HashUtil } from './utils/hash.util';
 import { ProccessHtmlUtil } from './utils/proccess_html.util';
 
 @Module({
-  imports: [forwardRef(() => AuthModule)],
+  imports: [],
   providers: [
     ProccessHtmlUtil,
     {
@@ -26,11 +25,6 @@ import { ProccessHtmlUtil } from './utils/proccess_html.util';
       provide: 'ICryptoUtil',
       useExisting: CryptoUtil,
     },
-    GenerateTokenUtil,
-    {
-      provide: 'IGenerateTokenUtil',
-      useExisting: GenerateTokenUtil,
-    },
     HashUtil,
     {
       provide: 'IHashUtil',
@@ -43,7 +37,6 @@ import { ProccessHtmlUtil } from './utils/proccess_html.util';
   ],
   exports: [
     'IHashUtil',
-    'IGenerateTokenUtil',
     'ICryptoUtil',
     'IGenerateNumberCodeUtil',
     'IProccessHtmlUtil',

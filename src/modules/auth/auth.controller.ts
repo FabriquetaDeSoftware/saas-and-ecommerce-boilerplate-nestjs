@@ -13,7 +13,7 @@ import { Auth } from './entities/auth.entity';
 import { IsPublicRoute } from 'src/shared/decorators/is_public_route.decorator';
 import { SignInDto } from './dto/sign_in.dto';
 import { LocalAuthGuard } from './guards/local_auth.guard';
-import { ITokensReturns } from 'src/shared/interfaces/tokens_returns.interface';
+import { ITokensReturns } from 'src/modules/auth/interfaces/helpers/tokens_returns.interface';
 import { Roles } from 'src/shared/decorators/roles.decorator';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { RolesGuard } from 'src/shared/guards/roles.guard';

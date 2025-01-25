@@ -20,6 +20,7 @@ import { DatabaseModule } from 'src/databases/database.module';
 import { EmailModule } from 'src/shared/modules/email/email.module';
 import { ForgotPasswordService } from './services/forgot_password.service';
 import { RecoveryPasswordUseCase } from './use_cases/recovery_password.use_case';
+import { GenerateTokenHelper } from './helpers/generate_token.helper';
 
 @Module({
   imports: [
@@ -83,6 +84,11 @@ import { RecoveryPasswordUseCase } from './use_cases/recovery_password.use_case'
     {
       provide: 'IValidateUserService',
       useExisting: ValidateUserService,
+    },
+    GenerateTokenHelper,
+    {
+      provide: 'IGenerateTokenHelper',
+      useExisting: GenerateTokenHelper,
     },
     JwtStrategy,
     LocalStrategy,

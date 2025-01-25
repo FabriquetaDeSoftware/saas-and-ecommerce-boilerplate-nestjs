@@ -1,15 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { GenerateTokenDto } from './dto/generate_token.dto';
-import { ITokensReturns } from '../interfaces/tokens_returns.interface';
-import { IJwtUserPayload } from '../interfaces/jwt_user_payload.interface';
-import { jwtKeysConstants } from '../constants/jwt_keys.constants';
-import { ICryptoUtil } from './interfaces/crypto.util.interface';
+import { ITokensReturns } from '../interfaces/helpers/tokens_returns.interface';
+import { IJwtUserPayload } from '../interfaces/helpers/jwt_user_payload.interface';
+import { jwtKeysConstants } from '../../../shared/constants/jwt_keys.constants';
+import { ICryptoUtil } from '../../../shared/utils/interfaces/crypto.util.interface';
 import { JwtService } from '@nestjs/jwt';
-import { IGenerateTokenUtil } from './interfaces/generate_token.util.interface';
-import { TokenEnum } from '../enum/token.enum';
+import { IGenerateTokenHelper } from '../interfaces/helpers/generate_token.helper.interface';
+import { TokenEnum } from '../../../shared/enum/token.enum';
 
 @Injectable()
-export class GenerateTokenUtil implements IGenerateTokenUtil {
+export class GenerateTokenHelper implements IGenerateTokenHelper {
   @Inject()
   private readonly _jwtService: JwtService;
 

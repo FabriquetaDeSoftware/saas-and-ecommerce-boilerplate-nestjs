@@ -2,7 +2,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { jwtKeysConstants } from 'src/shared/constants/jwt_keys.constants';
-import { IJwtUserPayload } from 'src/shared/interfaces/jwt_user_payload.interface';
+import { IJwtUserPayload } from 'src/modules/auth/interfaces/helpers/jwt_user_payload.interface';
 import { TokenEnum } from 'src/shared/enum/token.enum';
 import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
 
