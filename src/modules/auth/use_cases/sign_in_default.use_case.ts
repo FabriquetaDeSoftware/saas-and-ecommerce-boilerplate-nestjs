@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { SignInDto } from '../dto/sign_in.dto';
 import { Auth } from '../entities/auth.entity';
 import { ITokensReturns } from 'src/modules/auth/interfaces/helpers/tokens_returns.interface';
@@ -35,7 +35,7 @@ export class SignInDefaultUseCase implements ISignInDefaultUseCase {
     const findUserByEmail = await this._findUserByEmailHelper.execute(email);
 
     if (!findUserByEmail) {
-      return null;
+      throw new UnauthorizedException('Invalid credentials');
     }
 
     return findUserByEmail;

@@ -71,7 +71,7 @@ export class RefreshTokenService implements IRefreshTokenService {
     const findUserByEmail = await this._findUserByEmailHelper.execute(email);
 
     if (!findUserByEmail) {
-      return null;
+      throw new UnauthorizedException('Invalid Payload');
     }
 
     return findUserByEmail;
