@@ -14,6 +14,41 @@ export class EmailSenderUseCase implements IEmailSenderUseCase {
   }
 
   private async intermediary(input: EmailSenderDto): Promise<void> {
+    const proccedTemplate = await this.generateTemplate(input);
+
+    return await this.sendEmail(input, proccedTemplate);
+  }
+
+  private async sendEmail(
+    input: EmailSenderDto,
+    proccedTemplate: string,
+  ): Promise<void> {
+    const mailOptions = {
+      from: '"Seu Nome" <seu-email@example.com>',
+      to: input.emailTo,
+      subject: input.subject,
+      html: proccedTemplate,
+    };
+
+    const trasnporter = this.trasnporter();
+
+    trasnporter.sendMail(mailOptions);
+
+    return;
+  }
+
+  private async generateTemplate(input: EmailSenderDto): Promise<string> {
+    const templatePath = `/home/api/nestjs/auth-boilerplate/src/shared/modules/email/templates/${input.language}/${input.template}`;
+
+    const proccedTemplate = await this._processHTMLUtil.execute(
+      templatePath,
+      input.variables,
+    );
+
+    return proccedTemplate;
+  }
+
+  private trasnporter(): nodemailer.Transporter {
     const transporter = nodemailer.createTransport({
       host: 'sandbox.smtp.mailtrap.io',
       port: 2525,
@@ -23,22 +58,6 @@ export class EmailSenderUseCase implements IEmailSenderUseCase {
       },
     });
 
-    const templatePath = `/home/api/nestjs/auth-boilerplate/src/shared/modules/email/templates/${input.language}/${input.template}`;
-
-    const proccedTemplate = await this._processHTMLUtil.execute(
-      templatePath,
-      input.variables,
-    );
-
-    const mailOptions = {
-      from: '"Seu Nome" <seu-email@example.com>',
-      to: input.emailTo,
-      subject: input.subject,
-      html: proccedTemplate,
-    };
-
-    await transporter.sendMail(mailOptions);
-
-    return;
+    return transporter;
   }
 }
