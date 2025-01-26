@@ -36,7 +36,7 @@ export class SignInMagicLinkUseCase implements ISignInMagicLinkUseCase {
     return await this._sendEmailQueueJob.execute({
       emailTo: email,
       language: LanguageEnum.PT_BR,
-      subject: 'Recuperação de senha',
+      subject: 'Login com link mágico',
       template: TemplateEnum.MAGIC_LINK_LOGIN,
       variables: {
         NAME: email,
