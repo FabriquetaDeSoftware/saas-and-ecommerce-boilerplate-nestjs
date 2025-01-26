@@ -22,6 +22,7 @@ import { JwtStrategy } from './infrastructure/strategies/jwt.strategy';
 import { LocalStrategy } from './infrastructure/strategies/local.strategy';
 import { JwtAuthGuard } from './interface/guards/jwt_auth.guard';
 import { SignInMagicLinkUseCase } from './application/use_cases/sign_in_magic_link.use_case';
+import { SignUpMagicLinkseCase } from './application/use_cases/sign_up_magic_link.use_case';
 
 @Module({
   imports: [
@@ -36,6 +37,11 @@ import { SignInMagicLinkUseCase } from './application/use_cases/sign_in_magic_li
   ],
   controllers: [AuthController],
   providers: [
+    SignUpMagicLinkseCase,
+    {
+      provide: 'ISignUpMagicLinkseCase',
+      useExisting: SignUpMagicLinkseCase,
+    },
     SignInMagicLinkUseCase,
     {
       provide: 'ISignInMagicLinkUseCase',

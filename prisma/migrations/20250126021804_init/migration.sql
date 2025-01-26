@@ -7,7 +7,7 @@ CREATE TABLE "Auth" (
     "public_id" TEXT NOT NULL,
     "role" "RolesAuth" NOT NULL DEFAULT 'USER',
     "email" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
+    "password" TEXT,
     "is_verified_account" BOOLEAN NOT NULL DEFAULT false,
     "newsletter_subscription" BOOLEAN NOT NULL DEFAULT true,
     "terms_and_conditions_accepted" BOOLEAN NOT NULL DEFAULT true,

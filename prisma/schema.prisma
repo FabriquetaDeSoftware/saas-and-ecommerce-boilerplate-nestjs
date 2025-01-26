@@ -13,7 +13,7 @@ model Auth {
 
   role     RolesAuth @default(USER)
   email    String    @unique
-  password String
+  password String?
 
   is_verified_account           Boolean @default(false)
   newsletter_subscription       Boolean @default(true)

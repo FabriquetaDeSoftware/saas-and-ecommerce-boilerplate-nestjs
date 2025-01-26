@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Inject,
+  NotImplementedException,
   Post,
   Query,
   UseGuards,
@@ -28,12 +29,14 @@ import { RecoveryPasswordDto } from '../../application/dto/recovery_password.dto
 import { EmailDto } from '../../application/dto/email.dto';
 import { IRecoveryPasswordUseCase } from '../../domain/interfaces/use_cases/recovery_password.use_case.interface';
 import { ISignInMagicLinkUseCase } from '../../domain/interfaces/use_cases/sign_in_magic_link.use_case';
+import { SignUpMagicLinkDto } from '../../application/dto/sign_up_magic_link.dto';
+import { ISignUpMagicLinkseCase } from '../../domain/interfaces/use_cases/sign_up_magic_link.use_case.interface';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   @Inject('ISignUpUseCase')
-  private readonly _signUpUseCase: ISignUpUseCase;
+  private readonly _signUpDefaultUseCase: ISignUpUseCase;
 
   @Inject('ISignInDefaultUseCase')
   private readonly _signInDefaultUseCase: ISignInDefaultUseCase;
@@ -53,10 +56,21 @@ export class AuthController {
   @Inject('ISignInMagicLinkUseCase')
   private readonly _signInMagicLinkUseCase: ISignInMagicLinkUseCase;
 
+  @Inject('ISignUpMagicLinkseCase')
+  private readonly _signUpMagicLinkseCase: ISignUpMagicLinkseCase;
+
   @IsPublicRoute()
-  @Post('sign-up')
-  public async signUp(@Body() input: SignUpDto): Promise<Auth> {
-    return await this._signUpUseCase.execute(input);
+  @Post('sign-up-default')
+  public async signUpDefault(@Body() input: SignUpDto): Promise<Auth> {
+    return await this._signUpDefaultUseCase.execute(input);
+  }
+
+  @IsPublicRoute()
+  @Post('sign-up-magic-link')
+  public async signUpMagicLink(
+    @Body() input: SignUpMagicLinkDto,
+  ): Promise<Auth> {
+    return await this._signUpMagicLinkseCase.execute(input);
   }
 
   @IsPublicRoute()
@@ -70,13 +84,15 @@ export class AuthController {
   @IsPublicRoute()
   @UseGuards(LocalAuthGuard)
   @Post('sign-in-default')
-  public async signIn(@Body() input: SignInDto): Promise<ITokensReturnsHelper> {
+  public async signInDefault(
+    @Body() input: SignInDto,
+  ): Promise<ITokensReturnsHelper> {
     return await this._signInDefaultUseCase.execute(input);
   }
 
   @IsPublicRoute()
-  @Post('sign-in-with-magic-link')
-  public async signInWithMagicLink(
+  @Post('sign-in-magic-link')
+  public async signInMagicLink(
     @Body() input: EmailDto,
   ): Promise<{ message: string }> {
     return await this._signInMagicLinkUseCase.execute(input);
