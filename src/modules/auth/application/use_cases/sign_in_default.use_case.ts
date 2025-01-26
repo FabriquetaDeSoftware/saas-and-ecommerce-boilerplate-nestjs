@@ -35,7 +35,9 @@ export class SignInDefaultUseCase implements ISignInDefaultUseCase {
     const findUserByEmail = await this._findUserByEmailHelper.execute(email);
 
     if (!findUserByEmail) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException(
+        'Invalid credentials or account not verified',
+      );
     }
 
     return findUserByEmail;

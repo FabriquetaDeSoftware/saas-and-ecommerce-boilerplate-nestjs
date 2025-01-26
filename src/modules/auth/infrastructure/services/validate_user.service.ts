@@ -32,7 +32,9 @@ export class ValidateUserService implements IValidateUserService {
     const findUserByEmail = await this._findUserByEmailHelper.execute(email);
 
     if (!findUserByEmail) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException(
+        'Invalid credentials or account not verified',
+      );
     }
 
     return findUserByEmail;
@@ -45,7 +47,9 @@ export class ValidateUserService implements IValidateUserService {
     const isMatch = await this._hashUtil.compareHash(password, encrypted);
 
     if (!isMatch) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException(
+        'Invalid credentials or account not verified',
+      );
     }
 
     return isMatch;

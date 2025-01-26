@@ -63,7 +63,7 @@ export class RefreshTokenService implements IRefreshTokenService {
     );
 
     if (payloadType !== TokenEnum.REFRESH_TOKEN) {
-      throw new UnauthorizedException('Invalid token');
+      throw new UnauthorizedException('Invalid or expired token');
     }
 
     return payload;

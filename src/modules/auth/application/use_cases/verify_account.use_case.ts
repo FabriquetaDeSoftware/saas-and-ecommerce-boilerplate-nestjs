@@ -102,7 +102,7 @@ export class VerifyAccountUseCase implements IVerifyAccountUseCase {
     const isMatch = await this._hashUtil.compareHash(code, cachedCode);
 
     if (!isMatch) {
-      throw new UnauthorizedException('Invalid code');
+      throw new UnauthorizedException('Invalid or expired code');
     }
 
     return isMatch;
@@ -124,7 +124,7 @@ export class VerifyAccountUseCase implements IVerifyAccountUseCase {
     const isMatch = await this._hashUtil.compareHash(code, hashedCode);
 
     if (!isMatch) {
-      throw new UnauthorizedException('Invalid code');
+      throw new UnauthorizedException('Invalid or expired code');
     }
 
     return isMatch;

@@ -56,14 +56,4 @@ export class SignInMagicLinkUseCase implements ISignInMagicLinkUseCase {
 
     return user;
   }
-
-  // private async checkEmailExistsOrError(email: string): Promise<Auth> {
-  //   const findUserByEmail = await this._findUserByEmailHelper.execute(email);
-
-  //   if (!findUserByEmail) {
-  //     throw new UnauthorizedException('Invalid credentials');
-  //   }
-
-  //   return findUserByEmail;
-  // }
 }

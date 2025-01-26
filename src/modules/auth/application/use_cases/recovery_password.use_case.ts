@@ -85,7 +85,7 @@ export class RecoveryPasswordUseCase implements IRecoveryPasswordUseCase {
     );
 
     if (payloadType !== TokenEnum.RECOVERY_PASSWORD_TOKEN) {
-      throw new UnauthorizedException('Invalid token');
+      throw new UnauthorizedException('Invalid or expired token');
     }
 
     return payload;

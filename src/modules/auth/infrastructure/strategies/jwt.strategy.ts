@@ -27,7 +27,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     );
 
     if (payloadType !== TokenEnum.ACCESS_TOKEN) {
-      throw new UnauthorizedException('Invalid token');
+      throw new UnauthorizedException('Invalid or expired token');
     }
 
     return {
