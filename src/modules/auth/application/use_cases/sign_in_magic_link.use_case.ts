@@ -24,7 +24,7 @@ export class SignInMagicLinkUseCase implements ISignInMagicLinkUseCase {
   }
 
   private async intermediary(email: string): Promise<{ message: string }> {
-    const findUserByEmail = await this.checkEmailExistsOrError(email);
+    const findUserByEmail = await this.validateUser(email);
 
     const { access_token, refresh_token } =
       await this._generateTokenUtil.execute({
@@ -45,13 +45,25 @@ export class SignInMagicLinkUseCase implements ISignInMagicLinkUseCase {
     });
   }
 
-  private async checkEmailExistsOrError(email: string): Promise<Auth> {
-    const findUserByEmail = await this._findUserByEmailHelper.execute(email);
+  private async validateUser(email: string): Promise<Auth> {
+    const user = await this._findUserByEmailHelper.execute(email);
 
-    if (!findUserByEmail) {
-      throw new UnauthorizedException('Invalid credentials');
+    if (!user || !user.is_verified_account) {
+      throw new UnauthorizedException(
+        'Invalid credentials or account not verified',
+      );
     }
 
-    return findUserByEmail;
+    return user;
   }
+
+  // private async checkEmailExistsOrError(email: string): Promise<Auth> {
+  //   const findUserByEmail = await this._findUserByEmailHelper.execute(email);
+
+  //   if (!findUserByEmail) {
+  //     throw new UnauthorizedException('Invalid credentials');
+  //   }
+
+  //   return findUserByEmail;
+  // }
 }
