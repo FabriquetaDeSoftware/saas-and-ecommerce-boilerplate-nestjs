@@ -21,6 +21,7 @@ import { GenerateTokenHelper } from './shared/helpers/generate_token.helper';
 import { JwtStrategy } from './infrastructure/strategies/jwt.strategy';
 import { LocalStrategy } from './infrastructure/strategies/local.strategy';
 import { JwtAuthGuard } from './interface/guards/jwt_auth.guard';
+import { SignInMagicLinkUseCase } from './application/use_cases/sign_in_magic_link.use_case';
 
 @Module({
   imports: [
@@ -35,6 +36,11 @@ import { JwtAuthGuard } from './interface/guards/jwt_auth.guard';
   ],
   controllers: [AuthController],
   providers: [
+    SignInMagicLinkUseCase,
+    {
+      provide: 'ISignInMagicLinkUseCase',
+      useExisting: SignInMagicLinkUseCase,
+    },
     ForgotPasswordService,
     {
       provide: 'IForgotPasswordService',

@@ -27,6 +27,7 @@ import { IForgotPasswordService } from '../../domain/interfaces/services/forgot_
 import { RecoveryPasswordDto } from '../../application/dto/recovery_password.dto';
 import { EmailDto } from '../../application/dto/email.dto';
 import { IRecoveryPasswordUseCase } from '../../domain/interfaces/use_cases/recovery_password.use_case.interface';
+import { ISignInMagicLinkUseCase } from '../../domain/interfaces/use_cases/sign_in_magic_link.use_case';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -48,6 +49,9 @@ export class AuthController {
 
   @Inject('IRecoveryPasswordUseCase')
   private readonly _recoveryPasswordUseCase: IRecoveryPasswordUseCase;
+
+  @Inject('ISignInMagicLinkUseCase')
+  private readonly _signInMagicLinkUseCase: ISignInMagicLinkUseCase;
 
   @IsPublicRoute()
   @Post('sign-up')
@@ -73,9 +77,9 @@ export class AuthController {
   @IsPublicRoute()
   @Post('sign-in-with-magic-link')
   public async signInWithMagicLink(
-    @Body() input: SignInDto,
+    @Body() input: EmailDto,
   ): Promise<{ message: string }> {
-    return { message: 'Magic lin sent to your email' };
+    return await this._signInMagicLinkUseCase.execute(input);
   }
 
   @IsPublicRoute()
