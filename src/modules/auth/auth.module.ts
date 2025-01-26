@@ -12,7 +12,7 @@ import { RecoveryPasswordUseCase } from './application/use_cases/recovery_passwo
 import { VerificationCodesRepository } from './infrastructure/repositories/verification_codes.repository';
 import { VerifyAccountUseCase } from './application/use_cases/verify_account.use_case';
 import { RefreshTokenService } from './infrastructure/services/refresh_token.service';
-import { SignUpUseCase } from './application/use_cases/sign_up.use_case';
+import { SignUpDefaultUseCase } from './application/use_cases/sign_up_default.use_case';
 import { SignInDefaultUseCase } from './application/use_cases/sign_in_default.use_case';
 import { AuthRepository } from './infrastructure/repositories/auth.repository';
 import { FindUserByEmailHelper } from './shared/helpers/find_user_by_email.helper';
@@ -72,10 +72,10 @@ import { SignUpMagicLinkseCase } from './application/use_cases/sign_up_magic_lin
       provide: 'IRefreshTokenService',
       useExisting: RefreshTokenService,
     },
-    SignUpUseCase,
+    SignUpDefaultUseCase,
     {
-      provide: 'ISignUpUseCase',
-      useExisting: SignUpUseCase,
+      provide: 'ISignUpDefaultUseCase',
+      useExisting: SignUpDefaultUseCase,
     },
     SignInDefaultUseCase,
     {
