@@ -4,7 +4,7 @@ import { IsBoolean, IsEmail, IsNotEmpty, IsOptional } from 'class-validator';
 export class SignUpMagicLinkDto {
   @ApiProperty({
     description: 'Email of the user',
-    example: 'teste@gmail.com',
+    example: 'teste1@gmail.com',
   })
   @IsNotEmpty()
   @IsEmail()
