@@ -19,7 +19,7 @@ import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { RefreshTokenDto } from '../../application/dto/refresh_token.dto';
 import { VerificationCodeDto } from '../../application/dto/verification_code.dto';
-import { ISignInDefaultUseCase } from '../../domain/interfaces/use_cases/sign_in.use_case.interface';
+import { ISignInDefaultUseCase } from '../../domain/interfaces/use_cases/sign_in_default.use_case.interface';
 import { ISignUpUseCase } from '../../domain/interfaces/use_cases/sign_up.use_case.interface';
 import { IVerifyAccountUseCase } from '../../domain/interfaces/use_cases/verify_account.use_case.interface';
 import { IRefreshTokenService } from '../../domain/interfaces/services/refresh_token.service.interface';

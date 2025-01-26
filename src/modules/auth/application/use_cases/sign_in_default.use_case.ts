@@ -1,6 +1,6 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { SignInDto } from '../dto/sign_in.dto';
-import { ISignInDefaultUseCase } from '../../domain/interfaces/use_cases/sign_in.use_case.interface';
+import { ISignInDefaultUseCase } from '../../domain/interfaces/use_cases/sign_in_default.use_case.interface';
 import { IFindUserByEmailHelper } from '../../domain/interfaces/helpers/find_user_by_email.helper.interface';
 import { IGenerateTokenHelper } from '../../domain/interfaces/helpers/generate_token.helper.interface';
 import { ITokensReturnsHelper } from '../../domain/interfaces/helpers/tokens_returns.helper.interface';
