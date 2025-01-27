@@ -51,7 +51,7 @@ services:
     command: redis-server --loglevel warning
 
   nginx:
-    container_name: nginx-proxy
+    container_name: nginx-nestjs-auth-boilerplate
     image: nginx:1.25-alpine
     depends_on:
       - api
