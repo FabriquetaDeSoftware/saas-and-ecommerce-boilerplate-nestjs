@@ -23,8 +23,8 @@ services:
     image: postgres:16.3-alpine
     networks:
       - network
-    # ports:
-    #   - '${MAPPED_PORT_DB}:5432'
+    ports:
+      - '${MAPPED_PORT_DB}:5432'
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
