@@ -6,6 +6,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { BullModule } from '@nestjs/bullmq';
 import { EmailModule } from './shared/modules/email/email.module';
 import { CommonModule } from './common/common.module';
+import { BillingModule } from './modules/billing/billing.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { CommonModule } from './common/common.module';
     DatabaseModule,
     EmailModule,
     CommonModule,
+    BillingModule,
   ],
   controllers: [],
   providers: [],

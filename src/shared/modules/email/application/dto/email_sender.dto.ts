@@ -31,6 +31,7 @@ export class EmailSenderDto {
     description: 'Language of the email',
     enum: LanguageEnum,
     example: LanguageEnum.PT_BR,
+    enumName: 'LanguageEnum',
   })
   @IsNotEmpty()
   @IsEnum(LanguageEnum)
@@ -40,6 +41,7 @@ export class EmailSenderDto {
     description: 'Template of the email',
     enum: TemplateEnum,
     example: TemplateEnum.ACCOUNT_VERIFICATION,
+    enumName: 'TemplateEnum',
   })
   @IsNotEmpty()
   @IsEnum(TemplateEnum)
