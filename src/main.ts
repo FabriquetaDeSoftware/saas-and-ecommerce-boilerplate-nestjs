@@ -11,7 +11,10 @@ import { serverConstants } from './shared/constants/server.constant';
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter(),
+    new FastifyAdapter({
+      bodyLimit: 1048576,
+      connectionTimeout: 15000,
+    }),
   );
 
   app.useGlobalPipes(
