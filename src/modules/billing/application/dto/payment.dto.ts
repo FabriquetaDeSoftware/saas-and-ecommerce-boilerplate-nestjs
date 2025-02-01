@@ -4,12 +4,11 @@ import { PaymentsEnum } from 'src/modules/auth/application/enum/payments.enum';
 
 export class PaymentDto {
   @ApiProperty({
-    description: 'Payment type',
-    example: PaymentsEnum.SUBSCRIPTION,
-    enum: PaymentsEnum,
-    enumName: 'PaymentsEnum',
+    description: 'Payment amount',
+    example: 10,
   })
   @IsNotEmpty()
-  @IsEnum(PaymentsEnum)
-  type: PaymentsEnum;
+  amount: number;
+
+  currency?: string;
 }
