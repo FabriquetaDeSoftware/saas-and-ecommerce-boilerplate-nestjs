@@ -7,7 +7,7 @@ export class StripePaymentService {
 
   constructor() {
     this.stripe = new Stripe('key', {
-      apiVersion: '2025-01-27.acacia', // Use a versão mais recente da API
+      apiVersion: '2025-01-27.acacia',
     });
   }
 
@@ -16,24 +16,24 @@ export class StripePaymentService {
     currency: string,
   ): Promise<string> {
     const session = await this.stripe.checkout.sessions.create({
-      payment_method_types: ['card'], // Aceita apenas cartão de crédito
+      payment_method_types: ['card'],
       line_items: [
         {
           price_data: {
-            currency: currency || 'brl', // Moeda padrão: BRL (Real Brasileiro)
+            currency: currency || 'brl',
             product_data: {
-              name: 'Produto de Teste', // Nome do produto ou serviço
+              name: 'Produto de Teste',
             },
-            unit_amount: amount * 100, // Valor em centavos
+            unit_amount: amount * 100,
           },
-          quantity: 1, // Quantidade do item
+          quantity: 1,
         },
       ],
-      mode: 'payment', // Modo de pagamento único
-      success_url: 'http://localhost:8080/sucesso', // URL de redirecionamento após sucesso
-      cancel_url: 'http://localhost:8080/cancelado', // URL de redirecionamento após cancelamento
+      mode: 'payment',
+      success_url: 'http://localhost:8080/sucesso',
+      cancel_url: 'http://localhost:8080/cancelado',
     });
 
-    return session.url; // URL do Checkout para redirecionar o usuário
+    return session.url;
   }
 }
