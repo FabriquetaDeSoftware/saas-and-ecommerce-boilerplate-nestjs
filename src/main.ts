@@ -15,6 +15,9 @@ async function bootstrap() {
       bodyLimit: 1048576,
       connectionTimeout: 15000,
     }),
+    {
+      rawBody: true,
+    },
   );
 
   app.useGlobalPipes(
