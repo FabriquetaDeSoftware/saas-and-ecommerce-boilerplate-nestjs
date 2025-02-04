@@ -3,16 +3,15 @@ import { EmailSenderDto } from '../../application/dto/email_sender.dto';
 import * as nodemailer from 'nodemailer';
 import { IEmailSenderService } from '../../domain/interfaces/services/email_sender.service.interface';
 import { IProcessHTMLUtil } from 'src/shared/utils/interfaces/proccess_html.interface';
+import { emailConstants } from '../../domain/constants/email.constants';
 
 @Injectable()
 export class EmailSenderService implements IEmailSenderService {
   @Inject('IProccessHtmlUtil')
   private readonly _processHTMLUtil: IProcessHTMLUtil;
 
-  private readonly _templateBasePath =
-    '/home/api/nestjs/auth-boilerplate/src/shared/modules/email/infrastructure/templates';
-
   public async execute(input: EmailSenderDto): Promise<void> {
+    console.log(emailConstants);
     return await this.intermediary(input);
   }
 
@@ -27,7 +26,7 @@ export class EmailSenderService implements IEmailSenderService {
     processedTemplate: string,
   ): Promise<void> {
     const mailOptions = {
-      from: '"Seu Nome" <seu-email@example.com>',
+      from: `"Seu Nome" ${emailConstants.email_from}`,
       to: input.emailTo,
       subject: input.subject,
       html: processedTemplate,
@@ -41,7 +40,7 @@ export class EmailSenderService implements IEmailSenderService {
   }
 
   private async generateTemplate(input: EmailSenderDto): Promise<string> {
-    const templatePath = `${this._templateBasePath}/${input.language}/${input.template}`;
+    const templatePath = `${emailConstants.email_template_base_path}/${input.language}/${input.template}`;
 
     const processedTemplate = await this._processHTMLUtil.execute(
       templatePath,
@@ -53,11 +52,11 @@ export class EmailSenderService implements IEmailSenderService {
 
   private transporter(): nodemailer.Transporter {
     const transporter = nodemailer.createTransport({
-      host: 'sandbox.smtp.mailtrap.io',
-      port: 2525,
+      host: emailConstants.email_host,
+      port: parseInt(emailConstants.email_port),
       auth: {
-        user: '348a394b31bf8e',
-        pass: 'd0c1632c32bee3',
+        user: emailConstants.email_user,
+        pass: emailConstants.email_password,
       },
     });
 
