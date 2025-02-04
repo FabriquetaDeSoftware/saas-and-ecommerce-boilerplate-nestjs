@@ -1,17 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import Stripe from 'stripe';
+import { stripeConstants } from '../../domain/constants/stripe.constant';
 
 @Injectable()
 export class StripePaymentService {
   private stripe: Stripe;
 
   constructor() {
-    this.stripe = new Stripe(
-      'sk_test_51QkqmnAIFECoCtHiqG8glyWO4G85vkgc2FqLWmaQbj8cjSWKolsnx3qn4JoYZM1cs2v0LfYZgxtoioaEtTa8mgy900GFuGjs0w',
-      {
-        apiVersion: '2025-01-27.acacia',
-      },
-    );
+    this.stripe = new Stripe(stripeConstants.stripe_secret_key, {
+      apiVersion: '2025-01-27.acacia',
+    });
   }
 
   async createOneTimePayment(priceId: string) {
@@ -24,8 +22,8 @@ export class StripePaymentService {
         },
       ],
       mode: 'payment',
-      success_url: 'http://localhost:8080/api',
-      cancel_url: 'http://localhost:8080/',
+      success_url: stripeConstants.success_url,
+      cancel_url: stripeConstants.cancel_url,
     });
 
     return session.url;
@@ -35,13 +33,12 @@ export class StripePaymentService {
     const event = this.stripe.webhooks.constructEvent(
       payload,
       signature,
-      'whsec_856015c16b8f037a85b8878ad31fc09d1a35779606d0704b4dd63153ea9dd30f',
+      stripeConstants.stripe_webhook_secret,
     );
 
     switch (event.type) {
       case 'payment_intent.succeeded':
         const paymentIntent = event.data.object;
-        console.log(`PaymentIntent for ${paymentIntent.amount} was successful`);
         break;
       default:
         console.log(`Unhandled event type ${event.type}`);
