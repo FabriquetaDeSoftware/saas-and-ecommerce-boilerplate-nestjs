@@ -2,7 +2,7 @@ import { Controller, Post, RawBodyRequest, Req, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { IsPublicRoute } from 'src/common/decorators/is_public_route.decorator';
 import { StripePaymentService } from '../../infrastructure/services/stripe_payment.service';
-import { FastifyRequest, FastifyReply } from 'fastify';
+import { FastifyRequest } from 'fastify';
 
 @ApiTags('billing')
 @Controller('billing')
