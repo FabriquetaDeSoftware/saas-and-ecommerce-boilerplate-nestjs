@@ -20,10 +20,16 @@ export class BillingController {
 
   @IsPublicRoute()
   @Post('payment/subscription')
-  public async subscription() {}
+  public async subscription() {
+    const priceId = 'price_1QouBMAIFECoCtHid1E2PjEM';
+    const paymentIntent =
+      await this.stripeService.createSubscriptionPayment(priceId);
+
+    return paymentIntent;
+  }
 
   @IsPublicRoute()
-  @Post('payment/webhook')
+  @Post('webhook')
   public async webhook(@Req() req: RawBodyRequest<FastifyRequest>) {
     const sig = Array.isArray(req.headers['stripe-signature'])
       ? req.headers['stripe-signature'][0]
