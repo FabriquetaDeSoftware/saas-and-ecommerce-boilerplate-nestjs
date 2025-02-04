@@ -31,15 +31,18 @@ export class RolesGuard implements CanActivate {
   }
 
   private async intermediry(data: string): Promise<string> {
-    const dataFromBase64ToBuffer = Buffer.from(data, 'base64');
-
-    const dataDecoded = await this.decryptPayload(dataFromBase64ToBuffer);
+    const dataDecoded = await this.decryptPayload(data);
 
     return dataDecoded;
   }
 
-  private async decryptPayload(data: Buffer): Promise<string> {
-    const dataBuffer = await this.cryptoUtil.decryptData(data);
+  private async decryptPayload(data: string): Promise<string> {
+    const dataFromBase64ToBuffer = Buffer.from(data, 'base64');
+
+    const dataBuffer = await this.cryptoUtil.decryptData(
+      dataFromBase64ToBuffer,
+    );
+
     const dataDecoded = dataBuffer.toString();
 
     return dataDecoded;
