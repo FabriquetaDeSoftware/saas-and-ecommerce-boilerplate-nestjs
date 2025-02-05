@@ -4,21 +4,21 @@ import {
   Inject,
   Injectable,
 } from '@nestjs/common';
-import { RBACEnum } from 'src/shared/enum/rbac.enum';
-import { RBAC_KEY } from '../decorators/rbac.decorator';
+import { RolesEnum } from 'src/shared/enum/roles.enum';
+import { ROLES_KEY } from '../decorators/roles.decorator';
 import { Reflector } from '@nestjs/core';
 import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
 
 @Injectable()
-export class RBACGuard implements CanActivate {
+export class RoleBasedAccessControlGuard implements CanActivate {
   constructor(private readonly _reflector: Reflector) {}
 
   @Inject('ICryptoUtil')
   protected readonly cryptoUtil: ICryptoUtil;
 
   public async canActivate(context: ExecutionContext): Promise<boolean> {
-    const requiredRoles = this._reflector.getAllAndOverride<RBACEnum[]>(
-      RBAC_KEY,
+    const requiredRoles = this._reflector.getAllAndOverride<RolesEnum[]>(
+      ROLES_KEY,
       [context.getHandler(), context.getClass()],
     );
 

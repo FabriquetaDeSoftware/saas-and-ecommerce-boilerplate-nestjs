@@ -15,8 +15,8 @@ import { IsPublicRoute } from 'src/common/decorators/is_public_route.decorator';
 import { SignInDto } from '../../application/dto/sign_in.dto';
 import { LocalAuthGuard } from '../guards/local_auth.guard';
 import { ITokensReturnsHelper } from '../../domain/interfaces/helpers/tokens_returns.helper.interface';
-import { RBAC } from 'src/common/decorators/rbac.decorator';
-import { RBACEnum } from 'src/shared/enum/rbac.enum';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { RefreshTokenDto } from '../../application/dto/refresh_token.dto';
 import { VerificationCodeDto } from '../../application/dto/verification_code.dto';
 import { ISignInDefaultUseCase } from '../../domain/interfaces/use_cases/sign_in_default.use_case.interface';
@@ -129,14 +129,14 @@ export class AuthController {
 
   @ApiBearerAuth()
   @Get('admin')
-  @RBAC(RBACEnum.ADMIN)
+  @Roles(RolesEnum.ADMIN)
   public admin(): string {
     return 'Admin route';
   }
 
   @ApiBearerAuth()
   @Get('user')
-  @RBAC(RBACEnum.USER, RBACEnum.ADMIN)
+  @Roles(RolesEnum.USER, RolesEnum.ADMIN)
   public user(): string {
     return 'User route';
   }

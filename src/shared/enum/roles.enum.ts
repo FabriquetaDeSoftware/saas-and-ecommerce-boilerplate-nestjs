@@ -1,4 +1,4 @@
-export enum RBACEnum {
+export enum RolesEnum {
   ADMIN = 'ADMIN',
   USER = 'USER',
 }

@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { RolesEnum } from 'src/shared/enum/rbac.enum';
+import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { IDatabaseAdapter } from 'src/common/databases/interfaces/database.adapter.interface';
 import { IAuthRepository } from '../../domain/interfaces/repository/auth.repository.interface';
 import { Auth } from '../../domain/entities/auth.entity';
