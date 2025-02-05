@@ -1,4 +1,4 @@
-import { RolesEnum } from 'src/shared/enum/roles.enum';
+import { RolesEnum } from 'src/shared/enum/rbac.enum';
 
 export class Auth {
   id: number;

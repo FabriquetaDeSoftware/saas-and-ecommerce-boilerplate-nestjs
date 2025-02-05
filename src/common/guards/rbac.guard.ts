@@ -4,26 +4,28 @@ import {
   Inject,
   Injectable,
 } from '@nestjs/common';
-import { RolesEnum } from 'src/shared/enum/roles.enum';
-import { ROLES_KEY } from '../decorators/roles.decorator';
+import { RBACEnum } from 'src/shared/enum/rbac.enum';
+import { RBAC_KEY } from '../decorators/rbac.decorator';
 import { Reflector } from '@nestjs/core';
 import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
 
 @Injectable()
-export class RolesGuard implements CanActivate {
+export class RBACGuard implements CanActivate {
   constructor(private readonly _reflector: Reflector) {}
 
   @Inject('ICryptoUtil')
   protected readonly cryptoUtil: ICryptoUtil;
 
   public async canActivate(context: ExecutionContext): Promise<boolean> {
-    const requiredRoles = this._reflector.getAllAndOverride<RolesEnum[]>(
-      ROLES_KEY,
+    const requiredRoles = this._reflector.getAllAndOverride<RBACEnum[]>(
+      RBAC_KEY,
       [context.getHandler(), context.getClass()],
     );
+
     if (!requiredRoles) {
       return true;
     }
+
     const { user } = context.switchToHttp().getRequest();
     const role = await this.intermediry(user.role);
 

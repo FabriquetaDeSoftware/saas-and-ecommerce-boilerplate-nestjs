@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from './databases/database.module';
 import { APP_GUARD } from '@nestjs/core';
-import { RolesGuard } from './guards/roles.guard';
+import { RBACGuard } from './guards/rbac.guard';
 import { SharedModule } from 'src/shared/shared.module';
 
 @Module({
@@ -9,7 +9,7 @@ import { SharedModule } from 'src/shared/shared.module';
   providers: [
     {
       provide: APP_GUARD,
-      useClass: RolesGuard,
+      useClass: RBACGuard,
     },
   ],
   exports: [DatabaseModule],
