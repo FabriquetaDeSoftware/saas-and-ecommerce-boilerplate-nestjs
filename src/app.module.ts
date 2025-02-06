@@ -7,6 +7,7 @@ import { BullModule } from '@nestjs/bullmq';
 import { EmailModule } from './shared/modules/email/email.module';
 import { CommonModule } from './common/common.module';
 import { BillingModule } from './modules/billing/billing.module';
+import { CaslModule } from './common/casl/casl.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { BillingModule } from './modules/billing/billing.module';
     EmailModule,
     CommonModule,
     BillingModule,
+    CaslModule,
   ],
   controllers: [],
   providers: [],
