@@ -8,6 +8,7 @@ import { EmailModule } from './shared/modules/email/email.module';
 import { CommonModule } from './common/common.module';
 import { BillingModule } from './modules/billing/billing.module';
 import { CaslModule } from './common/casl/casl.module';
+import { ProductsModule } from './modules/products/products.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { CaslModule } from './common/casl/casl.module';
     CommonModule,
     BillingModule,
     CaslModule,
+    ProductsModule,
   ],
   controllers: [],
   providers: [],

@@ -1,22 +1,18 @@
 import {
   Body,
   Controller,
-  Get,
   Inject,
-  NotImplementedException,
   Post,
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { SignUpDto } from '../../application/dto/sign_up.dto';
 import { Auth } from '../../domain/entities/auth.entity';
 import { IsPublicRoute } from 'src/common/decorators/is_public_route.decorator';
 import { SignInDto } from '../../application/dto/sign_in.dto';
 import { LocalAuthGuard } from '../guards/local_auth.guard';
 import { ITokensReturnsHelper } from '../../domain/interfaces/helpers/tokens_returns.helper.interface';
-import { Roles } from 'src/common/decorators/roles.decorator';
-import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { RefreshTokenDto } from '../../application/dto/refresh_token.dto';
 import { VerificationCodeDto } from '../../application/dto/verification_code.dto';
 import { ISignInDefaultUseCase } from '../../domain/interfaces/use_cases/sign_in_default.use_case.interface';
@@ -30,12 +26,6 @@ import { IRecoveryPasswordUseCase } from '../../domain/interfaces/use_cases/reco
 import { ISignInMagicLinkUseCase } from '../../domain/interfaces/use_cases/sign_in_magic_link.use_case';
 import { SignUpMagicLinkDto } from '../../application/dto/sign_up_magic_link.dto';
 import { ISignUpMagicLinkseCase } from '../../domain/interfaces/use_cases/sign_up_magic_link.use_case.interface';
-import {
-  CaslAbilityFactory,
-  ProductFields,
-  Products,
-} from 'src/common/casl/casl_ability.factory';
-import { Action } from 'src/shared/enum/actions.enum';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -63,8 +53,6 @@ export class AuthController {
 
   @Inject('ISignUpMagicLinkseCase')
   private readonly _signUpMagicLinkseCase: ISignUpMagicLinkseCase;
-
-  constructor(private caslAbilityFactory: CaslAbilityFactory) {}
 
   @IsPublicRoute()
   @Post('sign-up-default')
@@ -127,41 +115,5 @@ export class AuthController {
     @Query() input: RecoveryPasswordDto,
   ): Promise<{ message: string }> {
     return await this._recoveryPasswordUseCase.execute(input);
-  }
-
-  @ApiBearerAuth()
-  @Get('all')
-  public all(): string {
-    return 'All route';
-  }
-
-  @ApiBearerAuth()
-  @Get('admin')
-  @Roles(RolesEnum.ADMIN)
-  public admin(): string {
-    return 'Admin route';
-  }
-
-  @ApiBearerAuth()
-  @Get('user')
-  @Roles(RolesEnum.USER, RolesEnum.ADMIN)
-  public user(): string {
-    const user: Auth = {
-      id: 1,
-      email: 'mamm',
-      role: RolesEnum.USER,
-      password: '123',
-      created_at: new Date(),
-      updated_at: new Date(),
-      is_verified_account: true,
-      newsletter_subscription: true,
-      public_id: '123',
-      terms_and_conditions_accepted: true,
-    };
-
-    const ability = this.caslAbilityFactory.createForUser(user);
-    console.log(ability.can(Action.Update, Products, 'price' as ProductFields));
-
-    return 'User route';
   }
 }
