@@ -6,41 +6,38 @@ import {
   MongoAbility,
 } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
+import { Auth } from 'src/modules/auth/domain/entities/auth.entity';
 import { Action } from 'src/shared/enum/actions.enum';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
 
-class User {
+class Products {
   id: number;
-  isAdmin: boolean;
-}
-class Article {
-  id: number;
-  isPublished: boolean;
-  authorId: number;
+  public_id: string;
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+  image: string;
+  created_at: Date;
+  updated_at: Date;
 }
 
-// TODO: importar as entidades das tabela que vao se aplicar as regras
-type Subjects = InferSubjects<typeof Article | typeof User> | 'all';
-
-//type Subjects = 'Product' | 'User' | 'Order' | 'all';
+type Subjects = InferSubjects<typeof Products | typeof Auth> | 'all';
 
 export type AppAbility = MongoAbility<[Action, Subjects]>;
 
 @Injectable()
 export class CaslAbilityFactory {
-  createForUser(user: User) {
+  createForUser(user: Auth) {
     const { can, cannot, build } = new AbilityBuilder<
       MongoAbility<[Action, Subjects]>
     >(createMongoAbility);
 
-    if (user.isAdmin) {
-      can(Action.Manage, 'all');
+    if (user.role === RolesEnum.ADMIN) {
+      can(Action.Manage, Products);
     } else {
-      can(Action.Read, 'all');
+      can(Action.Read, Products);
     }
-
-    can(Action.Update, Article, { authorId: user.id });
-    cannot(Action.Delete, Article, { isPublished: true });
 
     return build({
       detectSubjectType: (item) =>
