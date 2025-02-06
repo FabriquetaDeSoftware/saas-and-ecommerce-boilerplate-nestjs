@@ -32,6 +32,7 @@ import { SignUpMagicLinkDto } from '../../application/dto/sign_up_magic_link.dto
 import { ISignUpMagicLinkseCase } from '../../domain/interfaces/use_cases/sign_up_magic_link.use_case.interface';
 import {
   CaslAbilityFactory,
+  ProductFields,
   Products,
 } from 'src/common/casl/casl_ability.factory';
 import { Action } from 'src/shared/enum/actions.enum';
@@ -159,7 +160,7 @@ export class AuthController {
     };
 
     const ability = this.caslAbilityFactory.createForUser(user);
-    console.log(ability.can(Action.Update, Products, 'price'));
+    console.log(ability.can(Action.Update, Products, 'price' as ProductFields));
 
     return 'User route';
   }

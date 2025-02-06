@@ -22,6 +22,8 @@ export class Products {
   updated_at: Date;
 }
 
+export type ProductFields = keyof Products;
+
 type Subjects = InferSubjects<typeof Products | typeof Auth> | 'all';
 
 export type AppAbility = MongoAbility<[Action, Subjects]>;
