@@ -35,12 +35,13 @@ export class CaslAbilityFactory {
       MongoAbility<[Action, Subjects]>
     >(createMongoAbility);
 
-    if (user.role === RolesEnum.ADMIN) {
-      can(Action.Manage, Products);
-      cannot(Action.Delete, Products);
-    } else {
-      can(Action.Read, Products);
-      can(Action.Update, Products, ['price', 'stock']);
+    switch (user.role) {
+      case RolesEnum.ADMIN:
+        can(Action.Manage, Products);
+        break;
+
+      default:
+        break;
     }
 
     return build({
