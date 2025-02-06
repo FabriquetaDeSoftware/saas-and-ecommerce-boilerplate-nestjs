@@ -13,6 +13,6 @@ import { CaslModule } from './casl/casl.module';
       useClass: RoleBasedAccessControlGuard,
     },
   ],
-  exports: [DatabaseModule],
+  exports: [DatabaseModule, CaslModule],
 })
 export class CommonModule {}

@@ -25,6 +25,20 @@ model Auth {
   verification_code VerificationCodes?
 }
 
+// model Products {
+//   id        Int    @id @default(autoincrement())
+//   public_id String @unique @default(uuid())
+
+//   name        String
+//   description String
+//   price       Decimal @db.Money
+//   stock       Int
+//   image       String?
+
+//   created_at DateTime @default(now())
+//   updated_at DateTime @updatedAt
+// }
+
 model VerificationCodes {
   id        Int    @id @default(autoincrement())
   public_id String @unique @default(uuid())

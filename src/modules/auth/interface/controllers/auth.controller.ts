@@ -30,6 +30,11 @@ import { IRecoveryPasswordUseCase } from '../../domain/interfaces/use_cases/reco
 import { ISignInMagicLinkUseCase } from '../../domain/interfaces/use_cases/sign_in_magic_link.use_case';
 import { SignUpMagicLinkDto } from '../../application/dto/sign_up_magic_link.dto';
 import { ISignUpMagicLinkseCase } from '../../domain/interfaces/use_cases/sign_up_magic_link.use_case.interface';
+import {
+  CaslAbilityFactory,
+  Products,
+} from 'src/common/casl/casl_ability.factory';
+import { Action } from 'src/shared/enum/actions.enum';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -57,6 +62,8 @@ export class AuthController {
 
   @Inject('ISignUpMagicLinkseCase')
   private readonly _signUpMagicLinkseCase: ISignUpMagicLinkseCase;
+
+  constructor(private caslAbilityFactory: CaslAbilityFactory) {}
 
   @IsPublicRoute()
   @Post('sign-up-default')
@@ -138,6 +145,22 @@ export class AuthController {
   @Get('user')
   @Roles(RolesEnum.USER, RolesEnum.ADMIN)
   public user(): string {
+    const user: Auth = {
+      id: 1,
+      email: 'mamm',
+      role: RolesEnum.USER,
+      password: '123',
+      created_at: new Date(),
+      updated_at: new Date(),
+      is_verified_account: true,
+      newsletter_subscription: true,
+      public_id: '123',
+      terms_and_conditions_accepted: true,
+    };
+
+    const ability = this.caslAbilityFactory.createForUser(user);
+    console.log(ability.can(Action.Update, Products, 'price'));
+
     return 'User route';
   }
 }

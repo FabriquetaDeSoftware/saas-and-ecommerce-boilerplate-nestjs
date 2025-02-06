@@ -10,7 +10,7 @@ import { Auth } from 'src/modules/auth/domain/entities/auth.entity';
 import { Action } from 'src/shared/enum/actions.enum';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
 
-class Products {
+export class Products {
   id: number;
   public_id: string;
   name: string;
@@ -35,8 +35,10 @@ export class CaslAbilityFactory {
 
     if (user.role === RolesEnum.ADMIN) {
       can(Action.Manage, Products);
+      cannot(Action.Delete, Products);
     } else {
       can(Action.Read, Products);
+      can(Action.Update, Products, ['price', 'stock']);
     }
 
     return build({
