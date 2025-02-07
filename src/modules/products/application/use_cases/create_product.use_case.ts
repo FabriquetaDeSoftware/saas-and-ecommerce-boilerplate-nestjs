@@ -3,7 +3,6 @@ import { ICreateProductUseCase } from '../../domain/interfaces/use_cases/create_
 import { CreateProductDto } from '../dto/create_product.dto';
 import { Products } from '../../domain/entities/products.entity';
 import { IProductsRepository } from '../../domain/interfaces/repositories/products.repository.interface';
-import { CaslAbilityFactory } from 'src/common/casl/casl_ability.factory';
 import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
 
 @Injectable()
@@ -13,9 +12,6 @@ export class CreateProductUseCase implements ICreateProductUseCase {
 
   @Inject('ICryptoUtil')
   private readonly _cryptoUtil: ICryptoUtil;
-
-  @Inject()
-  private readonly _caslAbilityFactory: CaslAbilityFactory;
 
   public async execute(
     role: string,
@@ -45,18 +41,4 @@ export class CreateProductUseCase implements ICreateProductUseCase {
 
     return dataDecoded;
   }
-
-  // const ability = this._caslAbilityFactory.createForUser(user);
-
-  // const fieldsToUpdate = Object.keys(input) as (keyof CreateProductDto)[];
-
-  // const isAllowed = fieldsToUpdate.every((field) =>
-  //   ability.can(Action.Update, Products, field as ProductFields),
-  // );
-
-  // const filteredInput = Object.fromEntries(
-  //   Object.entries(input).filter(([field]) =>
-  //     ability.can(Action.Update, Products, field as ProductFields),
-  //   ),
-  // );
 }

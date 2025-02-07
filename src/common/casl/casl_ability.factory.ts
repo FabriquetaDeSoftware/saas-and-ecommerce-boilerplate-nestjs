@@ -19,12 +19,12 @@ export type AppAbility = MongoAbility<[Action, Subjects]>;
 
 @Injectable()
 export class CaslAbilityFactory {
-  createForUser(user: Auth) {
+  createForUser(role: RolesEnum) {
     const { can, cannot, build } = new AbilityBuilder<
       MongoAbility<[Action, Subjects]>
     >(createMongoAbility);
 
-    switch (user.role) {
+    switch (role) {
       case RolesEnum.ADMIN:
         can(Action.Manage, Products);
         break;
