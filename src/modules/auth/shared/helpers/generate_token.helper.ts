@@ -4,7 +4,7 @@ import { IGenerateTokenHelper } from '../../domain/interfaces/helpers/generate_t
 import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
 import { GenerateTokenDto } from '../../application/dto/generate_token.dto';
 import { ITokensReturnsHelper } from '../../domain/interfaces/helpers/tokens_returns.helper.interface';
-import { IJwtUserPayloadHelper } from '../../domain/interfaces/helpers/jwt_user_payload.helper.interface';
+import { IJwtUserPayload } from '../../../../shared/interfaces/jwt_user_payload.interface';
 import { TokenEnum } from 'src/shared/enum/token.enum';
 import { jwtKeysConstants } from 'src/shared/constants/jwt_keys.constants';
 
@@ -36,7 +36,7 @@ export class GenerateTokenHelper implements IGenerateTokenHelper {
       this.encryptPayload(data.role),
     ]);
 
-    const payload: IJwtUserPayloadHelper = {
+    const payload: IJwtUserPayload = {
       sub,
       email,
       role,
@@ -51,7 +51,7 @@ export class GenerateTokenHelper implements IGenerateTokenHelper {
   }
 
   private async generateTokens(
-    payload: IJwtUserPayloadHelper,
+    payload: IJwtUserPayload,
     type?: TokenEnum,
   ): Promise<ITokensReturnsHelper> {
     if (type) {

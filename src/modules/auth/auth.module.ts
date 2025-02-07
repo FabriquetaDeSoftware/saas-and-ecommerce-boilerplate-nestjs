@@ -3,7 +3,6 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtKeysConstants } from 'src/shared/constants/jwt_keys.constants';
 import { APP_GUARD } from '@nestjs/core';
-import { EmailModule } from 'src/shared/modules/email/email.module';
 import { CommonModule } from 'src/common/common.module';
 import { AuthController } from './interface/controllers/auth.controller';
 import { SharedModule } from 'src/shared/shared.module';
@@ -33,7 +32,6 @@ import { SignUpMagicLinkseCase } from './application/use_cases/sign_up_magic_lin
     SharedModule,
     CommonModule,
     PassportModule,
-    EmailModule,
   ],
   controllers: [AuthController],
   providers: [

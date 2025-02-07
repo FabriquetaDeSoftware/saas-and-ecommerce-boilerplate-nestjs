@@ -14,7 +14,7 @@ export class RoleBasedAccessControlGuard implements CanActivate {
   constructor(private readonly _reflector: Reflector) {}
 
   @Inject('ICryptoUtil')
-  protected readonly cryptoUtil: ICryptoUtil;
+  private readonly _cryptoUtil: ICryptoUtil;
 
   public async canActivate(context: ExecutionContext): Promise<boolean> {
     const requiredRoles = this._reflector.getAllAndOverride<RolesEnum[]>(
@@ -41,7 +41,7 @@ export class RoleBasedAccessControlGuard implements CanActivate {
   private async decryptPayload(data: string): Promise<string> {
     const dataFromBase64ToBuffer = Buffer.from(data, 'base64');
 
-    const dataBuffer = await this.cryptoUtil.decryptData(
+    const dataBuffer = await this._cryptoUtil.decryptData(
       dataFromBase64ToBuffer,
     );
 

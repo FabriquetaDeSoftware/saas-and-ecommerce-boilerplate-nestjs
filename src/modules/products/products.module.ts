@@ -3,9 +3,10 @@ import { ProductsController } from './interface/controllers/products.controller'
 import { CommonModule } from 'src/common/common.module';
 import { CreateProductUseCase } from './application/use_cases/create_product.use_case';
 import { ProductsRepository } from './infrastructure/repositories/products.repository';
+import { SharedModule } from 'src/shared/shared.module';
 
 @Module({
-  imports: [CommonModule],
+  imports: [CommonModule, SharedModule],
   controllers: [ProductsController],
   providers: [
     ProductsRepository,

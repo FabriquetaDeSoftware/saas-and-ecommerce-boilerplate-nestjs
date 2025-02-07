@@ -1,17 +1,12 @@
-import { forwardRef, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { GenerateNumberCodeUtil } from './utils/generate_number_code.util';
 import { CryptoUtil } from './utils/crypto.util';
 import { HashUtil } from './utils/hash.util';
-import { ProccessHtmlUtil } from './utils/proccess_html.util';
+import { EmailModule } from './modules/email/email.module';
 
 @Module({
-  imports: [],
+  imports: [EmailModule],
   providers: [
-    ProccessHtmlUtil,
-    {
-      provide: 'IProccessHtmlUtil',
-      useExisting: ProccessHtmlUtil,
-    },
     GenerateNumberCodeUtil,
     {
       provide: 'IGenerateNumberCodeUtil',
@@ -28,11 +23,6 @@ import { ProccessHtmlUtil } from './utils/proccess_html.util';
       useExisting: HashUtil,
     },
   ],
-  exports: [
-    'IHashUtil',
-    'ICryptoUtil',
-    'IGenerateNumberCodeUtil',
-    'IProccessHtmlUtil',
-  ],
+  exports: ['IHashUtil', 'ICryptoUtil', 'IGenerateNumberCodeUtil', EmailModule],
 })
 export class SharedModule {}

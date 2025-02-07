@@ -13,7 +13,7 @@ import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
 import { IRecoveryPasswordUseCase } from '../../domain/interfaces/use_cases/recovery_password.use_case.interface';
 import { IAuthRepository } from '../../domain/interfaces/repositories/auth.repository.interface';
 import { IFindUserByEmailHelper } from '../../domain/interfaces/helpers/find_user_by_email.helper.interface';
-import { IJwtUserPayloadHelper } from '../../domain/interfaces/helpers/jwt_user_payload.helper.interface';
+import { IJwtUserPayload } from '../../../../shared/interfaces/jwt_user_payload.interface';
 import { Auth } from '../../domain/entities/auth.entity';
 
 @Injectable()
@@ -71,13 +71,10 @@ export class RecoveryPasswordUseCase implements IRecoveryPasswordUseCase {
 
   private async verifyRefreshTokenIsValid(
     token: string,
-  ): Promise<IJwtUserPayloadHelper> {
-    const payload: IJwtUserPayloadHelper = await this._jwtService.verify(
-      token,
-      {
-        secret: jwtKeysConstants.secret_recovery_password_token_key,
-      },
-    );
+  ): Promise<IJwtUserPayload> {
+    const payload: IJwtUserPayload = await this._jwtService.verify(token, {
+      secret: jwtKeysConstants.secret_recovery_password_token_key,
+    });
 
     const payloadType = await this.decryptPayload(
       Buffer.from(payload.type, 'base64'),

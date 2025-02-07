@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import * as fs from 'node:fs/promises';
-import { IProcessHTMLUtil } from './interfaces/proccess_html.interface';
+import { IProcessHtmlHelper } from '../../domain/interfaces/helpers/proccess_html.helper.interface';
 
 @Injectable()
-export class ProccessHtmlUtil implements IProcessHTMLUtil {
+export class ProcessHtmlHelper implements IProcessHtmlHelper {
   public async execute(
     pathHTML: string,
     variables?: Record<string, string>,

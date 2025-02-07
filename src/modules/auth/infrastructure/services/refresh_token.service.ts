@@ -8,7 +8,7 @@ import { IFindUserByEmailHelper } from '../../domain/interfaces/helpers/find_use
 import { IGenerateTokenHelper } from '../../domain/interfaces/helpers/generate_token.helper.interface';
 import { RefreshTokenDto } from '../../application/dto/refresh_token.dto';
 import { ITokensReturnsHelper } from '../../domain/interfaces/helpers/tokens_returns.helper.interface';
-import { IJwtUserPayloadHelper } from '../../domain/interfaces/helpers/jwt_user_payload.helper.interface';
+import { IJwtUserPayload } from '../../../../shared/interfaces/jwt_user_payload.interface';
 import { Auth } from '../../domain/entities/auth.entity';
 
 @Injectable()
@@ -50,8 +50,8 @@ export class RefreshTokenService implements IRefreshTokenService {
 
   private async verifyRefreshTokenIsValid(
     refreshToken: string,
-  ): Promise<IJwtUserPayloadHelper> {
-    const payload: IJwtUserPayloadHelper = await this._jwtService.verify(
+  ): Promise<IJwtUserPayload> {
+    const payload: IJwtUserPayload = await this._jwtService.verify(
       refreshToken,
       {
         secret: jwtKeysConstants.secret_refresh_token_key,

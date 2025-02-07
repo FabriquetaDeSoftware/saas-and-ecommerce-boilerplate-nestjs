@@ -3,15 +3,10 @@ import { CreateProductDto } from '../../application/dto/create_product.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { Roles } from 'src/common/decorators/roles.decorator';
-import { IsPublicRoute } from 'src/common/decorators/is_public_route.decorator';
-import { Auth } from 'src/modules/auth/domain/entities/auth.entity';
-import {
-  CaslAbilityFactory,
-  ProductFields,
-} from 'src/common/casl/casl_ability.factory';
-import { Action } from 'src/shared/enum/actions.enum';
 import { Products } from '../../domain/entities/products.entity';
 import { ICreateProductUseCase } from '../../domain/interfaces/use_cases/create_product.use_case.interface';
+import { CurrentUser } from 'src/common/decorators/current_user.decorator';
+import { IJwtUserPayload } from 'src/shared/interfaces/jwt_user_payload.interface';
 
 @ApiBearerAuth()
 @Controller('products')
@@ -19,39 +14,14 @@ export class ProductsController {
   @Inject('ICreateProductUseCase')
   private readonly _createProductUseCase: ICreateProductUseCase;
 
-  @Inject()
-  private readonly _caslAbilityFactory: CaslAbilityFactory;
-
-  //@Roles(RolesEnum.ADMIN)
-  @IsPublicRoute()
+  @Roles(RolesEnum.ADMIN)
   @Post('create')
-  public async createProduct(@Body() input: CreateProductDto): Promise<void> {
-    await this._createProductUseCase.execute(input);
+  public async createProduct(
+    @Body() input: CreateProductDto,
+    @CurrentUser() user: IJwtUserPayload,
+  ): Promise<Products> {
+    const response = await this._createProductUseCase.execute(user.role, input);
 
-    const user: Auth = {
-      id: 1,
-      email: 'mamm',
-      role: RolesEnum.USER,
-      password: '123',
-      created_at: new Date(),
-      updated_at: new Date(),
-      is_verified_account: true,
-      newsletter_subscription: true,
-      public_id: '123',
-      terms_and_conditions_accepted: true,
-    };
-
-    const ability = this._caslAbilityFactory.createForUser(user);
-
-    const fieldsToUpdate = Object.keys(input) as (keyof CreateProductDto)[];
-
-    const isAllowed = fieldsToUpdate.every((field) =>
-      ability.can(Action.Update, Products, field as ProductFields),
-    );
-
-    console.log(isAllowed);
-    console.log(input);
-
-    return;
+    return response;
   }
 }
