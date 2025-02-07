@@ -12,5 +12,18 @@ export interface IAuthRepository {
 
   findOneByEmail(email: string): Promise<Auth>;
 
-  updateInfoAuth(updateInfoDto: Partial<UpdateInfoDto>): Promise<Auth>;
+  updateInfoByIdAuth(
+    id: number,
+    updateInfoDto: Partial<UpdateInfoDto>,
+  ): Promise<Auth>;
+
+  updateInfoByPublicIdAuth(
+    public_id: string,
+    updateInfoDto: Partial<UpdateInfoDto>,
+  ): Promise<Auth>;
+
+  updateInfoByEmailAuth(
+    email: string,
+    updateInfoDto: Partial<UpdateInfoDto>,
+  ): Promise<Auth>;
 }

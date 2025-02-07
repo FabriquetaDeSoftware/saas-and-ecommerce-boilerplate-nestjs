@@ -9,8 +9,6 @@ import {
 } from 'class-validator';
 
 export class UpdateInfoDto {
-  id: number;
-
   @ApiProperty({
     description: 'Password of the user',
     example: '123456',

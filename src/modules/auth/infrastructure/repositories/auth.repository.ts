@@ -43,12 +43,39 @@ export class AuthRepository implements IAuthRepository {
     return { ...result, role: result.role as RolesEnum };
   }
 
-  public async updateInfoAuth(
+  public async updateInfoByIdAuth(
+    id: number,
     updateInfoDto: Partial<UpdateInfoDto>,
   ): Promise<Auth> {
     const result = await this._databaseAdapter.update<Auth>(
       this._model,
-      { id: updateInfoDto.id },
+      { id },
+      { ...updateInfoDto },
+    );
+
+    return { ...result, role: result.role as RolesEnum };
+  }
+
+  public async updateInfoByPublicIdAuth(
+    public_id: string,
+    updateInfoDto: Partial<UpdateInfoDto>,
+  ): Promise<Auth> {
+    const result = await this._databaseAdapter.update<Auth>(
+      this._model,
+      { public_id },
+      { ...updateInfoDto },
+    );
+
+    return { ...result, role: result.role as RolesEnum };
+  }
+
+  public async updateInfoByEmailAuth(
+    email: string,
+    updateInfoDto: Partial<UpdateInfoDto>,
+  ): Promise<Auth> {
+    const result = await this._databaseAdapter.update<Auth>(
+      this._model,
+      { email },
       { ...updateInfoDto },
     );
 

@@ -54,9 +54,9 @@ export class VerifyAccountUseCase implements IVerifyAccountUseCase {
       data.email,
       data.code.toString(),
     );
-    console.log('verifyCodeByCache', verifyCodeByCache);
+
     if (verifyCodeByCache) {
-      await this.updateAccountIsVerify(user.id, true);
+      await this.updateAccountIsVerify(user.email, true);
 
       return await this.sendEmailVerificationCode({
         emailTo: user.email,
@@ -71,7 +71,7 @@ export class VerifyAccountUseCase implements IVerifyAccountUseCase {
 
     await this.verifyCode(data.code.toString(), verificationCode.code);
 
-    await this.updateAccountIsVerify(user.id, true);
+    await this.updateAccountIsVerify(user.email, true);
 
     return await this.sendEmailVerificationCode({
       emailTo: user.email,
@@ -109,11 +109,10 @@ export class VerifyAccountUseCase implements IVerifyAccountUseCase {
   }
 
   private async updateAccountIsVerify(
-    id: number,
+    email: string,
     is_verified_account: boolean,
   ): Promise<Auth> {
-    const result = await this._authRepository.updateInfoAuth({
-      id,
+    const result = await this._authRepository.updateInfoByEmailAuth(email, {
       is_verified_account,
     });
 

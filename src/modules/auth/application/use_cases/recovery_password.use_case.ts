@@ -48,12 +48,11 @@ export class RecoveryPasswordUseCase implements IRecoveryPasswordUseCase {
       Buffer.from(payload.email, 'base64'),
     );
 
-    const findUserByEmail = await this.findUserByEmailAndValidate(email);
+    await this.findUserByEmailAndValidate(email);
 
     const hashedPassword = await this._hashUtil.generateHash(input.password);
 
-    await this._authRepository.updateInfoAuth({
-      id: findUserByEmail.id,
+    await this._authRepository.updateInfoByEmailAuth(email, {
       password: hashedPassword,
     });
 
