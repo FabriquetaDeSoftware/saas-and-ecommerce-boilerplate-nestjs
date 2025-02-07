@@ -4,6 +4,12 @@ import { CreateProductDto } from '../dto/create_product.dto';
 import { Products } from '../../domain/entities/products.entity';
 import { IProductsRepository } from '../../domain/interfaces/repositories/products.repository.interface';
 import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
+import {
+  CaslAbilityFactory,
+  ProductFields,
+} from 'src/common/casl/casl_ability.factory';
+import { Action } from 'src/shared/enum/actions.enum';
+import { RolesEnum } from 'src/shared/enum/roles.enum';
 
 @Injectable()
 export class CreateProductUseCase implements ICreateProductUseCase {
@@ -13,12 +19,30 @@ export class CreateProductUseCase implements ICreateProductUseCase {
   @Inject('ICryptoUtil')
   private readonly _cryptoUtil: ICryptoUtil;
 
+  @Inject()
+  private readonly _caslAbilityFactory: CaslAbilityFactory;
+
   public async execute(
     role: string,
     input: CreateProductDto,
   ): Promise<Products> {
-    const data = await this.intermediry(role);
-    console.log(data);
+    const roleDecripted = await this.intermediry(role);
+
+    const ability = this._caslAbilityFactory.createForUser(
+      roleDecripted as RolesEnum,
+    );
+
+    const fieldsToUpdate = Object.keys(input) as (keyof CreateProductDto)[];
+    const isAllowed = fieldsToUpdate.every((field) =>
+      ability.can(Action.Update, Products, field as ProductFields),
+    );
+
+    const filteredInput = Object.fromEntries(
+      Object.entries(input).filter(([field]) =>
+        ability.can(Action.Update, Products, field as ProductFields),
+      ),
+    );
+
     const result = await this._productsRepository.create(input);
 
     return result;
