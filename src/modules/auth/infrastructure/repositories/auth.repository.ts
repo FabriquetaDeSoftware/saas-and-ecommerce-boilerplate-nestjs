@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { IDatabaseAdapter } from 'src/common/databases/interfaces/database.adapter.interface';
-import { IAuthRepository } from '../../domain/interfaces/repository/auth.repository.interface';
+import { IAuthRepository } from '../../domain/interfaces/repositories/auth.repository.interface';
 import { Auth } from '../../domain/entities/auth.entity';
 import { UpdateInfoDto } from '../../application/dto/update_info.dto';
 import { SignUpDto } from '../../application/dto/sign_up.dto';

@@ -11,7 +11,6 @@ export class EmailSenderService implements IEmailSenderService {
   private readonly _processHTMLUtil: IProcessHTMLUtil;
 
   public async execute(input: EmailSenderDto): Promise<void> {
-    console.log(emailConstants);
     return await this.intermediary(input);
   }
 

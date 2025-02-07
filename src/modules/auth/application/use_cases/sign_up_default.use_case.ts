@@ -7,7 +7,7 @@ import { TemplateEnum } from 'src/shared/modules/email/application/enum/template
 import { IGenerateNumberCodeUtil } from 'src/shared/utils/interfaces/generate_number_code.util.interface';
 import { ISendEmailQueueJob } from 'src/shared/modules/email/domain/interfaces/jobs/send_email_queue.job.interface';
 import { ISignUpDefaultUseCase } from '../../domain/interfaces/use_cases/sign_up.use_case.interface';
-import { IAuthRepository } from '../../domain/interfaces/repository/auth.repository.interface';
+import { IAuthRepository } from '../../domain/interfaces/repositories/auth.repository.interface';
 import { IFindUserByEmailHelper } from '../../domain/interfaces/helpers/find_user_by_email.helper.interface';
 import { Auth } from '../../domain/entities/auth.entity';
 

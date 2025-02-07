@@ -29,7 +29,7 @@ model Products {
   id        Int    @id @default(autoincrement())
   public_id String @unique @default(uuid())
 
-  name        String
+  name        String  @unique
   description String
   price       Decimal @db.Money
   stock       Int

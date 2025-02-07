@@ -13,9 +13,9 @@ import { ISendEmailQueueJob } from 'src/shared/modules/email/domain/interfaces/j
 import { LanguageEnum } from 'src/shared/enum/language.enum';
 import { TemplateEnum } from 'src/shared/modules/email/application/enum/template.enum';
 import { IVerifyAccountUseCase } from '../../domain/interfaces/use_cases/verify_account.use_case.interface';
-import { IVerificationCodesRepository } from '../../domain/interfaces/repository/verification_codes.repository.interface';
+import { IVerificationCodesRepository } from '../../domain/interfaces/repositories/verification_codes.repository.interface';
 import { IFindUserByEmailHelper } from '../../domain/interfaces/helpers/find_user_by_email.helper.interface';
-import { IAuthRepository } from '../../domain/interfaces/repository/auth.repository.interface';
+import { IAuthRepository } from '../../domain/interfaces/repositories/auth.repository.interface';
 import { Auth } from '../../domain/entities/auth.entity';
 import { VerificationCodes } from '../../domain/entities/verification_codes.entity';
 
@@ -54,7 +54,7 @@ export class VerifyAccountUseCase implements IVerifyAccountUseCase {
       data.email,
       data.code.toString(),
     );
-
+    console.log('verifyCodeByCache', verifyCodeByCache);
     if (verifyCodeByCache) {
       await this.updateAccountIsVerify(user.id, true);
 

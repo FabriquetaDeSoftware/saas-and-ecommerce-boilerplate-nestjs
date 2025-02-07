@@ -11,7 +11,7 @@ import { TokenEnum } from 'src/shared/enum/token.enum';
 import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
 import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
 import { IRecoveryPasswordUseCase } from '../../domain/interfaces/use_cases/recovery_password.use_case.interface';
-import { IAuthRepository } from '../../domain/interfaces/repository/auth.repository.interface';
+import { IAuthRepository } from '../../domain/interfaces/repositories/auth.repository.interface';
 import { IFindUserByEmailHelper } from '../../domain/interfaces/helpers/find_user_by_email.helper.interface';
 import { IJwtUserPayloadHelper } from '../../domain/interfaces/helpers/jwt_user_payload.helper.interface';
 import { Auth } from '../../domain/entities/auth.entity';

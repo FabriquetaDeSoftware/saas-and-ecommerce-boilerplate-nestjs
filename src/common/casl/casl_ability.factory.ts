@@ -7,20 +7,9 @@ import {
 } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
 import { Auth } from 'src/modules/auth/domain/entities/auth.entity';
+import { Products } from 'src/modules/products/domain/entities/products.entity';
 import { Action } from 'src/shared/enum/actions.enum';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
-
-export class Products {
-  id: number;
-  public_id: string;
-  name: string;
-  description: string;
-  price: number;
-  stock: number;
-  image: string;
-  created_at: Date;
-  updated_at: Date;
-}
 
 export type ProductFields = keyof Products;
 
