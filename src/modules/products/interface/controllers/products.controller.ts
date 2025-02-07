@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Inject, Post } from '@nestjs/common';
 import { CreateProductDto } from '../../application/dto/create_product.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
@@ -8,19 +8,26 @@ import { Auth } from 'src/modules/auth/domain/entities/auth.entity';
 import {
   CaslAbilityFactory,
   ProductFields,
-  Products,
 } from 'src/common/casl/casl_ability.factory';
 import { Action } from 'src/shared/enum/actions.enum';
+import { Products } from '../../domain/entities/products.entity';
+import { ICreateProductUseCase } from '../../domain/interfaces/use_cases/create_product.use_case.interface';
 
 @ApiBearerAuth()
 @Controller('products')
 export class ProductsController {
-  constructor(private caslAbilityFactory: CaslAbilityFactory) {}
+  @Inject('ICreateProductUseCase')
+  private readonly _createProductUseCase: ICreateProductUseCase;
+
+  @Inject()
+  private readonly _caslAbilityFactory: CaslAbilityFactory;
 
   //@Roles(RolesEnum.ADMIN)
   @IsPublicRoute()
   @Post('create')
   public async createProduct(@Body() input: CreateProductDto): Promise<void> {
+    await this._createProductUseCase.execute(input);
+
     const user: Auth = {
       id: 1,
       email: 'mamm',
@@ -34,7 +41,7 @@ export class ProductsController {
       terms_and_conditions_accepted: true,
     };
 
-    const ability = this.caslAbilityFactory.createForUser(user);
+    const ability = this._caslAbilityFactory.createForUser(user);
 
     const fieldsToUpdate = Object.keys(input) as (keyof CreateProductDto)[];
 

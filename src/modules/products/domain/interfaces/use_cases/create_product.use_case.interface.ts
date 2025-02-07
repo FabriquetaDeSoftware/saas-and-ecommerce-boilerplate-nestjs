@@ -1,0 +1,6 @@
+import { Products } from '../../entities/products.entity';
+import { CreateProductDto } from 'src/modules/products/application/dto/create_product.dto';
+
+export interface ICreateProductUseCase {
+  execute(input: CreateProductDto): Promise<Products>;
+}

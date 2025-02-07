@@ -1,10 +1,23 @@
 import { Module } from '@nestjs/common';
 import { ProductsController } from './interface/controllers/products.controller';
 import { CommonModule } from 'src/common/common.module';
+import { CreateProductUseCase } from './application/use_cases/create_product.use_case';
+import { ProductsRepository } from './infrastructure/repositories/products.repository';
 
 @Module({
   imports: [CommonModule],
   controllers: [ProductsController],
-  providers: [],
+  providers: [
+    ProductsRepository,
+    {
+      provide: 'IProductsRepository',
+      useExisting: ProductsRepository,
+    },
+    CreateProductUseCase,
+    {
+      provide: 'ICreateProductUseCase',
+      useExisting: CreateProductUseCase,
+    },
+  ],
 })
 export class ProductsModule {}
