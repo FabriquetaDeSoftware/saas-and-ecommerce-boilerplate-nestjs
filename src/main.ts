@@ -1,4 +1,4 @@
-import { ModulesContainer, NestFactory } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import {
   FastifyAdapter,
@@ -11,7 +11,6 @@ import {
   VersioningType,
 } from '@nestjs/common';
 import { serverConstants } from './shared/constants/server.constant';
-import { InstanceWrapper } from '@nestjs/core/injector/instance-wrapper';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
