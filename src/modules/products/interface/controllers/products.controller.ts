@@ -1,6 +1,6 @@
 import { Body, Controller, Inject, Post } from '@nestjs/common';
 import { CreateProductDto } from '../../application/dto/create_product.dto';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Products } from '../../domain/entities/products.entity';
@@ -8,6 +8,7 @@ import { ICreateProductUseCase } from '../../domain/interfaces/use_cases/create_
 import { CurrentUser } from 'src/common/decorators/current_user.decorator';
 import { IJwtUserPayload } from 'src/shared/interfaces/jwt_user_payload.interface';
 
+@ApiTags('products')
 @ApiBearerAuth()
 @Controller('products')
 export class ProductsController {
