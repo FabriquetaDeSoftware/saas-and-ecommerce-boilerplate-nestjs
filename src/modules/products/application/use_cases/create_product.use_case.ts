@@ -1,15 +1,12 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ICreateProductUseCase } from '../../domain/interfaces/use_cases/create_product.use_case.interface';
 import { CreateProductDto } from '../dto/create_product.dto';
 import { Products } from '../../domain/entities/products.entity';
 import { IProductsRepository } from '../../domain/interfaces/repositories/products.repository.interface';
 import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
-import {
-  CaslAbilityFactory,
-  ProductFields,
-} from 'src/common/casl/casl_ability.factory';
 import { Action } from 'src/shared/enum/actions.enum';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
+import { IPermissionManagerUtil } from 'src/shared/utils/interfaces/permission_manager.util.interface';
 
 @Injectable()
 export class CreateProductUseCase implements ICreateProductUseCase {
@@ -19,39 +16,42 @@ export class CreateProductUseCase implements ICreateProductUseCase {
   @Inject('ICryptoUtil')
   private readonly _cryptoUtil: ICryptoUtil;
 
-  @Inject()
-  private readonly _caslAbilityFactory: CaslAbilityFactory;
+  @Inject('IPermissionManagerUtil')
+  private readonly _permissionManagerUtil: IPermissionManagerUtil;
 
   public async execute(
     role: string,
     input: CreateProductDto,
   ): Promise<Products> {
-    const roleDecripted = await this.intermediry(role);
+    const result = await this.intermediry(role, input);
 
-    const ability = this._caslAbilityFactory.createForUser(
-      roleDecripted as RolesEnum,
-    );
+    return result;
+  }
 
-    const fieldsToUpdate = Object.keys(input) as (keyof CreateProductDto)[];
-    const isAllowed = fieldsToUpdate.every((field) =>
-      ability.can(Action.Update, Products, field as ProductFields),
-    );
+  private async intermediry(
+    role: string,
+    input: CreateProductDto,
+  ): Promise<Products> {
+    const roleDecoded = await this.decryptPayload(role);
 
-    const filteredInput = Object.fromEntries(
-      Object.entries(input).filter(([field]) =>
-        ability.can(Action.Update, Products, field as ProductFields),
-      ),
-    );
+    this.isAllowedAction(roleDecoded, input);
 
     const result = await this._productsRepository.create(input);
 
     return result;
   }
 
-  private async intermediry(data: string): Promise<string> {
-    const dataDecoded = await this.decryptPayload(data);
+  private isAllowedAction(role: string, input: CreateProductDto): void {
+    const isAllowed = this._permissionManagerUtil.validateFieldPermissions(
+      role as RolesEnum,
+      input,
+      Action.Create,
+      Products,
+    );
 
-    return dataDecoded;
+    if (!isAllowed) {
+      throw new UnauthorizedException('Unauthorized to perform this action');
+    }
   }
 
   private async decryptPayload(data: string): Promise<string> {

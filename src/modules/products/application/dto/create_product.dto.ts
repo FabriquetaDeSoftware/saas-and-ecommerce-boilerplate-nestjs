@@ -10,23 +10,23 @@ import {
 
 export class CreateProductDto {
   @ApiProperty({
-    description: 'Email of the user',
-    example: 'teste@gmail.com',
+    description: 'Name of the product',
+    example: 'product name',
   })
   @IsNotEmpty()
   @IsString()
   name: string;
 
   @ApiProperty({
-    description: 'Email of the user',
-    example: 'teste@gmail.com',
+    description: 'Description of the product',
+    example: 'the best product',
   })
   @IsNotEmpty()
   @IsString()
   description: string;
 
   @ApiProperty({
-    description: 'Email of the user',
+    description: 'Price of the product',
     example: 123.45,
   })
   @IsNotEmpty()
@@ -35,7 +35,7 @@ export class CreateProductDto {
   price: number;
 
   @ApiProperty({
-    description: 'Email of the user',
+    description: 'stock of the product',
     example: 123,
   })
   @IsNotEmpty()
@@ -44,7 +44,7 @@ export class CreateProductDto {
   stock: number;
 
   @ApiProperty({
-    description: 'Email of the user',
+    description: 'Url image of the product',
     example:
       'https://t0.gstatic.com/licensed-image?q=tbn:ANd9GcTEVcrypslvdUeHleSabemh-hXNLNslN-H0XVxm7ObA2J28dKoXFD5zck7QPMjyHGBCWXhq2nmA4YA0IYslGIM',
   })
