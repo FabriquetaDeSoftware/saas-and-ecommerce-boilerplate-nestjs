@@ -1,4 +1,4 @@
-import { Controller, Post, RawBodyRequest, Req, Res } from '@nestjs/common';
+import { Controller, Headers, Post, RawBodyRequest, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { IsPublicRoute } from 'src/common/decorators/is_public_route.decorator';
 import { StripePaymentService } from '../../infrastructure/services/stripe_payment.service';
@@ -30,12 +30,12 @@ export class BillingController {
 
   @IsPublicRoute()
   @Post('webhook')
-  public async webhook(@Req() req: RawBodyRequest<FastifyRequest>) {
-    const sig = Array.isArray(req.headers['stripe-signature'])
-      ? req.headers['stripe-signature'][0]
-      : req.headers['stripe-signature'];
+  public async webhook(
+    @Req() req: RawBodyRequest<FastifyRequest>,
+    @Headers('stripe-signature') stripeSignature: string,
+  ) {
     const payload = req.rawBody;
 
-    await this.stripeService.handleWebhookEvent(payload, sig);
+    await this.stripeService.handleWebhookEvent(payload, stripeSignature);
   }
 }
