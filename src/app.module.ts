@@ -9,6 +9,7 @@ import { CommonModule } from './common/common.module';
 import { BillingModule } from './modules/billing/billing.module';
 import { CaslModule } from './common/casl/casl.module';
 import { ProductsModule } from './modules/products/products.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -30,7 +31,7 @@ import { ProductsModule } from './modules/products/products.module';
     CaslModule,
     ProductsModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [],
 })
 export class AppModule {}

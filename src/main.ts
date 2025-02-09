@@ -11,6 +11,8 @@ import {
   VersioningType,
 } from '@nestjs/common';
 import { serverConstants } from './shared/constants/server.constant';
+import { join } from 'node:path';
+import { PointOfViewModule } from 'point-of-view';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -34,8 +36,19 @@ async function bootstrap() {
     }),
   );
 
-  const host = serverConstants.host;
+  app.useStaticAssets({
+    root: join(__dirname, '..', 'public'),
+    prefix: '/public/',
+  });
 
+  app.setViewEngine({
+    engine: {
+      handlebars: require('handlebars'),
+    },
+    templates: join(__dirname, '..', 'views'),
+  });
+
+  const host = serverConstants.host;
   app.enableCors({
     origin: (origin, callback) => {
       if (!origin || host.includes(origin)) {
