@@ -12,7 +12,6 @@ import {
 } from '@nestjs/common';
 import { serverConstants } from './shared/constants/server.constant';
 import { join } from 'node:path';
-import { PointOfViewModule } from 'point-of-view';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
