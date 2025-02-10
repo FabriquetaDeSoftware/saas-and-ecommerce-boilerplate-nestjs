@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import Stripe from 'stripe';
-import { stripeConstants } from '../../domain/constants/stripe.constant';
+import { gatewayConstants } from '../../domain/constants/gateway.constant';
 import { IBillingGateway } from '../../domain/interfaces/gateway/billing.gateway.interface';
 
 @Injectable()
@@ -8,7 +8,7 @@ export class StripeGateway implements IBillingGateway {
   private readonly _stripe: Stripe;
 
   constructor() {
-    this._stripe = new Stripe(stripeConstants.stripe_secret_key, {
+    this._stripe = new Stripe(gatewayConstants.stripe_secret_key, {
       apiVersion: '2025-01-27.acacia',
     });
   }
@@ -23,8 +23,8 @@ export class StripeGateway implements IBillingGateway {
         },
       ],
       mode: 'payment',
-      success_url: stripeConstants.success_url,
-      cancel_url: stripeConstants.cancel_url,
+      success_url: gatewayConstants.success_url,
+      cancel_url: gatewayConstants.cancel_url,
     });
 
     return { url: session.url };
@@ -40,8 +40,8 @@ export class StripeGateway implements IBillingGateway {
         },
       ],
       mode: 'subscription',
-      success_url: stripeConstants.success_url,
-      cancel_url: stripeConstants.cancel_url,
+      success_url: gatewayConstants.success_url,
+      cancel_url: gatewayConstants.cancel_url,
     });
 
     return { url: session.url };
@@ -51,7 +51,7 @@ export class StripeGateway implements IBillingGateway {
     const event = this._stripe.webhooks.constructEvent(
       payload,
       signature,
-      stripeConstants.stripe_webhook_secret,
+      gatewayConstants.stripe_webhook_secret,
     );
 
     switch (event.type) {

@@ -10,21 +10,28 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { IsPublicRoute } from 'src/common/decorators/is_public_route.decorator';
 import { FastifyRequest } from 'fastify';
-import { IPaymentService } from '../../domain/interfaces/services/payment.service.interface';
+import { IWebhookService } from '../../domain/interfaces/services/webhook.service.interface';
+import { IOneTimePaymentUseCase } from '../../domain/interfaces/use_cases/one_time_payment.use_case.interface';
+import { ISubscriptionPaymentUseCase } from '../../domain/interfaces/use_cases/subscription_payment.use_case.interface';
 
 @ApiTags('billing')
 @Controller('billing')
 export class BillingController {
-  @Inject('IPaymentService')
-  private readonly _paymentService: IPaymentService;
+  @Inject('IWebhookService')
+  private readonly _webhookService: IWebhookService;
+
+  @Inject('IOneTimePaymentUseCase')
+  private readonly _oneTimepaymentService: IOneTimePaymentUseCase;
+
+  @Inject('ISubscriptionPaymentUseCase')
+  private readonly _subscriptionPaymentService: ISubscriptionPaymentUseCase;
 
   @IsPublicRoute()
   @Post('payment/one-time')
   @HttpCode(303)
   public async oneTime(): Promise<{ url: string }> {
     const priceId = 'price_1Qnj8hAIFECoCtHiGReB5Rpl';
-    const paymentIntent =
-      await this._paymentService.createOneTimePayment(priceId);
+    const paymentIntent = await this._oneTimepaymentService.execute(priceId);
 
     return paymentIntent;
   }
@@ -35,7 +42,7 @@ export class BillingController {
   public async subscription(): Promise<{ url: string }> {
     const priceId = 'price_1QouBMAIFECoCtHid1E2PjEM';
     const paymentIntent =
-      await this._paymentService.createSubscriptionPayment(priceId);
+      await this._subscriptionPaymentService.execute(priceId);
 
     return paymentIntent;
   }
@@ -48,6 +55,6 @@ export class BillingController {
   ): Promise<void> {
     const payload = req.rawBody;
 
-    await this._paymentService.handleWebhookEvent(payload, stripeSignature);
+    await this._webhookService.execute(payload, stripeSignature);
   }
 }
