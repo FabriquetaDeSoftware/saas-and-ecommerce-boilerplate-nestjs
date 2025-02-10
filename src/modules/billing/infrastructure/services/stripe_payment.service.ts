@@ -1,19 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import Stripe from 'stripe';
 import { stripeConstants } from '../../domain/constants/stripe.constant';
+import { IPaymentService } from '../../domain/interfaces/services/payment.service.interface';
 
 @Injectable()
-export class StripePaymentService {
-  private stripe: Stripe;
+export class StripePaymentService implements IPaymentService {
+  private readonly _stripe: Stripe;
 
   constructor() {
-    this.stripe = new Stripe(stripeConstants.stripe_secret_key, {
+    this._stripe = new Stripe(stripeConstants.stripe_secret_key, {
       apiVersion: '2025-01-27.acacia',
     });
   }
 
   public async createOneTimePayment(priceId: string) {
-    const session = await this.stripe.checkout.sessions.create({
+    const session = await this._stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
         {
@@ -26,11 +27,11 @@ export class StripePaymentService {
       cancel_url: stripeConstants.cancel_url,
     });
 
-    return session.url;
+    return { url: session.url };
   }
 
   public async createSubscriptionPayment(priceId: string) {
-    const session = await this.stripe.checkout.sessions.create({
+    const session = await this._stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
         {
@@ -43,11 +44,11 @@ export class StripePaymentService {
       cancel_url: stripeConstants.cancel_url,
     });
 
-    return session.url;
+    return { url: session.url };
   }
 
   public async handleWebhookEvent(payload: any, signature: string) {
-    const event = this.stripe.webhooks.constructEvent(
+    const event = this._stripe.webhooks.constructEvent(
       payload,
       signature,
       stripeConstants.stripe_webhook_secret,
