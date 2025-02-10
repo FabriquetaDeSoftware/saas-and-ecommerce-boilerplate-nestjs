@@ -1,14 +1,20 @@
 import { Module } from '@nestjs/common';
 import { BillingController } from './interface/controllers/billing.controller';
-import { StripePaymentService } from './infrastructure/services/stripe_payment.service';
+import { StripeGateway } from './infrastructure/gateway/stripe.gateway';
+import { WebhookService } from './infrastructure/services/webhook.service';
 
 @Module({
   controllers: [BillingController],
   providers: [
-    StripePaymentService,
+    WebhookService,
     {
-      provide: 'IPaymentService',
-      useExisting: StripePaymentService,
+      provide: 'IWebhookService',
+      useExisting: WebhookService,
+    },
+    StripeGateway,
+    {
+      provide: 'IBillingGateway',
+      useExisting: StripeGateway,
     },
   ],
 })
