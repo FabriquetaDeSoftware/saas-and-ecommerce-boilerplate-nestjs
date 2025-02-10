@@ -11,10 +11,18 @@
     href="https://fonts.googleapis.com/css?family=EB+Garamond:400,500,700"
     rel="stylesheet"
   />
-
+  <link rel="shortcut icon" href="../public/assets/logo_nest.ico" type="image/x-icon">
+  <title>Boilerplate</title>
   <style type="text/css">
+    *{
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
     body {
       display: flex;
+      gap: 20px;
+      padding-top: 30px;
       flex-flow: column wrap;
       justify-content: center;
       align-items: center;
@@ -26,6 +34,12 @@
       font-size: 18px;
       font-weight: 400;
     }
+    .buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      align-items: center;
+    }
     .button {
       padding: 10px 20px;
       background-color: #3a3f44;
@@ -36,19 +50,21 @@
       font-weight: 500;
       cursor: pointer;
       transition: background-color 0.3s ease;
+      text-decoration: none;
     }
     .button:hover {
       background-color: #5a5f64;
     }
   </style>
-
-  <title>Document</title>
 </head>
+
 <body>
-  <br/>
   <img src="../public/assets/logo_nest.svg" width="100" />
   <h4>Welcome to the SaaS and Ecommerce Boilerplate Backend!</h4>
-  <button class="button" onclick="window.location.href='/docs'">Go to Swagger</button>
+  <div class="buttons">
+    <a class="button" href="/docs" rel="noopener noreferrer">Go to Swagger</a>
+    <a class="button" href="https://discord.gg/mMXW78zS" target="_blank" rel="noopener noreferrer">Go to Discord</a>
+  </div>
 </body>
 </html>
 
