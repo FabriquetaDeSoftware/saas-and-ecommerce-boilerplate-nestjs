@@ -3,7 +3,7 @@ import { IPermissionManagerUtil } from './interfaces/permission_manager.util.int
 import { RolesEnum } from '../enum/roles.enum';
 import { CaslAbilityFactory } from 'src/common/casl/casl_ability.factory';
 import { Action } from '../enum/actions.enum';
-import { EntitySubjectCaslType } from 'src/common/casl/types/entity_subject_casl.type';
+import { CaslSubjectType } from 'src/common/casl/domain/types/casl_subject.type';
 
 @Injectable()
 export class PermissionManagerUtil implements IPermissionManagerUtil {
@@ -14,7 +14,7 @@ export class PermissionManagerUtil implements IPermissionManagerUtil {
     role: RolesEnum,
     input: object,
     action: Action,
-    entity: EntitySubjectCaslType,
+    entity: CaslSubjectType,
   ): boolean {
     const ability = this._caslAbilityFactory.createForUser(role);
 
@@ -30,8 +30,8 @@ export class PermissionManagerUtil implements IPermissionManagerUtil {
     role: RolesEnum,
     input: object,
     action: Action,
-    entity: EntitySubjectCaslType,
-  ): Partial<EntitySubjectCaslType> {
+    entity: CaslSubjectType,
+  ): Partial<CaslSubjectType> {
     const ability = this._caslAbilityFactory.createForUser(role);
 
     const filteredInput = Object.fromEntries(

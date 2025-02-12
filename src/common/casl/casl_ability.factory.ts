@@ -6,12 +6,12 @@ import {
   MongoAbility,
 } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
-import { Products } from 'src/modules/products/domain/entities/products.entity';
 import { Action } from 'src/shared/enum/actions.enum';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
-import { EntitySubjectCaslType } from './types/entity_subject_casl.type';
+import { CaslSubjectType } from './domain/types/casl_subject.type';
+import { CaslEntities } from './domain/entities/casl_entities.entity';
 
-type Subjects = InferSubjects<EntitySubjectCaslType> | 'all';
+type Subjects = InferSubjects<CaslSubjectType> | 'all';
 
 type AppAbility = MongoAbility<[Action, Subjects]>;
 
@@ -24,7 +24,7 @@ export class CaslAbilityFactory {
 
     switch (role) {
       case RolesEnum.ADMIN:
-        can(Action.Manage, Products);
+        can(Action.Manage, CaslEntities.Products);
         break;
 
       default:
