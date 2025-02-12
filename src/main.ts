@@ -4,21 +4,18 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import {
-  ForbiddenException,
-  ValidationPipe,
-  VersioningType,
-} from '@nestjs/common';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { serverConstants } from './shared/constants/server.constant';
-import { join } from 'node:path';
+import { swaggerConfig } from './config/swagger.config';
+import { corsConfig } from './config/cors.config';
+import { renderPageConfig } from './config/render_page.config';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter({
-      bodyLimit: 1048576,
-      connectionTimeout: 15000,
+      bodyLimit: 10_485_760,
+      connectionTimeout: 15_000,
     }),
     {
       rawBody: true,
@@ -35,45 +32,13 @@ async function bootstrap() {
     }),
   );
 
-  app.useStaticAssets({
-    root: join(__dirname, '..', 'public'),
-    prefix: '/public/',
-  });
+  renderPageConfig(app);
 
-  app.setViewEngine({
-    engine: {
-      handlebars: require('handlebars'),
-    },
-    templates: join(__dirname, '..', 'views'),
-  });
+  corsConfig(app);
 
-  const host = serverConstants.host;
-  app.enableCors({
-    origin: (origin, callback) => {
-      if (!origin || host.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new ForbiddenException('Not allowed by CORS'));
-      }
-    },
-  });
-
-  const config = new DocumentBuilder()
-    .setTitle('Api To Auth Boilerplate')
-    .setDescription('API for testing saas and e-comerce boilerplate routes')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .addTag('auth')
-    .addTag('email')
-    .addTag('billing')
-    .addTag('products')
-    .build();
-
-  const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, documentFactory);
+  swaggerConfig(app);
 
   const port = parseInt(serverConstants.port_api);
-
   await app.listen({ port, host: '0.0.0.0' });
 }
 bootstrap();
