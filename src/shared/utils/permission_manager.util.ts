@@ -3,8 +3,7 @@ import { IPermissionManagerUtil } from './interfaces/permission_manager.util.int
 import { RolesEnum } from '../enum/roles.enum';
 import { CaslAbilityFactory } from 'src/common/casl/casl_ability.factory';
 import { Action } from '../enum/actions.enum';
-import { EntitySubjectCaslType } from '../types/entity_subject_casl.type';
-import { Products } from 'src/modules/products/domain/entities/products.entity';
+import { EntitySubjectCaslType } from 'src/common/casl/types/entity_subject_casl.type';
 
 @Injectable()
 export class PermissionManagerUtil implements IPermissionManagerUtil {

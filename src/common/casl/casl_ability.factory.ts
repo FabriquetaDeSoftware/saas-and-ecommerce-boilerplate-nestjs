@@ -6,12 +6,12 @@ import {
   MongoAbility,
 } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
-import { Auth } from 'src/modules/auth/domain/entities/auth.entity';
 import { Products } from 'src/modules/products/domain/entities/products.entity';
 import { Action } from 'src/shared/enum/actions.enum';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
+import { EntitySubjectCaslType } from './types/entity_subject_casl.type';
 
-type Subjects = InferSubjects<typeof Products | typeof Auth> | 'all';
+type Subjects = InferSubjects<EntitySubjectCaslType> | 'all';
 
 type AppAbility = MongoAbility<[Action, Subjects]>;
 
