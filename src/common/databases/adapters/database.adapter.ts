@@ -20,6 +20,35 @@ export class DatabaseAdapter implements IDatabaseAdapter {
     return await this._prismaService[model].findMany({ where });
   }
 
+  public async findManyWithPagination<R>(
+    model: string,
+    where?: object,
+    skip?: number,
+    take?: number,
+  ): Promise<{
+    data: R[];
+    total: number;
+    page: number;
+    pageSize: number;
+    totalPages: number;
+  }> {
+    const total = await this._prismaService.products.count();
+    const page = skip * take;
+    const result = await this._prismaService[model].findMany({
+      where,
+      skip: page,
+      take,
+    });
+
+    return {
+      data: result,
+      total,
+      page: skip + 1,
+      pageSize: take,
+      totalPages: Math.ceil(total / take),
+    };
+  }
+
   public async findOne<R>(model: string, where: object): Promise<R | null> {
     return await this._prismaService[model].findUnique({ where });
   }
