@@ -21,10 +21,7 @@ import { IDeleteProductUseCase } from '../../domain/interfaces/use_cases/delete_
 import { IsPublicRoute } from 'src/common/decorators/is_public_route.decorator';
 import { IListManyProductUseCase } from '../../domain/interfaces/use_cases/list_many_products.use_case.interface';
 import { ListManyProductsDto } from '../../application/dto/list_many_products.dto';
-import {
-  ListManyProductsReturn,
-  ListManyProductsWithoutIdReturn,
-} from '../../domain/types/list_many_products_return.type';
+import { ListManyProductsWithoutIdReturn } from '../../domain/types/list_many_products_return.type';
 
 @ApiTags('products')
 @Controller('products')
