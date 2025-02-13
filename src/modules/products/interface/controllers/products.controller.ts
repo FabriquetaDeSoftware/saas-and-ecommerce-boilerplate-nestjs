@@ -7,6 +7,7 @@ import {
   Inject,
   Param,
   Post,
+  Query,
 } from '@nestjs/common';
 import { CreateProductDto } from '../../application/dto/create_product.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -19,9 +20,13 @@ import { IJwtUserPayload } from 'src/shared/interfaces/jwt_user_payload.interfac
 import { IDeleteProductUseCase } from '../../domain/interfaces/use_cases/delete_product.use_case';
 import { IsPublicRoute } from 'src/common/decorators/is_public_route.decorator';
 import { IListManyProductUseCase } from '../../domain/interfaces/use_cases/list_many_products.use_case.interface';
+import { ListManyProductsDto } from '../../application/dto/list_many_products.dto';
+import {
+  ListManyProductsReturn,
+  ListManyProductsWithoutIdReturn,
+} from '../../domain/types/list_many_products_return.type';
 
 @ApiTags('products')
-@ApiBearerAuth()
 @Controller('products')
 export class ProductsController {
   @Inject('ICreateProductUseCase')
@@ -33,6 +38,7 @@ export class ProductsController {
   @Inject('IListManyProductUseCase')
   private readonly _listManyProductUseCase: IListManyProductUseCase;
 
+  @ApiBearerAuth()
   @Roles(RolesEnum.ADMIN)
   @Post('create')
   public async createProduct(
@@ -44,6 +50,7 @@ export class ProductsController {
     return response;
   }
 
+  @ApiBearerAuth()
   @Roles(RolesEnum.ADMIN)
   @Delete('delete/:publicId')
   @HttpCode(204)
@@ -61,8 +68,10 @@ export class ProductsController {
 
   @IsPublicRoute()
   @Get('list-many')
-  public async findMany(): Promise<Omit<Products, 'id'>[]> {
-    const response = await this._listManyProductUseCase.execute();
+  public async findMany(
+    @Query() query: ListManyProductsDto,
+  ): Promise<ListManyProductsWithoutIdReturn> {
+    const response = await this._listManyProductUseCase.execute(query);
 
     return response;
   }

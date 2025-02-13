@@ -3,6 +3,7 @@ import { IProductsRepository } from '../../domain/interfaces/repositories/produc
 import { IDatabaseAdapter } from 'src/common/databases/interfaces/database.adapter.interface';
 import { CreateProductDto } from '../../application/dto/create_product.dto';
 import { Products } from '../../domain/entities/products.entity';
+import { ListManyProductsReturn } from '../../domain/types/list_many_products_return.type';
 
 @Injectable()
 export class ProductsRepository implements IProductsRepository {
@@ -23,8 +24,25 @@ export class ProductsRepository implements IProductsRepository {
     await this._databaseAdapter.delete<void>(this._model, { public_id });
   }
 
-  public async listMany(): Promise<Products[]> {
-    const result = await this._databaseAdapter.findMany<Products>(this._model);
+  public async listMany(where?: object): Promise<Products[]> {
+    const result = await this._databaseAdapter.findMany<Products>(this._model, {
+      where,
+    });
+
+    return result;
+  }
+
+  public async listManyWithPagination(
+    where?: object,
+    skip?: number,
+    take?: number,
+  ): Promise<ListManyProductsReturn> {
+    const result = await this._databaseAdapter.findManyWithPagination<Products>(
+      this._model,
+      { where },
+      skip,
+      take,
+    );
 
     return result;
   }
