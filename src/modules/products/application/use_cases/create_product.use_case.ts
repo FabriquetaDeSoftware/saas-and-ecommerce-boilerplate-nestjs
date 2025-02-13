@@ -38,7 +38,7 @@ export class CreateProductUseCase implements ICreateProductUseCase {
 
     const result = await this._productsRepository.create(input);
 
-    return result;
+    return { ...result, id: undefined };
   }
 
   private isAllowedAction(role: string, input: CreateProductDto): void {
