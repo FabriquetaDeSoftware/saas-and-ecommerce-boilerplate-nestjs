@@ -7,7 +7,7 @@ import {
   RawBodyRequest,
   Req,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { IsPublicRoute } from 'src/common/decorators/is_public_route.decorator';
 import { FastifyRequest } from 'fastify';
 import { IWebhookService } from '../../domain/interfaces/services/webhook.service.interface';
@@ -26,7 +26,7 @@ export class BillingController {
   @Inject('ISubscriptionPaymentUseCase')
   private readonly _subscriptionPaymentService: ISubscriptionPaymentUseCase;
 
-  @IsPublicRoute()
+  @ApiBearerAuth()
   @Post('payment/one-time')
   @HttpCode(303)
   public async oneTime(): Promise<{ url: string }> {
@@ -36,7 +36,7 @@ export class BillingController {
     return paymentIntent;
   }
 
-  @IsPublicRoute()
+  @ApiBearerAuth()
   @Post('payment/subscription')
   @HttpCode(303)
   public async subscription(): Promise<{ url: string }> {

@@ -19,6 +19,7 @@ export function swaggerConfig(
     .addTag('email')
     .addTag('billing')
     .addTag('products')
+    .addTag('app')
     .build();
 
   const documentFactory = () => SwaggerModule.createDocument(app, config);

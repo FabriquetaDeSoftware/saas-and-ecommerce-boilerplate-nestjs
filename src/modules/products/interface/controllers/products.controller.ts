@@ -6,6 +6,7 @@ import {
   HttpCode,
   Inject,
   Param,
+  Patch,
   Post,
   Query,
 } from '@nestjs/common';
@@ -46,6 +47,11 @@ export class ProductsController {
 
     return response;
   }
+
+  @ApiBearerAuth()
+  @Roles(RolesEnum.ADMIN)
+  @Patch('update/:publicId')
+  public async updateProduct(): Promise<void> {}
 
   @ApiBearerAuth()
   @Roles(RolesEnum.ADMIN)

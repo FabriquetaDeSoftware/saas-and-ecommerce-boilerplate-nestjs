@@ -37,7 +37,7 @@ async function bootstrap() {
   corsConfig(app);
 
   swaggerConfig(app);
-  //a
+
   const port = parseInt(serverConstants.port_api);
   await app.listen({ port, host: '0.0.0.0' });
 }
