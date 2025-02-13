@@ -69,7 +69,7 @@ export class SignUpDefaultUseCase implements ISignUpDefaultUseCase {
       },
     });
 
-    return { ...result, password: undefined };
+    return { ...result, password: undefined, id: undefined };
   }
 
   private async createAccount(

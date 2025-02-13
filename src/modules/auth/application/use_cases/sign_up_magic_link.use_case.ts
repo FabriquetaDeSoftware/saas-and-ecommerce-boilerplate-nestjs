@@ -67,7 +67,7 @@ export class SignUpMagicLinkseCase implements ISignUpMagicLinkseCase {
       },
     });
 
-    return { ...result, password: undefined };
+    return { ...result, password: undefined, id: undefined };
   }
 
   private async createAccount(
