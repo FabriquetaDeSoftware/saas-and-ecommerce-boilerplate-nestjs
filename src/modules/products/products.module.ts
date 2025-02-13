@@ -5,11 +5,17 @@ import { CreateProductUseCase } from './application/use_cases/create_product.use
 import { ProductsRepository } from './infrastructure/repositories/products.repository';
 import { SharedModule } from 'src/shared/shared.module';
 import { DeleteProductUseCase } from './application/use_cases/delete_product.use_case';
+import { ListManyProductUseCase } from './application/use_cases/list_many_products.use_case';
 
 @Module({
   imports: [CommonModule, SharedModule],
   controllers: [ProductsController],
   providers: [
+    ListManyProductUseCase,
+    {
+      provide: 'IListManyProductUseCase',
+      useExisting: ListManyProductUseCase,
+    },
     DeleteProductUseCase,
     {
       provide: 'IDeleteProductUseCase',

@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   HttpCode,
   Inject,
   Param,
@@ -16,6 +17,8 @@ import { ICreateProductUseCase } from '../../domain/interfaces/use_cases/create_
 import { CurrentUser } from 'src/common/decorators/current_user.decorator';
 import { IJwtUserPayload } from 'src/shared/interfaces/jwt_user_payload.interface';
 import { IDeleteProductUseCase } from '../../domain/interfaces/use_cases/delete_product.use_case';
+import { IsPublicRoute } from 'src/common/decorators/is_public_route.decorator';
+import { IListManyProductUseCase } from '../../domain/interfaces/use_cases/list_many_products.use_case.interface';
 
 @ApiTags('products')
 @ApiBearerAuth()
@@ -26,6 +29,9 @@ export class ProductsController {
 
   @Inject('IDeleteProductUseCase')
   private readonly _deleteProductUseCase: IDeleteProductUseCase;
+
+  @Inject('IListManyProductUseCase')
+  private readonly _listManyProductUseCase: IListManyProductUseCase;
 
   @Roles(RolesEnum.ADMIN)
   @Post('create')
@@ -49,6 +55,14 @@ export class ProductsController {
       user.role,
       publicId,
     );
+
+    return response;
+  }
+
+  @IsPublicRoute()
+  @Get('list-many')
+  public async findMany(): Promise<Omit<Products, 'id'>[]> {
+    const response = await this._listManyProductUseCase.execute();
 
     return response;
   }
