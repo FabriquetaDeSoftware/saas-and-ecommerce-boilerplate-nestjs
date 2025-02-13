@@ -13,19 +13,23 @@ export class ListManyProductUseCase implements IListManyProductUseCase {
   public async execute(
     input: ListManyProductsDto,
   ): Promise<ListManyProductsWithoutIdReturn> {
+    const response = await this.intermediry(input);
+
+    return response;
+  }
+
+  private async intermediry(
+    input: ListManyProductsDto,
+  ): Promise<ListManyProductsWithoutIdReturn> {
     const response = await this._productsRepository.listManyWithPagination(
       undefined,
       input.page - 1,
       input.pageSize,
     );
 
-    const withoutId = this.intermediry(response.data);
+    const withoutId = this.removeIdFromProduct(response.data);
 
     return { ...response, data: withoutId };
-  }
-
-  private intermediry(list: Products[]): Omit<Products, 'id'>[] {
-    return this.removeIdFromProduct(list);
   }
 
   private removeIdFromProduct(products: Products[]): Omit<Products, 'id'>[] {
