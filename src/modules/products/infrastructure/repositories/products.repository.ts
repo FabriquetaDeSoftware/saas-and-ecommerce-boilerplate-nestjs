@@ -34,6 +34,10 @@ export class ProductsRepository implements IProductsRepository {
       public_id,
     });
 
+    if (!result) {
+      return null;
+    }
+
     return result;
   }
 }
