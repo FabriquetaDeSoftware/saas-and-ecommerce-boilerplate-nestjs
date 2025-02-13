@@ -3,4 +3,7 @@ import { Products } from '../../entities/products.entity';
 
 export interface IProductsRepository {
   create(input: CreateProductDto): Promise<Products>;
+  delete(publicId: string): Promise<void>;
+  listMany(): Promise<Products[]>;
+  findOneByPublicId(publicId: string): Promise<Products>;
 }

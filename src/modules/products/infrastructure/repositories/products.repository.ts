@@ -18,4 +18,22 @@ export class ProductsRepository implements IProductsRepository {
 
     return result;
   }
+
+  public async delete(public_id: string): Promise<void> {
+    await this._databaseAdapter.delete<void>(this._model, { public_id });
+  }
+
+  public async listMany(): Promise<Products[]> {
+    const result = await this._databaseAdapter.findMany<Products>(this._model);
+
+    return result;
+  }
+
+  public async findOneByPublicId(public_id: string): Promise<Products> {
+    const result = await this._databaseAdapter.findOne<Products>(this._model, {
+      public_id,
+    });
+
+    return result;
+  }
 }
