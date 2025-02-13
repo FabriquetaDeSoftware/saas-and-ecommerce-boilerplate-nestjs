@@ -11,7 +11,15 @@ export class ListManyProductUseCase implements IListManyProductUseCase {
   public async execute(): Promise<Omit<Products, 'id'>[]> {
     const list = await this._productsRepository.listMany();
 
-    const result = list.map(({ id, ...rest }) => rest);
+    return this.intermediry(list);
+  }
+
+  private intermediry(list: Products[]): Omit<Products, 'id'>[] {
+    return this.removeIdFromProduct(list);
+  }
+
+  private removeIdFromProduct(products: Products[]): Omit<Products, 'id'>[] {
+    const result = products.map(({ id, ...rest }) => rest);
 
     return result;
   }
