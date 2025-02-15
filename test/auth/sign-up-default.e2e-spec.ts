@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
-import { SignUpDto } from 'src/modules/auth/application/dto/sign_up.dto';
+import { SignUpDefaultDto } from 'src/modules/auth/application/dto/sign_up_default.dto';
 import { SignUpDefaultUseCase } from 'src/modules/auth/application/use_cases/sign_up_default.use_case';
 import { ISignUpDefaultUseCase } from 'src/modules/auth/domain/interfaces/use_cases/sign_up.use_case.interface';
 
@@ -16,7 +16,7 @@ describe('AuthController from AppModule (e2e)', () => {
     }
 
     signUpDefaultUseCaseMock = {
-      execute: jest.fn().mockImplementation((dto: SignUpDto) => {
+      execute: jest.fn().mockImplementation((dto: SignUpDefaultDto) => {
         return Promise.resolve({
           id: '1',
           email: dto.email,
@@ -38,7 +38,7 @@ describe('AuthController from AppModule (e2e)', () => {
   });
 
   it('Should return created user', async () => {
-    const signUpData: SignUpDto = {
+    const signUpData: SignUpDefaultDto = {
       email: 'test@example.com',
       password: 'Password123!',
       newsletter_subscription: true,
@@ -52,7 +52,10 @@ describe('AuthController from AppModule (e2e)', () => {
 
     expect(response.body).toHaveProperty('id');
     expect(response.body).toHaveProperty('email', signUpData.email);
-    expect(response.body).not.toHaveProperty('password', signUpData.password);
+    expect(response.body).toHaveProperty(
+      'password',
+      signUpData.email + signUpData.password,
+    );
     expect(response.body).toHaveProperty(
       'newsletter_subscription',
       signUpData.newsletter_subscription,
@@ -65,7 +68,7 @@ describe('AuthController from AppModule (e2e)', () => {
   });
 
   it('Should return 409 when email already exists', async () => {
-    const signUpData: SignUpDto = {
+    const signUpData: SignUpDefaultDto = {
       email: 'existing@example.com',
       password: 'Password123!',
       newsletter_subscription: true,
