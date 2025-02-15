@@ -8,5 +8,8 @@
   },
   "moduleNameMapper": {
     "^src/(.*)$": "<rootDir>/src/$1"
-  }
+  },
+  "maxWorkers": 2, 
+  "detectOpenHandles": true,
+  "verbose": true
 }
