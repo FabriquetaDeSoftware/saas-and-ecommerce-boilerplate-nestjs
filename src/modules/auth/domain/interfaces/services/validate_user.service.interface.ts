@@ -1,6 +1,6 @@
-import { SignInDto } from 'src/modules/auth/application/dto/sign_in.dto';
+import { SignInDefaultDto } from 'src/modules/auth/application/dto/sign_in_default.dto';
 import { Auth } from '../../entities/auth.entity';
 
 export interface IValidateUserService {
-  execute(input: SignInDto): Promise<Auth>;
+  execute(input: SignInDefaultDto): Promise<Auth>;
 }

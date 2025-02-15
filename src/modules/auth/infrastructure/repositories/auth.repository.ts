@@ -4,7 +4,7 @@ import { IDatabaseAdapter } from 'src/common/databases/interfaces/database.adapt
 import { IAuthRepository } from '../../domain/interfaces/repositories/auth.repository.interface';
 import { Auth } from '../../domain/entities/auth.entity';
 import { UpdateInfoDto } from '../../application/dto/update_info.dto';
-import { SignUpDto } from '../../application/dto/sign_up.dto';
+import { SignUpDefaultDto } from '../../application/dto/sign_up_default.dto';
 
 @Injectable()
 export class AuthRepository implements IAuthRepository {
@@ -14,12 +14,12 @@ export class AuthRepository implements IAuthRepository {
   private readonly _model = 'auth';
 
   public async create(
-    signUpDto: SignUpDto,
+    signUpDefaultDto: SignUpDefaultDto,
     code: string,
     expires_at: Date,
   ): Promise<Auth> {
     const result = await this._databaseAdapter.create<Auth>(this._model, {
-      ...signUpDto,
+      ...signUpDefaultDto,
       verification_code: {
         create: {
           code,

@@ -1,11 +1,11 @@
 import { UpdateInfoDto } from 'src/modules/auth/application/dto/update_info.dto';
-import { SignUpDto } from 'src/modules/auth/application/dto/sign_up.dto';
+import { SignUpDefaultDto } from 'src/modules/auth/application/dto/sign_up_default.dto';
 import { Auth } from '../../entities/auth.entity';
 import { SignUpMagicLinkDto } from 'src/modules/auth/application/dto/sign_up_magic_link.dto';
 
 export interface IAuthRepository {
   create(
-    signUpDto: SignUpDto | SignUpMagicLinkDto,
+    SignUpDefaultDto: SignUpDefaultDto | SignUpMagicLinkDto,
     code: string,
     expires_at: Date,
   ): Promise<Auth>;

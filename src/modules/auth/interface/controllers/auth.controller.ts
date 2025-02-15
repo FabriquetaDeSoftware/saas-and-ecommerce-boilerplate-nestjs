@@ -7,10 +7,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { SignUpDto } from '../../application/dto/sign_up.dto';
+import { SignUpDefaultDto } from '../../application/dto/sign_up_default.dto';
 import { Auth } from '../../domain/entities/auth.entity';
 import { IsPublicRoute } from 'src/common/decorators/is_public_route.decorator';
-import { SignInDto } from '../../application/dto/sign_in.dto';
+import { SignInDefaultDto } from '../../application/dto/sign_in_default.dto';
 import { LocalAuthGuard } from '../guards/local_auth.guard';
 import { ITokensReturnsHelper } from '../../domain/interfaces/helpers/tokens_returns.helper.interface';
 import { RefreshTokenDto } from '../../application/dto/refresh_token.dto';
@@ -56,7 +56,7 @@ export class AuthController {
 
   @IsPublicRoute()
   @Post('sign-up-default')
-  public async signUpDefault(@Body() input: SignUpDto): Promise<Auth> {
+  public async signUpDefault(@Body() input: SignUpDefaultDto): Promise<Auth> {
     const response = await this._signUpDefaultUseCase.execute(input);
 
     return response;
@@ -86,7 +86,7 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('sign-in-default')
   public async signInDefault(
-    @Body() input: SignInDto,
+    @Body() input: SignInDefaultDto,
   ): Promise<ITokensReturnsHelper> {
     const response = await this._signInDefaultUseCase.execute(input);
 

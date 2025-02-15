@@ -3,7 +3,7 @@ import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
 import { IValidateUserService } from '../../domain/interfaces/services/validate_user.service.interface';
 import { IFindUserByEmailHelper } from '../../domain/interfaces/helpers/find_user_by_email.helper.interface';
 import { Auth } from '../../domain/entities/auth.entity';
-import { SignInDto } from '../../application/dto/sign_in.dto';
+import { SignInDefaultDto } from '../../application/dto/sign_in_default.dto';
 
 @Injectable()
 export class ValidateUserService implements IValidateUserService {
@@ -13,11 +13,11 @@ export class ValidateUserService implements IValidateUserService {
   @Inject('IHashUtil')
   private readonly _hashUtil: IHashUtil;
 
-  public async execute(input: SignInDto): Promise<Auth> {
+  public async execute(input: SignInDefaultDto): Promise<Auth> {
     return await this.intermediary(input);
   }
 
-  private async intermediary(data: SignInDto): Promise<Auth> {
+  private async intermediary(data: SignInDefaultDto): Promise<Auth> {
     const findUserByEmail = await this.findUserByEmailAndValidate(data.email);
 
     await this.decryptAndValidatePassword(

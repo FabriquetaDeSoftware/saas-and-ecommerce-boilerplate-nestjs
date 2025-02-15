@@ -1,5 +1,5 @@
 import { Injectable, Inject, ConflictException } from '@nestjs/common';
-import { SignUpDto } from '../dto/sign_up.dto';
+import { SignUpDefaultDto } from '../dto/sign_up_default.dto';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
 import { LanguageEnum } from 'src/shared/enum/language.enum';
@@ -31,11 +31,11 @@ export class SignUpDefaultUseCase implements ISignUpDefaultUseCase {
   @Inject('ISendEmailQueueJob')
   private readonly _sendEmailQueueJob: ISendEmailQueueJob;
 
-  public async execute(input: SignUpDto): Promise<Auth> {
+  public async execute(input: SignUpDefaultDto): Promise<Auth> {
     return await this.intermediary(input);
   }
 
-  private async intermediary(data: SignUpDto): Promise<Auth> {
+  private async intermediary(data: SignUpDefaultDto): Promise<Auth> {
     const [, hashedPassword, verificationCodeAndExpiresDate] =
       await Promise.all([
         this.checkEmailExistsAndError(data.email),
@@ -73,7 +73,7 @@ export class SignUpDefaultUseCase implements ISignUpDefaultUseCase {
   }
 
   private async createAccount(
-    data: SignUpDto,
+    data: SignUpDefaultDto,
     hashedPassword: string,
     hashedCode: string,
     expiresDate: Date,

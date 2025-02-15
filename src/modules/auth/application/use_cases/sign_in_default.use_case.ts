@@ -1,5 +1,5 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { SignInDto } from '../dto/sign_in.dto';
+import { SignInDefaultDto } from '../dto/sign_in_default.dto';
 import { ISignInDefaultUseCase } from '../../domain/interfaces/use_cases/sign_in_default.use_case.interface';
 import { IFindUserByEmailHelper } from '../../domain/interfaces/helpers/find_user_by_email.helper.interface';
 import { IGenerateTokenHelper } from '../../domain/interfaces/helpers/generate_token.helper.interface';
@@ -14,7 +14,7 @@ export class SignInDefaultUseCase implements ISignInDefaultUseCase {
   @Inject('IGenerateTokenHelper')
   private readonly _generateTokenUtil: IGenerateTokenHelper;
 
-  public async execute(input: SignInDto): Promise<ITokensReturnsHelper> {
+  public async execute(input: SignInDefaultDto): Promise<ITokensReturnsHelper> {
     return await this.intermediary(input.email);
   }
 

@@ -1,5 +1,4 @@
 import { Injectable, Inject, ConflictException } from '@nestjs/common';
-import { SignUpDto } from '../dto/sign_up.dto';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
 import { LanguageEnum } from 'src/shared/enum/language.enum';
