@@ -32,7 +32,9 @@ export class SignUpDefaultUseCase implements ISignUpDefaultUseCase {
   private readonly _sendEmailQueueJob: ISendEmailQueueJob;
 
   public async execute(input: SignUpDefaultDto): Promise<Auth> {
-    return await this.intermediary(input);
+    const response = await this.intermediary(input);
+
+    return { ...response, password: undefined, id: undefined };
   }
 
   private async intermediary(data: SignUpDefaultDto): Promise<Auth> {
@@ -69,7 +71,7 @@ export class SignUpDefaultUseCase implements ISignUpDefaultUseCase {
       },
     });
 
-    return { ...result, password: undefined, id: undefined };
+    return result;
   }
 
   private async createAccount(

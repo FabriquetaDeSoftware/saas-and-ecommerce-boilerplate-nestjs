@@ -32,7 +32,9 @@ export class SignUpMagicLinkUseCase implements ISignUpMagicLinkUseCase {
   private readonly _sendEmailQueueJob: ISendEmailQueueJob;
 
   public async execute(input: SignUpMagicLinkDto): Promise<Auth> {
-    return await this.intermediary(input);
+    const response = await this.intermediary(input);
+
+    return { ...response, password: undefined, id: undefined };
   }
 
   private async intermediary(data: SignUpMagicLinkDto): Promise<Auth> {
@@ -66,7 +68,7 @@ export class SignUpMagicLinkUseCase implements ISignUpMagicLinkUseCase {
       },
     });
 
-    return { ...result, password: undefined, id: undefined };
+    return result;
   }
 
   private async createAccount(

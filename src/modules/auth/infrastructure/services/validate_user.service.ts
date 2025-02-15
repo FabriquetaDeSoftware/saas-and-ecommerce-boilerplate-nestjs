@@ -14,7 +14,9 @@ export class ValidateUserService implements IValidateUserService {
   private readonly _hashUtil: IHashUtil;
 
   public async execute(input: SignInDefaultDto): Promise<Auth> {
-    return await this.intermediary(input);
+    const response = await this.intermediary(input);
+
+    return { ...response, password: undefined, id: undefined };
   }
 
   private async intermediary(data: SignInDefaultDto): Promise<Auth> {
@@ -25,7 +27,7 @@ export class ValidateUserService implements IValidateUserService {
       findUserByEmail.password,
     );
 
-    return { ...findUserByEmail, password: undefined };
+    return findUserByEmail;
   }
 
   private async findUserByEmailAndValidate(email: string): Promise<Auth> {
