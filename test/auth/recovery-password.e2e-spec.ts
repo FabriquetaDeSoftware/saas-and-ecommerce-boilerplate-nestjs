@@ -15,10 +15,14 @@ describe('AuthController from AppModule (e2e)', () => {
     await app.init();
   });
 
-  it('/auth/verification-code/ (POST)', () => {
+  it('/auth/recovery-password/ (Post)', () => {
     return request(app.getHttpServer())
-      .get('/auth/verification-code/')
+      .post('/auth/recovery-password/')
       .expect(200)
       .expect('Hello World!');
+  });
+
+  afterAll(async () => {
+    await app.close();
   });
 });

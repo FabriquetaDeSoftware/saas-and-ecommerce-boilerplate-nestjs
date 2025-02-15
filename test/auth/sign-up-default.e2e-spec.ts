@@ -15,10 +15,14 @@ describe('AuthController from AppModule (e2e)', () => {
     await app.init();
   });
 
-  it('/auth/sign-in/ (POST)', () => {
+  it('/auth/sign-up-default/ (Post)', () => {
     return request(app.getHttpServer())
-      .get('/auth/sign-in/')
+      .post('/auth/sign-up-default/')
       .expect(200)
       .expect('Hello World!');
+  });
+
+  afterAll(async () => {
+    await app.close();
   });
 });

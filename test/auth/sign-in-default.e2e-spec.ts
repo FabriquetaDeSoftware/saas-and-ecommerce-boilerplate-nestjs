@@ -15,9 +15,9 @@ describe('AuthController from AppModule (e2e)', () => {
     await app.init();
   });
 
-  it('/auth/refresh-token/ (Post)', () => {
+  it('/auth/sign-in-default/ (Post)', () => {
     return request(app.getHttpServer())
-      .post('/auth/refresh-token/')
+      .post('/auth/sign-in-default/')
       .expect(200)
       .expect('Hello World!');
   });
