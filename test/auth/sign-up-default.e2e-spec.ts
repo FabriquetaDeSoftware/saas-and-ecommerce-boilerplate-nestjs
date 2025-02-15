@@ -6,7 +6,6 @@ import { SignUpDefaultDto } from 'src/modules/auth/application/dto/sign_up_defau
 import { IAuthRepository } from 'src/modules/auth/domain/interfaces/repositories/auth.repository.interface';
 import { Auth } from 'src/modules/auth/domain/entities/auth.entity';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
-import { AuthRepository } from 'src/modules/auth/infrastructure/repositories/auth.repository';
 import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
 
 describe('AuthController from AppModule (e2e)', () => {
