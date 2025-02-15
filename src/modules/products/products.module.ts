@@ -6,11 +6,17 @@ import { ProductsRepository } from './infrastructure/repositories/products.repos
 import { SharedModule } from 'src/shared/shared.module';
 import { DeleteProductUseCase } from './application/use_cases/delete_product.use_case';
 import { ListManyProductUseCase } from './application/use_cases/list_many_products.use_case';
+import { UpdateProductInfoUseCase } from './application/use_cases/update_product_info.use_case';
 
 @Module({
   imports: [CommonModule, SharedModule],
   controllers: [ProductsController],
   providers: [
+    UpdateProductInfoUseCase,
+    {
+      provide: 'IUpdateProductInfoUseCase',
+      useExisting: UpdateProductInfoUseCase,
+    },
     ListManyProductUseCase,
     {
       provide: 'IListManyProductUseCase',

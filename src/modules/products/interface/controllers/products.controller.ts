@@ -23,6 +23,8 @@ import { IsPublicRoute } from 'src/common/decorators/is_public_route.decorator';
 import { IListManyProductUseCase } from '../../domain/interfaces/use_cases/list_many_products.use_case.interface';
 import { ListManyProductsDto } from '../../application/dto/list_many_products.dto';
 import { ListManyProductsWithoutIdReturn } from '../../domain/types/list_many_products_return.type';
+import { IUpdateProductInfoUseCase } from '../../domain/interfaces/use_cases/update_product_info.use_case.interface';
+import { UpadateProductInfoDto } from '../../application/dto/update_product_info.dto';
 
 @ApiTags('products')
 @Controller('products')
@@ -35,6 +37,9 @@ export class ProductsController {
 
   @Inject('IListManyProductUseCase')
   private readonly _listManyProductUseCase: IListManyProductUseCase;
+
+  @Inject('IUpdateProductInfoUseCase')
+  private readonly _updateProductInfoUseCase: IUpdateProductInfoUseCase;
 
   @ApiBearerAuth()
   @Roles(RolesEnum.ADMIN)
@@ -51,7 +56,13 @@ export class ProductsController {
   @ApiBearerAuth()
   @Roles(RolesEnum.ADMIN)
   @Patch('update/:publicId')
-  public async updateProduct(): Promise<void> {}
+  public async updateProduct(
+    @Body() body: UpadateProductInfoDto,
+  ): Promise<Products> {
+    const response = await this._updateProductInfoUseCase.execute(body);
+
+    return response;
+  }
 
   @ApiBearerAuth()
   @Roles(RolesEnum.ADMIN)
