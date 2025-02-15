@@ -56,5 +56,7 @@ export class BillingController {
     const payload = req.rawBody;
 
     await this._webhookService.execute(payload, stripeSignature);
+
+    return;
   }
 }

@@ -57,7 +57,9 @@ export class AuthController {
   @IsPublicRoute()
   @Post('sign-up-default')
   public async signUpDefault(@Body() input: SignUpDto): Promise<Auth> {
-    return await this._signUpDefaultUseCase.execute(input);
+    const response = await this._signUpDefaultUseCase.execute(input);
+
+    return response;
   }
 
   @IsPublicRoute()
@@ -65,7 +67,9 @@ export class AuthController {
   public async signUpMagicLink(
     @Body() input: SignUpMagicLinkDto,
   ): Promise<Auth> {
-    return await this._signUpMagicLinkseCase.execute(input);
+    const response = await this._signUpMagicLinkseCase.execute(input);
+
+    return response;
   }
 
   @IsPublicRoute()
@@ -73,7 +77,9 @@ export class AuthController {
   public async verifyAccount(
     @Body() input: VerificationCodeDto,
   ): Promise<{ message: string }> {
-    return await this._verifyAccountUseCase.execute(input);
+    const response = await this._verifyAccountUseCase.execute(input);
+
+    return response;
   }
 
   @IsPublicRoute()
@@ -82,7 +88,9 @@ export class AuthController {
   public async signInDefault(
     @Body() input: SignInDto,
   ): Promise<ITokensReturnsHelper> {
-    return await this._signInDefaultUseCase.execute(input);
+    const response = await this._signInDefaultUseCase.execute(input);
+
+    return response;
   }
 
   @IsPublicRoute()
@@ -90,7 +98,9 @@ export class AuthController {
   public async signInMagicLink(
     @Body() input: EmailDto,
   ): Promise<{ message: string }> {
-    return await this._signInMagicLinkUseCase.execute(input);
+    const response = await this._signInMagicLinkUseCase.execute(input);
+
+    return response;
   }
 
   @IsPublicRoute()
@@ -98,7 +108,9 @@ export class AuthController {
   public async refreshToken(
     @Body() input: RefreshTokenDto,
   ): Promise<ITokensReturnsHelper> {
-    return await this._refreshTokenService.execute(input);
+    const response = await this._refreshTokenService.execute(input);
+
+    return response;
   }
 
   @IsPublicRoute()
@@ -106,7 +118,9 @@ export class AuthController {
   public async forgotPassword(
     @Body() input: EmailDto,
   ): Promise<{ message: string }> {
-    return await this._forgotPasswordService.execute(input);
+    const response = await this._forgotPasswordService.execute(input);
+
+    return response;
   }
 
   @IsPublicRoute()
@@ -114,6 +128,8 @@ export class AuthController {
   public async recoveryPassword(
     @Query() input: RecoveryPasswordDto,
   ): Promise<{ message: string }> {
-    return await this._recoveryPasswordUseCase.execute(input);
+    const response = await this._recoveryPasswordUseCase.execute(input);
+
+    return response;
   }
 }
