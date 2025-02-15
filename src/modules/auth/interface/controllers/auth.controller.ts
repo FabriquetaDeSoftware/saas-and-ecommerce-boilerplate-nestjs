@@ -25,7 +25,7 @@ import { EmailDto } from '../../application/dto/email.dto';
 import { IRecoveryPasswordUseCase } from '../../domain/interfaces/use_cases/recovery_password.use_case.interface';
 import { ISignInMagicLinkUseCase } from '../../domain/interfaces/use_cases/sign_in_magic_link.use_case';
 import { SignUpMagicLinkDto } from '../../application/dto/sign_up_magic_link.dto';
-import { ISignUpMagicLinkseCase } from '../../domain/interfaces/use_cases/sign_up_magic_link.use_case.interface';
+import { ISignUpMagicLinkUseCase } from '../../domain/interfaces/use_cases/sign_up_magic_link.use_case.interface';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -51,8 +51,8 @@ export class AuthController {
   @Inject('ISignInMagicLinkUseCase')
   private readonly _signInMagicLinkUseCase: ISignInMagicLinkUseCase;
 
-  @Inject('ISignUpMagicLinkseCase')
-  private readonly _signUpMagicLinkseCase: ISignUpMagicLinkseCase;
+  @Inject('ISignUpMagicLinkUseCase')
+  private readonly _signUpMagicLinkUseCase: ISignUpMagicLinkUseCase;
 
   @IsPublicRoute()
   @Post('sign-up-default')
@@ -67,7 +67,7 @@ export class AuthController {
   public async signUpMagicLink(
     @Body() input: SignUpMagicLinkDto,
   ): Promise<Auth> {
-    const response = await this._signUpMagicLinkseCase.execute(input);
+    const response = await this._signUpMagicLinkUseCase.execute(input);
 
     return response;
   }
