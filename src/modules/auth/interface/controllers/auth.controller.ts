@@ -119,6 +119,7 @@ export class AuthController {
 
   @IsPublicRoute()
   @Post('forgot-password')
+  @HttpCode(200)
   public async forgotPassword(
     @Body() input: EmailDto,
   ): Promise<{ message: string }> {
