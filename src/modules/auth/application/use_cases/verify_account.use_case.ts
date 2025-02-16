@@ -3,7 +3,6 @@ import {
   Inject,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { VerificationCodeDto } from '../dto/verification_code.dto';
 import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
@@ -102,7 +101,7 @@ export class VerifyAccountUseCase implements IVerifyAccountUseCase {
     const isMatch = await this._hashUtil.compareHash(code, cachedCode);
 
     if (!isMatch) {
-      throw new UnauthorizedException('Invalid or expired code');
+      throw new BadRequestException('Invalid or expired code');
     }
 
     return isMatch;
@@ -123,7 +122,7 @@ export class VerifyAccountUseCase implements IVerifyAccountUseCase {
     const isMatch = await this._hashUtil.compareHash(code, hashedCode);
 
     if (!isMatch) {
-      throw new UnauthorizedException('Invalid or expired code');
+      throw new BadRequestException('Invalid or expired code');
     }
 
     return isMatch;
@@ -133,7 +132,7 @@ export class VerifyAccountUseCase implements IVerifyAccountUseCase {
     const user = await this._findUserByEmailHelper.execute(email);
 
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException('User email not found');
     }
 
     return user;
