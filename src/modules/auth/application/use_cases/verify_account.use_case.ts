@@ -84,7 +84,9 @@ export class VerifyAccountUseCase implements IVerifyAccountUseCase {
   private async sendEmailVerificationCode(
     data: EmailSenderDto,
   ): Promise<{ message: string }> {
-    return await this._sendEmailQueueJob.execute(data);
+    await this._sendEmailQueueJob.execute(data);
+
+    return { message: 'User account verified' };
   }
 
   private async verifyCodeByCache(key: string, code: string): Promise<boolean> {
@@ -142,7 +144,7 @@ export class VerifyAccountUseCase implements IVerifyAccountUseCase {
     user_id: number,
   ): Promise<VerificationCodes> {
     const verificationCode =
-      await this._verificationCodesRepository.findVerificationCodeByEmail(
+      await this._verificationCodesRepository.findVerificationCodeByAuthorId(
         user_id,
       );
 

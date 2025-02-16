@@ -12,7 +12,7 @@ export class VerificationCodesRepository
 
   private readonly _model = 'verificationCodes';
 
-  public async findVerificationCodeByEmail(
+  public async findVerificationCodeByAuthorId(
     auth_id: number,
   ): Promise<VerificationCodes> {
     const result = await this._databaseAdapter.findOne<VerificationCodes>(

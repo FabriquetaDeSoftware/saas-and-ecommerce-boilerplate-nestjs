@@ -75,6 +75,7 @@ export class AuthController {
 
   @IsPublicRoute()
   @Post('verify-account')
+  @HttpCode(200)
   public async verifyAccount(
     @Body() input: VerificationCodeDto,
   ): Promise<{ message: string }> {
