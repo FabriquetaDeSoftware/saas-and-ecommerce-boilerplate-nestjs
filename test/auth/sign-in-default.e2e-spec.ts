@@ -6,6 +6,7 @@ import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
 import { IAuthRepository } from 'src/modules/auth/domain/interfaces/repositories/auth.repository.interface';
 import { SignInDefaultDto } from 'src/modules/auth/application/dto/sign_in_default.dto';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
+import { Auth } from 'src/modules/auth/domain/entities/auth.entity';
 
 describe('AuthController from AppModule (e2e)', () => {
   let app: INestApplication;
@@ -24,19 +25,20 @@ describe('AuthController from AppModule (e2e)', () => {
 
     authRepositoryMock = {
       create: jest.fn().mockImplementation(undefined),
-      findOneByEmail: jest.fn().mockImplementation((email: string) =>
-        Promise.resolve({
-          id: 1,
-          public_id: '1',
-          role: RolesEnum.USER,
-          email,
-          password: 'hashedText',
-          is_verified_account: true,
-          newsletter_subscription: true,
-          terms_and_conditions_accepted: true,
-          created_at: new Date(),
-          updated_at: new Date(),
-        }),
+      findOneByEmail: jest.fn().mockImplementation(
+        (email: string): Promise<Auth> =>
+          Promise.resolve({
+            id: 1,
+            public_id: '1',
+            role: RolesEnum.USER,
+            email,
+            password: 'hashedText',
+            is_verified_account: true,
+            newsletter_subscription: true,
+            terms_and_conditions_accepted: true,
+            created_at: new Date(),
+            updated_at: new Date(),
+          }),
       ),
       updateInfoByIdAuth: jest.fn().mockResolvedValue(undefined),
       updateInfoByPublicIdAuth: jest.fn().mockResolvedValue(undefined),
