@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  HttpCode,
   Inject,
   Post,
   Query,
@@ -85,6 +86,7 @@ export class AuthController {
   @IsPublicRoute()
   @UseGuards(LocalAuthGuard)
   @Post('sign-in-default')
+  @HttpCode(200)
   public async signInDefault(
     @Body() input: SignInDefaultDto,
   ): Promise<ITokensReturnsHelper> {
