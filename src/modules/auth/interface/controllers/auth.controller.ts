@@ -97,6 +97,7 @@ export class AuthController {
 
   @IsPublicRoute()
   @Post('sign-in-magic-link')
+  @HttpCode(200)
   public async signInMagicLink(
     @Body() input: EmailDto,
   ): Promise<{ message: string }> {

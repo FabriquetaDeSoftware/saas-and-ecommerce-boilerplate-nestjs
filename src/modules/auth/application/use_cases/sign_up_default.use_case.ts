@@ -96,7 +96,7 @@ export class SignUpDefaultUseCase implements ISignUpDefaultUseCase {
     const findUserByEmail = await this._findUserByEmailHelper.execute(email);
 
     if (findUserByEmail) {
-      throw new ConflictException('Email already exists');
+      throw new ConflictException('Unable to process request');
     }
   }
 

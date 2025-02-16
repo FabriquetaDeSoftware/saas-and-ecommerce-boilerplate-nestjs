@@ -92,7 +92,10 @@ describe('AuthController from AppModule (e2e)', () => {
       .expect(401);
 
     expect(response.body).toHaveProperty('statusCode', 401);
-    expect(response.body).toHaveProperty('message');
+    expect(response.body).toHaveProperty(
+      'message',
+      'Invalid credentials or account not verified',
+    );
     expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
       signInData.email,
     );
@@ -112,7 +115,10 @@ describe('AuthController from AppModule (e2e)', () => {
       .expect(401);
 
     expect(response.body).toHaveProperty('statusCode', 401);
-    expect(response.body).toHaveProperty('message');
+    expect(response.body).toHaveProperty(
+      'message',
+      'Invalid credentials or account not verified',
+    );
     expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
       signInData.email,
     );
@@ -147,7 +153,10 @@ describe('AuthController from AppModule (e2e)', () => {
       .expect(401);
 
     expect(response.body).toHaveProperty('statusCode', 401);
-    expect(response.body).toHaveProperty('message');
+    expect(response.body).toHaveProperty(
+      'message',
+      'Invalid credentials or account not verified',
+    );
     expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
       signInData.email,
     );

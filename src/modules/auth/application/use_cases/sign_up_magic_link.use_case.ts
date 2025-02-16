@@ -89,7 +89,7 @@ export class SignUpMagicLinkUseCase implements ISignUpMagicLinkUseCase {
     const findUserByEmail = await this._findUserByEmailHelper.execute(email);
 
     if (findUserByEmail) {
-      throw new ConflictException('Email already exists');
+      throw new ConflictException('Unable to process request');
     }
   }
 

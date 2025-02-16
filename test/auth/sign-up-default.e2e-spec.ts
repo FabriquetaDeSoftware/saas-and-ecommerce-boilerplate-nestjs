@@ -124,7 +124,10 @@ describe('AuthController from AppModule (e2e)', () => {
       .expect(409);
 
     expect(response.body).toHaveProperty('statusCode', 409);
-    expect(response.body).toHaveProperty('message');
+    expect(response.body).toHaveProperty(
+      'message',
+      'Unable to process request',
+    );
     expect(authRepositoryMock.create).not.toHaveBeenCalled();
   });
 
