@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Inject,
   Injectable,
   NotFoundException,
@@ -81,7 +82,7 @@ export class RecoveryPasswordUseCase implements IRecoveryPasswordUseCase {
     );
 
     if (payloadType !== TokenEnum.RECOVERY_PASSWORD_TOKEN) {
-      throw new UnauthorizedException('Invalid or expired token');
+      throw new BadRequestException('Invalid or expired token');
     }
 
     return payload;
