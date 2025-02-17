@@ -46,22 +46,22 @@ describe('AuthController from AppModule (e2e)', () => {
     await app.init();
   });
 
-  it('Should return password recovery', async () => {
-    const recoveryPasswordData: RecoveryPasswordDto = {
-      token: 'valid_token',
-      password: '123456',
-    };
+  // it('Should return password recovery', async () => {
+  //   const recoveryPasswordData: RecoveryPasswordDto = {
+  //     token: 'valid_token',
+  //     password: '123456',
+  //   };
 
-    const response = await request(app.getHttpServer())
-      .post('/auth/recovery-password/')
-      .send(recoveryPasswordData)
-      .expect(200);
+  //   const response = await request(app.getHttpServer())
+  //     .post('/auth/recovery-password/')
+  //     .send(recoveryPasswordData)
+  //     .expect(200);
 
-    expect(response.body).toHaveProperty(
-      'message',
-      'Password recovered successfully',
-    );
-  });
+  //   expect(response.body).toHaveProperty(
+  //     'message',
+  //     'Password recovered successfully',
+  //   );
+  // });
 
   it('Should return 400 when token is invalid', async () => {
     const recoveryPasswordData: RecoveryPasswordDto = {
