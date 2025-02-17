@@ -6,15 +6,23 @@ import { IAuthRepository } from 'src/modules/auth/domain/interfaces/repositories
 import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { EmailDto } from 'src/modules/auth/application/dto/email.dto';
 import { Auth } from 'src/modules/auth/domain/entities/auth.entity';
+import { ISendEmailQueueJob } from 'src/shared/modules/email/domain/interfaces/jobs/send_email_queue.job.interface';
 
 describe('AuthController from AppModule (e2e)', () => {
   let app: INestApplication;
   let authRepositoryMock: jest.Mocked<IAuthRepository>;
+  let sendEmailQueueJobMock: jest.Mocked<ISendEmailQueueJob>;
 
   beforeEach(async () => {
     if (app) {
       await app.close();
     }
+
+    sendEmailQueueJobMock = {
+      execute: jest
+        .fn()
+        .mockResolvedValue({ message: 'Email sent successfully' }),
+    };
 
     authRepositoryMock = {
       create: jest.fn().mockImplementation(undefined),
@@ -41,6 +49,8 @@ describe('AuthController from AppModule (e2e)', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
+      .overrideProvider('ISendEmailQueueJob')
+      .useValue(sendEmailQueueJobMock)
       .overrideProvider('IAuthRepository')
       .useValue(authRepositoryMock)
       .compile();

@@ -7,11 +7,13 @@ import { IAuthRepository } from 'src/modules/auth/domain/interfaces/repositories
 import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
 import { Auth } from 'src/modules/auth/domain/entities/auth.entity';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
+import { ISendEmailQueueJob } from 'src/shared/modules/email/domain/interfaces/jobs/send_email_queue.job.interface';
 
 describe('AuthController from AppModule (e2e)', () => {
   let app: INestApplication;
   let authRepositoryMock: jest.Mocked<IAuthRepository>;
   let hashUtilMock: jest.Mocked<IHashUtil>;
+  let sendEmailQueueJobMock: jest.Mocked<ISendEmailQueueJob>;
 
   beforeEach(async () => {
     if (app) {
@@ -21,6 +23,12 @@ describe('AuthController from AppModule (e2e)', () => {
     hashUtilMock = {
       generateHash: jest.fn().mockResolvedValue('hashedText'),
       compareHash: jest.fn().mockResolvedValue(true),
+    };
+
+    sendEmailQueueJobMock = {
+      execute: jest
+        .fn()
+        .mockResolvedValue({ message: 'Email sent successfully' }),
     };
 
     authRepositoryMock = {
@@ -55,6 +63,8 @@ describe('AuthController from AppModule (e2e)', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
+      .overrideProvider('ISendEmailQueueJob')
+      .useValue(sendEmailQueueJobMock)
       .overrideProvider('IHashUtil')
       .useValue(hashUtilMock)
       .overrideProvider('IAuthRepository')
