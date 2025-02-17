@@ -3,7 +3,6 @@ import {
   Inject,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { RecoveryPasswordDto } from '../dto/recovery_password.dto';
 import { JwtService } from '@nestjs/jwt';
