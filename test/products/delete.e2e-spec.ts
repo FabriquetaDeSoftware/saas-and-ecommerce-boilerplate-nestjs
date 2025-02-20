@@ -19,9 +19,30 @@ describe('AuthController from AppModule (e2e)', () => {
     await app.init();
   });
 
-  it('/products/delete/:publicId/ (Delete)', async () => {
+  it('Should return 204', async () => {
     // const response = await request(app.getHttpServer())
     //   .delete('/products/delete/:publicId/')
+    //   .expect(200)
+    //   .expect('Hello World!');
+  });
+
+  it('Should return 403 when user is not ADMIN', async () => {
+    // const response = await request(app.getHttpServer())
+    //   .post('/products/delete/:publicId/')
+    //   .expect(200)
+    //   .expect('Hello World!');
+  });
+
+  it('Should return 401 when user is not athorized to perfom this operation', async () => {
+    // const response = await request(app.getHttpServer())
+    //   .post('/products/delete/:publicId/')
+    //   .expect(200)
+    //   .expect('Hello World!');
+  });
+
+  it('Should return 404 when publicId of product is invalid', async () => {
+    // const response = await request(app.getHttpServer())
+    //   .post('/products/delete/:publicId/')
     //   .expect(200)
     //   .expect('Hello World!');
   });
