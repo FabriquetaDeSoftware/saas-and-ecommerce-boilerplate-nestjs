@@ -4,7 +4,7 @@ export class Products {
   name: string;
   description: string;
   price: number;
-  stock: number;
+  slug: string;
   image: string;
   created_at: Date;
   updated_at: Date;

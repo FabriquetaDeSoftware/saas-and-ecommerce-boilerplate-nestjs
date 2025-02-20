@@ -35,13 +35,12 @@ export class CreateProductDto {
   price: number;
 
   @ApiProperty({
-    description: 'stock of the product',
-    example: 123,
+    description: 'Slug of the product',
+    example: 'slug_product1',
   })
   @IsNotEmpty()
-  @IsNumber()
-  @IsPositive()
-  stock: number;
+  @IsString()
+  slug: string;
 
   @ApiProperty({
     description: 'Url image of the product',

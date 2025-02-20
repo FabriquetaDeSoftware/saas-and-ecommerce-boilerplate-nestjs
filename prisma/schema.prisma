@@ -29,10 +29,10 @@ model Products {
   id        Int    @id @default(autoincrement())
   public_id String @unique @default(uuid())
 
-  name        String  @unique
+  name        String
   description String
   price       Decimal @db.Money
-  stock       Int
+  slug        String  @unique
   image       String?
 
   created_at DateTime @default(now())
