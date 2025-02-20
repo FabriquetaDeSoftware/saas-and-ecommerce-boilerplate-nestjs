@@ -85,6 +85,7 @@ export class ProductsController {
   public async findMany(
     @Query() query: ListManyProductsDto,
   ): Promise<ListManyProductsWithoutIdReturn> {
+    console.log('query', query);
     const response = await this._listManyProductUseCase.execute(query);
 
     return response;

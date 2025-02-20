@@ -69,10 +69,6 @@ describe('AuthController from AppModule (e2e)', () => {
       .send(signInData)
       .expect(200);
 
-    const mockReturn = await authRepositoryMock.findOneByEmail(
-      signInData.email,
-    );
-
     expect(response.body).toHaveProperty('access_token');
     expect(response.body).toHaveProperty('refresh_token');
     expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
