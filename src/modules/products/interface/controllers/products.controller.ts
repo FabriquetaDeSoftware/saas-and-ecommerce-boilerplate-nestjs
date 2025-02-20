@@ -22,7 +22,7 @@ import { IDeleteProductUseCase } from '../../domain/interfaces/use_cases/delete_
 import { IsPublicRoute } from 'src/common/decorators/is_public_route.decorator';
 import { IListManyProductUseCase } from '../../domain/interfaces/use_cases/list_many_products.use_case.interface';
 import { ListManyProductsDto } from '../../application/dto/list_many_products.dto';
-import { ListManyProductsReturn } from '../../domain/types/list_many_products_return.type';
+import { ListManyProductsWithoutIdReturn } from '../../domain/types/list_many_products_return.type';
 import { IUpdateProductInfoUseCase } from '../../domain/interfaces/use_cases/update_product_info.use_case.interface';
 import { UpadateProductInfoDto } from '../../application/dto/update_product_info.dto';
 
@@ -84,7 +84,7 @@ export class ProductsController {
   @Get('list-many')
   public async findMany(
     @Query() query: ListManyProductsDto,
-  ): Promise<ListManyProductsReturn> {
+  ): Promise<ListManyProductsWithoutIdReturn> {
     const response = await this._listManyProductUseCase.execute(query);
 
     return response;
