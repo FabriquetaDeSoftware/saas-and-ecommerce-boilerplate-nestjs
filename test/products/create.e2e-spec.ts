@@ -40,7 +40,7 @@ describe('AuthController from AppModule (e2e)', () => {
     //   .expect('Hello World!');
   });
 
-  it('Should return 401 when user is not athorized to perfom this operation', async () => {
+  it('Should return 401 when user is not athorized to perfom create operation', async () => {
     // const response = await request(app.getHttpServer())
     //   .post('/products/create/')
     //   .expect(200)
