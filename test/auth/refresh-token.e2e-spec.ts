@@ -1,9 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import {
-  BadRequestException,
-  INestApplication,
-  ValidationPipe,
-} from '@nestjs/common';
+import { BadRequestException, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { RefreshTokenDto } from 'src/modules/auth/application/dto/refresh_token.dto';
@@ -45,13 +41,6 @@ describe('AuthController from AppModule (e2e)', () => {
       .compile();
 
     app = moduleFixture.createNestApplication();
-
-    app.useGlobalPipes(
-      new ValidationPipe({
-        transform: true,
-      }),
-    );
-
     await app.init();
   });
 
