@@ -11,6 +11,7 @@ import { IListManySubscriptionProductUseCase } from '../../domain/interfaces/use
 import { IListManySingleProductUseCase } from '../../domain/interfaces/use_cases/list_many_single_products.use_case.interface';
 import { IDeleteSubscriptionProductUseCase } from '../../domain/interfaces/use_cases/delete_subscription_product.use_case';
 import { DeleteProductDto } from '../dto/delete_product.dto';
+import { IDeleteSingleProductUseCase } from '../../domain/interfaces/use_cases/delete_single_product.use_case.interface';
 
 @Injectable()
 export class ProductsOrchestrator implements IProductsOrchestrator {
@@ -28,6 +29,9 @@ export class ProductsOrchestrator implements IProductsOrchestrator {
 
   @Inject('IDeleteSubscriptionProductUseCase')
   private readonly _deleteSubscriptionProductUseCase: IDeleteSubscriptionProductUseCase;
+
+  @Inject('IDeleteSingleProductUseCase')
+  private readonly _deleteSingleProductUseCase: IDeleteSingleProductUseCase;
 
   public async create(
     role: string,
@@ -47,7 +51,10 @@ export class ProductsOrchestrator implements IProductsOrchestrator {
 
   public async delete(role: string, input: DeleteProductDto): Promise<void> {
     if (input.type === TypeProductEnum.SINGLE) {
-      return;
+      return await this._deleteSingleProductUseCase.execute(
+        role,
+        input.public_id,
+      );
     }
 
     if (input.type === TypeProductEnum.SUBSCRIPTION) {

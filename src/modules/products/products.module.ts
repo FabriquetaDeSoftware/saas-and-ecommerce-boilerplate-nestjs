@@ -11,11 +11,17 @@ import { ProductsOrchestrator } from './application/orchestrators/products.orche
 import { CreateSingleProductUseCase } from './application/use_cases/create_single_product.use_case';
 import { SingleProductsRepository } from './infrastructure/repositories/single_products.respository';
 import { ListManySingleProductUseCase } from './application/use_cases/list_many_single_products.use_case';
+import { DeleteSingleProductUseCase } from './application/use_cases/delete_single_product.use_case';
 
 @Module({
   imports: [CommonModule, SharedModule],
   controllers: [ProductsController],
   providers: [
+    DeleteSingleProductUseCase,
+    {
+      provide: 'IDeleteSingleProductUseCase',
+      useExisting: DeleteSingleProductUseCase,
+    },
     ListManySingleProductUseCase,
     {
       provide: 'IListManySingleProductUseCase',
