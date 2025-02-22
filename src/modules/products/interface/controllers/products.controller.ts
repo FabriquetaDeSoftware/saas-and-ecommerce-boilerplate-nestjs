@@ -16,7 +16,6 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Products } from '../../domain/entities/products.entity';
-import { ICreateProductUseCase } from '../../domain/interfaces/use_cases/create_product.use_case.interface';
 import { CurrentUser } from 'src/common/decorators/current_user.decorator';
 import { IJwtUserPayload } from 'src/shared/interfaces/jwt_user_payload.interface';
 import { IDeleteProductUseCase } from '../../domain/interfaces/use_cases/delete_product.use_case';
@@ -27,12 +26,13 @@ import { ListManyProductsWithoutIdReturn } from '../../domain/types/list_many_pr
 import { IUpdateProductInfoUseCase } from '../../domain/interfaces/use_cases/update_product_info.use_case.interface';
 import { UpadateProductInfoDto } from '../../application/dto/update_product_info.dto';
 import { TypeProductEnum } from '../../domain/enum/type_product.enum';
+import { ICreateProductOrchestrator } from '../../domain/interfaces/orchestrators/create_product.orchestrator.interface';
 
 @ApiTags('products')
 @Controller('products')
 export class ProductsController {
-  @Inject('ICreateProductUseCase')
-  private readonly _createProductUseCase: ICreateProductUseCase;
+  @Inject('ICreateProductOrchestrator')
+  private readonly _createProductOrchestrator: ICreateProductOrchestrator;
 
   @Inject('IDeleteProductUseCase')
   private readonly _deleteProductUseCase: IDeleteProductUseCase;
@@ -51,7 +51,11 @@ export class ProductsController {
     @Param('type', new ParseEnumPipe(TypeProductEnum)) type: TypeProductEnum,
     @CurrentUser() user: IJwtUserPayload,
   ): Promise<Products> {
-    const response = await this._createProductUseCase.execute(user.role, input);
+    const response = await this._createProductOrchestrator.execute(
+      user.role,
+      input,
+      type,
+    );
 
     return response;
   }

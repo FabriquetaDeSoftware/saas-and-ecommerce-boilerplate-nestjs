@@ -1,5 +1,5 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { ICreateProductUseCase } from '../../domain/interfaces/use_cases/create_product.use_case.interface';
+import { ICreateSubscriptionProductUseCase } from '../../domain/interfaces/use_cases/create_subscription_product.use_case.interface';
 import { CreateProductDto } from '../dto/create_product.dto';
 import { Products } from '../../domain/entities/products.entity';
 import { ISubscriptionProductsRepository } from '../../domain/interfaces/repositories/subscription_products.repository.interface';
@@ -9,9 +9,11 @@ import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { IPermissionManagerUtil } from 'src/shared/utils/interfaces/permission_manager.util.interface';
 
 @Injectable()
-export class CreateProductUseCase implements ICreateProductUseCase {
+export class CreateSubscriptionProductUseCase
+  implements ICreateSubscriptionProductUseCase
+{
   @Inject('ISubscriptionProductsRepository')
-  private readonly _productsRepository: ISubscriptionProductsRepository;
+  private readonly _subscriptionProductsRepository: ISubscriptionProductsRepository;
 
   @Inject('ICryptoUtil')
   private readonly _cryptoUtil: ICryptoUtil;
@@ -36,7 +38,7 @@ export class CreateProductUseCase implements ICreateProductUseCase {
 
     this.isAllowedAction(roleDecoded, input);
 
-    const result = await this._productsRepository.create(input);
+    const result = await this._subscriptionProductsRepository.create(input);
 
     return { ...result, id: undefined };
   }
