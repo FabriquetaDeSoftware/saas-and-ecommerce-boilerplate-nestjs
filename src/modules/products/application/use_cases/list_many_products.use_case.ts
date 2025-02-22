@@ -8,7 +8,7 @@ import { ListManyProductsWithoutIdReturn } from '../../domain/types/list_many_pr
 @Injectable()
 export class ListManyProductUseCase implements IListManyProductUseCase {
   @Inject('ISubscriptionProductsRepository')
-  private readonly _productsRepository: ISubscriptionProductsRepository;
+  private readonly _subscriptionProductsRepository: ISubscriptionProductsRepository;
 
   public async execute(
     input: ListManyProductsDto,
@@ -21,11 +21,12 @@ export class ListManyProductUseCase implements IListManyProductUseCase {
   private async intermediry(
     input: ListManyProductsDto,
   ): Promise<ListManyProductsWithoutIdReturn> {
-    const response = await this._productsRepository.listManyWithPagination(
-      undefined,
-      input.page - 1,
-      input.pageSize,
-    );
+    const response =
+      await this._subscriptionProductsRepository.listManyWithPagination(
+        undefined,
+        input.page - 1,
+        input.pageSize,
+      );
 
     const withoutId = this.removeIdFromProduct(response.data);
 

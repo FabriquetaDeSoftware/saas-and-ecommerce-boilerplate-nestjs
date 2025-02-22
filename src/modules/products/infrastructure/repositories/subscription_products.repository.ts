@@ -12,11 +12,11 @@ export class SubscriptionProductsRepository
   @Inject('IDatabaseAdapter')
   private readonly _databaseAdapter: IDatabaseAdapter;
 
-  private readonly _model = 'products';
+  private readonly _model = 'subscriptionPurchaseProducts';
 
-  public async create(createProductDto: CreateProductDto): Promise<Products> {
+  public async create(data: CreateProductDto): Promise<Products> {
     const result = await this._databaseAdapter.create<Products>(this._model, {
-      ...createProductDto,
+      ...data,
     });
 
     return result;

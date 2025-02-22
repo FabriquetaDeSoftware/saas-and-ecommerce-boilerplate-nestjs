@@ -1,6 +1,9 @@
 -- CreateEnum
 CREATE TYPE "RolesAuth" AS ENUM ('ADMIN', 'USER');
 
+-- CreateEnum
+CREATE TYPE "StatusSubscriptionPurchaseProducts" AS ENUM ('ACTIVE', 'EXPIRE', 'CANCELED');
+
 -- CreateTable
 CREATE TABLE "Auth" (
     "id" SERIAL NOT NULL,
@@ -27,6 +30,7 @@ CREATE TABLE "UserSinglePurchases" (
 
 -- CreateTable
 CREATE TABLE "UserSubscriptionPurchases" (
+    "status" "StatusSubscriptionPurchaseProducts" NOT NULL,
     "authId" INTEGER NOT NULL,
     "subscriptionPurchaseProductsId" INTEGER NOT NULL,
 
@@ -39,7 +43,7 @@ CREATE TABLE "SinglePurchaseProducts" (
     "public_id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
-    "price" MONEY NOT NULL,
+    "price" INTEGER NOT NULL,
     "slug" TEXT NOT NULL,
     "image" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -54,7 +58,7 @@ CREATE TABLE "SubscriptionPurchaseProducts" (
     "public_id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
-    "price" MONEY NOT NULL,
+    "price" INTEGER NOT NULL,
     "slug" TEXT NOT NULL,
     "image" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -100,16 +104,16 @@ CREATE UNIQUE INDEX "VerificationCodes_public_id_key" ON "VerificationCodes"("pu
 CREATE UNIQUE INDEX "VerificationCodes_auth_id_key" ON "VerificationCodes"("auth_id");
 
 -- AddForeignKey
-ALTER TABLE "UserSinglePurchases" ADD CONSTRAINT "UserSinglePurchases_authId_fkey" FOREIGN KEY ("authId") REFERENCES "Auth"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "UserSinglePurchases" ADD CONSTRAINT "UserSinglePurchases_authId_fkey" FOREIGN KEY ("authId") REFERENCES "Auth"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserSinglePurchases" ADD CONSTRAINT "UserSinglePurchases_singlePurchaseProductsId_fkey" FOREIGN KEY ("singlePurchaseProductsId") REFERENCES "SinglePurchaseProducts"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "UserSinglePurchases" ADD CONSTRAINT "UserSinglePurchases_singlePurchaseProductsId_fkey" FOREIGN KEY ("singlePurchaseProductsId") REFERENCES "SinglePurchaseProducts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserSubscriptionPurchases" ADD CONSTRAINT "UserSubscriptionPurchases_authId_fkey" FOREIGN KEY ("authId") REFERENCES "Auth"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "UserSubscriptionPurchases" ADD CONSTRAINT "UserSubscriptionPurchases_authId_fkey" FOREIGN KEY ("authId") REFERENCES "Auth"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserSubscriptionPurchases" ADD CONSTRAINT "UserSubscriptionPurchases_subscriptionPurchaseProductsId_fkey" FOREIGN KEY ("subscriptionPurchaseProductsId") REFERENCES "SubscriptionPurchaseProducts"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "UserSubscriptionPurchases" ADD CONSTRAINT "UserSubscriptionPurchases_subscriptionPurchaseProductsId_fkey" FOREIGN KEY ("subscriptionPurchaseProductsId") REFERENCES "SubscriptionPurchaseProducts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "VerificationCodes" ADD CONSTRAINT "VerificationCodes_auth_id_fkey" FOREIGN KEY ("auth_id") REFERENCES "Auth"("id") ON DELETE CASCADE ON UPDATE CASCADE;

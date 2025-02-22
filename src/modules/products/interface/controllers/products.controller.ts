@@ -6,6 +6,7 @@ import {
   HttpCode,
   Inject,
   Param,
+  ParseEnumPipe,
   Patch,
   Post,
   Query,
@@ -25,6 +26,7 @@ import { ListManyProductsDto } from '../../application/dto/list_many_products.dt
 import { ListManyProductsWithoutIdReturn } from '../../domain/types/list_many_products_return.type';
 import { IUpdateProductInfoUseCase } from '../../domain/interfaces/use_cases/update_product_info.use_case.interface';
 import { UpadateProductInfoDto } from '../../application/dto/update_product_info.dto';
+import { TypeProductEnum } from '../../domain/enum/type_product.enum';
 
 @ApiTags('products')
 @Controller('products')
@@ -43,9 +45,10 @@ export class ProductsController {
 
   @ApiBearerAuth()
   @Roles(RolesEnum.ADMIN)
-  @Post('create')
+  @Post('create/:type')
   public async createProduct(
     @Body() input: CreateProductDto,
+    @Param('type', new ParseEnumPipe(TypeProductEnum)) type: TypeProductEnum,
     @CurrentUser() user: IJwtUserPayload,
   ): Promise<Products> {
     const response = await this._createProductUseCase.execute(user.role, input);

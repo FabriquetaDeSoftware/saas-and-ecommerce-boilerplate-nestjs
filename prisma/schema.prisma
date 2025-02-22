@@ -28,21 +28,23 @@ model Auth {
 }
 
 model UserSinglePurchases {
-  authId                   Int
-  singlePurchaseProductsId Int
+  authId Int
+  Auth   Auth @relation(fields: [authId], references: [id], onDelete: Cascade)
 
-  Auth                   Auth                   @relation(fields: [authId], references: [id])
-  SinglePurchaseProducts SinglePurchaseProducts @relation(fields: [singlePurchaseProductsId], references: [id])
+  singlePurchaseProductsId Int
+  SinglePurchaseProducts   SinglePurchaseProducts @relation(fields: [singlePurchaseProductsId], references: [id], onDelete: Cascade)
 
   @@id([authId, singlePurchaseProductsId])
 }
 
 model UserSubscriptionPurchases {
-  authId                         Int
-  subscriptionPurchaseProductsId Int
+  status StatusSubscriptionPurchaseProducts
 
-  Auth                         Auth                         @relation(fields: [authId], references: [id])
-  SubscriptionPurchaseProducts SubscriptionPurchaseProducts @relation(fields: [subscriptionPurchaseProductsId], references: [id])
+  authId Int
+  Auth   Auth @relation(fields: [authId], references: [id], onDelete: Cascade)
+
+  subscriptionPurchaseProductsId Int
+  SubscriptionPurchaseProducts   SubscriptionPurchaseProducts @relation(fields: [subscriptionPurchaseProductsId], references: [id], onDelete: Cascade)
 
   @@id([authId, subscriptionPurchaseProductsId])
 }
@@ -53,7 +55,7 @@ model SinglePurchaseProducts {
 
   name        String
   description String
-  price       Decimal @db.Money
+  price       Int
   slug        String  @unique
   image       String?
 
@@ -69,7 +71,7 @@ model SubscriptionPurchaseProducts {
 
   name        String
   description String
-  price       Decimal @db.Money
+  price       Int
   slug        String  @unique
   image       String?
 
@@ -96,4 +98,10 @@ model VerificationCodes {
 enum RolesAuth {
   ADMIN
   USER
+}
+
+enum StatusSubscriptionPurchaseProducts {
+  ACTIVE
+  EXPIRE
+  CANCELED
 }
