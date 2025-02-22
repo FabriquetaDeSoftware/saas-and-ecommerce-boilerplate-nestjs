@@ -25,14 +25,14 @@ import { ListManyProductsDto } from '../../application/dto/list_many_products.dt
 import { ListManyProductsWithoutIdReturn } from '../../domain/types/list_many_products_return.type';
 import { IUpdateProductInfoUseCase } from '../../domain/interfaces/use_cases/update_product_info.use_case.interface';
 import { UpadateProductInfoDto } from '../../application/dto/update_product_info.dto';
-import { TypeProductEnum } from '../../domain/enum/type_product.enum';
-import { ICreateProductOrchestrator } from '../../domain/interfaces/orchestrators/create_product.orchestrator.interface';
+import { TypeProductEnum } from '../../application/enum/type_product.enum';
+import { IProductsOrchestrator } from '../../domain/interfaces/orchestrators/products.orchestrator.interface';
 
 @ApiTags('products')
 @Controller('products')
 export class ProductsController {
-  @Inject('ICreateProductOrchestrator')
-  private readonly _createProductOrchestrator: ICreateProductOrchestrator;
+  @Inject('IProductsOrchestrator')
+  private readonly _productsOrchestrator: IProductsOrchestrator;
 
   @Inject('IDeleteProductUseCase')
   private readonly _deleteProductUseCase: IDeleteProductUseCase;
@@ -51,7 +51,7 @@ export class ProductsController {
     @Param('type', new ParseEnumPipe(TypeProductEnum)) type: TypeProductEnum,
     @CurrentUser() user: IJwtUserPayload,
   ): Promise<Products> {
-    const response = await this._createProductOrchestrator.execute(
+    const response = await this._productsOrchestrator.create(
       user.role,
       input,
       type,
@@ -88,8 +88,9 @@ export class ProductsController {
   }
 
   @IsPublicRoute()
-  @Get('list-many')
+  @Get('list-many/:type')
   public async findMany(
+    @Param('type', new ParseEnumPipe(TypeProductEnum)) type: TypeProductEnum,
     @Query() query: ListManyProductsDto,
   ): Promise<ListManyProductsWithoutIdReturn> {
     const response = await this._listManyProductUseCase.execute(query);
