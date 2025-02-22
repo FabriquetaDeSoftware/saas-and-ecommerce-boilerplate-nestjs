@@ -1,5 +1,5 @@
-import { RecoveryPasswordDto } from 'src/modules/auth/application/dto/recovery_password.dto';
+import { PasswordDto } from 'src/modules/auth/application/dto/password.dto';
 
 export interface IRecoveryPasswordUseCase {
-  execute(input: RecoveryPasswordDto): Promise<{ message: string }>;
+  execute(token: string, input: PasswordDto): Promise<{ message: string }>;
 }

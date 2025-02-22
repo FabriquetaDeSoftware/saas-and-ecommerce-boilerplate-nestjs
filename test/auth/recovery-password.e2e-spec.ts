@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, BadRequestException } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
-import { RecoveryPasswordDto } from 'src/modules/auth/application/dto/recovery_password.dto';
+import { PasswordDto } from 'src/modules/auth/application/dto/password.dto';
 import { JwtService } from '@nestjs/jwt';
 import { IJwtUserPayload } from 'src/shared/interfaces/jwt_user_payload.interface';
 import { TokenEnum } from 'src/shared/enum/token.enum';
@@ -64,13 +64,13 @@ describe('AuthController from AppModule (e2e)', () => {
   // });
 
   it('Should return 400 when token is invalid', async () => {
-    const recoveryPasswordData: RecoveryPasswordDto = {
-      token: 'invalid_token',
+    const token = 'invalid_token';
+    const recoveryPasswordData: PasswordDto = {
       password: '123456',
     };
 
     const response = await request(app.getHttpServer())
-      .post('/auth/recovery-password/')
+      .post(`/auth/recovery-password?token=${token}`)
       .send(recoveryPasswordData)
       .expect(400);
 

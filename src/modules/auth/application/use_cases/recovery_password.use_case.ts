@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { RecoveryPasswordDto } from '../dto/recovery_password.dto';
+import { PasswordDto } from '../dto/password.dto';
 import { JwtService } from '@nestjs/jwt';
 import { jwtKeysConstants } from 'src/shared/constants/jwt_keys.constants';
 import { TokenEnum } from 'src/shared/enum/token.enum';
@@ -34,15 +34,17 @@ export class RecoveryPasswordUseCase implements IRecoveryPasswordUseCase {
   private readonly _hashUtil: IHashUtil;
 
   public async execute(
-    input: RecoveryPasswordDto,
+    token: string,
+    input: PasswordDto,
   ): Promise<{ message: string }> {
-    return await this.intermediary(input);
+    return await this.intermediary(token, input.password);
   }
 
   private async intermediary(
-    input: RecoveryPasswordDto,
+    token: string,
+    password: string,
   ): Promise<{ message: string }> {
-    const payload = await this.verifyRefreshTokenIsValid(input.token);
+    const payload = await this.verifyRefreshTokenIsValid(token);
 
     const email = await this.decryptPayload(
       Buffer.from(payload.email, 'base64'),
@@ -50,7 +52,7 @@ export class RecoveryPasswordUseCase implements IRecoveryPasswordUseCase {
 
     await this.findUserByEmailAndValidate(email);
 
-    const hashedPassword = await this._hashUtil.generateHash(input.password);
+    const hashedPassword = await this._hashUtil.generateHash(password);
 
     await this._authRepository.updateInfoByEmailAuth(email, {
       password: hashedPassword,

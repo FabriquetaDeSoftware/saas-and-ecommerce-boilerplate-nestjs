@@ -3,6 +3,7 @@ import {
   Controller,
   HttpCode,
   Inject,
+  Param,
   Post,
   Query,
   UseGuards,
@@ -21,7 +22,7 @@ import { ISignUpDefaultUseCase } from '../../domain/interfaces/use_cases/sign_up
 import { IVerifyAccountUseCase } from '../../domain/interfaces/use_cases/verify_account.use_case.interface';
 import { IRefreshTokenService } from '../../domain/interfaces/services/refresh_token.service.interface';
 import { IForgotPasswordService } from '../../domain/interfaces/services/forgot_password.service.interface';
-import { RecoveryPasswordDto } from '../../application/dto/recovery_password.dto';
+import { PasswordDto } from '../../application/dto/password.dto';
 import { EmailDto } from '../../application/dto/email.dto';
 import { IRecoveryPasswordUseCase } from '../../domain/interfaces/use_cases/recovery_password.use_case.interface';
 import { ISignInMagicLinkUseCase } from '../../domain/interfaces/use_cases/sign_in_magic_link.use_case';
@@ -131,9 +132,10 @@ export class AuthController {
   @IsPublicRoute()
   @Post('recovery-password')
   public async recoveryPassword(
-    @Query() input: RecoveryPasswordDto,
+    @Query('token') query: string,
+    @Body() input: PasswordDto,
   ): Promise<{ message: string }> {
-    const response = await this._recoveryPasswordUseCase.execute(input);
+    const response = await this._recoveryPasswordUseCase.execute(query, input);
 
     return response;
   }
