@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Products } from '../../domain/entities/products.entity';
-import { IProductsRepository } from '../../domain/interfaces/repositories/products.repository.interface';
+import { ISubscriptionProductsRepository } from '../../domain/interfaces/repositories/subscription_products.repository.interface';
 import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
 import { Action } from 'src/shared/enum/actions.enum';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
@@ -14,8 +14,8 @@ import { IDeleteProductUseCase } from '../../domain/interfaces/use_cases/delete_
 
 @Injectable()
 export class DeleteProductUseCase implements IDeleteProductUseCase {
-  @Inject('IProductsRepository')
-  private readonly _productsRepository: IProductsRepository;
+  @Inject('ISubscriptionProductsRepository')
+  private readonly _productsRepository: ISubscriptionProductsRepository;
 
   @Inject('ICryptoUtil')
   private readonly _cryptoUtil: ICryptoUtil;

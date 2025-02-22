@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
-import { IProductsRepository } from 'src/modules/products/domain/interfaces/repositories/products.repository.interface';
+import { IProductsRepository } from 'src/modules/products/domain/interfaces/repositories/subscription_products.repository.interface';
 import { ListManyProductsReturn } from 'src/modules/products/domain/types/list_many_products_return.type';
 import { ListManyProductsDto } from 'src/modules/products/application/dto/list_many_products.dto';
 

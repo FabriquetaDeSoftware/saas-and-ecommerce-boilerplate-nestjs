@@ -32,7 +32,7 @@ export class DatabaseAdapter implements IDatabaseAdapter {
     pageSize: number;
     totalPages: number;
   }> {
-    const total = await this._prismaService.products.count();
+    const total = await this._prismaService[model].count();
     const page = skip * take;
     const result = await this._prismaService[model].findMany({
       where,

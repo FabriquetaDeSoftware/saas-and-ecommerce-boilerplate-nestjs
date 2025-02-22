@@ -1,12 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { IProductsRepository } from '../../domain/interfaces/repositories/products.repository.interface';
+import { ISubscriptionProductsRepository } from '../../domain/interfaces/repositories/subscription_products.repository.interface';
 import { IDatabaseAdapter } from 'src/common/databases/interfaces/database.adapter.interface';
 import { CreateProductDto } from '../../application/dto/create_product.dto';
 import { Products } from '../../domain/entities/products.entity';
 import { ListManyProductsReturn } from '../../domain/types/list_many_products_return.type';
 
 @Injectable()
-export class ProductsRepository implements IProductsRepository {
+export class SubscriptionProductsRepository
+  implements ISubscriptionProductsRepository
+{
   @Inject('IDatabaseAdapter')
   private readonly _databaseAdapter: IDatabaseAdapter;
 

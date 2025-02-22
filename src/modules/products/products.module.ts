@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ProductsController } from './interface/controllers/products.controller';
 import { CommonModule } from 'src/common/common.module';
 import { CreateProductUseCase } from './application/use_cases/create_product.use_case';
-import { ProductsRepository } from './infrastructure/repositories/products.repository';
+import { SubscriptionProductsRepository } from './infrastructure/repositories/subscription_products.repository';
 import { SharedModule } from 'src/shared/shared.module';
 import { DeleteProductUseCase } from './application/use_cases/delete_product.use_case';
 import { ListManyProductUseCase } from './application/use_cases/list_many_products.use_case';
@@ -27,10 +27,10 @@ import { UpdateProductInfoUseCase } from './application/use_cases/update_product
       provide: 'IDeleteProductUseCase',
       useExisting: DeleteProductUseCase,
     },
-    ProductsRepository,
+    SubscriptionProductsRepository,
     {
-      provide: 'IProductsRepository',
-      useExisting: ProductsRepository,
+      provide: 'ISubscriptionProductsRepository',
+      useExisting: SubscriptionProductsRepository,
     },
     CreateProductUseCase,
     {

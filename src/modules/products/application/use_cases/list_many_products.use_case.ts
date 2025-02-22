@@ -1,14 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { IListManyProductUseCase } from '../../domain/interfaces/use_cases/list_many_products.use_case.interface';
-import { IProductsRepository } from '../../domain/interfaces/repositories/products.repository.interface';
+import { ISubscriptionProductsRepository } from '../../domain/interfaces/repositories/subscription_products.repository.interface';
 import { Products } from '../../domain/entities/products.entity';
 import { ListManyProductsDto } from '../dto/list_many_products.dto';
 import { ListManyProductsWithoutIdReturn } from '../../domain/types/list_many_products_return.type';
 
 @Injectable()
 export class ListManyProductUseCase implements IListManyProductUseCase {
-  @Inject('IProductsRepository')
-  private readonly _productsRepository: IProductsRepository;
+  @Inject('ISubscriptionProductsRepository')
+  private readonly _productsRepository: ISubscriptionProductsRepository;
 
   public async execute(
     input: ListManyProductsDto,

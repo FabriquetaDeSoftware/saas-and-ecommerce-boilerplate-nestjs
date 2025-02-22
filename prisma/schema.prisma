@@ -22,10 +22,32 @@ model Auth {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  verification_code VerificationCodes?
+  verification_code     VerificationCodes?
+  singlePurchases       UserSinglePurchases[]
+  subscriptionPurchases UserSubscriptionPurchases[]
 }
 
-model Products {
+model UserSinglePurchases {
+  authId                   Int
+  singlePurchaseProductsId Int
+
+  Auth                   Auth                   @relation(fields: [authId], references: [id])
+  SinglePurchaseProducts SinglePurchaseProducts @relation(fields: [singlePurchaseProductsId], references: [id])
+
+  @@id([authId, singlePurchaseProductsId])
+}
+
+model UserSubscriptionPurchases {
+  authId                         Int
+  subscriptionPurchaseProductsId Int
+
+  Auth                         Auth                         @relation(fields: [authId], references: [id])
+  SubscriptionPurchaseProducts SubscriptionPurchaseProducts @relation(fields: [subscriptionPurchaseProductsId], references: [id])
+
+  @@id([authId, subscriptionPurchaseProductsId])
+}
+
+model SinglePurchaseProducts {
   id        Int    @id @default(autoincrement())
   public_id String @unique @default(uuid())
 
@@ -37,6 +59,24 @@ model Products {
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+
+  purchases UserSinglePurchases[]
+}
+
+model SubscriptionPurchaseProducts {
+  id        Int    @id @default(autoincrement())
+  public_id String @unique @default(uuid())
+
+  name        String
+  description String
+  price       Decimal @db.Money
+  slug        String  @unique
+  image       String?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  subscriptionPurchases UserSubscriptionPurchases[]
 }
 
 model VerificationCodes {
