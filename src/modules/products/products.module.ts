@@ -8,11 +8,23 @@ import { DeleteProductUseCase } from './application/use_cases/delete_product.use
 import { ListManyProductUseCase } from './application/use_cases/list_many_products.use_case';
 import { UpdateProductInfoUseCase } from './application/use_cases/update_product_info.use_case';
 import { CreateProductOrchestrator } from './application/orchestrators/create_product.orchestrator';
+import { CreateSingleProductUseCase } from './application/use_cases/create_single_product.use_case';
+import { SingleProductsRepository } from './infrastructure/repositories/single_products.respository';
 
 @Module({
   imports: [CommonModule, SharedModule],
   controllers: [ProductsController],
   providers: [
+    SingleProductsRepository,
+    {
+      provide: 'ISingleProductsRepository',
+      useExisting: SingleProductsRepository,
+    },
+    CreateSingleProductUseCase,
+    {
+      provide: 'ICreateSingleProductUseCase',
+      useExisting: CreateSingleProductUseCase,
+    },
     CreateProductOrchestrator,
     {
       provide: 'ICreateProductOrchestrator',
