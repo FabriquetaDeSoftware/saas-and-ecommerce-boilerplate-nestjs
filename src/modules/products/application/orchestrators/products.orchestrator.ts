@@ -9,6 +9,7 @@ import { ListManyProductsWithoutIdReturn } from '../../domain/types/list_many_pr
 import { ListManyProductsDto } from '../dto/list_many_products.dto';
 import { IListManySubscriptionProductUseCase } from '../../domain/interfaces/use_cases/list_many_subscription_products.use_case.interface';
 import { IListManySingleProductUseCase } from '../../domain/interfaces/use_cases/list_many_single_products.use_case.interface';
+import { IDeleteSubscriptionProductUseCase } from '../../domain/interfaces/use_cases/delete_subscription_product.use_case';
 
 @Injectable()
 export class ProductsOrchestrator implements IProductsOrchestrator {
@@ -24,6 +25,9 @@ export class ProductsOrchestrator implements IProductsOrchestrator {
   @Inject('IListManySingleProductUseCase')
   private readonly _listManySingleProductUseCase: IListManySingleProductUseCase;
 
+  @Inject('IDeleteSubscriptionProductUseCase')
+  private readonly _deleteSubscriptionProductUseCase: IDeleteSubscriptionProductUseCase;
+
   public async create(
     role: string,
     input: CreateProductDto,
@@ -35,6 +39,18 @@ export class ProductsOrchestrator implements IProductsOrchestrator {
 
     if (type === TypeProductEnum.SUBSCRIPTION) {
       return await this._createSubscriptionProductUseCase.execute(role, input);
+    }
+
+    throw new BadRequestException(`Invalid product type: ${type}`);
+  }
+
+  public async delete(
+    role: string,
+    input: string,
+    type: TypeProductEnum,
+  ): Promise<void> {
+    if (type === TypeProductEnum.SUBSCRIPTION) {
+      return await this._deleteSubscriptionProductUseCase.execute(role, input);
     }
 
     throw new BadRequestException(`Invalid product type: ${type}`);

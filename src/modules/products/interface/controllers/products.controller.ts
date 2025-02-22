@@ -7,6 +7,7 @@ import {
   Inject,
   Param,
   ParseEnumPipe,
+  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -18,23 +19,20 @@ import { Roles } from 'src/common/decorators/roles.decorator';
 import { Products } from '../../domain/entities/products.entity';
 import { CurrentUser } from 'src/common/decorators/current_user.decorator';
 import { IJwtUserPayload } from 'src/shared/interfaces/jwt_user_payload.interface';
-import { IDeleteProductUseCase } from '../../domain/interfaces/use_cases/delete_product.use_case';
 import { IsPublicRoute } from 'src/common/decorators/is_public_route.decorator';
 import { ListManyProductsDto } from '../../application/dto/list_many_products.dto';
 import { ListManyProductsWithoutIdReturn } from '../../domain/types/list_many_products_return.type';
-import { IUpdateProductInfoUseCase } from '../../domain/interfaces/use_cases/update_product_info.use_case.interface';
+import { IUpdateProductInfoUseCase } from '../../domain/interfaces/use_cases/update_subscription_product_info.use_case.interface';
 import { UpadateProductInfoDto } from '../../application/dto/update_product_info.dto';
 import { TypeProductEnum } from '../../application/enum/type_product.enum';
 import { IProductsOrchestrator } from '../../domain/interfaces/orchestrators/products.orchestrator.interface';
+import { DeleteProductDto } from '../../application/dto/delete_product.dto';
 
 @ApiTags('products')
 @Controller('products')
 export class ProductsController {
   @Inject('IProductsOrchestrator')
   private readonly _productsOrchestrator: IProductsOrchestrator;
-
-  @Inject('IDeleteProductUseCase')
-  private readonly _deleteProductUseCase: IDeleteProductUseCase;
 
   @Inject('IUpdateProductInfoUseCase')
   private readonly _updateProductInfoUseCase: IUpdateProductInfoUseCase;
@@ -69,18 +67,16 @@ export class ProductsController {
 
   @ApiBearerAuth()
   @Roles(RolesEnum.ADMIN)
-  @Delete('delete/:publicId')
+  @Delete('delete')
   @HttpCode(204)
   public async DeleteProductUseCase(
-    @Param('publicId') publicId: string,
+    @Param() param: DeleteProductDto,
     @CurrentUser() user: IJwtUserPayload,
   ) {
-    const response = await this._deleteProductUseCase.execute(
-      user.role,
-      publicId,
-    );
+    const { public_id, type } = param;
+    await this._productsOrchestrator.delete(user.role, public_id, type);
 
-    return response;
+    return;
   }
 
   @IsPublicRoute()

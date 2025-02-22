@@ -11,6 +11,8 @@ export interface IProductsOrchestrator {
     type: TypeProductEnum,
   ): Promise<Products>;
 
+  delete(role: string, input: string, type: TypeProductEnum): Promise<void>;
+
   listMany(
     input: ListManyProductsDto,
     type: TypeProductEnum,
