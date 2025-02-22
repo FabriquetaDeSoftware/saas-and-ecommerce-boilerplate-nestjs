@@ -67,14 +67,13 @@ export class ProductsController {
 
   @ApiBearerAuth()
   @Roles(RolesEnum.ADMIN)
-  @Delete('delete')
+  @Delete('delete/:type/:public_id')
   @HttpCode(204)
   public async DeleteProductUseCase(
-    @Param() param: DeleteProductDto,
+    @Param() params: DeleteProductDto,
     @CurrentUser() user: IJwtUserPayload,
-  ) {
-    const { public_id, type } = param;
-    await this._productsOrchestrator.delete(user.role, public_id, type);
+  ): Promise<void> {
+    await this._productsOrchestrator.delete(user.role, params);
 
     return;
   }
