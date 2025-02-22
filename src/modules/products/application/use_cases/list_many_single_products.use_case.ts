@@ -1,14 +1,17 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { IListManyProductUseCase } from '../../domain/interfaces/use_cases/list_many_products.use_case.interface';
 import { ISubscriptionProductsRepository } from '../../domain/interfaces/repositories/subscription_products.repository.interface';
 import { Products } from '../../domain/entities/products.entity';
 import { ListManyProductsDto } from '../dto/list_many_products.dto';
 import { ListManyProductsWithoutIdReturn } from '../../domain/types/list_many_products_return.type';
+import { IListManySingleProductUseCase } from '../../domain/interfaces/use_cases/list_many_single_products.use_case.interface';
+import { ISingleProductsRepository } from '../../domain/interfaces/repositories/single_products.repository.interface';
 
 @Injectable()
-export class ListManyProductUseCase implements IListManyProductUseCase {
-  @Inject('ISubscriptionProductsRepository')
-  private readonly _subscriptionProductsRepository: ISubscriptionProductsRepository;
+export class ListManySingleProductUseCase
+  implements IListManySingleProductUseCase
+{
+  @Inject('ISingleProductsRepository')
+  private readonly _singleProductsRepository: ISingleProductsRepository;
 
   public async execute(
     input: ListManyProductsDto,
@@ -22,7 +25,7 @@ export class ListManyProductUseCase implements IListManyProductUseCase {
     input: ListManyProductsDto,
   ): Promise<ListManyProductsWithoutIdReturn> {
     const response =
-      await this._subscriptionProductsRepository.listManyWithPagination(
+      await this._singleProductsRepository.listManyWithPagination(
         undefined,
         input.page - 1,
         input.pageSize,

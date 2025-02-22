@@ -20,7 +20,6 @@ import { CurrentUser } from 'src/common/decorators/current_user.decorator';
 import { IJwtUserPayload } from 'src/shared/interfaces/jwt_user_payload.interface';
 import { IDeleteProductUseCase } from '../../domain/interfaces/use_cases/delete_product.use_case';
 import { IsPublicRoute } from 'src/common/decorators/is_public_route.decorator';
-import { IListManyProductUseCase } from '../../domain/interfaces/use_cases/list_many_products.use_case.interface';
 import { ListManyProductsDto } from '../../application/dto/list_many_products.dto';
 import { ListManyProductsWithoutIdReturn } from '../../domain/types/list_many_products_return.type';
 import { IUpdateProductInfoUseCase } from '../../domain/interfaces/use_cases/update_product_info.use_case.interface';
@@ -36,9 +35,6 @@ export class ProductsController {
 
   @Inject('IDeleteProductUseCase')
   private readonly _deleteProductUseCase: IDeleteProductUseCase;
-
-  @Inject('IListManyProductUseCase')
-  private readonly _listManyProductUseCase: IListManyProductUseCase;
 
   @Inject('IUpdateProductInfoUseCase')
   private readonly _updateProductInfoUseCase: IUpdateProductInfoUseCase;
@@ -93,7 +89,7 @@ export class ProductsController {
     @Param('type', new ParseEnumPipe(TypeProductEnum)) type: TypeProductEnum,
     @Query() query: ListManyProductsDto,
   ): Promise<ListManyProductsWithoutIdReturn> {
-    const response = await this._listManyProductUseCase.execute(query);
+    const response = await this._productsOrchestrator.listMany(query, type);
 
     return response;
   }
