@@ -12,6 +12,7 @@ import { CreateSingleProductUseCase } from './application/use_cases/create_singl
 import { SingleProductsRepository } from './infrastructure/repositories/single_products.respository';
 import { ListManySingleProductUseCase } from './application/use_cases/list_many_single_products.use_case';
 import { DeleteSingleProductUseCase } from './application/use_cases/delete_single_product.use_case';
+import { UpdateSingleProductInfoUseCase } from './application/use_cases/update_single_product_info.use_case';
 
 @Module({
   imports: [CommonModule, SharedModule],
@@ -41,6 +42,11 @@ import { DeleteSingleProductUseCase } from './application/use_cases/delete_singl
     {
       provide: 'IProductsOrchestrator',
       useExisting: ProductsOrchestrator,
+    },
+    UpdateSingleProductInfoUseCase,
+    {
+      provide: 'IUpdateSingleProductInfoUseCase',
+      useExisting: UpdateSingleProductInfoUseCase,
     },
     UpdateSubscriptionProductInfoUseCase,
     {

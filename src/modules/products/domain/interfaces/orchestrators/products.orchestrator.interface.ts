@@ -4,6 +4,7 @@ import { Products } from '../../entities/products.entity';
 import { ListManyProductsWithoutIdReturn } from '../../types/list_many_products_return.type';
 import { ListManyProductsDto } from 'src/modules/products/application/dto/list_many_products.dto';
 import { TypeAndIdProductParamsDto } from 'src/modules/products/application/dto/delete_product.dto';
+import { UpadateProductInfoDto } from 'src/modules/products/application/dto/update_product_info.dto';
 
 export interface IProductsOrchestrator {
   create(
@@ -13,6 +14,12 @@ export interface IProductsOrchestrator {
   ): Promise<Products>;
 
   delete(role: string, input: TypeAndIdProductParamsDto): Promise<void>;
+
+  update(
+    role: string,
+    params: TypeAndIdProductParamsDto,
+    input: UpadateProductInfoDto,
+  ): Promise<Products>;
 
   listMany(
     input: ListManyProductsDto,

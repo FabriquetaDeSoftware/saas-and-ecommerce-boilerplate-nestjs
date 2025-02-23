@@ -12,6 +12,9 @@ import { IListManySingleProductUseCase } from '../../domain/interfaces/use_cases
 import { IDeleteSubscriptionProductUseCase } from '../../domain/interfaces/use_cases/delete_subscription_product.use_case';
 import { TypeAndIdProductParamsDto } from '../dto/delete_product.dto';
 import { IDeleteSingleProductUseCase } from '../../domain/interfaces/use_cases/delete_single_product.use_case.interface';
+import { IUpdateSubscriptionProductInfoUseCase } from '../../domain/interfaces/use_cases/update_subscription_product_info.use_case.interface';
+import { UpadateProductInfoDto } from '../dto/update_product_info.dto';
+import { IUpdateSingleProductInfoUseCase } from '../../domain/interfaces/use_cases/update_single_product_info.use_case.interface';
 
 @Injectable()
 export class ProductsOrchestrator implements IProductsOrchestrator {
@@ -32,6 +35,12 @@ export class ProductsOrchestrator implements IProductsOrchestrator {
 
   @Inject('IDeleteSingleProductUseCase')
   private readonly _deleteSingleProductUseCase: IDeleteSingleProductUseCase;
+
+  @Inject('IUpdateSubscriptionProductInfoUseCase')
+  private readonly _updateSubscriptionProductInfoUseCase: IUpdateSubscriptionProductInfoUseCase;
+
+  @Inject('IUpdateSingleProductInfoUseCase')
+  private readonly _updateSingleProductInfoUseCase: IUpdateSingleProductInfoUseCase;
 
   public async create(
     role: string,
@@ -68,6 +77,30 @@ export class ProductsOrchestrator implements IProductsOrchestrator {
     }
 
     throw new BadRequestException(`Invalid product type: ${input.type}`);
+  }
+
+  public async update(
+    role: string,
+    params: TypeAndIdProductParamsDto,
+    input: UpadateProductInfoDto,
+  ): Promise<Products> {
+    if (params.type === TypeProductEnum.SINGLE) {
+      return await this._updateSingleProductInfoUseCase.execute(
+        role,
+        params.public_id,
+        input,
+      );
+    }
+
+    if (params.type === TypeProductEnum.SUBSCRIPTION) {
+      return await this._updateSubscriptionProductInfoUseCase.execute(
+        role,
+        params.public_id,
+        input,
+      );
+    }
+
+    throw new BadRequestException(`Invalid product type: ${params.type}`);
   }
 
   public async listMany(
