@@ -6,7 +6,7 @@ import { SubscriptionProductsRepository } from './infrastructure/repositories/su
 import { SharedModule } from 'src/shared/shared.module';
 import { DeleteSubscriptionProductUseCase } from './application/use_cases/delete_subscription_product.use_case';
 import { ListManySubscriptionProductUseCase } from './application/use_cases/list_many_subscription_products.use_case';
-import { UpdateProductInfoUseCase } from './application/use_cases/update_subscription_product_info.use_case';
+import { UpdateSubscriptionProductInfoUseCase } from './application/use_cases/update_subscription_product_info.use_case';
 import { ProductsOrchestrator } from './application/orchestrators/products.orchestrator';
 import { CreateSingleProductUseCase } from './application/use_cases/create_single_product.use_case';
 import { SingleProductsRepository } from './infrastructure/repositories/single_products.respository';
@@ -42,10 +42,10 @@ import { DeleteSingleProductUseCase } from './application/use_cases/delete_singl
       provide: 'IProductsOrchestrator',
       useExisting: ProductsOrchestrator,
     },
-    UpdateProductInfoUseCase,
+    UpdateSubscriptionProductInfoUseCase,
     {
-      provide: 'IUpdateProductInfoUseCase',
-      useExisting: UpdateProductInfoUseCase,
+      provide: 'IUpdateSubscriptionProductInfoUseCase',
+      useExisting: UpdateSubscriptionProductInfoUseCase,
     },
     ListManySubscriptionProductUseCase,
     {

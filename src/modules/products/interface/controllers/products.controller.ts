@@ -7,7 +7,6 @@ import {
   Inject,
   Param,
   ParseEnumPipe,
-  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -22,7 +21,7 @@ import { IJwtUserPayload } from 'src/shared/interfaces/jwt_user_payload.interfac
 import { IsPublicRoute } from 'src/common/decorators/is_public_route.decorator';
 import { ListManyProductsDto } from '../../application/dto/list_many_products.dto';
 import { ListManyProductsWithoutIdReturn } from '../../domain/types/list_many_products_return.type';
-import { IUpdateProductInfoUseCase } from '../../domain/interfaces/use_cases/update_subscription_product_info.use_case.interface';
+import { IUpdateSubscriptionProductInfoUseCase } from '../../domain/interfaces/use_cases/update_subscription_product_info.use_case.interface';
 import { UpadateProductInfoDto } from '../../application/dto/update_product_info.dto';
 import { TypeProductEnum } from '../../application/enum/type_product.enum';
 import { IProductsOrchestrator } from '../../domain/interfaces/orchestrators/products.orchestrator.interface';
@@ -34,8 +33,8 @@ export class ProductsController {
   @Inject('IProductsOrchestrator')
   private readonly _productsOrchestrator: IProductsOrchestrator;
 
-  @Inject('IUpdateProductInfoUseCase')
-  private readonly _updateProductInfoUseCase: IUpdateProductInfoUseCase;
+  @Inject('IUpdateSubscriptionProductInfoUseCase')
+  private readonly _updateSubscriptionProductInfoUseCase: IUpdateSubscriptionProductInfoUseCase;
 
   @ApiBearerAuth()
   @Roles(RolesEnum.ADMIN)
@@ -60,7 +59,8 @@ export class ProductsController {
   public async updateProduct(
     @Body() body: UpadateProductInfoDto,
   ): Promise<Products> {
-    const response = await this._updateProductInfoUseCase.execute(body);
+    const response =
+      await this._updateSubscriptionProductInfoUseCase.execute(body);
 
     return response;
   }

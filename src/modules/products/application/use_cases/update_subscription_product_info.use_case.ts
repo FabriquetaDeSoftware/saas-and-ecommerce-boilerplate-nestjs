@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { IUpdateProductInfoUseCase } from '../../domain/interfaces/use_cases/update_subscription_product_info.use_case.interface';
+import { IUpdateSubscriptionProductInfoUseCase } from '../../domain/interfaces/use_cases/update_subscription_product_info.use_case.interface';
 import { UpadateProductInfoDto } from '../dto/update_product_info.dto';
 import { Products } from '../../domain/entities/products.entity';
 
 @Injectable()
-export class UpdateProductInfoUseCase implements IUpdateProductInfoUseCase {
+export class UpdateSubscriptionProductInfoUseCase
+  implements IUpdateSubscriptionProductInfoUseCase
+{
   public async execute(input: UpadateProductInfoDto): Promise<Products> {
     return;
   }
