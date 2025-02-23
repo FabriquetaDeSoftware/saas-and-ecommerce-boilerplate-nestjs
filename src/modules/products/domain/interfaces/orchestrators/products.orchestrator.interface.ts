@@ -3,7 +3,7 @@ import { TypeProductEnum } from 'src/modules/products/application/enum/type_prod
 import { Products } from '../../entities/products.entity';
 import { ListManyProductsWithoutIdReturn } from '../../types/list_many_products_return.type';
 import { ListManyProductsDto } from 'src/modules/products/application/dto/list_many_products.dto';
-import { DeleteProductDto } from 'src/modules/products/application/dto/delete_product.dto';
+import { TypeAndIdProductParamsDto } from 'src/modules/products/application/dto/delete_product.dto';
 
 export interface IProductsOrchestrator {
   create(
@@ -12,7 +12,7 @@ export interface IProductsOrchestrator {
     type: TypeProductEnum,
   ): Promise<Products>;
 
-  delete(role: string, input: DeleteProductDto): Promise<void>;
+  delete(role: string, input: TypeAndIdProductParamsDto): Promise<void>;
 
   listMany(
     input: ListManyProductsDto,

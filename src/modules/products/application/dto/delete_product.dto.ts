@@ -2,7 +2,7 @@ import { IsEnum, IsNotEmpty, IsUUID } from 'class-validator';
 import { TypeProductEnum } from '../enum/type_product.enum';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class DeleteProductDto {
+export class TypeAndIdProductParamsDto {
   @ApiProperty({
     description: 'Type of product',
     example: TypeProductEnum.SUBSCRIPTION,

@@ -10,7 +10,7 @@ import { ListManyProductsDto } from '../dto/list_many_products.dto';
 import { IListManySubscriptionProductUseCase } from '../../domain/interfaces/use_cases/list_many_subscription_products.use_case.interface';
 import { IListManySingleProductUseCase } from '../../domain/interfaces/use_cases/list_many_single_products.use_case.interface';
 import { IDeleteSubscriptionProductUseCase } from '../../domain/interfaces/use_cases/delete_subscription_product.use_case';
-import { DeleteProductDto } from '../dto/delete_product.dto';
+import { TypeAndIdProductParamsDto } from '../dto/delete_product.dto';
 import { IDeleteSingleProductUseCase } from '../../domain/interfaces/use_cases/delete_single_product.use_case.interface';
 
 @Injectable()
@@ -49,7 +49,10 @@ export class ProductsOrchestrator implements IProductsOrchestrator {
     throw new BadRequestException(`Invalid product type: ${type}`);
   }
 
-  public async delete(role: string, input: DeleteProductDto): Promise<void> {
+  public async delete(
+    role: string,
+    input: TypeAndIdProductParamsDto,
+  ): Promise<void> {
     if (input.type === TypeProductEnum.SINGLE) {
       return await this._deleteSingleProductUseCase.execute(
         role,

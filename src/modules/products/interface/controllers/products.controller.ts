@@ -25,7 +25,7 @@ import { IUpdateSubscriptionProductInfoUseCase } from '../../domain/interfaces/u
 import { UpadateProductInfoDto } from '../../application/dto/update_product_info.dto';
 import { TypeProductEnum } from '../../application/enum/type_product.enum';
 import { IProductsOrchestrator } from '../../domain/interfaces/orchestrators/products.orchestrator.interface';
-import { DeleteProductDto } from '../../application/dto/delete_product.dto';
+import { TypeAndIdProductParamsDto } from '../../application/dto/delete_product.dto';
 
 @ApiTags('products')
 @Controller('products')
@@ -70,7 +70,7 @@ export class ProductsController {
   @Delete('delete/:type/:public_id')
   @HttpCode(204)
   public async DeleteProductUseCase(
-    @Param() params: DeleteProductDto,
+    @Param() params: TypeAndIdProductParamsDto,
     @CurrentUser() user: IJwtUserPayload,
   ): Promise<void> {
     await this._productsOrchestrator.delete(user.role, params);
