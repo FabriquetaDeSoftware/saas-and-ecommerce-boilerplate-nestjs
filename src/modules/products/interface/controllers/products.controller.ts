@@ -24,7 +24,10 @@ import { ListManyProductsWithoutIdReturn } from '../../domain/types/list_many_pr
 import { UpadateProductInfoDto } from '../../application/dto/update_product_info.dto';
 import { TypeProductEnum } from '../../application/enum/type_product.enum';
 import { IProductsOrchestrator } from '../../domain/interfaces/orchestrators/products.orchestrator.interface';
-import { TypeAndIdProductParamsDto } from '../../application/dto/delete_product.dto';
+import {
+  TypeAndIdProductParamsDto,
+  TypeProductParamsDto,
+} from '../../application/dto/params_to_product_routes.dto';
 
 @ApiTags('products')
 @Controller('products')
@@ -37,13 +40,13 @@ export class ProductsController {
   @Post('create/:type')
   public async createProduct(
     @Body() input: CreateProductDto,
-    @Param('type', new ParseEnumPipe(TypeProductEnum)) type: TypeProductEnum,
+    @Param() type: TypeProductParamsDto,
     @CurrentUser() user: IJwtUserPayload,
   ): Promise<Products> {
     const response = await this._productsOrchestrator.create(
       user.role,
       input,
-      type,
+      type.type,
     );
 
     return response;
@@ -82,10 +85,13 @@ export class ProductsController {
   @IsPublicRoute()
   @Get('list-many/:type')
   public async findMany(
-    @Param('type', new ParseEnumPipe(TypeProductEnum)) type: TypeProductEnum,
+    @Param() type: TypeProductParamsDto,
     @Query() query: ListManyProductsDto,
   ): Promise<ListManyProductsWithoutIdReturn> {
-    const response = await this._productsOrchestrator.listMany(query, type);
+    const response = await this._productsOrchestrator.listMany(
+      query,
+      type.type,
+    );
 
     return response;
   }

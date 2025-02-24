@@ -38,7 +38,12 @@ export class CreateSubscriptionProductUseCase
 
     this.isAllowedAction(roleDecoded, input);
 
-    const result = await this._subscriptionProductsRepository.create(input);
+    const priceToCents = input.price * 100;
+
+    const result = await this._subscriptionProductsRepository.create({
+      ...input,
+      price: priceToCents,
+    });
 
     return { ...result, id: undefined };
   }

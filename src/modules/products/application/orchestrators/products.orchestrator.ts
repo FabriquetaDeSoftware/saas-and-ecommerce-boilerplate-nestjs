@@ -10,7 +10,7 @@ import { ListManyProductsDto } from '../dto/list_many_products.dto';
 import { IListManySubscriptionProductUseCase } from '../../domain/interfaces/use_cases/list_many_subscription_products.use_case.interface';
 import { IListManySingleProductUseCase } from '../../domain/interfaces/use_cases/list_many_single_products.use_case.interface';
 import { IDeleteSubscriptionProductUseCase } from '../../domain/interfaces/use_cases/delete_subscription_product.use_case';
-import { TypeAndIdProductParamsDto } from '../dto/delete_product.dto';
+import { TypeAndIdProductParamsDto } from '../dto/params_to_product_routes.dto';
 import { IDeleteSingleProductUseCase } from '../../domain/interfaces/use_cases/delete_single_product.use_case.interface';
 import { IUpdateSubscriptionProductInfoUseCase } from '../../domain/interfaces/use_cases/update_subscription_product_info.use_case.interface';
 import { UpadateProductInfoDto } from '../dto/update_product_info.dto';
