@@ -60,4 +60,25 @@ export class SubscriptionProductsRepository
 
     return result;
   }
+
+  public async findOneBySlug(slug: string): Promise<Products> {
+    const result = await this._databaseAdapter.findOne<Products>(this._model, {
+      slug,
+    });
+
+    return result;
+  }
+
+  public async update(
+    public_id: string,
+    data: CreateProductDto,
+  ): Promise<Products> {
+    const result = await this._databaseAdapter.update<Products>(
+      this._model,
+      { public_id },
+      { ...data },
+    );
+
+    return result;
+  }
 }

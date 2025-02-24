@@ -31,7 +31,9 @@ export class UpdateSingleProductInfoUseCase
     public_id: string,
     input: UpadateProductInfoDto,
   ): Promise<Products> {
-    return this.intermediary(role, public_id, input);
+    const response = await this.intermediary(role, public_id, input);
+
+    return { ...response, id: undefined };
   }
 
   private async intermediary(
@@ -45,12 +47,15 @@ export class UpdateSingleProductInfoUseCase
 
     this.isAllowedAction(roleDecoded, public_id);
 
-    const result = await this._singleProductsRepository.update(
-      public_id,
-      input,
-    );
+    const priceToCents =
+      input.price !== undefined ? input.price * 100 : undefined;
 
-    return undefined;
+    const result = await this._singleProductsRepository.update(public_id, {
+      ...input,
+      ...(priceToCents !== undefined ? { price: priceToCents } : {}),
+    });
+
+    return result;
   }
 
   private async verifyIfProductExist(publicId: string): Promise<Products> {

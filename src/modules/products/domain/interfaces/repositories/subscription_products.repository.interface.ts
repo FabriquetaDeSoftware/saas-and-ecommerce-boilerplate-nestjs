@@ -12,4 +12,6 @@ export interface ISubscriptionProductsRepository {
     take?: number,
   ): Promise<ListManyProductsReturn>;
   findOneByPublicId(publicId: string): Promise<Products>;
+  findOneBySlug(slug: string): Promise<Products>;
+  update(publicId: string, input: CreateProductDto): Promise<Products>;
 }
