@@ -14,7 +14,7 @@ export class UpadateProductInfoDto {
   })
   @IsOptional()
   @IsString()
-  name: string;
+  name?: string;
 
   @ApiProperty({
     description: 'New description of the product',
@@ -22,7 +22,7 @@ export class UpadateProductInfoDto {
   })
   @IsOptional()
   @IsString()
-  description: string;
+  description?: string;
 
   @ApiProperty({
     description: 'New price of the product',
@@ -31,7 +31,7 @@ export class UpadateProductInfoDto {
   @IsOptional()
   @IsNumber()
   @IsPositive()
-  price: number;
+  price?: number;
 
   @ApiProperty({
     description: 'New slug of the product',
@@ -39,7 +39,7 @@ export class UpadateProductInfoDto {
   })
   @IsOptional()
   @IsString()
-  slug: string;
+  slug?: string;
 
   @ApiProperty({
     description: 'New url image of the product',
@@ -48,5 +48,5 @@ export class UpadateProductInfoDto {
   })
   @IsOptional()
   @IsUrl()
-  image: string;
+  image?: string;
 }
