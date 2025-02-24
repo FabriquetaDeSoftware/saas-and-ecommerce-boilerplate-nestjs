@@ -17,7 +17,7 @@ export class DeleteSubscriptionProductUseCase
   implements IDeleteSubscriptionProductUseCase
 {
   @Inject('ISubscriptionProductsRepository')
-  private readonly _productsRepository: ISubscriptionProductsRepository;
+  private readonly _subscriptionProductsRepository: ISubscriptionProductsRepository;
 
   @Inject('ICryptoUtil')
   private readonly _cryptoUtil: ICryptoUtil;
@@ -38,7 +38,7 @@ export class DeleteSubscriptionProductUseCase
 
     this.isAllowedAction(roleDecoded, publicId);
 
-    const result = await this._productsRepository.delete(publicId);
+    const result = await this._subscriptionProductsRepository.delete(publicId);
 
     return result;
   }
@@ -57,7 +57,8 @@ export class DeleteSubscriptionProductUseCase
   }
 
   private async verifyIfProductExist(publicId: string): Promise<Products> {
-    const result = await this._productsRepository.findOneByPublicId(publicId);
+    const result =
+      await this._subscriptionProductsRepository.findOneByPublicId(publicId);
 
     if (!result) {
       throw new NotFoundException('Product not found');

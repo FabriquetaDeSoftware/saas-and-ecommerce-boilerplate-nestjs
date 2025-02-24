@@ -15,7 +15,7 @@ import { IDeleteSingleProductUseCase } from '../../domain/interfaces/use_cases/d
 @Injectable()
 export class DeleteSingleProductUseCase implements IDeleteSingleProductUseCase {
   @Inject('ISingleProductsRepository')
-  private readonly _productsRepository: ISingleProductsRepository;
+  private readonly _singleProductsRepository: ISingleProductsRepository;
 
   @Inject('ICryptoUtil')
   private readonly _cryptoUtil: ICryptoUtil;
@@ -36,7 +36,7 @@ export class DeleteSingleProductUseCase implements IDeleteSingleProductUseCase {
 
     this.isAllowedAction(roleDecoded, publicId);
 
-    const result = await this._productsRepository.delete(publicId);
+    const result = await this._singleProductsRepository.delete(publicId);
 
     return result;
   }
@@ -55,7 +55,8 @@ export class DeleteSingleProductUseCase implements IDeleteSingleProductUseCase {
   }
 
   private async verifyIfProductExist(publicId: string): Promise<Products> {
-    const result = await this._productsRepository.findOneByPublicId(publicId);
+    const result =
+      await this._singleProductsRepository.findOneByPublicId(publicId);
 
     if (!result) {
       throw new NotFoundException('Product not found');

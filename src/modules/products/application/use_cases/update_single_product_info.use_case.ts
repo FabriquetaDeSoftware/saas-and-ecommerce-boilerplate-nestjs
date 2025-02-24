@@ -18,7 +18,7 @@ export class UpdateSingleProductInfoUseCase
   implements IUpdateSingleProductInfoUseCase
 {
   @Inject('ISingleProductsRepository')
-  private readonly _productsRepository: ISingleProductsRepository;
+  private readonly _singleProductsRepository: ISingleProductsRepository;
 
   @Inject('ICryptoUtil')
   private readonly _cryptoUtil: ICryptoUtil;
@@ -45,14 +45,17 @@ export class UpdateSingleProductInfoUseCase
 
     this.isAllowedAction(roleDecoded, public_id);
 
-    //TODO: Implement update method
-    //const result = await this._productsRepository.update(public_id, input);
+    const result = await this._singleProductsRepository.update(
+      public_id,
+      input,
+    );
 
     return undefined;
   }
 
   private async verifyIfProductExist(publicId: string): Promise<Products> {
-    const result = await this._productsRepository.findOneByPublicId(publicId);
+    const result =
+      await this._singleProductsRepository.findOneByPublicId(publicId);
 
     if (!result) {
       throw new NotFoundException('Product not found');
