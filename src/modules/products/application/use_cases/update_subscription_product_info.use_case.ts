@@ -7,7 +7,11 @@ import { Products } from '../../domain/entities/products.entity';
 export class UpdateSubscriptionProductInfoUseCase
   implements IUpdateSubscriptionProductInfoUseCase
 {
-  public async execute(input: UpadateProductInfoDto): Promise<Products> {
+  public async execute(
+    role: string,
+    public_id: string,
+    input: UpadateProductInfoDto,
+  ): Promise<Products> {
     return;
   }
 }
