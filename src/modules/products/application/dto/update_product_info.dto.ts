@@ -26,7 +26,7 @@ export class UpadateProductInfoDto {
 
   @ApiProperty({
     description: 'New price of the product',
-    example: 54321,
+    example: 543.21,
   })
   @IsOptional()
   @IsNumber()
