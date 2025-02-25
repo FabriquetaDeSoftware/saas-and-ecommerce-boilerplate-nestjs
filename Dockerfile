@@ -1,5 +1,4 @@
-FROM node:20.18-bullseye-slim
-
+FROM node:22.14-bullseye-slim
 WORKDIR /home/api/nestjs/auth-boilerplate
 
 COPY . .

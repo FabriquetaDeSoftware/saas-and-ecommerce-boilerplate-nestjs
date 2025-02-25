@@ -9,7 +9,7 @@ export class StripeGateway implements IBillingGateway {
 
   constructor() {
     this._stripe = new Stripe(gatewayConstants.stripe_secret_key, {
-      apiVersion: '2025-01-27.acacia',
+      apiVersion: '2025-02-24.acacia',
     });
   }
 
