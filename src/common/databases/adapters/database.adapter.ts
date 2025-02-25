@@ -2,6 +2,8 @@ import { Global, Inject, Injectable } from '@nestjs/common';
 import { IDatabaseAdapter } from '../interfaces/database.adapter.interface';
 import { PrismaService } from '../modules/prisma/prisma.service';
 
+//TODO: add omit parameter to the methods
+
 @Global()
 @Injectable()
 export class DatabaseAdapter implements IDatabaseAdapter {
