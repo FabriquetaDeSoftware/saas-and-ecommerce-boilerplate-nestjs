@@ -1,6 +1,7 @@
 import { CreateProductDto } from 'src/modules/products/application/dto/create_product.dto';
 import { Products } from '../../entities/products.entity';
 import { ListManyProductsReturn } from '../../types/list_many_products_return.type';
+import { UpdateProductInfoDto } from 'src/modules/products/application/dto/update_product_info.dto';
 
 export interface ISubscriptionProductsRepository {
   create(input: CreateProductDto): Promise<Products>;
@@ -13,5 +14,5 @@ export interface ISubscriptionProductsRepository {
   ): Promise<ListManyProductsReturn>;
   findOneByPublicId(publicId: string): Promise<Products>;
   findOneBySlug(slug: string): Promise<Products>;
-  update(publicId: string, input: CreateProductDto): Promise<Products>;
+  update(publicId: string, input: UpdateProductInfoDto): Promise<Products>;
 }

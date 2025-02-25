@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { IUpdateSubscriptionProductInfoUseCase } from '../../domain/interfaces/use_cases/update_subscription_product_info.use_case.interface';
-import { UpadateProductInfoDto } from '../dto/update_product_info.dto';
+import { UpdateProductInfoDto } from '../dto/update_product_info.dto';
 import { Products } from '../../domain/entities/products.entity';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { Action } from 'src/shared/enum/actions.enum';
@@ -29,7 +29,7 @@ export class UpdateSubscriptionProductInfoUseCase
   public async execute(
     role: string,
     public_id: string,
-    input: UpadateProductInfoDto,
+    input: UpdateProductInfoDto,
   ): Promise<Products> {
     const response = await this.intermediary(role, public_id, input);
 
@@ -39,7 +39,7 @@ export class UpdateSubscriptionProductInfoUseCase
   private async intermediary(
     role: string,
     public_id: string,
-    input: UpadateProductInfoDto,
+    input: UpdateProductInfoDto,
   ): Promise<Products> {
     await this.verifyIfProductExist(public_id);
 

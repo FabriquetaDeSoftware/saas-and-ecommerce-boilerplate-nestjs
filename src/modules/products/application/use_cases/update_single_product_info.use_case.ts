@@ -4,7 +4,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UpadateProductInfoDto } from '../dto/update_product_info.dto';
+import { UpdateProductInfoDto } from '../dto/update_product_info.dto';
 import { Products } from '../../domain/entities/products.entity';
 import { IUpdateSingleProductInfoUseCase } from '../../domain/interfaces/use_cases/update_single_product_info.use_case.interface';
 import { IPermissionManagerUtil } from 'src/shared/utils/interfaces/permission_manager.util.interface';
@@ -29,7 +29,7 @@ export class UpdateSingleProductInfoUseCase
   public async execute(
     role: string,
     public_id: string,
-    input: UpadateProductInfoDto,
+    input: UpdateProductInfoDto,
   ): Promise<Products> {
     const response = await this.intermediary(role, public_id, input);
 
@@ -39,7 +39,7 @@ export class UpdateSingleProductInfoUseCase
   private async intermediary(
     role: string,
     public_id: string,
-    input: UpadateProductInfoDto,
+    input: UpdateProductInfoDto,
   ): Promise<Products> {
     await this.verifyIfProductExist(public_id);
 

@@ -4,6 +4,7 @@ import { IDatabaseAdapter } from 'src/common/databases/interfaces/database.adapt
 import { CreateProductDto } from '../../application/dto/create_product.dto';
 import { Products } from '../../domain/entities/products.entity';
 import { ListManyProductsReturn } from '../../domain/types/list_many_products_return.type';
+import { UpdateProductInfoDto } from '../../application/dto/update_product_info.dto';
 
 @Injectable()
 export class SingleProductsRepository implements ISingleProductsRepository {
@@ -69,7 +70,7 @@ export class SingleProductsRepository implements ISingleProductsRepository {
 
   public async update(
     public_id: string,
-    data: CreateProductDto,
+    data: UpdateProductInfoDto,
   ): Promise<Products> {
     const result = await this._databaseAdapter.update<Products>(
       this._model,

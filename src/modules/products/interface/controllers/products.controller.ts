@@ -21,8 +21,7 @@ import { IJwtUserPayload } from 'src/shared/interfaces/jwt_user_payload.interfac
 import { IsPublicRoute } from 'src/common/decorators/is_public_route.decorator';
 import { ListManyProductsDto } from '../../application/dto/list_many_products.dto';
 import { ListManyProductsWithoutIdReturn } from '../../domain/types/list_many_products_return.type';
-import { UpadateProductInfoDto } from '../../application/dto/update_product_info.dto';
-import { TypeProductEnum } from '../../application/enum/type_product.enum';
+import { UpdateProductInfoDto } from '../../application/dto/update_product_info.dto';
 import { IProductsOrchestrator } from '../../domain/interfaces/orchestrators/products.orchestrator.interface';
 import {
   TypeAndIdProductParamsDto,
@@ -57,7 +56,7 @@ export class ProductsController {
   @Patch('update/:type/:public_id')
   public async updateProduct(
     @Param() params: TypeAndIdProductParamsDto,
-    @Body() body: UpadateProductInfoDto,
+    @Body() body: UpdateProductInfoDto,
     @CurrentUser() user: IJwtUserPayload,
   ): Promise<Products> {
     const response = await this._productsOrchestrator.update(

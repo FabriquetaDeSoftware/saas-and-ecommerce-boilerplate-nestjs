@@ -13,7 +13,7 @@ import { IDeleteSubscriptionProductUseCase } from '../../domain/interfaces/use_c
 import { TypeAndIdProductParamsDto } from '../dto/params_to_product_routes.dto';
 import { IDeleteSingleProductUseCase } from '../../domain/interfaces/use_cases/delete_single_product.use_case.interface';
 import { IUpdateSubscriptionProductInfoUseCase } from '../../domain/interfaces/use_cases/update_subscription_product_info.use_case.interface';
-import { UpadateProductInfoDto } from '../dto/update_product_info.dto';
+import { UpdateProductInfoDto } from '../dto/update_product_info.dto';
 import { IUpdateSingleProductInfoUseCase } from '../../domain/interfaces/use_cases/update_single_product_info.use_case.interface';
 
 @Injectable()
@@ -82,7 +82,7 @@ export class ProductsOrchestrator implements IProductsOrchestrator {
   public async update(
     role: string,
     params: TypeAndIdProductParamsDto,
-    input: UpadateProductInfoDto,
+    input: UpdateProductInfoDto,
   ): Promise<Products> {
     if (params.type === TypeProductEnum.SINGLE) {
       return await this._updateSingleProductInfoUseCase.execute(

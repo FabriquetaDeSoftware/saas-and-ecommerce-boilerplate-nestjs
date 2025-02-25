@@ -7,7 +7,7 @@ import {
   IsUrl,
 } from 'class-validator';
 
-export class UpadateProductInfoDto {
+export class UpdateProductInfoDto {
   @ApiProperty({
     description: 'New name of the product',
     example: 'new product name',
