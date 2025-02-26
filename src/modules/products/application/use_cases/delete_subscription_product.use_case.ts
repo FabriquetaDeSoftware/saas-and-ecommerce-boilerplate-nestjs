@@ -56,7 +56,9 @@ export class DeleteSubscriptionProductUseCase
     }
   }
 
-  private async verifyIfProductExist(publicId: string): Promise<Products> {
+  private async verifyIfProductExist(
+    publicId: string,
+  ): Promise<Partial<Products>> {
     const result =
       await this._subscriptionProductsRepository.findOneByPublicId(publicId);
 

@@ -11,7 +11,7 @@ export interface IProductsOrchestrator {
     role: string,
     input: CreateProductDto,
     type: TypeProductEnum,
-  ): Promise<Products>;
+  ): Promise<Partial<Products>>;
 
   delete(role: string, input: TypeAndIdProductParamsDto): Promise<void>;
 
@@ -19,7 +19,7 @@ export interface IProductsOrchestrator {
     role: string,
     params: TypeAndIdProductParamsDto,
     input: UpdateProductInfoDto,
-  ): Promise<Products>;
+  ): Promise<Partial<Products>>;
 
   listMany(
     input: ListManyProductsDto,

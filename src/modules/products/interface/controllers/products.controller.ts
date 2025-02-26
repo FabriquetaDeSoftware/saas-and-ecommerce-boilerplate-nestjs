@@ -6,7 +6,6 @@ import {
   HttpCode,
   Inject,
   Param,
-  ParseEnumPipe,
   Patch,
   Post,
   Query,
@@ -41,7 +40,7 @@ export class ProductsController {
     @Body() input: CreateProductDto,
     @Param() type: TypeProductParamsDto,
     @CurrentUser() user: IJwtUserPayload,
-  ): Promise<Products> {
+  ): Promise<Partial<Products>> {
     const response = await this._productsOrchestrator.create(
       user.role,
       input,
@@ -58,7 +57,7 @@ export class ProductsController {
     @Param() params: TypeAndIdProductParamsDto,
     @Body() body: UpdateProductInfoDto,
     @CurrentUser() user: IJwtUserPayload,
-  ): Promise<Products> {
+  ): Promise<Partial<Products>> {
     const response = await this._productsOrchestrator.update(
       user.role,
       params,

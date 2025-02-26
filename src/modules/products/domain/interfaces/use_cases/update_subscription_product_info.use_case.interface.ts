@@ -6,5 +6,5 @@ export interface IUpdateSubscriptionProductInfoUseCase {
     role: string,
     public_id: string,
     input: UpdateProductInfoDto,
-  ): Promise<Products>;
+  ): Promise<Partial<Products>>;
 }

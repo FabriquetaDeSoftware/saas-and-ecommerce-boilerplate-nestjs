@@ -30,17 +30,17 @@ export class UpdateSubscriptionProductInfoUseCase
     role: string,
     public_id: string,
     input: UpdateProductInfoDto,
-  ): Promise<Products> {
+  ): Promise<Partial<Products>> {
     const response = await this.intermediary(role, public_id, input);
 
-    return { ...response, id: undefined };
+    return response;
   }
 
   private async intermediary(
     role: string,
     public_id: string,
     input: UpdateProductInfoDto,
-  ): Promise<Products> {
+  ): Promise<Partial<Products>> {
     await this.verifyIfProductExist(public_id);
 
     const roleDecoded = await this.decryptPayload(role);
@@ -56,12 +56,15 @@ export class UpdateSubscriptionProductInfoUseCase
         ...input,
         ...(priceToCents !== undefined ? { price: priceToCents } : {}),
       },
+      { id: true },
     );
 
     return result;
   }
 
-  private async verifyIfProductExist(publicId: string): Promise<Products> {
+  private async verifyIfProductExist(
+    publicId: string,
+  ): Promise<Partial<Products>> {
     const result =
       await this._subscriptionProductsRepository.findOneByPublicId(publicId);
 

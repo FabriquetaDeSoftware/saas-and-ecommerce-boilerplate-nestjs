@@ -22,7 +22,7 @@ export class CreateSingleProductUseCase implements ICreateSingleProductUseCase {
   public async execute(
     role: string,
     input: CreateProductDto,
-  ): Promise<Products> {
+  ): Promise<Partial<Products>> {
     const result = await this.intermediry(role, input);
 
     return result;
@@ -31,19 +31,22 @@ export class CreateSingleProductUseCase implements ICreateSingleProductUseCase {
   private async intermediry(
     role: string,
     input: CreateProductDto,
-  ): Promise<Products> {
+  ): Promise<Partial<Products>> {
     const roleDecoded = await this.decryptPayload(role);
 
     this.isAllowedAction(roleDecoded, input);
 
     const priceToCents = input.price * 100;
 
-    const result = await this._singleProductsRepository.create({
-      ...input,
-      price: priceToCents,
-    });
+    const result = await this._singleProductsRepository.create(
+      {
+        ...input,
+        price: priceToCents,
+      },
+      { id: true },
+    );
 
-    return { ...result, id: undefined };
+    return result;
   }
 
   private isAllowedAction(role: string, input: CreateProductDto): void {

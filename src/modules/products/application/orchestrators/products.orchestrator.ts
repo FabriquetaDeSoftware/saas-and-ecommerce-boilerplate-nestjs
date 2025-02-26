@@ -46,7 +46,7 @@ export class ProductsOrchestrator implements IProductsOrchestrator {
     role: string,
     input: CreateProductDto,
     type: TypeProductEnum,
-  ): Promise<Products> {
+  ): Promise<Partial<Products>> {
     if (type === TypeProductEnum.SINGLE) {
       return await this._createSingleProductUseCase.execute(role, input);
     }
@@ -83,7 +83,7 @@ export class ProductsOrchestrator implements IProductsOrchestrator {
     role: string,
     params: TypeAndIdProductParamsDto,
     input: UpdateProductInfoDto,
-  ): Promise<Products> {
+  ): Promise<Partial<Products>> {
     if (params.type === TypeProductEnum.SINGLE) {
       return await this._updateSingleProductInfoUseCase.execute(
         role,
