@@ -33,10 +33,7 @@ export class ValidateUserService implements IValidateUserService {
   private async findUserByEmailAndValidate(
     email: string,
   ): Promise<Partial<Auth>> {
-    const findUserByEmail = await this._findUserByEmailHelper.execute(email, {
-      password: true,
-      id: true,
-    });
+    const findUserByEmail = await this._findUserByEmailHelper.execute(email);
 
     if (!findUserByEmail) {
       throw new UnauthorizedException(
@@ -53,6 +50,7 @@ export class ValidateUserService implements IValidateUserService {
   ): Promise<boolean> {
     const isMatch = await this._hashUtil.compareHash(password, encrypted);
 
+    console.log('aqqquiii');
     if (!isMatch) {
       throw new UnauthorizedException(
         'Invalid credentials or account not verified',
