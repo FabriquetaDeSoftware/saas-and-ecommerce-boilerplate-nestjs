@@ -8,8 +8,13 @@ export class FindUserByEmailHelper implements IFindUserByEmailHelper {
   @Inject('IAuthRepository')
   private readonly _authRepository: IAuthRepository;
 
-  public async execute(input: string): Promise<Auth> {
-    const findUserByEmail = await this._authRepository.findOneByEmail(input);
+  public async execute(
+    input: string,
+    omitFields?: Partial<Record<keyof Auth, true>>,
+  ): Promise<Partial<Auth>> {
+    const findUserByEmail = await this._authRepository.findOneByEmail(input, {
+      ...omitFields,
+    });
 
     return findUserByEmail;
   }

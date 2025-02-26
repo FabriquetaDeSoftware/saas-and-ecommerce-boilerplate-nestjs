@@ -112,7 +112,7 @@ export class VerifyAccountUseCase implements IVerifyAccountUseCase {
   private async updateAccountIsVerify(
     email: string,
     is_verified_account: boolean,
-  ): Promise<Auth> {
+  ): Promise<Partial<Auth>> {
     const result = await this._authRepository.updateInfoByEmailAuth(email, {
       is_verified_account,
     });
@@ -130,7 +130,7 @@ export class VerifyAccountUseCase implements IVerifyAccountUseCase {
     return isMatch;
   }
 
-  private async findUserByEmail(email: string): Promise<Auth> {
+  private async findUserByEmail(email: string): Promise<Partial<Auth>> {
     const user = await this._findUserByEmailHelper.execute(email);
 
     if (!user) {
@@ -142,7 +142,7 @@ export class VerifyAccountUseCase implements IVerifyAccountUseCase {
 
   private async verifyExpiresDateOfCode(
     user_id: number,
-  ): Promise<VerificationCodes> {
+  ): Promise<Partial<VerificationCodes>> {
     const verificationCode =
       await this._verificationCodesRepository.findVerificationCodeByAuthorId(
         user_id,

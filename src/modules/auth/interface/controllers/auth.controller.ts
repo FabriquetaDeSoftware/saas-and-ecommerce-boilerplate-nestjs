@@ -58,7 +58,9 @@ export class AuthController {
 
   @IsPublicRoute()
   @Post('sign-up-default')
-  public async signUpDefault(@Body() input: SignUpDefaultDto): Promise<Auth> {
+  public async signUpDefault(
+    @Body() input: SignUpDefaultDto,
+  ): Promise<Partial<Auth>> {
     const response = await this._signUpDefaultUseCase.execute(input);
 
     return response;
@@ -68,7 +70,7 @@ export class AuthController {
   @Post('sign-up-magic-link')
   public async signUpMagicLink(
     @Body() input: SignUpMagicLinkDto,
-  ): Promise<Auth> {
+  ): Promise<Partial<Auth>> {
     const response = await this._signUpMagicLinkUseCase.execute(input);
 
     return response;

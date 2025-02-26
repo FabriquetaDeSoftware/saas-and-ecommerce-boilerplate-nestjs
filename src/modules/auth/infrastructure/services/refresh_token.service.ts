@@ -69,7 +69,7 @@ export class RefreshTokenService implements IRefreshTokenService {
     return payload;
   }
 
-  private async checkEmailExistsOrError(email: string): Promise<Auth> {
+  private async checkEmailExistsOrError(email: string): Promise<Partial<Auth>> {
     const findUserByEmail = await this._findUserByEmailHelper.execute(email);
 
     if (!findUserByEmail) {

@@ -31,7 +31,7 @@ export class SignInDefaultUseCase implements ISignInDefaultUseCase {
     return { access_token, refresh_token };
   }
 
-  private async checkEmailExistsOrError(email: string): Promise<Auth> {
+  private async checkEmailExistsOrError(email: string): Promise<Partial<Auth>> {
     const findUserByEmail = await this._findUserByEmailHelper.execute(email);
 
     if (!findUserByEmail) {

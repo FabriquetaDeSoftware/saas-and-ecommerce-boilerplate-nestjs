@@ -17,24 +17,36 @@ export class AuthRepository implements IAuthRepository {
     signUpDefaultDto: SignUpDefaultDto,
     code: string,
     expires_at: Date,
-  ): Promise<Auth> {
-    const result = await this._databaseAdapter.create<Auth>(this._model, {
-      ...signUpDefaultDto,
-      verification_code: {
-        create: {
-          code,
-          expires_at,
+    omitFields?: Partial<Record<keyof Auth, true>>,
+  ): Promise<Partial<Auth>> {
+    const result = await this._databaseAdapter.create<Auth>(
+      this._model,
+      {
+        ...signUpDefaultDto,
+        verification_code: {
+          create: {
+            code,
+            expires_at,
+          },
         },
       },
-    });
+      { ...omitFields },
+    );
 
     return { ...result, role: result.role as RolesEnum };
   }
 
-  public async findOneByEmail(email: string): Promise<Auth> {
-    const result = await this._databaseAdapter.findOne<Auth>(this._model, {
-      email,
-    });
+  public async findOneByEmail(
+    email: string,
+    omitFields?: Partial<Record<keyof Auth, true>>,
+  ): Promise<Partial<Auth>> {
+    const result = await this._databaseAdapter.findOne<Auth>(
+      this._model,
+      {
+        email,
+      },
+      { ...omitFields },
+    );
 
     if (!result) {
       return null;
@@ -46,11 +58,13 @@ export class AuthRepository implements IAuthRepository {
   public async updateInfoByIdAuth(
     id: number,
     updateInfoDto: Partial<UpdateInfoDto>,
-  ): Promise<Auth> {
+    omitFields?: Partial<Record<keyof Auth, true>>,
+  ): Promise<Partial<Auth>> {
     const result = await this._databaseAdapter.update<Auth>(
       this._model,
       { id },
       { ...updateInfoDto },
+      { ...omitFields },
     );
 
     return { ...result, role: result.role as RolesEnum };
@@ -59,11 +73,13 @@ export class AuthRepository implements IAuthRepository {
   public async updateInfoByPublicIdAuth(
     public_id: string,
     updateInfoDto: Partial<UpdateInfoDto>,
-  ): Promise<Auth> {
+    omitFields?: Partial<Record<keyof Auth, true>>,
+  ): Promise<Partial<Auth>> {
     const result = await this._databaseAdapter.update<Auth>(
       this._model,
       { public_id },
       { ...updateInfoDto },
+      { ...omitFields },
     );
 
     return { ...result, role: result.role as RolesEnum };
@@ -72,11 +88,13 @@ export class AuthRepository implements IAuthRepository {
   public async updateInfoByEmailAuth(
     email: string,
     updateInfoDto: Partial<UpdateInfoDto>,
-  ): Promise<Auth> {
+    omitFields?: Partial<Record<keyof Auth, true>>,
+  ): Promise<Partial<Auth>> {
     const result = await this._databaseAdapter.update<Auth>(
       this._model,
       { email },
       { ...updateInfoDto },
+      { ...omitFields },
     );
 
     return { ...result, role: result.role as RolesEnum };

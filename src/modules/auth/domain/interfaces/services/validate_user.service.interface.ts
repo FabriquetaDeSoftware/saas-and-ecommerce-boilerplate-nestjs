@@ -2,5 +2,8 @@ import { SignInDefaultDto } from 'src/modules/auth/application/dto/sign_in_defau
 import { Auth } from '../../entities/auth.entity';
 
 export interface IValidateUserService {
-  execute(input: SignInDefaultDto): Promise<Auth>;
+  execute(
+    input: SignInDefaultDto,
+    omitFields?: Partial<Record<keyof Auth, true>>,
+  ): Promise<Partial<Auth>>;
 }

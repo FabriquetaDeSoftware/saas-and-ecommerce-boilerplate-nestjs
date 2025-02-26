@@ -31,13 +31,13 @@ export class SignUpDefaultUseCase implements ISignUpDefaultUseCase {
   @Inject('ISendEmailQueueJob')
   private readonly _sendEmailQueueJob: ISendEmailQueueJob;
 
-  public async execute(input: SignUpDefaultDto): Promise<Auth> {
+  public async execute(input: SignUpDefaultDto): Promise<Partial<Auth>> {
     const response = await this.intermediary(input);
 
-    return { ...response, password: undefined, id: undefined };
+    return response;
   }
 
-  private async intermediary(data: SignUpDefaultDto): Promise<Auth> {
+  private async intermediary(data: SignUpDefaultDto): Promise<Partial<Auth>> {
     const [, hashedPassword, verificationCodeAndExpiresDate] =
       await Promise.all([
         this.checkEmailExistsAndError(data.email),
@@ -79,7 +79,7 @@ export class SignUpDefaultUseCase implements ISignUpDefaultUseCase {
     hashedPassword: string,
     hashedCode: string,
     expiresDate: Date,
-  ): Promise<Auth> {
+  ): Promise<Partial<Auth>> {
     const response = await this._authRepository.create(
       {
         ...data,
@@ -87,6 +87,10 @@ export class SignUpDefaultUseCase implements ISignUpDefaultUseCase {
       },
       hashedCode,
       expiresDate,
+      {
+        password: true,
+        id: true,
+      },
     );
 
     return response;

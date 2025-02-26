@@ -2,5 +2,5 @@ import { SignUpDefaultDto } from 'src/modules/auth/application/dto/sign_up_defau
 import { Auth } from '../../entities/auth.entity';
 
 export interface ISignUpDefaultUseCase {
-  execute(data: SignUpDefaultDto): Promise<Auth>;
+  execute(data: SignUpDefaultDto): Promise<Partial<Auth>>;
 }

@@ -14,7 +14,7 @@ export class VerificationCodesRepository
 
   public async findVerificationCodeByAuthorId(
     auth_id: number,
-  ): Promise<VerificationCodes> {
+  ): Promise<Partial<VerificationCodes>> {
     const result = await this._databaseAdapter.findOne<VerificationCodes>(
       this._model,
       { auth_id },

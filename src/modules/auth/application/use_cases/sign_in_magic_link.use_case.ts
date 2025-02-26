@@ -45,7 +45,7 @@ export class SignInMagicLinkUseCase implements ISignInMagicLinkUseCase {
     });
   }
 
-  private async validateUser(email: string): Promise<Auth> {
+  private async validateUser(email: string): Promise<Partial<Auth>> {
     const user = await this._findUserByEmailHelper.execute(email);
 
     if (!user || !user.is_verified_account) {

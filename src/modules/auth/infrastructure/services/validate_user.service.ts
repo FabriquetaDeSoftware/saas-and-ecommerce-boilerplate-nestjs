@@ -13,13 +13,13 @@ export class ValidateUserService implements IValidateUserService {
   @Inject('IHashUtil')
   private readonly _hashUtil: IHashUtil;
 
-  public async execute(input: SignInDefaultDto): Promise<Auth> {
+  public async execute(input: SignInDefaultDto): Promise<Partial<Auth>> {
     const response = await this.intermediary(input);
 
-    return { ...response, password: undefined, id: undefined };
+    return response;
   }
 
-  private async intermediary(data: SignInDefaultDto): Promise<Auth> {
+  private async intermediary(data: SignInDefaultDto): Promise<Partial<Auth>> {
     const findUserByEmail = await this.findUserByEmailAndValidate(data.email);
 
     await this.decryptAndValidatePassword(
@@ -30,8 +30,13 @@ export class ValidateUserService implements IValidateUserService {
     return findUserByEmail;
   }
 
-  private async findUserByEmailAndValidate(email: string): Promise<Auth> {
-    const findUserByEmail = await this._findUserByEmailHelper.execute(email);
+  private async findUserByEmailAndValidate(
+    email: string,
+  ): Promise<Partial<Auth>> {
+    const findUserByEmail = await this._findUserByEmailHelper.execute(email, {
+      password: true,
+      id: true,
+    });
 
     if (!findUserByEmail) {
       throw new UnauthorizedException(

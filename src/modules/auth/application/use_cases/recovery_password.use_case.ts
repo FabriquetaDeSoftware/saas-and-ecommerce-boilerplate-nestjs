@@ -61,7 +61,9 @@ export class RecoveryPasswordUseCase implements IRecoveryPasswordUseCase {
     return { message: 'Password recovered successfully' };
   }
 
-  private async findUserByEmailAndValidate(email: string): Promise<Auth> {
+  private async findUserByEmailAndValidate(
+    email: string,
+  ): Promise<Partial<Auth>> {
     const findUserByEmail = await this._findUserByEmailHelper.execute(email);
 
     if (!findUserByEmail) {

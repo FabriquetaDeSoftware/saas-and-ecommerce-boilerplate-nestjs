@@ -8,22 +8,29 @@ export interface IAuthRepository {
     SignUpDefaultDto: SignUpDefaultDto | SignUpMagicLinkDto,
     code: string,
     expires_at: Date,
-  ): Promise<Auth>;
+    omitFields?: Partial<Record<keyof Auth, true>>,
+  ): Promise<Partial<Auth>>;
 
-  findOneByEmail(email: string): Promise<Auth>;
+  findOneByEmail(
+    email: string,
+    omitFields?: Partial<Record<keyof Auth, true>>,
+  ): Promise<Partial<Auth>>;
 
   updateInfoByIdAuth(
     id: number,
     updateInfoDto: Partial<UpdateInfoDto>,
-  ): Promise<Auth>;
+    omitFields?: Partial<Record<keyof Auth, true>>,
+  ): Promise<Partial<Auth>>;
 
   updateInfoByPublicIdAuth(
     public_id: string,
     updateInfoDto: Partial<UpdateInfoDto>,
-  ): Promise<Auth>;
+    omitFields?: Partial<Record<keyof Auth, true>>,
+  ): Promise<Partial<Auth>>;
 
   updateInfoByEmailAuth(
     email: string,
     updateInfoDto: Partial<UpdateInfoDto>,
-  ): Promise<Auth>;
+    omitFields?: Partial<Record<keyof Auth, true>>,
+  ): Promise<Partial<Auth>>;
 }

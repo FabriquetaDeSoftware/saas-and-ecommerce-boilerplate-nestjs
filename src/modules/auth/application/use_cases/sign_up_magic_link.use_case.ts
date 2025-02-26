@@ -31,13 +31,13 @@ export class SignUpMagicLinkUseCase implements ISignUpMagicLinkUseCase {
   @Inject('ISendEmailQueueJob')
   private readonly _sendEmailQueueJob: ISendEmailQueueJob;
 
-  public async execute(input: SignUpMagicLinkDto): Promise<Auth> {
+  public async execute(input: SignUpMagicLinkDto): Promise<Partial<Auth>> {
     const response = await this.intermediary(input);
 
-    return { ...response, password: undefined, id: undefined };
+    return response;
   }
 
-  private async intermediary(data: SignUpMagicLinkDto): Promise<Auth> {
+  private async intermediary(data: SignUpMagicLinkDto): Promise<Partial<Auth>> {
     const [, verificationCodeAndExpiresDate] = await Promise.all([
       this.checkEmailExistsAndError(data.email),
       this.generateCodeOfVerificationAndExpiresDate(),
@@ -75,11 +75,15 @@ export class SignUpMagicLinkUseCase implements ISignUpMagicLinkUseCase {
     data: SignUpMagicLinkDto,
     hashedCode: string,
     expiresDate: Date,
-  ): Promise<Auth> {
+  ): Promise<Partial<Auth>> {
     const response = await this._authRepository.create(
       data,
       hashedCode,
       expiresDate,
+      {
+        password: true,
+        id: true,
+      },
     );
 
     return response;

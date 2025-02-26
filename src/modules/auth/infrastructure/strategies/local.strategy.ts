@@ -15,7 +15,10 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   @Inject('IValidateUserService')
   private _validateUserService: IValidateUserService;
 
-  public async validate(email: string, password: string): Promise<Auth> {
+  public async validate(
+    email: string,
+    password: string,
+  ): Promise<Partial<Auth>> {
     const user = await this._validateUserService.execute({ email, password });
 
     if (!user || !user.is_verified_account) {
