@@ -20,7 +20,7 @@ import { CurrentUser } from 'src/common/decorators/current_user.decorator';
 import { IJwtUserPayload } from 'src/shared/interfaces/jwt_user_payload.interface';
 import { IsPublicRoute } from 'src/common/decorators/is_public_route.decorator';
 import { ListManyProductsDto } from '../../application/dto/list_many_products.dto';
-import { ListManyProductsReturn } from '../../domain/interfaces/returns/list_many_products_return.type';
+import { ListManyProductsReturn } from '../../domain/interfaces/returns/list_many_products_return.interface';
 import { UpdateProductInfoDto } from '../../application/dto/update_product_info.dto';
 import { IProductsOrchestrator } from '../../domain/interfaces/orchestrators/products.orchestrator.interface';
 import {

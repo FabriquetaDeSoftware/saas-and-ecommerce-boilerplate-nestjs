@@ -3,7 +3,7 @@ import { IListManySubscriptionProductUseCase } from '../../domain/interfaces/use
 import { ISubscriptionProductsRepository } from '../../domain/interfaces/repositories/subscription_products.repository.interface';
 import { Products } from '../../domain/entities/products.entity';
 import { ListManyProductsDto } from '../dto/list_many_products.dto';
-import { ListManyProductsReturn } from '../../domain/interfaces/returns/list_many_products_return.type';
+import { ListManyProductsReturn } from '../../domain/interfaces/returns/list_many_products_return.interface';
 
 @Injectable()
 export class ListManySubscriptionProductUseCase

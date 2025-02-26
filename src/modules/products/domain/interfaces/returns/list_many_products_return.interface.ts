@@ -1,7 +1,7 @@
 import { Products } from '../../entities/products.entity';
 
 export interface ListManyProductsReturn {
-  data: Products[];
+  data: Partial<Products[]>;
   total: number;
   page: number;
   pageSize: number;
