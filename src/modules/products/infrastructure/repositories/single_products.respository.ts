@@ -3,7 +3,7 @@ import { ISingleProductsRepository } from '../../domain/interfaces/repositories/
 import { IDatabaseAdapter } from 'src/common/databases/interfaces/database.adapter.interface';
 import { CreateProductDto } from '../../application/dto/create_product.dto';
 import { Products } from '../../domain/entities/products.entity';
-import { ListManyProductsReturn } from '../../domain/types/list_many_products_return.type';
+import { ListManyProductsReturn } from '../../domain/interfaces/returns/list_many_products_return.type';
 import { UpdateProductInfoDto } from '../../application/dto/update_product_info.dto';
 
 @Injectable()
@@ -29,12 +29,14 @@ export class SingleProductsRepository implements ISingleProductsRepository {
     where?: object,
     skip?: number,
     take?: number,
+    omitFields?: Partial<Record<keyof Products, true>>,
   ): Promise<ListManyProductsReturn> {
     const result = await this._databaseAdapter.findMany<Products>(
       this._model,
       { where },
       skip,
       take,
+      { ...omitFields },
     );
 
     return result;

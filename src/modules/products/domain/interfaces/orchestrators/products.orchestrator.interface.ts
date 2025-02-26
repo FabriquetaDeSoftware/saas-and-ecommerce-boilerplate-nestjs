@@ -1,7 +1,7 @@
 import { CreateProductDto } from 'src/modules/products/application/dto/create_product.dto';
 import { TypeProductEnum } from 'src/modules/products/application/enum/type_product.enum';
 import { Products } from '../../entities/products.entity';
-import { ListManyProductsWithoutIdReturn } from '../../types/list_many_products_return.type';
+import { ListManyProductsReturn } from '../returns/list_many_products_return.type';
 import { ListManyProductsDto } from 'src/modules/products/application/dto/list_many_products.dto';
 import { TypeAndIdProductParamsDto } from 'src/modules/products/application/dto/params_to_product_routes.dto';
 import { UpdateProductInfoDto } from 'src/modules/products/application/dto/update_product_info.dto';
@@ -24,5 +24,5 @@ export interface IProductsOrchestrator {
   listMany(
     input: ListManyProductsDto,
     type: TypeProductEnum,
-  ): Promise<ListManyProductsWithoutIdReturn>;
+  ): Promise<ListManyProductsReturn>;
 }

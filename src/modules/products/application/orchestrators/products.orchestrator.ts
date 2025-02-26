@@ -5,7 +5,7 @@ import { TypeProductEnum } from '../enum/type_product.enum';
 import { ICreateSubscriptionProductUseCase } from '../../domain/interfaces/use_cases/create_subscription_product.use_case.interface';
 import { Products } from '../../domain/entities/products.entity';
 import { ICreateSingleProductUseCase } from '../../domain/interfaces/use_cases/create_single_product.use_case.interface';
-import { ListManyProductsWithoutIdReturn } from '../../domain/types/list_many_products_return.type';
+import { ListManyProductsReturn } from '../../domain/interfaces/returns/list_many_products_return.type';
 import { ListManyProductsDto } from '../dto/list_many_products.dto';
 import { IListManySubscriptionProductUseCase } from '../../domain/interfaces/use_cases/list_many_subscription_products.use_case.interface';
 import { IListManySingleProductUseCase } from '../../domain/interfaces/use_cases/list_many_single_products.use_case.interface';
@@ -106,7 +106,7 @@ export class ProductsOrchestrator implements IProductsOrchestrator {
   public async listMany(
     input: ListManyProductsDto,
     type: TypeProductEnum,
-  ): Promise<ListManyProductsWithoutIdReturn> {
+  ): Promise<ListManyProductsReturn> {
     if (type === TypeProductEnum.SINGLE) {
       return this._listManySingleProductUseCase.execute(input);
     }

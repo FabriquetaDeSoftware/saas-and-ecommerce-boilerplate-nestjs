@@ -6,7 +6,7 @@ import { PrismaService } from '../modules/prisma/prisma.service';
 TODO: add omit parameter to all methods with the type Partial<Record<keyof R, true>> to omit fields from the response. The paramter should be optional.
 
 EXAMPLE:     
-  method<R>(omitFields?: Partial<Record<keyof R, true>): Promise<Partial<R>> {
+  method<R>(omitFields?: Partial<Record<keyof R, true>>): Promise<Partial<R>> {
     return await this._prismaService[model].method({ omit: omitFields });
   }
 
@@ -34,8 +34,9 @@ export class DatabaseAdapter implements IDatabaseAdapter {
     where?: object,
     skip?: number,
     take?: number,
+    omitFields?: Partial<Record<keyof R, true>>,
   ): Promise<{
-    data: R[];
+    data: Partial<R[]>;
     total: number;
     page: number;
     pageSize: number;
@@ -43,7 +44,9 @@ export class DatabaseAdapter implements IDatabaseAdapter {
   }> {
     const total = await this._prismaService[model].count();
     const page = skip * take;
+
     const result = await this._prismaService[model].findMany({
+      omit: omitFields,
       where,
       skip: page,
       take,

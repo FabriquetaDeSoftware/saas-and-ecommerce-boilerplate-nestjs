@@ -3,7 +3,7 @@ import { IListManySubscriptionProductUseCase } from '../../domain/interfaces/use
 import { ISubscriptionProductsRepository } from '../../domain/interfaces/repositories/subscription_products.repository.interface';
 import { Products } from '../../domain/entities/products.entity';
 import { ListManyProductsDto } from '../dto/list_many_products.dto';
-import { ListManyProductsWithoutIdReturn } from '../../domain/types/list_many_products_return.type';
+import { ListManyProductsReturn } from '../../domain/interfaces/returns/list_many_products_return.type';
 
 @Injectable()
 export class ListManySubscriptionProductUseCase
@@ -14,7 +14,7 @@ export class ListManySubscriptionProductUseCase
 
   public async execute(
     input: ListManyProductsDto,
-  ): Promise<ListManyProductsWithoutIdReturn> {
+  ): Promise<ListManyProductsReturn> {
     const response = await this.intermediry(input);
 
     return response;
@@ -22,21 +22,14 @@ export class ListManySubscriptionProductUseCase
 
   private async intermediry(
     input: ListManyProductsDto,
-  ): Promise<ListManyProductsWithoutIdReturn> {
+  ): Promise<ListManyProductsReturn> {
     const response = await this._subscriptionProductsRepository.listMany(
       undefined,
       input.page - 1,
       input.pageSize,
+      { id: true },
     );
 
-    const withoutId = this.removeIdFromProduct(response.data);
-
-    return { ...response, data: withoutId };
-  }
-
-  private removeIdFromProduct(products: Products[]): Omit<Products, 'id'>[] {
-    const result = products.map(({ id, ...rest }) => rest);
-
-    return result;
+    return response;
   }
 }
