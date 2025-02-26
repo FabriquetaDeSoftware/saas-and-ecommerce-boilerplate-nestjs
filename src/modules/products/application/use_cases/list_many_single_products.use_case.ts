@@ -24,12 +24,11 @@ export class ListManySingleProductUseCase
   private async intermediry(
     input: ListManyProductsDto,
   ): Promise<ListManyProductsWithoutIdReturn> {
-    const response =
-      await this._singleProductsRepository.listManyWithPagination(
-        undefined,
-        input.page - 1,
-        input.pageSize,
-      );
+    const response = await this._singleProductsRepository.listMany(
+      undefined,
+      input.page - 1,
+      input.pageSize,
+    );
 
     const withoutId = this.removeIdFromProduct(response.data);
 

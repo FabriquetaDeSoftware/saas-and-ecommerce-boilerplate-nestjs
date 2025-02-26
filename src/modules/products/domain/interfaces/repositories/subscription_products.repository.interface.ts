@@ -6,8 +6,7 @@ import { UpdateProductInfoDto } from 'src/modules/products/application/dto/updat
 export interface ISubscriptionProductsRepository {
   create(input: CreateProductDto): Promise<Products>;
   delete(publicId: string): Promise<void>;
-  listMany(where?: object): Promise<Products[]>;
-  listManyWithPagination(
+  listMany(
     where?: object,
     skip?: number,
     take?: number,

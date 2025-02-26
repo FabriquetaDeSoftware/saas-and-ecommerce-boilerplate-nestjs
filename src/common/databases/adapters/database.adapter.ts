@@ -29,11 +29,7 @@ export class DatabaseAdapter implements IDatabaseAdapter {
     return await this._prismaService[model].delete({ where });
   }
 
-  public async findMany<R>(model: string, where?: object): Promise<R[]> {
-    return await this._prismaService[model].findMany({ where });
-  }
-
-  public async findManyWithPagination<R>(
+  public async findMany<R>(
     model: string,
     where?: object,
     skip?: number,

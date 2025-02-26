@@ -27,20 +27,12 @@ export class SubscriptionProductsRepository
     await this._databaseAdapter.delete<void>(this._model, { public_id });
   }
 
-  public async listMany(where?: object): Promise<Products[]> {
-    const result = await this._databaseAdapter.findMany<Products>(this._model, {
-      where,
-    });
-
-    return result;
-  }
-
-  public async listManyWithPagination(
+  public async listMany(
     where?: object,
     skip?: number,
     take?: number,
   ): Promise<ListManyProductsReturn> {
-    const result = await this._databaseAdapter.findManyWithPagination<Products>(
+    const result = await this._databaseAdapter.findMany<Products>(
       this._model,
       { where },
       skip,

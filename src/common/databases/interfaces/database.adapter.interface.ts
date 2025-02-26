@@ -1,7 +1,6 @@
 export interface IDatabaseAdapter {
   findOne<R>(model: string, where: object): Promise<R | null>;
-  findMany<R>(model: string, where?: object): Promise<R[]>;
-  findManyWithPagination<R>(
+  findMany<R>(
     model: string,
     where?: object,
     skip?: number,
