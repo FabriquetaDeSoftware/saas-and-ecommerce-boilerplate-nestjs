@@ -21,12 +21,18 @@ export class DatabaseAdapter implements IDatabaseAdapter {
   @Inject()
   private readonly _prismaService: PrismaService;
 
-  public async create<R>(model: string, data: object): Promise<R> {
-    return await this._prismaService[model].create({ data });
+  public async create<R>(
+    model: string,
+    data: object,
+    omitFields?: Partial<Record<keyof R, true>>,
+  ): Promise<Partial<R>> {
+    return await this._prismaService[model].create({ omit: omitFields, data });
   }
 
-  public async delete<R>(model: string, where: object): Promise<R> {
-    return await this._prismaService[model].delete({ where });
+  public async delete(model: string, where: object): Promise<void> {
+    await this._prismaService[model].delete({ where });
+
+    return;
   }
 
   public async findMany<R>(
@@ -61,15 +67,27 @@ export class DatabaseAdapter implements IDatabaseAdapter {
     };
   }
 
-  public async findOne<R>(model: string, where: object): Promise<R | null> {
-    return await this._prismaService[model].findUnique({ where });
+  public async findOne<R>(
+    model: string,
+    where: object,
+    omitFields?: Partial<Record<keyof R, true>>,
+  ): Promise<Partial<R> | null> {
+    return await this._prismaService[model].findUnique({
+      omit: omitFields,
+      where,
+    });
   }
 
   public async update<R>(
     model: string,
     where: object,
     data: object,
-  ): Promise<R> {
-    return await this._prismaService[model].update({ where, data });
+    omitFields?: Partial<Record<keyof R, true>>,
+  ): Promise<Partial<R>> {
+    return await this._prismaService[model].update({
+      omit: omitFields,
+      where,
+      data,
+    });
   }
 }

@@ -1,5 +1,9 @@
 export interface IDatabaseAdapter {
-  findOne<R>(model: string, where: object): Promise<R | null>;
+  findOne<R>(
+    model: string,
+    where: object,
+    omitFields?: Partial<Record<keyof R, true>>,
+  ): Promise<Partial<R> | null>;
 
   findMany<R>(
     model: string,
@@ -15,9 +19,18 @@ export interface IDatabaseAdapter {
     totalPages: number;
   }>;
 
-  create<R>(model: string, data: object): Promise<R>;
+  create<R>(
+    model: string,
+    data: object,
+    omitFields?: Partial<Record<keyof R, true>>,
+  ): Promise<Partial<R>>;
 
-  update<R>(model: string, where: object, data: object): Promise<R>;
+  update<R>(
+    model: string,
+    where: object,
+    data: object,
+    omitFields?: Partial<Record<keyof R, true>>,
+  ): Promise<Partial<R>>;
 
-  delete<R>(model: string, where: object): Promise<R>;
+  delete(model: string, where: object): Promise<void>;
 }
