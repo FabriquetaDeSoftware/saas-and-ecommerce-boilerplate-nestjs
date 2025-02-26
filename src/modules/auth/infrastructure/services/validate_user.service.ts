@@ -50,7 +50,6 @@ export class ValidateUserService implements IValidateUserService {
   ): Promise<boolean> {
     const isMatch = await this._hashUtil.compareHash(password, encrypted);
 
-    console.log('aqqquiii');
     if (!isMatch) {
       throw new UnauthorizedException(
         'Invalid credentials or account not verified',
