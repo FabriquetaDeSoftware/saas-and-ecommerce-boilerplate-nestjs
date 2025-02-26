@@ -25,8 +25,8 @@ export class UpdateProductInfoDto {
   description?: string;
 
   @ApiProperty({
-    description: 'New price of the product',
-    example: 543.21,
+    description: 'New price of the product in cents',
+    example: 54321,
   })
   @IsOptional()
   @IsNumber()

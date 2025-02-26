@@ -36,13 +36,8 @@ export class CreateSingleProductUseCase implements ICreateSingleProductUseCase {
 
     this.isAllowedAction(roleDecoded, input);
 
-    const priceToCents = input.price * 100;
-
     const result = await this._singleProductsRepository.create(
-      {
-        ...input,
-        price: priceToCents,
-      },
+      { ...input },
       { id: true },
     );
 

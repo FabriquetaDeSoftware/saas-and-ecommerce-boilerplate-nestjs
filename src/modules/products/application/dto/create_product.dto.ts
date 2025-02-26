@@ -26,8 +26,8 @@ export class CreateProductDto {
   description: string;
 
   @ApiProperty({
-    description: 'Price of the product',
-    example: 123.45,
+    description: 'Price of the product in cents',
+    example: 12345,
   })
   @IsNotEmpty()
   @IsNumber()

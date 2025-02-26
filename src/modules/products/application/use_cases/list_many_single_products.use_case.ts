@@ -28,7 +28,7 @@ export class ListManySingleProductUseCase
       undefined,
       input.page - 1,
       input.pageSize,
-      { id: true },
+      { id: true, description: true, created_at: true, updated_at: true },
     );
 
     return response;
