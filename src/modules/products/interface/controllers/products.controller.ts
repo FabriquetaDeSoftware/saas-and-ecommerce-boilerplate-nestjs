@@ -24,6 +24,7 @@ import { UpdateProductInfoDto } from '../../application/dto/update_product_info.
 import { IProductsOrchestrator } from '../../domain/interfaces/orchestrators/products.orchestrator.interface';
 import {
   TypeAndIdProductParamsDto,
+  TypeAndSlugProductParamsDto,
   TypeProductParamsDto,
 } from '../../application/dto/params_to_product_routes.dto';
 
@@ -89,6 +90,19 @@ export class ProductsController {
     const response = await this._productsOrchestrator.listMany(
       query,
       type.type,
+    );
+
+    return response;
+  }
+
+  @IsPublicRoute()
+  @Get('show-one/:type/:slug')
+  public async findOneBySlug(
+    @Param() params: TypeAndSlugProductParamsDto,
+  ): Promise<Partial<Products>> {
+    const response = await this._productsOrchestrator.showOneBySlug(
+      params.slug,
+      params.type,
     );
 
     return response;

@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsUUID } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsString, IsUUID } from 'class-validator';
 import { TypeProductEnum } from '../enum/type_product.enum';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -22,4 +22,13 @@ export class TypeAndIdProductParamsDto extends TypeProductParamsDto {
   @IsNotEmpty()
   @IsUUID()
   public_id: string;
+}
+export class TypeAndSlugProductParamsDto extends TypeProductParamsDto {
+  @ApiProperty({
+    description: 'Slug of the product',
+    example: 'slug_product1',
+  })
+  @IsNotEmpty()
+  @IsString()
+  slug: string;
 }

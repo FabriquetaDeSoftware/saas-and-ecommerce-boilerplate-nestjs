@@ -21,6 +21,11 @@ export interface IProductsOrchestrator {
     input: UpdateProductInfoDto,
   ): Promise<Partial<Products>>;
 
+  showOneBySlug(
+    slug: string,
+    type: TypeProductEnum,
+  ): Promise<Partial<Products>>;
+
   listMany(
     input: ListManyProductsDto,
     type: TypeProductEnum,

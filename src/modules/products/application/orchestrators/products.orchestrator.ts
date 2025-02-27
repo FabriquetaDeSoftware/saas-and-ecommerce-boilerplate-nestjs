@@ -9,12 +9,14 @@ import { ListManyProductsReturn } from '../../domain/interfaces/returns/list_man
 import { ListManyProductsDto } from '../dto/list_many_products.dto';
 import { IListManySubscriptionProductUseCase } from '../../domain/interfaces/use_cases/list_many_subscription_products.use_case.interface';
 import { IListManySingleProductUseCase } from '../../domain/interfaces/use_cases/list_many_single_products.use_case.interface';
-import { IDeleteSubscriptionProductUseCase } from '../../domain/interfaces/use_cases/delete_subscription_product.use_case';
+import { IDeleteSubscriptionProductUseCase } from '../../domain/interfaces/use_cases/delete_subscription_product.use_case.interface';
 import { TypeAndIdProductParamsDto } from '../dto/params_to_product_routes.dto';
 import { IDeleteSingleProductUseCase } from '../../domain/interfaces/use_cases/delete_single_product.use_case.interface';
 import { IUpdateSubscriptionProductInfoUseCase } from '../../domain/interfaces/use_cases/update_subscription_product_info.use_case.interface';
 import { UpdateProductInfoDto } from '../dto/update_product_info.dto';
 import { IUpdateSingleProductInfoUseCase } from '../../domain/interfaces/use_cases/update_single_product_info.use_case.interface';
+import { IShowSubscriptionProductUseCase } from '../../domain/interfaces/use_cases/show_subscription_product.use_case.interface';
+import { IShowSingleProductUseCase } from '../../domain/interfaces/use_cases/show_single_product.use_case.interface';
 
 @Injectable()
 export class ProductsOrchestrator implements IProductsOrchestrator {
@@ -41,6 +43,12 @@ export class ProductsOrchestrator implements IProductsOrchestrator {
 
   @Inject('IUpdateSingleProductInfoUseCase')
   private readonly _updateSingleProductInfoUseCase: IUpdateSingleProductInfoUseCase;
+
+  @Inject('IShowSubscriptionProductUseCase')
+  private readonly _showSubscriptionProductUseCase: IShowSubscriptionProductUseCase;
+
+  @Inject('IShowSingleProductUseCase')
+  private readonly _showSingleProductUseCase: IShowSingleProductUseCase;
 
   public async create(
     role: string,
@@ -101,6 +109,21 @@ export class ProductsOrchestrator implements IProductsOrchestrator {
     }
 
     throw new BadRequestException(`Invalid product type: ${params.type}`);
+  }
+
+  public async showOneBySlug(
+    slug: string,
+    type: TypeProductEnum,
+  ): Promise<Partial<Products>> {
+    if (type === TypeProductEnum.SINGLE) {
+      return await this._showSingleProductUseCase.execute(slug);
+    }
+
+    if (type === TypeProductEnum.SUBSCRIPTION) {
+      return await this._showSubscriptionProductUseCase.execute(slug);
+    }
+
+    throw new BadRequestException(`Invalid product type: ${type}`);
   }
 
   public async listMany(

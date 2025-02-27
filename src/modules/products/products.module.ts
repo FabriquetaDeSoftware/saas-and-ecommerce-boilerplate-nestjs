@@ -13,11 +13,23 @@ import { SingleProductsRepository } from './infrastructure/repositories/single_p
 import { ListManySingleProductUseCase } from './application/use_cases/list_many_single_products.use_case';
 import { DeleteSingleProductUseCase } from './application/use_cases/delete_single_product.use_case';
 import { UpdateSingleProductInfoUseCase } from './application/use_cases/update_single_product_info.use_case';
+import { ShowSubscriptionProductUseCase } from './application/use_cases/show_subscription_product.use_case';
+import { ShowSingleProductUseCase } from './application/use_cases/show_single_product.use_case';
 
 @Module({
   imports: [CommonModule, SharedModule],
   controllers: [ProductsController],
   providers: [
+    ShowSingleProductUseCase,
+    {
+      provide: 'IShowSingleProductUseCase',
+      useExisting: ShowSingleProductUseCase,
+    },
+    ShowSubscriptionProductUseCase,
+    {
+      provide: 'IShowSubscriptionProductUseCase',
+      useExisting: ShowSubscriptionProductUseCase,
+    },
     DeleteSingleProductUseCase,
     {
       provide: 'IDeleteSingleProductUseCase',
