@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import Stripe from 'stripe';
 import { gatewayConstants } from '../../domain/constants/gateway.constant';
-import { IBillingGateway } from '../../domain/interfaces/gateway/billing.gateway.interface';
 
 @Injectable()
-export class StripeGateway implements IBillingGateway {
+export class StripeGateway {
   private readonly _stripe: Stripe;
 
   constructor() {

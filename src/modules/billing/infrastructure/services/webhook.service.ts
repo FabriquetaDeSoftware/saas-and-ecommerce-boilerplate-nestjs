@@ -1,13 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { IBillingGateway } from '../../domain/interfaces/gateway/billing.gateway.interface';
+import { IPaymentGatewayAdapter } from '../../domain/interfaces/gateway/adapters/payment.gateway.adapter.interface';
 import { IWebhookService } from '../../domain/interfaces/services/webhook.service.interface';
 
 @Injectable()
 export class WebhookService implements IWebhookService {
-  @Inject('IBillingGateway')
-  private readonly _billingGateway: IBillingGateway;
+  @Inject('IPaymentGatewayAdapter')
+  private readonly _paymentGatewayAdapter: IPaymentGatewayAdapter;
 
   public async execute(payload: Buffer<ArrayBufferLike>, signature: string) {
-    await this._billingGateway.handleWebhookEvent(payload, signature);
+    await this._paymentGatewayAdapter.handleWebhookEvent(payload, signature);
   }
 }

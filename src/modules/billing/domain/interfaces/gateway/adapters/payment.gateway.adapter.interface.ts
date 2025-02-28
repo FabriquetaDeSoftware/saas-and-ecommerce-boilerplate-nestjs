@@ -1,4 +1,4 @@
-export interface IBillingGateway {
+export interface IPaymentGatewayAdapter {
   createOneTimePayment(priceId: string): Promise<{ url: string }>;
   createSubscriptionPayment(priceId: string): Promise<{ url: string }>;
   handleWebhookEvent(

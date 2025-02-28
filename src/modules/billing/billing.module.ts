@@ -4,10 +4,16 @@ import { StripeGateway } from './infrastructure/gateway/stripe.gateway';
 import { WebhookService } from './infrastructure/services/webhook.service';
 import { OneTimePaymentUseCase } from './application/use_cases/one_time_payment.use_case';
 import { SubscriptionPaymentUseCase } from './application/use_cases/subscription_payment.use_case';
+import { PaymentGatewayAdapter } from './infrastructure/gateway/adapters/payment.gateway.adapter';
 
 @Module({
   controllers: [BillingController],
   providers: [
+    PaymentGatewayAdapter,
+    {
+      provide: 'IPaymentGatewayAdapter',
+      useExisting: PaymentGatewayAdapter,
+    },
     SubscriptionPaymentUseCase,
     {
       provide: 'ISubscriptionPaymentUseCase',
@@ -24,10 +30,6 @@ import { SubscriptionPaymentUseCase } from './application/use_cases/subscription
       useExisting: WebhookService,
     },
     StripeGateway,
-    {
-      provide: 'IBillingGateway',
-      useExisting: StripeGateway,
-    },
   ],
 })
 export class BillingModule {}
