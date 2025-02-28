@@ -12,7 +12,7 @@ export class StripeGateway {
     });
   }
 
-  public async createOneTimePayment(priceId: string) {
+  public async createOneTimePayment(priceId: string): Promise<{ url: string }> {
     const session = await this._stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
@@ -29,7 +29,9 @@ export class StripeGateway {
     return { url: session.url };
   }
 
-  public async createSubscriptionPayment(priceId: string) {
+  public async createSubscriptionPayment(
+    priceId: string,
+  ): Promise<{ url: string }> {
     const session = await this._stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
@@ -46,7 +48,10 @@ export class StripeGateway {
     return { url: session.url };
   }
 
-  public async handleWebhookEvent(payload: any, signature: string) {
+  public async handleWebhookEvent(
+    payload: any,
+    signature: string,
+  ): Promise<void> {
     const event = this._stripe.webhooks.constructEvent(
       payload,
       signature,
