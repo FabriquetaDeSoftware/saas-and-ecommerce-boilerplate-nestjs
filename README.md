@@ -42,6 +42,13 @@ $ pnpm install
 $ docker-compose up -d
 ```
 
+## Activate Stripe WebHook Test
+
+```bash
+# webhook
+$ stripe listen --forward-to http://localhost:8080/billing/webhook
+```
+
 ## Run tests in Docker environment
 
 ```bash
