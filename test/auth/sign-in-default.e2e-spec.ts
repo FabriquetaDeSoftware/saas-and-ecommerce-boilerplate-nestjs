@@ -73,6 +73,7 @@ describe('AuthController from AppModule (e2e)', () => {
     expect(response.body).toHaveProperty('refresh_token');
     expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
       signInData.email,
+      {},
     );
   });
 
@@ -96,6 +97,7 @@ describe('AuthController from AppModule (e2e)', () => {
     );
     expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
       signInData.email,
+      {},
     );
   });
 
@@ -119,6 +121,7 @@ describe('AuthController from AppModule (e2e)', () => {
     );
     expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
       signInData.email,
+      {},
     );
     expect(hashUtilMock.compareHash).toHaveBeenCalledWith(
       signInData.password,
@@ -157,6 +160,7 @@ describe('AuthController from AppModule (e2e)', () => {
     );
     expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
       signInData.email,
+      {},
     );
   });
 

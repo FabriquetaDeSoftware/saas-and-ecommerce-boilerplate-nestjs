@@ -39,13 +39,11 @@ describe('AuthController from AppModule (e2e)', () => {
             dto: SignUpDefaultDto,
             code: string,
             expires_at: Date,
-          ): Promise<Auth> => {
+          ): Promise<Partial<Auth>> => {
             return Promise.resolve({
-              id: 1,
               public_id: '1',
               role: RolesEnum.USER,
               email: dto.email,
-              password: 'hashedText',
               is_verified_account: false,
               newsletter_subscription: dto.newsletter_subscription,
               terms_and_conditions_accepted: dto.terms_and_conditions_accepted,
@@ -104,6 +102,7 @@ describe('AuthController from AppModule (e2e)', () => {
         getTime: expect.any(Function),
         toISOString: expect.any(Function),
       }),
+      { id: true, password: true },
     );
   });
 

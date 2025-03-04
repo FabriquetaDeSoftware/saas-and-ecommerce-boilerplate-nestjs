@@ -72,6 +72,7 @@ describe('AuthController from AppModule (e2e)', () => {
     expect(response.body).toHaveProperty('message', 'Email sent successfully');
     expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
       signInData.email,
+      {},
     );
   });
 
@@ -94,6 +95,7 @@ describe('AuthController from AppModule (e2e)', () => {
     );
     expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
       signInData.email,
+      {},
     );
   });
 
@@ -127,6 +129,7 @@ describe('AuthController from AppModule (e2e)', () => {
     );
     expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
       signInData.email,
+      {},
     );
   });
 

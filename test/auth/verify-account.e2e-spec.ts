@@ -117,6 +117,7 @@ describe('AuthController from AppModule (e2e)', () => {
     expect(response.body).toHaveProperty('message', 'User account verified');
     expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
       verifyAccountData.email,
+      {},
     );
     expect(authRepositoryMock.updateInfoByEmailAuth).toHaveBeenCalledWith(
       verifyAccountData.email,
@@ -146,6 +147,7 @@ describe('AuthController from AppModule (e2e)', () => {
     expect(response.body).toHaveProperty('message', 'User email not found');
     expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
       verifyAccountData.email,
+      {},
     );
     expect(
       verificationCodeRepositoryMock.findVerificationCodeByAuthorId,
@@ -180,6 +182,7 @@ describe('AuthController from AppModule (e2e)', () => {
     expect(response.body).toHaveProperty('message', 'Invalid or expired code');
     expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
       verifyAccountData.email,
+      {},
     );
     expect(
       verificationCodeRepositoryMock.findVerificationCodeByAuthorId,
