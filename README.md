@@ -20,7 +20,13 @@
 
 ## Description
 
-This repository provides a modular and scalable boilerplate designed to simplify the development of SaaS (Software as a Service) and e-commerce applications using NestJS. The project follows best practices such as modular architecture, dependency injection, and clean code principles.
+This repository provides a modular and scalable boilerplate designed to simplify the development of SaaS (Software as a Service) and e-commerce applications using NestJS.
+
+This project was born from the need to have advanced open source content in the area today. Its purpose is to facilitate the development of new back-end projects in the area of ​​e-commerce and SaaS.
+
+The project follows best practices such as modular architecture, dependency injection, and clean code principles.
+
+Welcome to open issues and and improvements on code-base. You are invited to contribute to the code base
 
 ### Following the Patterns
 
