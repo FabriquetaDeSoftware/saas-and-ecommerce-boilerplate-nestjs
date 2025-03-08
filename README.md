@@ -8,17 +8,29 @@
 <p align="center">A modular and scalable boilerplate for building SaaS and e-commerce applications with NestJS.
 </p>
 
-<p align="center">
-  <a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-  <a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-  <a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-</p>
+## Table of Contents
+
+- [Description](#description)
+- [Patterns](#patterns)
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Recommended](#recommended)
+- [Project setup](#project-setup)
+- [License](#license)
 
 ## Description
 
-<p>
 This repository provides a modular and scalable boilerplate designed to simplify the development of SaaS (Software as a Service) and e-commerce applications using NestJS. The project follows best practices such as modular architecture, dependency injection, and clean code principles.
-</p>
+
+### Following the Patterns
+
+- **Clean Code**: The project follows Clean Code principles, ensuring that the code is clear, concise, and easy to maintain. Keeping the design simple helps with the project's evolution and facilitates collaboration among developers, making it easier to make changes and add new features without impacting other parts of the system.
+
+- **Clean Architecture**: The separation of responsibilities across the layers of the system ensures that business logic and implementation details (such as the database and APIs) are decoupled. This makes it easier to replace components without affecting the core of the application, while also improving testability and scalability over time.
+
+- **Solid**: Applying SOLID principles results in more modular and flexible code. The use of abstractions and clearly defined responsibilities for each component makes the system easier to understand, test, and extend, minimizing side effects when adding new features. In particular, the use of the Dependency Inversion Principle enhances dependency injection, allowing easy replacement of services without changing core code.
+
+- **DDD**: Using DDD helps to model the business domain more accurately, creating a common language between developers and business experts. Dividing the system into bounded contexts allows different parts of the system to evolve independently, reflecting the real complexities of the domain. This results in a codebase that is more aligned with business needs and easier to maintain as the project grows.
 
 ### Features
 
@@ -49,7 +61,7 @@ To run the project you need to have the following software installed:
 
 - [Docker](https://www.docker.com/) to ensure it works optimally
 
-## Project setup
+## Project Setup
 
 ### Verify the .env.example file to configure your project.
 
@@ -57,21 +69,21 @@ To run the project you need to have the following software installed:
 $ pnpm install
 ```
 
-## Compile and run the project
+### Compile and run the project
 
 ```bash
 # watch mode
 $ docker-compose up -d
 ```
 
-## Activate Stripe WebHook Test
+### Activate Stripe WebHook Test
 
 ```bash
 # webhook
 $ stripe listen --forward-to http://localhost:8080/billing/webhook
 ```
 
-## Run tests in Docker environment
+### Run tests in Docker environment
 
 ```bash
 # e2e tests
