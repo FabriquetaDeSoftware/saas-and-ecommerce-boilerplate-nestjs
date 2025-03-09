@@ -11,13 +11,17 @@ export class EmailSenderService implements IEmailSenderService {
   private readonly _processHTMLUtil: IProcessHtmlHelper;
 
   public async execute(input: EmailSenderDto): Promise<void> {
-    return await this.intermediary(input);
+    await this.intermediary(input);
+
+    return;
   }
 
   private async intermediary(input: EmailSenderDto): Promise<void> {
     const processedTemplate = await this.generateTemplate(input);
 
-    return await this.sendEmail(input, processedTemplate);
+    await this.sendEmail(input, processedTemplate);
+
+    return;
   }
 
   private async sendEmail(
@@ -57,6 +61,7 @@ export class EmailSenderService implements IEmailSenderService {
         user: emailConstants.email_user,
         pass: emailConstants.email_password,
       },
+      debug: true,
     });
 
     return transporter;
