@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   api:
-    container_name: api-nestjs-auth-boilerplate
+    container_name: api-saas-and-ecommerce-boilerplate
     build: .
     env_file:
       - .env
@@ -14,12 +14,12 @@ services:
     # ports:
     #   - '${MAPPED_PORT_API}:${PORT_API}'
     volumes:
-      - .:/home/api/nestjs/auth-boilerplate
+      - .:/home/api/nestjs/saas-and-ecommerce-boilerplate-nestjs
     restart: always
     command: sh -c 'npx prisma migrate deploy & pnpm run start:dev'
 
   postgres:
-    container_name: postgres-nestjs-auth-boilerplate
+    container_name: postgres-saas-and-ecommerce-boilerplate
     image: postgres:16.3-alpine
     networks:
       - network
@@ -34,7 +34,7 @@ services:
     restart: always
 
   redis:
-    container_name: redis-nestjs-auth-boilerplate
+    container_name: redis-saas-and-ecommerce-boilerplate
     image: redis:7.0-alpine
     networks:
       - network
@@ -51,7 +51,7 @@ services:
     command: redis-server --loglevel warning
 
   nginx:
-    container_name: nginx-nestjs-auth-boilerplate
+    container_name: nginx-saas-and-ecommerce-boilerplate
     image: nginx:1.25-alpine
     depends_on:
       - api

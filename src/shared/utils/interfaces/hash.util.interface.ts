@@ -1,4 +1,4 @@
 export interface IHashUtil {
-  generateHash(data: string | Buffer): Promise<string>;
-  compareHash(data: string | Buffer, hash: string): Promise<boolean>;
+  generateHash(data: string): Promise<string>;
+  compareHash(data: string, hash: string): Promise<boolean>;
 }

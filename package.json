@@ -33,7 +33,7 @@
     "@nestjs/platform-fastify": "^10.4.15",
     "@nestjs/swagger": "^8.1.1",
     "@prisma/client": "^6.4.1",
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
     "bullmq": "^5.41.5",
     "cache-manager": "^6.4.0",
     "class-transformer": "^0.5.1",
