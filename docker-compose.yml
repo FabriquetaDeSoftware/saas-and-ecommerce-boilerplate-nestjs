@@ -16,7 +16,6 @@ services:
     volumes:
       - .:/home/api/nestjs/saas-and-ecommerce-boilerplate-nestjs
     restart: always
-    command: sh -c 'npx prisma migrate deploy & pnpm run start:dev'
 
   postgres:
     container_name: postgres-saas-and-ecommerce-boilerplate

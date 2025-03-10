@@ -6,7 +6,10 @@ COPY . .
 RUN rm -rf node_modules
 RUN npm install -g pnpm
 RUN pnpm i
+
 RUN pnpm add @prisma/client@latest
 RUN npx prisma generate
 
 EXPOSE ${PORT_API}
+
+CMD ["sh", "-c", "npx prisma migrate deploy && pnpm run start:dev"]
