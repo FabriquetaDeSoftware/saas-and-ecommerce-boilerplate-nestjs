@@ -14,7 +14,7 @@
   <link rel="shortcut icon" href="../public/assets/logo_nest.ico" type="image/x-icon">
   <title>Boilerplate</title>
   <style type="text/css">
-    *{
+    * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
@@ -55,16 +55,139 @@
     .button:hover {
       background-color: #5a5f64;
     }
+
+    /* Content Section Styling */
+    .content {
+      max-width: 900px;
+      padding: 20px;
+      background-color: #2a2d32;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      margin-top: 20px;
+    }
+    h2 {
+      font-size: 28px;
+      font-weight: 600;
+      color: #66c0f4;
+      margin-bottom: 10px;
+    }
+    h3 {
+      font-size: 22px;
+      font-weight: 500;
+      color: #f3a847;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    h4 {
+      font-size: 18px;
+      color: #fff;
+      font-weight: 400;
+    }
+    ul {
+      list-style-type: disc;
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 10px;
+    }
+    pre {
+      background-color: #333;
+      padding: 15px;
+      border-radius: 5px;
+      color: #f8f8f2;
+      font-family: 'Courier New', Courier, monospace;
+      overflow-x: auto;
+    }
+    a {
+      color: #66c0f4;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 
 <body>
   <img src="../public/assets/logo_nest.svg" width="100" />
   <h4>Welcome to the SaaS and Ecommerce Boilerplate Backend!</h4>
+    
+  <!-- Buttons -->
   <div class="buttons">
     <a class="button" href="/docs" rel="noopener noreferrer">Go to Swagger</a>
     <a class="button" href="https://discord.gg/YkubrFbtpG" target="_blank" rel="noopener noreferrer">Go to Discord</a>
   </div>
+  
+  <!-- Documentation content starts here -->
+  <div class="content">
+    <h2>SaaS and Ecommerce Boilerplate</h2>
+    <h4>A modular and scalable boilerplate for building SaaS and e-commerce applications with NestJS</h4>
+
+    <h3>Table of Contents</h3>
+    <ul>
+      <li><a href="#description">Description</a></li>
+      <li><a href="#patterns">Patterns</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#prerequisites">Prerequisites</a></li>
+      <li><a href="#recommended">Recommended</a></li>
+      <li><a href="#project-setup">Project Setup</a></li>
+      <li><a href="#license">License</a></li>
+    </ul>
+
+    <h3 id="description">Description</h3>
+    <p>This repository provides a modular and scalable boilerplate designed to simplify the development of SaaS (Software as a Service) and e-commerce applications using NestJS.</p>
+    <p>This project was born from the need to have advanced open-source content in the area today. Its purpose is to facilitate the development of new back-end projects in the area of e-commerce and SaaS.</p>
+    <p>The project follows best practices such as modular architecture, dependency injection, and clean code principles.</p>
+    <p>Welcome to open issues and improvements on the codebase. You are invited to contribute to the code base.</p>
+
+    <h3>Following the Patterns</h3>
+    <ul>
+      <li><strong>Clean Code</strong>: The project follows Clean Code principles, ensuring that the code is clear, concise, and easy to maintain.</li>
+      <li><strong>Clean Architecture</strong>: Separation of responsibilities across the layers of the system ensures maintainability and scalability.</li>
+      <li><strong>Solid</strong>: Applying SOLID principles results in more modular and flexible code.</li>
+      <li><strong>DDD</strong>: Using DDD helps model the business domain more accurately.</li>
+    </ul>
+
+    <h3 id="features">Features</h3>
+    <ul>
+      <li><strong>Modular Clean Architecture</strong>: Follows Clean Architecture and DDD, ensuring maintainability and scalability.</li>
+      <li><strong>Loose Coupling</strong>: Enables easy replacement of services without breaking the core system.</li>
+      <li><strong>Authentication</strong>: Includes JWT-based authentication and passwordless login.</li>
+      <li><strong>RBAC & ABAC</strong>: Supports Role-Based Access Control (RBAC) and Attribute-Based Access Control (ABAC) using CASL and Roles Guard.</li>
+      <li><strong>Billing Integration</strong>: Supports Stripe for payments, designed to allow easy integration with other providers.</li>
+      <li><strong>Queue Processing</strong>: Implements background job processing using BullMQ.</li>
+      <li><strong>Docker Support</strong>: Runs efficiently in a containerized environment.</li>
+      <li><strong>Testing</strong>: Includes e2e testing strategies.</li>
+    </ul>
+
+    <h3 id="prerequisites">Prerequisites</h3>
+    <p>To run the project, you need to have the following software installed:</p>
+    <ul>
+      <li><a href="https://nodejs.org">node</a> (version 22.11.0 or higher)</li>
+      <li><a href="https://pnpm.io">pnpm</a> (version 9.12.3 or higher)</li>
+    </ul>
+
+    <h3 id="recommended">Recommended</h3>
+    <p><a href="https://www.docker.com/">Docker</a> to ensure it works optimally.</p>
+
+    <h3 id="project-setup">Project Setup</h3>
+    <h4>Verify the .env.example file to configure your project.</h4>
+    <pre><code>$ pnpm install</code></pre>
+
+    <h4>Compile and Run the Project</h4>
+    <pre><code># watch mode
+$ docker-compose up -d</code></pre>
+
+    <h4>Activate Stripe WebHook Test</h4>
+    <pre><code># webhook
+$ stripe listen --forward-to http://localhost:8080/billing/webhook</code></pre>
+
+    <h4>Run Tests in Docker Environment</h4>
+    <pre><code># e2e tests
+$ docker exec -it <container_id> pnpm run test:e2e</code></pre>
+
+    <h3 id="license">License</h3>
+    <p>Nest is <a href="https://github.com/nestjs/nest/blob/master/LICENSE">MIT licensed</a>.</p>
+  </div>
 </body>
 </html>
-

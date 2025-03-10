@@ -1,11 +1,6 @@
 import { NestFastifyApplication } from '@nestjs/platform-fastify';
-import {
-  DocumentBuilder,
-  SwaggerDocumentOptions,
-  SwaggerModule,
-} from '@nestjs/swagger';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { RawServerDefault } from 'fastify';
-import { AuthModule } from 'src/modules/auth/auth.module';
 
 export function swaggerConfig(
   app: NestFastifyApplication<RawServerDefault>,
@@ -23,5 +18,6 @@ export function swaggerConfig(
     .build();
 
   const documentFactory = () => SwaggerModule.createDocument(app, config);
+
   SwaggerModule.setup('docs', app, documentFactory);
 }
