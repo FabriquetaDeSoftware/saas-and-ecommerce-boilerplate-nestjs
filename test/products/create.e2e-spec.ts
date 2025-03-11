@@ -19,7 +19,7 @@ describe('AuthController from AppModule (e2e)', () => {
     await app.init();
   });
 
-  it('Should return created product', async () => {
+  it('Should return 201 created product', async () => {
     // const response = await request(app.getHttpServer())
     //   .post('/products/create/')
     //   .expect(200)
