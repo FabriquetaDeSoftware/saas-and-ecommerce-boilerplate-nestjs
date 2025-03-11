@@ -46,6 +46,8 @@ Welcome to open issues and and improvements on code-base. You are invited to con
 
 - **Authentication**: Includes JWT-based authentication and passwordless login.
 
+- **Reverse Proxy**: Include reverse proxy with Ngnix configuration
+
 - **RBAC & ABAC**: Supports Role-Based Access Control (RBAC) and Attribute-Based Access Control (ABAC) using CASL and Roles Guard.
 
 - **Billing integration**: Supports Stripe for payments, designed to allow easy integration with other providers.
