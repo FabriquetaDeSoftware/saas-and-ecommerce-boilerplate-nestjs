@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { IAuthRepository } from 'src/modules/auth/domain/interfaces/repositories/auth.repository.interface';
@@ -13,11 +13,24 @@ describe('AuthController from AppModule (e2e)', () => {
   let authRepositoryMock: jest.Mocked<IAuthRepository>;
   let sendEmailQueueJobMock: jest.Mocked<ISendEmailQueueJob>;
 
-  beforeEach(async () => {
-    if (app) {
-      await app.close();
-    }
+  const mockAuth: Auth = {
+    id: 1,
+    public_id: '1',
+    role: RolesEnum.USER,
+    email: 'test@gmail.com',
+    password: 'hashedText',
+    is_verified_account: true,
+    newsletter_subscription: true,
+    terms_and_conditions_accepted: true,
+    created_at: new Date(),
+    updated_at: new Date(),
+  };
 
+  const validEmailData: EmailDto = {
+    email: 'test@gmail.com',
+  };
+
+  beforeAll(async () => {
     sendEmailQueueJobMock = {
       execute: jest
         .fn()
@@ -25,22 +38,8 @@ describe('AuthController from AppModule (e2e)', () => {
     };
 
     authRepositoryMock = {
-      create: jest.fn().mockImplementation(undefined),
-      findOneByEmail: jest.fn().mockImplementation(
-        (email: string): Promise<Auth> =>
-          Promise.resolve({
-            id: 1,
-            public_id: '1',
-            role: RolesEnum.USER,
-            email,
-            password: 'hashedText',
-            is_verified_account: true,
-            newsletter_subscription: true,
-            terms_and_conditions_accepted: true,
-            created_at: new Date(),
-            updated_at: new Date(),
-          }),
-      ),
+      create: jest.fn(),
+      findOneByEmail: jest.fn().mockResolvedValue(mockAuth),
       updateInfoByIdAuth: jest.fn().mockResolvedValue(undefined),
       updateInfoByPublicIdAuth: jest.fn().mockResolvedValue(undefined),
       updateInfoByEmailAuth: jest.fn().mockResolvedValue(undefined),
@@ -56,81 +55,97 @@ describe('AuthController from AppModule (e2e)', () => {
       .compile();
 
     app = moduleFixture.createNestApplication();
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transform: true,
+      }),
+    );
     await app.init();
   });
 
-  it('Should return authenticated user', async () => {
-    const signInData: EmailDto = {
-      email: 'test@gmail.com',
-    };
-
-    const response = await request(app.getHttpServer())
-      .post('/auth/sign-in-magic-link/')
-      .send(signInData)
-      .expect(200);
-
-    expect(response.body).toHaveProperty('message', 'Email sent successfully');
-    expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
-      signInData.email,
-      {},
-    );
+  beforeEach(() => {
+    jest.clearAllMocks();
+    authRepositoryMock.findOneByEmail.mockResolvedValue(mockAuth);
   });
 
-  it('Should return 401 when email is invalid', async () => {
-    authRepositoryMock.findOneByEmail.mockResolvedValueOnce(null);
+  describe('POST /auth/sign-in-magic-link', () => {
+    it('Should return success message when email is valid', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/auth/sign-in-magic-link/')
+        .send(validEmailData)
+        .expect(200);
 
-    const signInData: EmailDto = {
-      email: 'wrong@gmail.com',
-    };
-
-    const response = await request(app.getHttpServer())
-      .post('/auth/sign-in-magic-link/')
-      .send(signInData)
-      .expect(401);
-
-    expect(response.body).toHaveProperty('statusCode', 401);
-    expect(response.body).toHaveProperty(
-      'message',
-      'Invalid credentials or account not verified',
-    );
-    expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
-      signInData.email,
-      {},
-    );
-  });
-
-  it('Should return 401 when account is not verified', async () => {
-    authRepositoryMock.findOneByEmail.mockResolvedValueOnce({
-      id: 1,
-      public_id: '1',
-      role: RolesEnum.USER,
-      email: 'test@gmail.com',
-      password: 'hashedText',
-      is_verified_account: false,
-      newsletter_subscription: true,
-      terms_and_conditions_accepted: true,
-      created_at: new Date(),
-      updated_at: new Date(),
+      expect(response.body).toHaveProperty(
+        'message',
+        'Email sent successfully',
+      );
+      expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
+        validEmailData.email,
+        {},
+      );
+      expect(sendEmailQueueJobMock.execute).toHaveBeenCalled();
     });
 
-    const signInData: EmailDto = {
-      email: 'test@gmail.com',
-    };
+    it('Should return 401 when email is invalid', async () => {
+      authRepositoryMock.findOneByEmail.mockResolvedValueOnce(null);
 
-    const response = await request(app.getHttpServer())
-      .post('/auth/sign-in-magic-link/')
-      .send(signInData)
-      .expect(401);
+      const invalidEmailData: EmailDto = {
+        email: 'wrong@gmail.com',
+      };
 
-    expect(response.body).toHaveProperty('statusCode', 401);
-    expect(response.body).toHaveProperty(
-      'message',
-      'Invalid credentials or account not verified',
-    );
-    expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
-      signInData.email,
-      {},
-    );
+      const response = await request(app.getHttpServer())
+        .post('/auth/sign-in-magic-link/')
+        .send(invalidEmailData)
+        .expect(401);
+
+      expect(response.body).toHaveProperty('statusCode', 401);
+      expect(response.body).toHaveProperty(
+        'message',
+        'Invalid credentials or account not verified',
+      );
+      expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
+        invalidEmailData.email,
+        {},
+      );
+      expect(sendEmailQueueJobMock.execute).not.toHaveBeenCalled();
+    });
+
+    it('Should return 401 when account is not verified', async () => {
+      const unverifiedAuth = {
+        ...mockAuth,
+        is_verified_account: false,
+      };
+      authRepositoryMock.findOneByEmail.mockResolvedValueOnce(unverifiedAuth);
+
+      const response = await request(app.getHttpServer())
+        .post('/auth/sign-in-magic-link/')
+        .send(validEmailData)
+        .expect(401);
+
+      expect(response.body).toHaveProperty('statusCode', 401);
+      expect(response.body).toHaveProperty(
+        'message',
+        'Invalid credentials or account not verified',
+      );
+      expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
+        validEmailData.email,
+        {},
+      );
+      expect(sendEmailQueueJobMock.execute).not.toHaveBeenCalled();
+    });
+
+    it('Should return 400 when email is missing', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/auth/sign-in-magic-link/')
+        .send({})
+        .expect(400);
+
+      expect(response.body).toHaveProperty('statusCode', 400);
+      expect(authRepositoryMock.findOneByEmail).not.toHaveBeenCalled();
+      expect(sendEmailQueueJobMock.execute).not.toHaveBeenCalled();
+    });
   });
 
   afterAll(async () => {
