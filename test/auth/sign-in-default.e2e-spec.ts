@@ -13,33 +13,33 @@ describe('AuthController from AppModule (e2e)', () => {
   let authRepositoryMock: jest.Mocked<IAuthRepository>;
   let hashUtilMock: jest.Mocked<IHashUtil>;
 
-  beforeEach(async () => {
-    if (app) {
-      await app.close();
-    }
+  const mockAuth: Auth = {
+    id: 1,
+    public_id: '1',
+    role: RolesEnum.USER,
+    email: 'test@gmail.com',
+    password: 'hashedText',
+    is_verified_account: true,
+    newsletter_subscription: true,
+    terms_and_conditions_accepted: true,
+    created_at: new Date(),
+    updated_at: new Date(),
+  };
 
+  const signInData: SignInDefaultDto = {
+    email: 'test@gmail.com',
+    password: '123456',
+  };
+
+  beforeAll(async () => {
     hashUtilMock = {
       generateHash: jest.fn().mockResolvedValue('hashedText'),
       compareHash: jest.fn().mockResolvedValue(true),
     };
 
     authRepositoryMock = {
-      create: jest.fn().mockImplementation(undefined),
-      findOneByEmail: jest.fn().mockImplementation(
-        (email: string): Promise<Auth> =>
-          Promise.resolve({
-            id: 1,
-            public_id: '1',
-            role: RolesEnum.USER,
-            email,
-            password: 'hashedText',
-            is_verified_account: true,
-            newsletter_subscription: true,
-            terms_and_conditions_accepted: true,
-            created_at: new Date(),
-            updated_at: new Date(),
-          }),
-      ),
+      create: jest.fn(),
+      findOneByEmail: jest.fn().mockResolvedValue(mockAuth),
       updateInfoByIdAuth: jest.fn().mockResolvedValue(undefined),
       updateInfoByPublicIdAuth: jest.fn().mockResolvedValue(undefined),
       updateInfoByEmailAuth: jest.fn().mockResolvedValue(undefined),
@@ -58,110 +58,106 @@ describe('AuthController from AppModule (e2e)', () => {
     await app.init();
   });
 
-  it('Should return authenticated user', async () => {
-    const signInData: SignInDefaultDto = {
-      email: 'test@gmail.com',
-      password: '123456',
-    };
-
-    const response = await request(app.getHttpServer())
-      .post('/auth/sign-in-default/')
-      .send(signInData)
-      .expect(200);
-
-    expect(response.body).toHaveProperty('access_token');
-    expect(response.body).toHaveProperty('refresh_token');
-    expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
-      signInData.email,
-      {},
-    );
+  beforeEach(() => {
+    jest.clearAllMocks();
+    authRepositoryMock.findOneByEmail.mockResolvedValue(mockAuth);
+    hashUtilMock.compareHash.mockResolvedValue(true);
   });
 
-  it('Should return 401 when email is invalid', async () => {
-    authRepositoryMock.findOneByEmail.mockResolvedValueOnce(null);
+  describe('POST /auth/sign-in-default', () => {
+    it('Should return authenticated user', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/auth/sign-in-default/')
+        .send(signInData)
+        .expect(200);
 
-    const signInData: SignInDefaultDto = {
-      email: 'wrong@gmail.com',
-      password: '123456',
-    };
-
-    const response = await request(app.getHttpServer())
-      .post('/auth/sign-in-default/')
-      .send(signInData)
-      .expect(401);
-
-    expect(response.body).toHaveProperty('statusCode', 401);
-    expect(response.body).toHaveProperty(
-      'message',
-      'Invalid credentials or account not verified',
-    );
-    expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
-      signInData.email,
-      {},
-    );
-  });
-
-  it('Should return 401 when password is invalid', async () => {
-    const signInData: SignInDefaultDto = {
-      email: 'test@gmail.com',
-      password: 'wrong123',
-    };
-
-    hashUtilMock.compareHash.mockResolvedValueOnce(false);
-
-    const response = await request(app.getHttpServer())
-      .post('/auth/sign-in-default/')
-      .send(signInData)
-      .expect(401);
-
-    expect(response.body).toHaveProperty('statusCode', 401);
-    expect(response.body).toHaveProperty(
-      'message',
-      'Invalid credentials or account not verified',
-    );
-    expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
-      signInData.email,
-      {},
-    );
-    expect(hashUtilMock.compareHash).toHaveBeenCalledWith(
-      signInData.password,
-      'hashedText',
-    );
-  });
-
-  it('Should return 401 when account is not verified', async () => {
-    authRepositoryMock.findOneByEmail.mockResolvedValueOnce({
-      id: 1,
-      public_id: '1',
-      role: RolesEnum.USER,
-      email: 'test@gmail.com',
-      password: 'hashedText',
-      is_verified_account: false,
-      newsletter_subscription: true,
-      terms_and_conditions_accepted: true,
-      created_at: new Date(),
-      updated_at: new Date(),
+      expect(response.body).toHaveProperty('access_token');
+      expect(response.body).toHaveProperty('refresh_token');
+      expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
+        signInData.email,
+        {},
+      );
+      expect(hashUtilMock.compareHash).toHaveBeenCalledWith(
+        signInData.password,
+        mockAuth.password,
+      );
     });
 
-    const signInData: SignInDefaultDto = {
-      email: 'test@gmail.com',
-      password: '123456',
-    };
+    it('Should return 401 when email is invalid', async () => {
+      authRepositoryMock.findOneByEmail.mockResolvedValueOnce(null);
 
-    const response = await request(app.getHttpServer())
-      .post('/auth/sign-in-default/')
-      .send(signInData)
-      .expect(401);
+      const invalidEmailData = {
+        email: 'wrong@gmail.com',
+        password: '123456',
+      };
 
-    expect(response.body).toHaveProperty('statusCode', 401);
-    expect(response.body).toHaveProperty(
-      'message',
-      'Invalid credentials or account not verified',
-    );
-    expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
-      signInData.email,
-      {},
-    );
+      const response = await request(app.getHttpServer())
+        .post('/auth/sign-in-default/')
+        .send(invalidEmailData)
+        .expect(401);
+
+      expect(response.body).toHaveProperty('statusCode', 401);
+      expect(response.body).toHaveProperty(
+        'message',
+        'Invalid credentials or account not verified',
+      );
+      expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
+        invalidEmailData.email,
+        {},
+      );
+      expect(hashUtilMock.compareHash).not.toHaveBeenCalled();
+    });
+
+    it('Should return 401 when password is invalid', async () => {
+      hashUtilMock.compareHash.mockResolvedValueOnce(false);
+
+      const invalidPasswordData = {
+        email: 'test@gmail.com',
+        password: 'wrong123',
+      };
+
+      const response = await request(app.getHttpServer())
+        .post('/auth/sign-in-default/')
+        .send(invalidPasswordData)
+        .expect(401);
+
+      expect(response.body).toHaveProperty('statusCode', 401);
+      expect(response.body).toHaveProperty(
+        'message',
+        'Invalid credentials or account not verified',
+      );
+      expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
+        invalidPasswordData.email,
+        {},
+      );
+      expect(hashUtilMock.compareHash).toHaveBeenCalledWith(
+        invalidPasswordData.password,
+        mockAuth.password,
+      );
+    });
+
+    it('Should return 401 when account is not verified', async () => {
+      const unverifiedAuth = {
+        ...mockAuth,
+        is_verified_account: false,
+      };
+      authRepositoryMock.findOneByEmail.mockResolvedValueOnce(unverifiedAuth);
+
+      const response = await request(app.getHttpServer())
+        .post('/auth/sign-in-default/')
+        .send(signInData)
+        .expect(401);
+
+      expect(response.body).toHaveProperty('statusCode', 401);
+      expect(response.body).toHaveProperty(
+        'message',
+        'Invalid credentials or account not verified',
+      );
+      expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
+        signInData.email,
+        {},
+      );
+    });
   });
 
   afterAll(async () => {
