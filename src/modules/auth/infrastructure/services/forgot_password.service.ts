@@ -17,7 +17,7 @@ export class ForgotPasswordService implements IForgotPasswordService {
   private readonly _findUserByEmailHelper: IFindUserByEmailHelper;
 
   @Inject('IGenerateTokenHelper')
-  private readonly _generateTokenUtil: IGenerateTokenHelper;
+  private readonly _generateTokenHelper: IGenerateTokenHelper;
 
   public async execute(input: EmailDto): Promise<{ message: string }> {
     return await this.intermediary(input);
@@ -32,7 +32,7 @@ export class ForgotPasswordService implements IForgotPasswordService {
       throw new NotFoundException('User not found');
     }
 
-    const { token } = await this._generateTokenUtil.execute({
+    const { token } = await this._generateTokenHelper.execute({
       email: findUserByEmail.email,
       role: findUserByEmail.role,
       sub: findUserByEmail.public_id,
