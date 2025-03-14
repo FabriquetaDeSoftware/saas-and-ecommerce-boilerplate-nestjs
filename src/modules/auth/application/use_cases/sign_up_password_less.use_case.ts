@@ -8,11 +8,11 @@ import { ISendEmailQueueJob } from 'src/shared/modules/email/domain/interfaces/j
 import { IAuthRepository } from '../../domain/interfaces/repositories/auth.repository.interface';
 import { IFindUserByEmailHelper } from '../../domain/interfaces/helpers/find_user_by_email.helper.interface';
 import { Auth } from '../../domain/entities/auth.entity';
-import { ISignUpMagicLinkUseCase } from '../../domain/interfaces/use_cases/sign_up_magic_link.use_case.interface';
+import { ISignUpPasswordLessUseCase } from '../../domain/interfaces/use_cases/sign_up_magic_link.use_case.interface';
 import { SignUpMagicLinkDto } from '../dto/sign_up_magic_link.dto';
 
 @Injectable()
-export class SignUpMagicLinkUseCase implements ISignUpMagicLinkUseCase {
+export class SignUpPasswordLessUseCase implements ISignUpPasswordLessUseCase {
   @Inject(CACHE_MANAGER)
   private readonly _cacheManager: Cache;
 

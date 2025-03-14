@@ -9,7 +9,7 @@ import { Auth } from 'src/modules/auth/domain/entities/auth.entity';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { ISendEmailQueueJob } from 'src/shared/modules/email/domain/interfaces/jobs/send_email_queue.job.interface';
 
-describe('AuthController MagicLink (e2e)', () => {
+describe('AuthController PasswordLess (e2e)', () => {
   let app: INestApplication;
   let authRepositoryMock: jest.Mocked<IAuthRepository>;
   let hashUtilMock: jest.Mocked<IHashUtil>;
@@ -91,10 +91,10 @@ describe('AuthController MagicLink (e2e)', () => {
     jest.clearAllMocks();
   });
 
-  describe('POST /auth/sign-up-magic-link/', () => {
+  describe('POST /auth/sign-up-password-less/', () => {
     it('should create a new user with magic link and return 201', async () => {
       const response = await request(app.getHttpServer())
-        .post('/auth/sign-up-magic-link/')
+        .post('/auth/sign-up-password-less/')
         .send(VALID_USER_DATA)
         .expect(HttpStatus.CREATED);
 
@@ -145,7 +145,7 @@ describe('AuthController MagicLink (e2e)', () => {
       });
 
       const response = await request(app.getHttpServer())
-        .post('/auth/sign-up-magic-link/')
+        .post('/auth/sign-up-password-less/')
         .send(existingUserData)
         .expect(HttpStatus.CONFLICT);
 
@@ -164,7 +164,7 @@ describe('AuthController MagicLink (e2e)', () => {
       };
 
       await request(app.getHttpServer())
-        .post('/auth/sign-up-magic-link/')
+        .post('/auth/sign-up-password-less/')
         .send(invalidData)
         .expect(HttpStatus.BAD_REQUEST);
 
@@ -177,7 +177,7 @@ describe('AuthController MagicLink (e2e)', () => {
       );
 
       await request(app.getHttpServer())
-        .post('/auth/sign-up-magic-link/')
+        .post('/auth/sign-up-password-less/')
         .send(VALID_USER_DATA)
         .expect(HttpStatus.INTERNAL_SERVER_ERROR);
     });
