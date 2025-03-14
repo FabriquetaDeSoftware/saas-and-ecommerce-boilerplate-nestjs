@@ -6,17 +6,17 @@ import { AppModule } from '../../src/app.module';
 describe('AuthController from AppModule (e2e)', () => {
   let app: INestApplication;
 
-  beforeEach(async () => {
-    if (app) {
-      await app.close();
-    }
-
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
+  });
+
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
   it('/billing/payment/one-time/ (Post)', async () => {

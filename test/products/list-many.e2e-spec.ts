@@ -12,11 +12,7 @@ describe('AuthController from AppModule (e2e)', () => {
   let productSubscriptionRepositoryMock: jest.Mocked<ISubscriptionProductsRepository>;
   let productSingleRepositoryMock: jest.Mocked<ISingleProductsRepository>;
 
-  beforeEach(async () => {
-    if (app) {
-      await app.close();
-    }
-
+  beforeAll(async () => {
     productSingleRepositoryMock = {
       findOneBySlug: jest.fn().mockResolvedValue(undefined),
       update: jest.fn().mockResolvedValue(undefined),
@@ -117,6 +113,10 @@ describe('AuthController from AppModule (e2e)', () => {
     );
 
     await app.init();
+  });
+
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
   it('Should return products[]', async () => {

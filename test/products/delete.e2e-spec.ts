@@ -6,7 +6,7 @@ import { AppModule } from '../../src/app.module';
 describe('AuthController from AppModule (e2e)', () => {
   let app: INestApplication;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     if (app) {
       await app.close();
     }
@@ -17,6 +17,10 @@ describe('AuthController from AppModule (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
     await app.init();
+  });
+
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
   it('Should return 204', async () => {
