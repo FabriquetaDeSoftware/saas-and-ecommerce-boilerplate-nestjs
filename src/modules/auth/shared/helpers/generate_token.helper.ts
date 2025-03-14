@@ -54,10 +54,13 @@ export class GenerateTokenHelper implements IGenerateTokenHelper {
     payload: IJwtUserPayload,
     type?: TokenEnum,
   ): Promise<ITokensReturnsHelper> {
-    if (type) {
+    if (type === TokenEnum.RECOVERY_PASSWORD_TOKEN) {
       const typeEcripted = await this.encryptPayload(type);
 
-      const token = this._jwtService.sign({ ...payload, type: typeEcripted });
+      const token = this._jwtService.sign(
+        { ...payload, type: typeEcripted },
+        { secret: jwtKeysConstants.secret_recovery_password_token_key },
+      );
 
       return { token };
     }
