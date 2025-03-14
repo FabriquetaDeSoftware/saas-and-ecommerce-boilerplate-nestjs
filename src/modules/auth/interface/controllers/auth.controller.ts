@@ -112,6 +112,7 @@ export class AuthController {
 
   @IsPublicRoute()
   @Post('refresh-token')
+  @HttpCode(200)
   public async refreshToken(
     @Body() input: RefreshTokenDto,
   ): Promise<ITokensReturnsHelper> {

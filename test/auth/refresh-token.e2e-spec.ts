@@ -12,11 +12,14 @@ import { TokenEnum } from 'src/shared/enum/token.enum';
 import { IJwtUserPayload } from 'src/shared/interfaces/jwt_user_payload.interface';
 import { IAuthRepository } from 'src/modules/auth/domain/interfaces/repositories/auth.repository.interface';
 import { jwtKeysConstants } from 'src/shared/constants/jwt_keys.constants';
+import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
+import { RolesEnum } from 'src/shared/enum/roles.enum';
 
 describe('AuthController from AppModule (e2e)', () => {
   let app: INestApplication;
   let jwtServiceMock: jest.Mocked<JwtService>;
   let authRepositoryMock: jest.Mocked<IAuthRepository>;
+  let cryptoUtilMock: jest.Mocked<ICryptoUtil>;
 
   const validToken = 'valid_token';
   const invalidToken = 'invalid_token';
@@ -25,8 +28,8 @@ describe('AuthController from AppModule (e2e)', () => {
 
   const mockJwtPayload: IJwtUserPayload = {
     email: Buffer.from(testEmail).toString('base64'),
-    role: 'user',
-    sub: testUserId,
+    role: Buffer.from(RolesEnum.USER).toString('base64'),
+    sub: Buffer.from(testUserId).toString('base64'),
     type: Buffer.from(TokenEnum.REFRESH_TOKEN).toString('base64'),
   };
 
@@ -39,6 +42,28 @@ describe('AuthController from AppModule (e2e)', () => {
   };
 
   beforeAll(async () => {
+    cryptoUtilMock = {
+      encryptData: jest.fn().mockResolvedValue(Buffer.from('encrypted_data')),
+      decryptData: jest.fn().mockImplementation(async (data: Buffer) => {
+        if (data.toString() === 'encrypted_data') {
+          return 'decrypted_data';
+        }
+        if (data.toString() === 'encrypted_email') {
+          return testEmail;
+        }
+        if (data.toString() === 'encrypted_role') {
+          return RolesEnum.USER;
+        }
+        if (data.toString() === 'encrypted_sub') {
+          return testUserId;
+        }
+        if (data.toString() === 'refresh_token') {
+          return TokenEnum.REFRESH_TOKEN;
+        }
+        return 'default_decrypted_value';
+      }),
+    } as any;
+
     jwtServiceMock = {
       verify: jest
         .fn()
@@ -66,6 +91,8 @@ describe('AuthController from AppModule (e2e)', () => {
     })
       .overrideProvider(JwtService)
       .useValue(jwtServiceMock)
+      .overrideProvider('ICryptoUtil')
+      .useValue(cryptoUtilMock)
       .overrideProvider('IAuthRepository')
       .useValue(authRepositoryMock)
       .compile();
@@ -87,15 +114,17 @@ describe('AuthController from AppModule (e2e)', () => {
 
   describe('POST /auth/refresh-token', () => {
     it('Should return new authentication payload', async () => {
-      // const response = await request(app.getHttpServer())
-      //   .post('/auth/refresh-token/')
-      //   .send(validRefreshTokenData)
-      //   .expect(200);
-      // expect(response.body).toHaveProperty('access_token');
-      // expect(response.body).toHaveProperty('refresh_token');
-      // expect(jwtServiceMock.verify).toHaveBeenCalledWith(validToken);
-      // expect(jwtServiceMock.sign).toHaveBeenCalled();
-      // expect(authRepositoryMock.findOneByEmail).toHaveBeenCalled();
+      const response = await request(app.getHttpServer())
+        .post('/auth/refresh-token/')
+        .send(validRefreshTokenData)
+        .expect(200);
+      expect(response.body).toHaveProperty('access_token');
+      expect(response.body).toHaveProperty('refresh_token');
+      expect(jwtServiceMock.verify).toHaveBeenCalledWith(validToken, {
+        secret: jwtKeysConstants.secret_refresh_token_key,
+      });
+      expect(jwtServiceMock.sign).toHaveBeenCalled();
+      expect(authRepositoryMock.findOneByEmail).toHaveBeenCalled();
     });
 
     it('Should return 400 when token is invalid', async () => {
