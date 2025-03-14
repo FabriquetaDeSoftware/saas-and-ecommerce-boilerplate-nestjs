@@ -133,6 +133,7 @@ export class AuthController {
 
   @IsPublicRoute()
   @Post('recovery-password')
+  @HttpCode(200)
   public async recoveryPassword(
     @Query('token') query: string,
     @Body() input: PasswordDto,
