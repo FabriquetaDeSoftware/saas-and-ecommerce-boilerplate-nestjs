@@ -67,6 +67,8 @@ describe('AuthController Verification (e2e)', () => {
           (auth_id: number): Promise<VerificationCodes> =>
             Promise.resolve(mockVerificationCode(auth_id)),
         ),
+
+      deleteVerificationCodeByAuthorId: jest.fn().mockResolvedValue(undefined),
     };
 
     sendEmailQueueJobMock = {
@@ -133,6 +135,9 @@ describe('AuthController Verification (e2e)', () => {
         VALID_VERIFICATION_DATA.email,
         { is_verified_account: true },
       );
+      expect(
+        verificationCodeRepositoryMock.deleteVerificationCodeByAuthorId,
+      ).toHaveBeenCalledTimes(1);
     });
 
     it('should return 404 when email is not found', async () => {

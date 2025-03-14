@@ -55,30 +55,39 @@ export class VerifyAccountUseCase implements IVerifyAccountUseCase {
     );
 
     if (verifyCodeByCache) {
-      await this.updateAccountIsVerify(user.email, true);
+      const [, sendEmail] = await Promise.all([
+        this.updateAccountIsVerify(user.email, true),
+        this.sendEmailVerificationCode({
+          emailTo: user.email,
+          language: LanguageEnum.PT_BR,
+          subject: 'Seja Bem Vindo a Plataforma',
+          template: TemplateEnum.WELCOME,
+          variables: { NAME: user.email, LINK: 'https://example.com' },
+        }),
+      ]);
 
-      return await this.sendEmailVerificationCode({
-        emailTo: user.email,
-        language: LanguageEnum.PT_BR,
-        subject: 'Seja Bem Vindo a Plataforma',
-        template: TemplateEnum.WELCOME,
-        variables: { NAME: user.email, LINK: 'https://example.com' },
-      });
+      return sendEmail;
     }
 
     const verificationCode = await this.verifyExpiresDateOfCode(user.id);
 
     await this.verifyCode(data.code.toString(), verificationCode.code);
 
-    await this.updateAccountIsVerify(user.email, true);
+    const [, , sendEmail] = await Promise.all([
+      this.updateAccountIsVerify(user.email, true),
+      this._verificationCodesRepository.deleteVerificationCodeByAuthorId(
+        user.id,
+      ),
+      this.sendEmailVerificationCode({
+        emailTo: user.email,
+        language: LanguageEnum.PT_BR,
+        subject: 'Seja Bem Vindo a Plataforma',
+        template: TemplateEnum.WELCOME,
+        variables: { NAME: user.email, LINK: 'https://example.com' },
+      }),
+    ]);
 
-    return await this.sendEmailVerificationCode({
-      emailTo: user.email,
-      language: LanguageEnum.PT_BR,
-      subject: 'Seja Bem Vindo a Plataforma',
-      template: TemplateEnum.WELCOME,
-      variables: { NAME: user.email, LINK: 'https://example.com' },
-    });
+    return sendEmail;
   }
 
   private async sendEmailVerificationCode(

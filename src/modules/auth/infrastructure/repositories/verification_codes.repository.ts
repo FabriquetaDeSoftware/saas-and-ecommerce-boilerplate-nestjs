@@ -22,4 +22,12 @@ export class VerificationCodesRepository
 
     return result;
   }
+
+  public async deleteVerificationCodeByAuthorId(
+    auth_id: number,
+  ): Promise<void> {
+    await this._databaseAdapter.delete(this._model, { auth_id });
+
+    return;
+  }
 }
