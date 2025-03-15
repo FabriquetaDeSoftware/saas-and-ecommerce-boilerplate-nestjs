@@ -9,4 +9,10 @@ export class AppController {
   @Get()
   @Render('index')
   public render(): void {}
+
+  @ApiBearerAuth()
+  @Get('hello')
+  public hello(): { message: string } {
+    return { message: 'Hello World!' };
+  }
 }
