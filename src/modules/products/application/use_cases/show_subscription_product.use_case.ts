@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { IShowSubscriptionProductUseCase } from '../../domain/interfaces/use_cases/show_subscription_product.use_case.interface';
 import { Products } from '../../domain/entities/products.entity';
 import { ISubscriptionProductsRepository } from '../../domain/interfaces/repositories/subscription_products.repository.interface';
@@ -23,6 +23,10 @@ export class ShowSubscriptionProductUseCase
         id: true,
       },
     );
+
+    if (!result) {
+      throw new NotFoundException('Product not found');
+    }
 
     return result;
   }

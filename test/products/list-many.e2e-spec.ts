@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { ISubscriptionProductsRepository } from 'src/modules/products/domain/interfaces/repositories/subscription_products.repository.interface';
@@ -182,6 +182,17 @@ describe('AuthController from AppModule (e2e)', () => {
           }),
       ),
     );
+  });
+
+  it('Should return 400 when type is invalid', async () => {
+    const invalidType = 'invalid-type';
+
+    await request(app.getHttpServer())
+      .get(`/products/list-many/${invalidType}/?page=1&pageSize=10`)
+      .expect(HttpStatus.BAD_REQUEST);
+
+    expect(productSingleRepositoryMock.listMany).not.toHaveBeenCalled();
+    expect(productSubscriptionRepositoryMock.listMany).not.toHaveBeenCalled();
   });
 
   afterAll(async () => {

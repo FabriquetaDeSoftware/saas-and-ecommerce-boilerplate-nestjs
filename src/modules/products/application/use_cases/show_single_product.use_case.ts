@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Products } from '../../domain/entities/products.entity';
 import { IShowSingleProductUseCase } from '../../domain/interfaces/use_cases/show_single_product.use_case.interface';
 import { ISingleProductsRepository } from '../../domain/interfaces/repositories/single_products.repository.interface';
@@ -18,6 +18,10 @@ export class ShowSingleProductUseCase implements IShowSingleProductUseCase {
     const result = await this._singleProductsRepository.findOneBySlug(slug, {
       id: true,
     });
+
+    if (!result) {
+      throw new NotFoundException('Product not found');
+    }
 
     return result;
   }

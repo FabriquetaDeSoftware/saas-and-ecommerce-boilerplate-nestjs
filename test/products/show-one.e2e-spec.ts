@@ -104,7 +104,7 @@ describe('AuthController from AppModule (e2e)', () => {
     );
   });
 
-  it('Should return 400 when slug not exists', async () => {
+  it('Should return 404 when slug not exists', async () => {
     productSingleRepositoryMock.findOneBySlug.mockResolvedValueOnce(null);
     productSubscriptionRepositoryMock.findOneBySlug.mockResolvedValueOnce(null);
 
@@ -114,7 +114,7 @@ describe('AuthController from AppModule (e2e)', () => {
       types.map((type) =>
         request(app.getHttpServer())
           .get(`/products/show-one/${type}/${invalidSlug}/`)
-          .expect(HttpStatus.BAD_REQUEST),
+          .expect(HttpStatus.NOT_FOUND),
       ),
     );
 
