@@ -1,49 +1,88 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { HttpStatus, INestApplication } from '@nestjs/common';
+import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from 'src/app.module';
 import { JwtService } from '@nestjs/jwt';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
+import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
+import { GenerateTokenHelper } from 'src/modules/auth/shared/helpers/generate_token.helper';
+import { GenerateTokenDto } from 'src/modules/auth/application/dto/generate_token.dto';
 
-describe('Protected Routes (e2e)', () => {
+describe('Rotas Protegidas (e2e)', () => {
   let app: INestApplication;
-  let jwtServiceMock: jest.Mocked<JwtService>;
-  let mockAccessToken: string;
+  let jwtService: JwtService;
+  let cryptoUtil: ICryptoUtil;
+  let generateTokenHelper: GenerateTokenHelper;
+  let accessToken: string;
 
   beforeAll(async () => {
-    const mockPayload = {
-      email: 'test@gmail.com',
-      role: RolesEnum.USER,
-      sub: '1',
+    const testEmail = 'test@example.com';
+    const testUserId = '123';
+    const testRole = RolesEnum.USER;
+
+    const cryptoUtilMock = {
+      encryptData: jest.fn().mockImplementation((data: string) => {
+        return Promise.resolve(Buffer.from(data));
+      }),
+      decryptData: jest.fn().mockImplementation((data: Buffer) => {
+        return Promise.resolve(data.toString());
+      }),
     };
-
-    mockAccessToken =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJrVUZWdVA5eWNnLzEwcGJqN0lpR0JLaUt4ZS9pRWdGWmNlOVMrSXdFVkZ1czdhTDNPdG13NFI0Mm5LWXlrNUVOU0pCWFhBPT0iLCJlbWFpbCI6Im9qaDdTNENkS3dFdlE3ZVpReDN4ZHF3alFvclVGQlBsaEl2eHVDTG5udz09Iiwicm9sZSI6IjJQRHhQRjJVVG9GVHVzOFFYYVlKUmlwUG9RQzIiLCJ0eXBlIjoiTHJDRTNjaVNzYUNNZkJlVmFaZ3NQUXlENEJFRWZJK1dYdTltc2c9PSIsImlhdCI6MTc0MjA1ODEwOSwiZXhwIjoxNzQyMDU5OTA5fQ._Ho1-Afe4Q4ZKgaTHCbIKKwcecTHN0kiGOjQvg7tWiM';
-
-    jwtServiceMock = {
-      sign: jest.fn().mockReturnValue(mockAccessToken),
-      verify: jest.fn().mockReturnValue(mockPayload),
-    } as any;
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
-      .overrideProvider(JwtService)
-      .useValue(jwtServiceMock)
+      .overrideProvider('ICryptoUtil')
+      .useValue(cryptoUtilMock)
       .compile();
 
     app = moduleFixture.createNestApplication();
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transform: true,
+      }),
+    );
     await app.init();
+
+    jwtService = moduleFixture.get<JwtService>(JwtService);
+    cryptoUtil = moduleFixture.get<ICryptoUtil>('ICryptoUtil');
+
+    generateTokenHelper = new GenerateTokenHelper();
+    Object.defineProperty(generateTokenHelper, '_jwtService', {
+      value: jwtService,
+      writable: true,
+    });
+    Object.defineProperty(generateTokenHelper, '_cryptoUtil', {
+      value: cryptoUtil,
+      writable: true,
+    });
+
+    const tokenDto: GenerateTokenDto = {
+      email: testEmail,
+      sub: testUserId,
+      role: testRole,
+    };
+
+    const tokens = await generateTokenHelper.execute(tokenDto);
+    accessToken = tokens.access_token;
   });
 
   describe('GET /hello', () => {
-    it('Should return message for authenticated user', async () => {
+    it('Should return message to authenticated user', async () => {
       const response = await request(app.getHttpServer())
         .get('/hello/')
-        .set('Authorization', `Bearer ${mockAccessToken}`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .expect(HttpStatus.OK);
 
       expect(response.body).toHaveProperty('message');
+    });
+
+    it('Should return 401 to request not authenticated', async () => {
+      await request(app.getHttpServer())
+        .get('/hello/')
+        .expect(HttpStatus.UNAUTHORIZED);
     });
   });
 
