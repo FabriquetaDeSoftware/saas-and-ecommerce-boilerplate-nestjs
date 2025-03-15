@@ -8,7 +8,7 @@ import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
 import { GenerateTokenHelper } from 'src/modules/auth/shared/helpers/generate_token.helper';
 import { GenerateTokenDto } from 'src/modules/auth/application/dto/generate_token.dto';
 
-describe('Rotas Protegidas (e2e)', () => {
+describe('Protected route without roles to test (e2e)', () => {
   let app: INestApplication;
   let jwtService: JwtService;
   let cryptoUtil: ICryptoUtil;
@@ -61,7 +61,7 @@ describe('Rotas Protegidas (e2e)', () => {
     });
   });
 
-  describe('GET /protected-route', () => {
+  describe('GET /protected', () => {
     it('Should return message to authenticated user', async () => {
       const tokenDto: GenerateTokenDto = {
         email: testEmail,
@@ -73,7 +73,7 @@ describe('Rotas Protegidas (e2e)', () => {
       accessToken = tokens.access_token;
 
       const response = await request(app.getHttpServer())
-        .get('/protected-route/')
+        .get('/protected/')
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(HttpStatus.OK);
 
@@ -82,7 +82,7 @@ describe('Rotas Protegidas (e2e)', () => {
 
     it('Should return 401 when token is invalid', async () => {
       const response = await request(app.getHttpServer())
-        .get('/protected-route/')
+        .get('/protected/')
         .set('Authorization', `Bearer ${invalidToken}`)
         .expect(HttpStatus.UNAUTHORIZED);
 
@@ -91,7 +91,7 @@ describe('Rotas Protegidas (e2e)', () => {
 
     it('Should return 401 to request not authenticated', async () => {
       await request(app.getHttpServer())
-        .get('/protected-route/')
+        .get('/protected/')
         .expect(HttpStatus.UNAUTHORIZED);
     });
   });

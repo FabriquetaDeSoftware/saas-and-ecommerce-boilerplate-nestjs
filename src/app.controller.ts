@@ -13,21 +13,21 @@ export class AppController {
   public render(): void {}
 
   @ApiBearerAuth()
-  @Get('protected-route')
+  @Get('protected')
   public protectedRoute(): { message: string } {
     return { message: 'Protected Route' };
   }
 
   @ApiBearerAuth()
   @Roles(RolesEnum.ADMIN)
-  @Get('admin-route')
+  @Get('admin')
   public adminRoute(): { message: string } {
     return { message: 'Admin Route' };
   }
 
   @ApiBearerAuth()
   @Roles(RolesEnum.USER)
-  @Get('user-route')
+  @Get('user')
   public userRoute(): { message: string } {
     return { message: 'User Route' };
   }
