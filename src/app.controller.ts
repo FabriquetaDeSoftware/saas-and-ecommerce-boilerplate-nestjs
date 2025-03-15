@@ -1,6 +1,6 @@
 import { Get, Controller, Render, Res } from '@nestjs/common';
 import { IsPublicRoute } from './common/decorators/is_public_route.decorator';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('app')
 @Controller()
@@ -9,4 +9,10 @@ export class AppController {
   @Get()
   @Render('index')
   public render(): void {}
+
+  @ApiBearerAuth()
+  @Get('hello')
+  public hello(): { message: string } {
+    return { message: 'Hello World!' };
+  }
 }
