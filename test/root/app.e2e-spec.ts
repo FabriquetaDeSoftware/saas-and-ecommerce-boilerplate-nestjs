@@ -13,13 +13,14 @@ describe('Rotas Protegidas (e2e)', () => {
   let jwtService: JwtService;
   let cryptoUtil: ICryptoUtil;
   let generateTokenHelper: GenerateTokenHelper;
+
   let accessToken: string;
+  let invalidToken: string = 'invalid_token';
+
+  const testEmail = 'test@example.com';
+  const testUserId = '123';
 
   beforeAll(async () => {
-    const testEmail = 'test@example.com';
-    const testUserId = '123';
-    const testRole = RolesEnum.USER;
-
     const cryptoUtilMock = {
       encryptData: jest.fn().mockImplementation((data: string) => {
         return Promise.resolve(Buffer.from(data));
@@ -58,30 +59,141 @@ describe('Rotas Protegidas (e2e)', () => {
       value: cryptoUtil,
       writable: true,
     });
-
-    const tokenDto: GenerateTokenDto = {
-      email: testEmail,
-      sub: testUserId,
-      role: testRole,
-    };
-
-    const tokens = await generateTokenHelper.execute(tokenDto);
-    accessToken = tokens.access_token;
   });
 
-  describe('GET /hello', () => {
+  describe('GET /protected-route', () => {
     it('Should return message to authenticated user', async () => {
+      const tokenDto: GenerateTokenDto = {
+        email: testEmail,
+        sub: testUserId,
+        role: RolesEnum.USER,
+      };
+
+      const tokens = await generateTokenHelper.execute(tokenDto);
+      accessToken = tokens.access_token;
+
       const response = await request(app.getHttpServer())
-        .get('/hello/')
+        .get('/protected-route/')
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(HttpStatus.OK);
 
       expect(response.body).toHaveProperty('message');
     });
 
+    it('Should return 401 when token is invalid', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/protected-route/')
+        .set('Authorization', `Bearer ${invalidToken}`)
+        .expect(HttpStatus.UNAUTHORIZED);
+
+      expect(response.body).toHaveProperty('message');
+    });
+
     it('Should return 401 to request not authenticated', async () => {
       await request(app.getHttpServer())
-        .get('/hello/')
+        .get('/protected-route/')
+        .expect(HttpStatus.UNAUTHORIZED);
+    });
+  });
+
+  describe('GET /admin-route', () => {
+    it('Should return message to authenticated user', async () => {
+      const tokenDto: GenerateTokenDto = {
+        email: testEmail,
+        sub: testUserId,
+        role: RolesEnum.ADMIN,
+      };
+
+      const tokens = await generateTokenHelper.execute(tokenDto);
+      accessToken = tokens.access_token;
+
+      const response = await request(app.getHttpServer())
+        .get('/admin-route/')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(HttpStatus.OK);
+
+      expect(response.body).toHaveProperty('message');
+    });
+
+    it('Should return 403 when user dont have role available', async () => {
+      const tokenDto: GenerateTokenDto = {
+        email: testEmail,
+        sub: testUserId,
+        role: RolesEnum.USER,
+      };
+
+      const tokens = await generateTokenHelper.execute(tokenDto);
+      accessToken = tokens.access_token;
+
+      await request(app.getHttpServer())
+        .get('/admin-route/')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(HttpStatus.FORBIDDEN);
+    });
+
+    it('Should return 401 when token is invalid', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/admin-route/')
+        .set('Authorization', `Bearer ${invalidToken}`)
+        .expect(HttpStatus.UNAUTHORIZED);
+
+      expect(response.body).toHaveProperty('message');
+    });
+
+    it('Should return 401 to request not authenticated', async () => {
+      await request(app.getHttpServer())
+        .get('/admin-route/')
+        .expect(HttpStatus.UNAUTHORIZED);
+    });
+  });
+
+  describe('GET /user-route', () => {
+    it('Should return message to authenticated user', async () => {
+      const tokenDto: GenerateTokenDto = {
+        email: testEmail,
+        sub: testUserId,
+        role: RolesEnum.USER,
+      };
+
+      const tokens = await generateTokenHelper.execute(tokenDto);
+      accessToken = tokens.access_token;
+
+      const response = await request(app.getHttpServer())
+        .get('/user-route/')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(HttpStatus.OK);
+
+      expect(response.body).toHaveProperty('message');
+    });
+
+    it('Should return 403 when user dont have role available', async () => {
+      const tokenDto: GenerateTokenDto = {
+        email: testEmail,
+        sub: testUserId,
+        role: RolesEnum.ADMIN,
+      };
+
+      const tokens = await generateTokenHelper.execute(tokenDto);
+      accessToken = tokens.access_token;
+
+      await request(app.getHttpServer())
+        .get('/user-route/')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(HttpStatus.FORBIDDEN);
+    });
+
+    it('Should return 401 when token is invalid', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/user-route/')
+        .set('Authorization', `Bearer ${invalidToken}`)
+        .expect(HttpStatus.UNAUTHORIZED);
+
+      expect(response.body).toHaveProperty('message');
+    });
+
+    it('Should return 401 to request not authenticated', async () => {
+      await request(app.getHttpServer())
+        .get('/user-route/')
         .expect(HttpStatus.UNAUTHORIZED);
     });
   });
