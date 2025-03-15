@@ -12,6 +12,8 @@ describe('AuthController from AppModule (e2e)', () => {
   let productSubscriptionRepositoryMock: jest.Mocked<ISubscriptionProductsRepository>;
   let productSingleRepositoryMock: jest.Mocked<ISingleProductsRepository>;
 
+  const types = ['single', 'subscription'];
+
   beforeAll(async () => {
     productSingleRepositoryMock = {
       findOneBySlug: jest.fn().mockResolvedValue(undefined),
@@ -105,13 +107,13 @@ describe('AuthController from AppModule (e2e)', () => {
       .compile();
 
     app = moduleFixture.createNestApplication();
-
     app.useGlobalPipes(
       new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
         transform: true,
       }),
     );
-
     await app.init();
   });
 
@@ -124,8 +126,6 @@ describe('AuthController from AppModule (e2e)', () => {
       page: 1,
       pageSize: 1,
     };
-
-    const types = ['single', 'subscription'];
 
     await Promise.all(
       types.map((type) =>
@@ -168,8 +168,6 @@ describe('AuthController from AppModule (e2e)', () => {
       total: 0,
       totalPages: 0,
     });
-
-    const types = ['single', 'subscription'];
 
     await Promise.all(
       types.map((type) =>

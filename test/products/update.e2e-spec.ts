@@ -40,12 +40,16 @@ describe('AuthController from AppModule (e2e)', () => {
     //   .expect('Hello World!');
   });
 
-  it('Should return 404 when publicId of product is invalid', async () => {
+  it('Should return 404 when product not found', async () => {
     // const response = await request(app.getHttpServer())
     //   .post('/products/update/:publicId/')
     //   .expect(200)
     //   .expect('Hello World!');
   });
+
+  it('Should return 400 when type is invalid', async () => {});
+
+  it('should validate required fields and return 400 for invalid data', async () => {});
 
   afterAll(async () => {
     await app.close();

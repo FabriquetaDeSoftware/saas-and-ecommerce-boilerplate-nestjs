@@ -3,7 +3,6 @@ import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { ISubscriptionProductsRepository } from 'src/modules/products/domain/interfaces/repositories/subscription_products.repository.interface';
-import { ListManyProductsReturn } from 'src/modules/products/domain/interfaces/returns/list_many_products_return.interface';
 import { ListManyProductsDto } from 'src/modules/products/application/dto/list_many_products.dto';
 import { ISingleProductsRepository } from 'src/modules/products/domain/interfaces/repositories/single_products.repository.interface';
 
@@ -14,6 +13,7 @@ describe('AuthController from AppModule (e2e)', () => {
 
   const validSlug = 'valid_slug';
   const invalidSlug = 'invalid_slug';
+  const types = ['single', 'subscription'];
 
   beforeAll(async () => {
     productSingleRepositoryMock = {
@@ -64,13 +64,13 @@ describe('AuthController from AppModule (e2e)', () => {
       .compile();
 
     app = moduleFixture.createNestApplication();
-
     app.useGlobalPipes(
       new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
         transform: true,
       }),
     );
-
     await app.init();
   });
 
@@ -83,8 +83,6 @@ describe('AuthController from AppModule (e2e)', () => {
       page: 1,
       pageSize: 1,
     };
-
-    const types = ['single', 'subscription'];
 
     await Promise.all(
       types.map((type) =>
@@ -107,8 +105,6 @@ describe('AuthController from AppModule (e2e)', () => {
   it('Should return 404 when slug not exists', async () => {
     productSingleRepositoryMock.findOneBySlug.mockResolvedValueOnce(null);
     productSubscriptionRepositoryMock.findOneBySlug.mockResolvedValueOnce(null);
-
-    const types = ['single', 'subscription'];
 
     await Promise.all(
       types.map((type) =>
