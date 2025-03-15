@@ -75,7 +75,7 @@ describe('AuthController from AppModule (e2e)', () => {
       const response = await request(app.getHttpServer())
         .post('/auth/forgot-password/')
         .send(forgotPassData)
-        .expect(200);
+        .expect(HttpStatus.OK);
 
       expect(response.body).toHaveProperty(
         'message',

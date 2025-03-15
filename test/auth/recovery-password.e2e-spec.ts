@@ -114,7 +114,7 @@ describe('AuthController from AppModule (e2e)', () => {
       const response = await request(app.getHttpServer())
         .post(`/auth/recovery-password?token=${validToken}`)
         .send(recoveryPasswordData)
-        .expect(200);
+        .expect(HttpStatus.OK);
       expect(response.body).toHaveProperty(
         'message',
         'Password recovered successfully',

@@ -118,7 +118,7 @@ describe('AuthController from AppModule (e2e)', () => {
       const response = await request(app.getHttpServer())
         .post('/auth/refresh-token/')
         .send(validRefreshTokenData)
-        .expect(200);
+        .expect(HttpStatus.OK);
       expect(response.body).toHaveProperty('access_token');
       expect(response.body).toHaveProperty('refresh_token');
       expect(jwtServiceMock.verify).toHaveBeenCalledWith(validToken, {

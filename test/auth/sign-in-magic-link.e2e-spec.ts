@@ -75,7 +75,7 @@ describe('AuthController from AppModule (e2e)', () => {
       const response = await request(app.getHttpServer())
         .post('/auth/sign-in-magic-link/')
         .send(validEmailData)
-        .expect(200);
+        .expect(HttpStatus.OK);
 
       expect(response.body).toHaveProperty(
         'message',

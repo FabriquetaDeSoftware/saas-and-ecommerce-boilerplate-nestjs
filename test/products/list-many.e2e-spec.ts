@@ -133,7 +133,7 @@ describe('AuthController from AppModule (e2e)', () => {
           .get(
             `/products/list-many/${type}/?page=${listManyProductsData.page}&pageSize=${listManyProductsData.pageSize}`,
           )
-          .expect(200),
+          .expect(HttpStatus.OK),
       ),
     );
 
@@ -175,7 +175,7 @@ describe('AuthController from AppModule (e2e)', () => {
       types.map((type) =>
         request(app.getHttpServer())
           .get(`/products/list-many/${type}/?page=1&pageSize=10`)
-          .expect(200)
+          .expect(HttpStatus.OK)
           .expect((res) => {
             expect(res.body.data).toHaveLength(0);
             expect(res.body.total).toBe(0);

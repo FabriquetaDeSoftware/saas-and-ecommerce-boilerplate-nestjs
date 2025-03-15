@@ -90,7 +90,7 @@ describe('AuthController from AppModule (e2e)', () => {
       types.map((type) =>
         request(app.getHttpServer())
           .get(`/products/show-one/${type}/${validSlug}/`)
-          .expect(200),
+          .expect(HttpStatus.OK),
       ),
     );
 
