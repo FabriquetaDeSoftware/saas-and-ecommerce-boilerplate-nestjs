@@ -61,6 +61,10 @@ describe('Protected route without roles to test (e2e)', () => {
     });
   });
 
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe('GET /protected', () => {
     it('Should return message to authenticated user', async () => {
       const tokenDto: GenerateTokenDto = {

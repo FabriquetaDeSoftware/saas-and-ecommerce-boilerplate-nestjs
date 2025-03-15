@@ -63,6 +63,10 @@ describe('Protected route with admin role to test (e2e)', () => {
     });
   });
 
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe('GET /admin', () => {
     it('Should return message to authenticated user', async () => {
       const tokenDto: GenerateTokenDto = {
