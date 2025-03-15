@@ -152,6 +152,38 @@ describe('AuthController from AppModule (e2e)', () => {
     );
   });
 
+  it('Should return empty array', async () => {
+    productSingleRepositoryMock.listMany.mockResolvedValueOnce({
+      data: [],
+      page: 1,
+      pageSize: 10,
+      total: 0,
+      totalPages: 0,
+    });
+
+    productSubscriptionRepositoryMock.listMany.mockResolvedValueOnce({
+      data: [],
+      page: 1,
+      pageSize: 10,
+      total: 0,
+      totalPages: 0,
+    });
+
+    const types = ['single', 'subscription'];
+
+    await Promise.all(
+      types.map((type) =>
+        request(app.getHttpServer())
+          .get(`/products/list-many/${type}/?page=1&pageSize=10`)
+          .expect(200)
+          .expect((res) => {
+            expect(res.body.data).toHaveLength(0);
+            expect(res.body.total).toBe(0);
+          }),
+      ),
+    );
+  });
+
   afterAll(async () => {
     await app.close();
   });

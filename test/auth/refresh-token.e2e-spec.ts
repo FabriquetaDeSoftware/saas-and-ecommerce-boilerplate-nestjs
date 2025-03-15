@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import {
   BadRequestException,
+  HttpStatus,
   INestApplication,
   ValidationPipe,
 } from '@nestjs/common';
@@ -131,7 +132,7 @@ describe('AuthController from AppModule (e2e)', () => {
       const response = await request(app.getHttpServer())
         .post('/auth/refresh-token/')
         .send(invalidRefreshTokenData)
-        .expect(400);
+        .expect(HttpStatus.BAD_REQUEST);
 
       expect(response.body).toHaveProperty('statusCode', 400);
       expect(response.body).toHaveProperty(
@@ -148,7 +149,7 @@ describe('AuthController from AppModule (e2e)', () => {
       const response = await request(app.getHttpServer())
         .post('/auth/refresh-token/')
         .send({})
-        .expect(400);
+        .expect(HttpStatus.BAD_REQUEST);
 
       expect(response.body).toHaveProperty('statusCode', 400);
       expect(jwtServiceMock.verify).not.toHaveBeenCalled();

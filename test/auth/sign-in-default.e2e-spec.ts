@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
@@ -94,7 +94,7 @@ describe('AuthController from AppModule (e2e)', () => {
       const response = await request(app.getHttpServer())
         .post('/auth/sign-in-default/')
         .send(invalidEmailData)
-        .expect(401);
+        .expect(HttpStatus.UNAUTHORIZED);
 
       expect(response.body).toHaveProperty('statusCode', 401);
       expect(response.body).toHaveProperty(
@@ -119,7 +119,7 @@ describe('AuthController from AppModule (e2e)', () => {
       const response = await request(app.getHttpServer())
         .post('/auth/sign-in-default/')
         .send(invalidPasswordData)
-        .expect(401);
+        .expect(HttpStatus.UNAUTHORIZED);
 
       expect(response.body).toHaveProperty('statusCode', 401);
       expect(response.body).toHaveProperty(
@@ -146,7 +146,7 @@ describe('AuthController from AppModule (e2e)', () => {
       const response = await request(app.getHttpServer())
         .post('/auth/sign-in-default/')
         .send(signInData)
-        .expect(401);
+        .expect(HttpStatus.UNAUTHORIZED);
 
       expect(response.body).toHaveProperty('statusCode', 401);
       expect(response.body).toHaveProperty(

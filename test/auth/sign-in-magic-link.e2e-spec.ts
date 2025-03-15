@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { IAuthRepository } from 'src/modules/auth/domain/interfaces/repositories/auth.repository.interface';
@@ -98,7 +98,7 @@ describe('AuthController from AppModule (e2e)', () => {
       const response = await request(app.getHttpServer())
         .post('/auth/sign-in-magic-link/')
         .send(invalidEmailData)
-        .expect(401);
+        .expect(HttpStatus.UNAUTHORIZED);
 
       expect(response.body).toHaveProperty('statusCode', 401);
       expect(response.body).toHaveProperty(
@@ -122,7 +122,7 @@ describe('AuthController from AppModule (e2e)', () => {
       const response = await request(app.getHttpServer())
         .post('/auth/sign-in-magic-link/')
         .send(validEmailData)
-        .expect(401);
+        .expect(HttpStatus.UNAUTHORIZED);
 
       expect(response.body).toHaveProperty('statusCode', 401);
       expect(response.body).toHaveProperty(
@@ -140,7 +140,7 @@ describe('AuthController from AppModule (e2e)', () => {
       const response = await request(app.getHttpServer())
         .post('/auth/sign-in-magic-link/')
         .send({})
-        .expect(400);
+        .expect(HttpStatus.BAD_REQUEST);
 
       expect(response.body).toHaveProperty('statusCode', 400);
       expect(authRepositoryMock.findOneByEmail).not.toHaveBeenCalled();
