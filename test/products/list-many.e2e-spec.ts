@@ -127,7 +127,7 @@ describe('AuthController from AppModule (e2e)', () => {
       pageSize: 1,
     };
 
-    await Promise.all(
+    const responses = await Promise.all(
       types.map((type) =>
         request(app.getHttpServer())
           .get(
@@ -136,6 +136,37 @@ describe('AuthController from AppModule (e2e)', () => {
           .expect(HttpStatus.OK),
       ),
     );
+
+    responses.map((response) => {
+      expect(response.body).toEqual(
+        expect.objectContaining({
+          data: expect.arrayContaining([
+            expect.objectContaining({
+              id: 1,
+              public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
+              name: 'Product 1',
+              description: 'Description 1',
+              price: 10,
+              image: 'image1.jpg',
+              slug: 'product-1',
+            }),
+            expect.objectContaining({
+              id: 2,
+              public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
+              name: 'Product 2',
+              description: 'Description 2',
+              price: 10,
+              image: 'image2.jpg',
+              slug: 'product-1',
+            }),
+          ]),
+          page: 1,
+          pageSize: 1,
+          total: 2,
+          totalPages: 2,
+        }),
+      );
+    });
 
     expect(productSubscriptionRepositoryMock.listMany).toHaveBeenCalledWith(
       undefined,

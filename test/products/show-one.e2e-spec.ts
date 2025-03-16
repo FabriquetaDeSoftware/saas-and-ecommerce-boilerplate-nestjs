@@ -79,18 +79,28 @@ describe('AuthController from AppModule (e2e)', () => {
   });
 
   it('Should return one product', async () => {
-    const listManyProductsData: ListManyProductsDto = {
-      page: 1,
-      pageSize: 1,
-    };
-
-    await Promise.all(
+    const responses = await Promise.all(
       types.map((type) =>
         request(app.getHttpServer())
           .get(`/products/show-one/${type}/${validSlug}/`)
           .expect(HttpStatus.OK),
       ),
     );
+
+    responses.map((response) => {
+      expect(response.body).toEqual(
+        expect.objectContaining({
+          public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
+          name: 'Product 1',
+          description: 'Description 1',
+          price: 10,
+          image: 'image1.jpg',
+          slug: 'product-1',
+          created_at: expect.any(String),
+          updated_at: expect.any(String),
+        }),
+      );
+    });
 
     expect(
       productSubscriptionRepositoryMock.findOneBySlug,

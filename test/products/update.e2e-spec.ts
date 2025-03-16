@@ -146,6 +146,7 @@ describe('AuthController from AppModule (e2e)', () => {
       { ...VALID_PRODUCT_DATA, price: VALID_PRODUCT_DATA.price * 100 },
       { id: true },
     );
+
     expect(productSingleRepositoryMock.update).toHaveBeenCalledWith(
       validPublicId,
       { ...VALID_PRODUCT_DATA, price: VALID_PRODUCT_DATA.price * 100 },
@@ -198,7 +199,7 @@ describe('AuthController from AppModule (e2e)', () => {
     );
 
     expect(productSubscriptionRepositoryMock.update).not.toHaveBeenCalled();
-    expect(productSingleRepositoryMock.update).not.toHaveBeenCalled;
+    expect(productSingleRepositoryMock.update).not.toHaveBeenCalled();
   });
 
   it('Should return 404 when product not found', async () => {

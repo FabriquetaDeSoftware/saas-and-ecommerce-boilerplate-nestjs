@@ -152,6 +152,18 @@ describe('AuthController from AppModule (e2e)', () => {
 
     responses.map((response) => {
       expect(response.body).not.toHaveProperty('id');
+      expect(response.body).toEqual(
+        expect.objectContaining({
+          public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
+          name: VALID_PRODUCT_DATA.name,
+          description: VALID_PRODUCT_DATA.description,
+          price: VALID_PRODUCT_DATA.price,
+          image: VALID_PRODUCT_DATA.image,
+          slug: VALID_PRODUCT_DATA.slug,
+          created_at: expect.any(String),
+          updated_at: expect.any(String),
+        }),
+      );
     });
 
     expect(productSingleRepositoryMock.create).toHaveBeenCalledWith(
