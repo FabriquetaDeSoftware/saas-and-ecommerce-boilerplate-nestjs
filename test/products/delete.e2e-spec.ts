@@ -26,13 +26,13 @@ describe('AuthController from AppModule (e2e)', () => {
   const notPerformerRole = RolesEnum.USER;
   const invalidRole = 'INVALID_ROLE';
 
-  const validPublicId = '1';
+  const validPublicId = '9f3b779d-1ffc-4812-ab14-4e3687741538';
   const invalidPublicId = '2';
 
   const types = ['single', 'subscription'];
   const mockProductResponse: Products = {
     id: 1,
-    public_id: '1',
+    public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
     name: 'Product 1',
     description: 'Product 1 description',
     price: 100,
@@ -45,20 +45,20 @@ describe('AuthController from AppModule (e2e)', () => {
 
   beforeAll(async () => {
     productSingleRepositoryMock = {
-      findOneBySlug: jest.fn().mockResolvedValue(mockProductResponse),
+      findOneBySlug: jest.fn().mockResolvedValue(undefined),
       update: jest.fn().mockResolvedValue(undefined),
       create: jest.fn().mockImplementation(undefined),
       delete: jest.fn().mockResolvedValue(undefined),
-      findOneByPublicId: jest.fn().mockResolvedValue(undefined),
+      findOneByPublicId: jest.fn().mockResolvedValue(mockProductResponse),
       listMany: jest.fn().mockImplementation(undefined),
     };
 
     productSubscriptionRepositoryMock = {
-      findOneBySlug: jest.fn().mockResolvedValue(mockProductResponse),
+      findOneBySlug: jest.fn().mockResolvedValue(undefined),
       update: jest.fn().mockResolvedValue(undefined),
       create: jest.fn().mockImplementation(undefined),
       delete: jest.fn().mockResolvedValue(undefined),
-      findOneByPublicId: jest.fn().mockResolvedValue(undefined),
+      findOneByPublicId: jest.fn().mockResolvedValue(mockProductResponse),
       listMany: jest.fn().mockImplementation(undefined),
     };
 
@@ -120,14 +120,21 @@ describe('AuthController from AppModule (e2e)', () => {
     const tokens = await generateTokenHelper.execute(tokenDto);
     accessToken = tokens.access_token;
 
-    // const responses = await Promise.all(
-    //   types.map((type) =>
-    //     request(app.getHttpServer())
-    //       .delete(`/products/delete/${type}/${validPublicId}/`)
-    //       .set('Authorization', `Bearer ${accessToken}`)
-    //       .expect(HttpStatus.NO_CONTENT),
-    //   ),
-    // );
+    await Promise.all(
+      types.map((type) =>
+        request(app.getHttpServer())
+          .delete(`/products/delete/${type}/${validPublicId}/`)
+          .set('Authorization', `Bearer ${accessToken}`)
+          .expect(HttpStatus.NO_CONTENT),
+      ),
+    );
+
+    expect(productSubscriptionRepositoryMock.delete).toHaveBeenCalledWith(
+      validPublicId,
+    );
+    expect(productSingleRepositoryMock.delete).toHaveBeenCalledWith(
+      validPublicId,
+    );
   });
 
   it('Should return 403 when user is not ADMIN', async () => {

@@ -54,9 +54,7 @@ export class DeleteSingleProductUseCase implements IDeleteSingleProductUseCase {
     }
   }
 
-  private async verifyIfProductExist(
-    publicId: string,
-  ): Promise<Partial<Products>> {
+  private async verifyIfProductExist(publicId: string): Promise<void> {
     const result =
       await this._singleProductsRepository.findOneByPublicId(publicId);
 
@@ -64,7 +62,7 @@ export class DeleteSingleProductUseCase implements IDeleteSingleProductUseCase {
       throw new NotFoundException('Product not found');
     }
 
-    return result;
+    return;
   }
 
   private async decryptPayload(data: string): Promise<string> {

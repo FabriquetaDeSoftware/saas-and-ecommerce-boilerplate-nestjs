@@ -27,7 +27,7 @@ describe('AuthController from AppModule (e2e)', () => {
             data: [
               {
                 id: 1,
-                public_id: '1',
+                public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
                 name: 'Product 1',
                 description: 'Description 1',
                 price: 10,
@@ -38,7 +38,7 @@ describe('AuthController from AppModule (e2e)', () => {
               },
               {
                 id: 2,
-                public_id: '2',
+                public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
                 name: 'Product 2',
                 description: 'Description 2',
                 price: 10,
@@ -68,7 +68,7 @@ describe('AuthController from AppModule (e2e)', () => {
             data: [
               {
                 id: 1,
-                public_id: '1',
+                public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
                 name: 'Product 1',
                 description: 'Description 1',
                 price: 10,
@@ -79,7 +79,7 @@ describe('AuthController from AppModule (e2e)', () => {
               },
               {
                 id: 2,
-                public_id: '2',
+                public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
                 name: 'Product 2',
                 description: 'Description 2',
                 price: 10,

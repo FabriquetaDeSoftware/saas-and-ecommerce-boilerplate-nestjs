@@ -19,7 +19,7 @@ describe('AuthController from AppModule (e2e)', () => {
     productSingleRepositoryMock = {
       findOneBySlug: jest.fn().mockResolvedValue({
         id: 1,
-        public_id: '1',
+        public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
         name: 'Product 1',
         description: 'Description 1',
         price: 10,
@@ -38,7 +38,7 @@ describe('AuthController from AppModule (e2e)', () => {
     productSubscriptionRepositoryMock = {
       findOneBySlug: jest.fn().mockResolvedValue({
         id: 1,
-        public_id: '1',
+        public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
         name: 'Product 1',
         description: 'Description 1',
         price: 10,

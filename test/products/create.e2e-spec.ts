@@ -40,7 +40,7 @@ describe('AuthController from AppModule (e2e)', () => {
   const mockProductResponse = (
     productData: CreateProductDto,
   ): Partial<Products> => ({
-    public_id: '1',
+    public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
     name: productData.name,
     description: productData.description,
     price: productData.price,

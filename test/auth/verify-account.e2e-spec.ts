@@ -31,7 +31,7 @@ describe('AuthController Verification (e2e)', () => {
     isVerified: boolean = false,
   ): Auth => ({
     id: MOCK_AUTH_ID,
-    public_id: '1',
+    public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
     role: RolesEnum.USER,
     email,
     password: HASHED_CODE,
@@ -47,7 +47,7 @@ describe('AuthController Verification (e2e)', () => {
     code: string = HASHED_CODE,
   ): VerificationCodes => ({
     id: 1,
-    public_id: '1',
+    public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
     auth_id,
     code,
     created_at: new Date(),
@@ -207,7 +207,7 @@ describe('AuthController Verification (e2e)', () => {
       verificationCodeRepositoryMock.findVerificationCodeByAuthorId.mockResolvedValueOnce(
         {
           id: 1,
-          public_id: '1',
+          public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
           auth_id: MOCK_AUTH_ID,
           code: HASHED_CODE,
           created_at: expiredDate,

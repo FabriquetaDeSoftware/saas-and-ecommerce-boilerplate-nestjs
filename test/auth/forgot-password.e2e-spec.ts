@@ -15,7 +15,7 @@ describe('AuthController from AppModule (e2e)', () => {
 
   const mockAuth: Auth = {
     id: 1,
-    public_id: '1',
+    public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
     role: RolesEnum.USER,
     email: 'test@gmail.com',
     password: '123456',

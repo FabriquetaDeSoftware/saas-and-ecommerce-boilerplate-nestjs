@@ -25,12 +25,12 @@ describe('AuthController from AppModule (e2e)', () => {
   const validToken = 'valid_token';
   const invalidToken = 'invalid_token';
   const testEmail = 'test@example.com';
-  const testUserId = '123';
+  const testUserPublicId = '9f3b779d-1ffc-4812-ab14-4e3687741538';
 
   const mockJwtPayload: IJwtUserPayload = {
     email: Buffer.from(testEmail).toString('base64'),
     role: Buffer.from(RolesEnum.USER).toString('base64'),
-    sub: Buffer.from(testUserId).toString('base64'),
+    sub: Buffer.from(testUserPublicId).toString('base64'),
     type: Buffer.from(TokenEnum.REFRESH_TOKEN).toString('base64'),
   };
 
@@ -56,7 +56,7 @@ describe('AuthController from AppModule (e2e)', () => {
           return RolesEnum.USER;
         }
         if (data.toString() === 'encrypted_sub') {
-          return testUserId;
+          return testUserPublicId;
         }
         if (data.toString() === 'refresh_token') {
           return TokenEnum.REFRESH_TOKEN;
@@ -81,7 +81,7 @@ describe('AuthController from AppModule (e2e)', () => {
     authRepositoryMock = {
       findOneByEmail: jest.fn().mockResolvedValue({
         id: 1,
-        public_id: testUserId,
+        public_id: testUserPublicId,
         email: testEmail,
         role: 'user',
       }),

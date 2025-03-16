@@ -56,9 +56,7 @@ export class DeleteSubscriptionProductUseCase
     }
   }
 
-  private async verifyIfProductExist(
-    publicId: string,
-  ): Promise<Partial<Products>> {
+  private async verifyIfProductExist(publicId: string): Promise<void> {
     const result =
       await this._subscriptionProductsRepository.findOneByPublicId(publicId);
 
@@ -66,7 +64,7 @@ export class DeleteSubscriptionProductUseCase
       throw new NotFoundException('Product not found');
     }
 
-    return result;
+    return;
   }
 
   private async decryptPayload(data: string): Promise<string> {

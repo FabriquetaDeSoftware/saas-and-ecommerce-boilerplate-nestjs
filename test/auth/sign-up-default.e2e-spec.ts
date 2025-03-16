@@ -25,7 +25,7 @@ describe('AuthController (e2e)', () => {
   const HASHED_PASSWORD = 'hashedText';
 
   const mockAuthResponse = (userData: SignUpDefaultDto): Partial<Auth> => ({
-    public_id: '1',
+    public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
     role: RolesEnum.USER,
     email: userData.email,
     is_verified_account: false,
@@ -101,7 +101,7 @@ describe('AuthController (e2e)', () => {
 
       expect(response.body).toEqual(
         expect.objectContaining({
-          public_id: '1',
+          public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
           email: VALID_USER_DATA.email,
           newsletter_subscription: VALID_USER_DATA.newsletter_subscription,
           terms_and_conditions_accepted:
@@ -141,7 +141,7 @@ describe('AuthController (e2e)', () => {
 
       authRepositoryMock.findOneByEmail.mockResolvedValueOnce({
         id: 1,
-        public_id: '1',
+        public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
         role: RolesEnum.USER,
         email: existingUserData.email,
         password: HASHED_PASSWORD,
