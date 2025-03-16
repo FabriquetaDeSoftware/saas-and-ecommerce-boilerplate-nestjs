@@ -63,10 +63,10 @@ export class UpdateSubscriptionProductInfoUseCase
   }
 
   private async verifyIfProductExist(publicId: string): Promise<void> {
-    const resulta =
+    const result =
       await this._subscriptionProductsRepository.findOneByPublicId(publicId);
 
-    if (!resulta) {
+    if (!result) {
       throw new NotFoundException('Product not found');
     }
 
