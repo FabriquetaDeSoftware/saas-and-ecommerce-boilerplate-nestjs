@@ -35,7 +35,7 @@ export class ProductsController {
   private readonly _productsOrchestrator: IProductsOrchestrator;
 
   @ApiBearerAuth()
-  @Roles(RolesEnum.ADMIN)
+  @Roles(RolesEnum.ADMIN, RolesEnum.USER)
   @Post('create/:type')
   public async createProduct(
     @Body() input: CreateProductDto,
@@ -52,7 +52,7 @@ export class ProductsController {
   }
 
   @ApiBearerAuth()
-  @Roles(RolesEnum.ADMIN)
+  @Roles(RolesEnum.ADMIN, RolesEnum.USER)
   @Patch('update/:type/:public_id')
   public async updateProduct(
     @Param() params: TypeAndIdProductParamsDto,
@@ -69,7 +69,7 @@ export class ProductsController {
   }
 
   @ApiBearerAuth()
-  @Roles(RolesEnum.ADMIN)
+  @Roles(RolesEnum.ADMIN, RolesEnum.USER)
   @Delete('delete/:type/:public_id')
   @HttpCode(204)
   public async DeleteProductUseCase(

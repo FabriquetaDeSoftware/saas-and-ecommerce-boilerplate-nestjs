@@ -101,6 +101,7 @@ describe('AuthController (e2e)', () => {
 
       expect(response.body).toEqual(
         expect.objectContaining({
+          public_id: '1',
           email: VALID_USER_DATA.email,
           newsletter_subscription: VALID_USER_DATA.newsletter_subscription,
           terms_and_conditions_accepted:
