@@ -212,18 +212,26 @@ describe('AuthController from AppModule (e2e)', () => {
     );
 
     responses.map((response) => {
+      expect(response.body).toHaveProperty('statusCode', HttpStatus.CONFLICT);
       expect(response.body).toHaveProperty(
-        'statusCode',
-        HttpStatus.UNAUTHORIZED,
+        'message',
+        'Product whith this slug already exists',
       );
-      expect(response.body).toHaveProperty('message', 'Unauthorized');
     });
 
-    expect(productSingleRepositoryMock.create).toHaveBeenCalledWith(
+    expect(productSingleRepositoryMock.findOneBySlug).toHaveBeenCalledWith(
+      VALID_PRODUCT_DATA.slug,
+      { id: true },
+    );
+    expect(
+      productSubscriptionRepositoryMock.findOneBySlug,
+    ).toHaveBeenCalledWith(VALID_PRODUCT_DATA.slug, { id: true });
+
+    expect(productSingleRepositoryMock.create).not.toHaveBeenCalledWith(
       VALID_PRODUCT_DATA,
       { id: true },
     );
-    expect(productSubscriptionRepositoryMock.create).toHaveBeenCalledWith(
+    expect(productSubscriptionRepositoryMock.create).not.toHaveBeenCalledWith(
       VALID_PRODUCT_DATA,
       { id: true },
     );
