@@ -1,4 +1,9 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ConflictException,
+  Inject,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ICreateSingleProductUseCase } from '../../domain/interfaces/use_cases/create_single_product.use_case.interface';
 import { CreateProductDto } from '../dto/create_product.dto';
 import { Products } from '../../domain/entities/products.entity';
@@ -36,6 +41,8 @@ export class CreateSingleProductUseCase implements ICreateSingleProductUseCase {
 
     this.isAllowedAction(roleDecoded, input);
 
+    await this.findProductBySlug(input.slug);
+
     const result = await this._singleProductsRepository.create(
       { ...input },
       { id: true },
@@ -67,5 +74,17 @@ export class CreateSingleProductUseCase implements ICreateSingleProductUseCase {
     const dataDecoded = dataBuffer.toString();
 
     return dataDecoded;
+  }
+
+  private async findProductBySlug(slug: string): Promise<void> {
+    const response = await this._singleProductsRepository.findOneBySlug(slug, {
+      id: true,
+    });
+
+    if (response) {
+      throw new ConflictException('Product whith this slug already exists');
+    }
+
+    return;
   }
 }
