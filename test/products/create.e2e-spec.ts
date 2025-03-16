@@ -29,6 +29,7 @@ describe('AuthController from AppModule (e2e)', () => {
     image:
       'https://t0.gstatic.com/licensed-image?q=tbn:ANd9GcTEVcrypslvdUeHleSabemh-hXNLNslN-H0XVxm7ObA2J28dKoXFD5zck7QPMjyHGBCWXhq2nmA4YA0IYslGIM',
   };
+
   const testEmail = 'test@example.com';
   const testUserId = '123';
   const validRole = RolesEnum.ADMIN;
@@ -145,12 +146,17 @@ describe('AuthController from AppModule (e2e)', () => {
 
     responses.map((response) => {
       expect(response.body).not.toHaveProperty('id');
-
-      expect(productSingleRepositoryMock.create).toHaveBeenCalledWith(
-        VALID_PRODUCT_DATA,
-        { id: true },
-      );
     });
+
+    expect(productSingleRepositoryMock.create).toHaveBeenCalledWith(
+      VALID_PRODUCT_DATA,
+      { id: true },
+    );
+
+    expect(productSubscriptionRepositoryMock.create).toHaveBeenCalledWith(
+      VALID_PRODUCT_DATA,
+      { id: true },
+    );
   });
 
   it('Should return 403 when user is not ADMIN', async () => {
