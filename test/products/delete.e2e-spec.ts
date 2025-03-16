@@ -27,7 +27,6 @@ describe('AuthController from AppModule (e2e)', () => {
   const invalidRole = 'INVALID_ROLE';
 
   const validPublicId = '9f3b779d-1ffc-4812-ab14-4e3687741538';
-  const invalidPublicId = '2';
 
   const types = ['single', 'subscription'];
   const mockProductResponse: Products = {
@@ -138,27 +137,100 @@ describe('AuthController from AppModule (e2e)', () => {
   });
 
   it('Should return 403 when user is not ADMIN', async () => {
-    // const response = await request(app.getHttpServer())
-    //   .post('/products/delete/:type/:publicId/')
-    //   .expect(200)
-    //   .expect('Hello World!');
+    const tokenDto: GenerateTokenDto = {
+      email: testEmail,
+      sub: testUserId,
+      role: invalidRole,
+    };
+
+    const tokens = await generateTokenHelper.execute(tokenDto);
+    accessToken = tokens.access_token;
+
+    await Promise.all(
+      types.map((type) =>
+        request(app.getHttpServer())
+          .delete(`/products/delete/${type}/${validPublicId}/`)
+          .set('Authorization', `Bearer ${accessToken}`)
+          .expect(HttpStatus.FORBIDDEN),
+      ),
+    );
+
+    expect(productSubscriptionRepositoryMock.delete).not.toHaveBeenCalled();
+    expect(productSingleRepositoryMock.delete).not.toHaveBeenCalled();
   });
 
   it('Should return 401 when user is not athorized to perfom delete operation', async () => {
-    // const response = await request(app.getHttpServer())
-    //   .post('/products/delete/:type/:publicId/')
-    //   .expect(200)
-    //   .expect('Hello World!');
+    const tokenDto: GenerateTokenDto = {
+      email: testEmail,
+      sub: testUserId,
+      role: notPerformerRole,
+    };
+
+    const tokens = await generateTokenHelper.execute(tokenDto);
+    accessToken = tokens.access_token;
+
+    await Promise.all(
+      types.map((type) =>
+        request(app.getHttpServer())
+          .delete(`/products/delete/${type}/${validPublicId}/`)
+          .set('Authorization', `Bearer ${accessToken}`)
+          .expect(HttpStatus.UNAUTHORIZED),
+      ),
+    );
+
+    expect(productSubscriptionRepositoryMock.delete).not.toHaveBeenCalled();
+    expect(productSingleRepositoryMock.delete).not.toHaveBeenCalled();
   });
 
   it('Should return 404 when product not found', async () => {
-    // const response = await request(app.getHttpServer())
-    //   .post('/products/delete/:type/:publicId/')
-    //   .expect(200)
-    //   .expect('Hello World!');
+    productSingleRepositoryMock.findOneByPublicId.mockResolvedValue(null);
+    productSubscriptionRepositoryMock.findOneByPublicId.mockResolvedValue(null);
+
+    const tokenDto: GenerateTokenDto = {
+      email: testEmail,
+      sub: testUserId,
+      role: validRole,
+    };
+
+    const tokens = await generateTokenHelper.execute(tokenDto);
+    accessToken = tokens.access_token;
+
+    await Promise.all(
+      types.map((type) =>
+        request(app.getHttpServer())
+          .delete(`/products/delete/${type}/${validPublicId}/`)
+          .set('Authorization', `Bearer ${accessToken}`)
+          .expect(HttpStatus.NOT_FOUND),
+      ),
+    );
+
+    expect(
+      productSubscriptionRepositoryMock.findOneByPublicId,
+    ).toHaveBeenCalled();
+    expect(productSingleRepositoryMock.findOneByPublicId).toHaveBeenCalled();
+
+    expect(productSubscriptionRepositoryMock.delete).not.toHaveBeenCalled();
+    expect(productSingleRepositoryMock.delete).not.toHaveBeenCalled();
   });
 
-  it('Should return 400 when type is invalid', async () => {});
+  it('Should return 400 when type is invalid', async () => {
+    const tokenDto: GenerateTokenDto = {
+      email: testEmail,
+      sub: testUserId,
+      role: validRole,
+    };
+
+    const tokens = await generateTokenHelper.execute(tokenDto);
+    accessToken = tokens.access_token;
+
+    request(app.getHttpServer())
+      .delete(`/products/delete/invalid-type/${validPublicId}/`)
+      .set('Authorization', `Bearer ${accessToken}`)
+      .expect(HttpStatus.BAD_REQUEST);
+
+    expect(productSubscriptionRepositoryMock.delete).not.toHaveBeenCalled();
+    expect(productSingleRepositoryMock.delete).not.toHaveBeenCalled();
+  });
 
   afterAll(async () => {
     await app.close();
