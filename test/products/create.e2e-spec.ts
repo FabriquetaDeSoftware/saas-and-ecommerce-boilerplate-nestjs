@@ -185,13 +185,48 @@ describe('AuthController from AppModule (e2e)', () => {
   });
 
   it('Should return 409 when there is already a product with the same slug', async () => {
-    // await Promise.all(
-    //   types.map((type) =>
-    //     request(app.getHttpServer())
-    //       .post(`/products/create/${type}/`)
-    //       .expect(HttpStatus.CONFLICT),
-    //   ),
-    // );
+    productSingleRepositoryMock.findOneBySlug.mockResolvedValueOnce(
+      mockProductResponse(VALID_PRODUCT_DATA),
+    );
+    productSubscriptionRepositoryMock.findOneBySlug.mockResolvedValueOnce(
+      mockProductResponse(VALID_PRODUCT_DATA),
+    );
+
+    const tokenDto: GenerateTokenDto = {
+      email: testEmail,
+      sub: testUserId,
+      role: validRole,
+    };
+
+    const tokens = await generateTokenHelper.execute(tokenDto);
+    accessToken = tokens.access_token;
+
+    const responses = await Promise.all(
+      types.map((type) =>
+        request(app.getHttpServer())
+          .post(`/products/create/${type}/`)
+          .set('Authorization', `Bearer ${accessToken}`)
+          .send(VALID_PRODUCT_DATA)
+          .expect(HttpStatus.CONFLICT),
+      ),
+    );
+
+    responses.map((response) => {
+      expect(response.body).toHaveProperty(
+        'statusCode',
+        HttpStatus.UNAUTHORIZED,
+      );
+      expect(response.body).toHaveProperty('message', 'Unauthorized');
+    });
+
+    expect(productSingleRepositoryMock.create).toHaveBeenCalledWith(
+      VALID_PRODUCT_DATA,
+      { id: true },
+    );
+    expect(productSubscriptionRepositoryMock.create).toHaveBeenCalledWith(
+      VALID_PRODUCT_DATA,
+      { id: true },
+    );
   });
 
   it('Should return 401 when user is not athorized to perfom create operation', async () => {
@@ -218,12 +253,10 @@ describe('AuthController from AppModule (e2e)', () => {
         HttpStatus.UNAUTHORIZED,
       );
       expect(response.body).toHaveProperty('message', 'Unauthorized');
-
-      expect(productSingleRepositoryMock.create).not.toHaveBeenCalledWith(
-        VALID_PRODUCT_DATA,
-        { id: true },
-      );
     });
+
+    expect(productSingleRepositoryMock.create).not.toHaveBeenCalled();
+    expect(productSubscriptionRepositoryMock.create).not.toHaveBeenCalled();
   });
 
   it('Should return 400 when type is invalid', async () => {
@@ -237,16 +270,41 @@ describe('AuthController from AppModule (e2e)', () => {
     expect(
       productSubscriptionRepositoryMock.findOneBySlug,
     ).not.toHaveBeenCalled();
+    expect(productSingleRepositoryMock.create).not.toHaveBeenCalled();
+    expect(productSubscriptionRepositoryMock.create).not.toHaveBeenCalled();
   });
 
   it('should validate required fields and return 400 for invalid data', async () => {
-    // await Promise.all(
-    //   types.map((type) =>
-    //     request(app.getHttpServer())
-    //       .post(`/products/create/${type}/`)
-    //       .expect(HttpStatus.BAD_REQUEST),
-    //   ),
-    // );
+    const tokenDto: GenerateTokenDto = {
+      email: testEmail,
+      sub: testUserId,
+      role: validRole,
+    };
+
+    const tokens = await generateTokenHelper.execute(tokenDto);
+    accessToken = tokens.access_token;
+
+    const invalidData = 'invalid-data';
+
+    const responses = await Promise.all(
+      types.map((type) =>
+        request(app.getHttpServer())
+          .post(`/products/create/${type}/`)
+          .set('Authorization', `Bearer ${accessToken}`)
+          .send(invalidData)
+          .expect(HttpStatus.BAD_REQUEST),
+      ),
+    );
+
+    responses.map((response) => {
+      expect(response.body).toHaveProperty(
+        'statusCode',
+        HttpStatus.BAD_REQUEST,
+      );
+    });
+
+    expect(productSingleRepositoryMock.create).not.toHaveBeenCalled();
+    expect(productSubscriptionRepositoryMock.create).not.toHaveBeenCalled();
   });
 
   afterAll(async () => {
