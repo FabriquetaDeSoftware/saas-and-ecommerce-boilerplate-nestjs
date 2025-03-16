@@ -223,7 +223,7 @@ describe('AuthController from AppModule (e2e)', () => {
     const tokens = await generateTokenHelper.execute(tokenDto);
     accessToken = tokens.access_token;
 
-    request(app.getHttpServer())
+    await request(app.getHttpServer())
       .delete(`/products/delete/invalid-type/${validPublicId}/`)
       .set('Authorization', `Bearer ${accessToken}`)
       .expect(HttpStatus.BAD_REQUEST);

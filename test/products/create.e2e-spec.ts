@@ -70,7 +70,13 @@ describe('AuthController from AppModule (e2e)', () => {
     productSubscriptionRepositoryMock = {
       findOneBySlug: jest.fn().mockResolvedValue(undefined),
       update: jest.fn().mockResolvedValue(undefined),
-      create: jest.fn().mockImplementation(undefined),
+      create: jest
+        .fn()
+        .mockImplementation(
+          (dto: CreateProductDto): Promise<Partial<Products>> => {
+            return Promise.resolve(mockProductResponse(dto));
+          },
+        ),
       delete: jest.fn().mockResolvedValue(undefined),
       findOneByPublicId: jest.fn().mockResolvedValue(undefined),
       listMany: jest.fn().mockImplementation(undefined),

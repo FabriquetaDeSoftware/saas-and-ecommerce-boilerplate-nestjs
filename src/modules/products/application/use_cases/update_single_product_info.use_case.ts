@@ -62,9 +62,7 @@ export class UpdateSingleProductInfoUseCase
     return result;
   }
 
-  private async verifyIfProductExist(
-    publicId: string,
-  ): Promise<Partial<Products>> {
+  private async verifyIfProductExist(publicId: string): Promise<void> {
     const result =
       await this._singleProductsRepository.findOneByPublicId(publicId);
 
@@ -72,7 +70,7 @@ export class UpdateSingleProductInfoUseCase
       throw new NotFoundException('Product not found');
     }
 
-    return result;
+    return;
   }
 
   private isAllowedAction(role: string, publicId: string): void {
