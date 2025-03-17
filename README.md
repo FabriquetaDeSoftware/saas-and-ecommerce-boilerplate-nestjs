@@ -82,12 +82,15 @@ $ pnpm install
 #### Permission to execute the shell script
 
 ```bash
+# enable shell script
+$ chmod +x shell/check_env_vars.sh
 $ chmod +x shell/run-docker.sh
 ```
 
 #### Run project
 
 ```bash
+# run docker
 $ ./shell/run-docker.sh
 ```
 

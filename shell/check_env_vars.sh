@@ -4,10 +4,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 ENV_FILE="$PROJECT_ROOT/.env"
 
-# Verifica se o arquivo .env existe
 if [ -f "$ENV_FILE" ]; then
     echo "Loading variables from the file $ENV_FILE"
-    # Carrega as variáveis do arquivo .env
     export $(grep -v '^#' "$ENV_FILE" | xargs)
 else
     echo ".env file not found in $ENV_FILE"
@@ -22,8 +20,6 @@ MISSING_VARS=()
 for VAR in "${REQUIRED_VARS[@]}"; do
     if [ -z "${!VAR}" ]; then
         MISSING_VARS+=("$VAR")
-    else
-        echo "✓ $VAR is set"
     fi
 done
 
