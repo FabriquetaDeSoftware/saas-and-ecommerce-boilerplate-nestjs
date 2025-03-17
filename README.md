@@ -58,6 +58,8 @@ Welcome to open issues and and improvements on code-base. You are invited to con
 
 - **Testing**: Includes e2e testing strategies.
 
+- **Environment**: Includes prod and dev environment, choose in the `.env`
+
 ## Prerequisites
 
 To run the project you need to have the following software installed:
