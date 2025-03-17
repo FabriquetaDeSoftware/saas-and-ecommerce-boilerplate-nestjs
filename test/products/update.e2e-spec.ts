@@ -44,7 +44,7 @@ describe('AuthController from AppModule (e2e)', () => {
     public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
     name: 'Product 1',
     description: 'Product 1 description',
-    price: 100,
+    price: 10000,
     slug: 'product-1',
     image:
       'https://t0.gstatic.com/licensed-image?q=tbn:ANd9GcTEVcrypslvdUeHleSabemh-hXNLNslN-H0XVxm7ObA2J28dKoXFD5zck7QPMjyHGBCWXhq2nmA4YA0IYslGIM',
@@ -143,13 +143,13 @@ describe('AuthController from AppModule (e2e)', () => {
 
     expect(productSubscriptionRepositoryMock.update).toHaveBeenCalledWith(
       validPublicId,
-      { ...VALID_PRODUCT_DATA, price: VALID_PRODUCT_DATA.price * 100 },
+      { ...VALID_PRODUCT_DATA },
       { id: true },
     );
 
     expect(productSingleRepositoryMock.update).toHaveBeenCalledWith(
       validPublicId,
-      { ...VALID_PRODUCT_DATA, price: VALID_PRODUCT_DATA.price * 100 },
+      { ...VALID_PRODUCT_DATA },
       { id: true },
     );
   });

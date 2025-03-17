@@ -47,14 +47,10 @@ export class UpdateSingleProductInfoUseCase
 
     this.isAllowedAction(roleDecoded, public_id);
 
-    const priceToCents =
-      input.price !== undefined ? input.price * 100 : undefined;
-
     const result = await this._singleProductsRepository.update(
       public_id,
       {
         ...input,
-        ...(priceToCents !== undefined ? { price: priceToCents } : {}),
       },
       { id: true },
     );
