@@ -3,7 +3,7 @@
 if [ -f .env ]; then
     export $(grep -v '^#' .env | xargs)
 else
-    echo "Arquivo .env não encontrado na raiz do projeto."
+    echo ".env file not found in project root."
     exit 1
 fi
 
@@ -12,18 +12,18 @@ ENV=${ENVIRONMENT:-development}
 echo "Ambiente detectado: $ENV"
 
 if [ "$ENV" = "development" ] || [ "$ENV" = "dev" ]; then
-    echo "Executando em ambiente de desenvolvimento..."
+    echo "Running in development environment..."
     cd docker/composes
     docker-compose -f docker-compose.dev.yml --env-file ../../.env up -d
     cd ../..
-    echo "Containers de desenvolvimento iniciados com sucesso."
+    echo "Development containers launched successfully."
 elif [ "$ENV" = "production" ] || [ "$ENV" = "prod" ]; then
-    echo "Executando em ambiente de producao..."
+    echo "Running in production environment..."
     cd docker/composes
     docker-compose -f docker-compose.prod.yml --env-file ../../.env up -d
     cd ../..
-    echo "Containers de desenvolvimento iniciados com sucesso."
+    echo "Production containers launched successfully."
 else
-    echo "Ambiente '$ENV' não reconhecido. Use 'development/dev' ou 'production/prod'."
+    echo "Environment '$ENV' not recognized. Use 'development/dev' or 'production/prod'."
     exit 1
 fi
