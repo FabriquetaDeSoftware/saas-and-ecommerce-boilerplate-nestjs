@@ -1,0 +1,77 @@
+services:
+  api:
+    container_name: api-dev
+    build:
+      context: ../..
+      dockerfile: docker/files/Dockerfile.dev
+    env_file:
+      - ../../.env
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - network
+    # ports:
+    #   - '${MAPPED_PORT_API}:${PORT_API}'
+    volumes:
+      - ../..:/home/api/nestjs/saas-and-ecommerce-boilerplate-nestjs
+    restart: always
+
+  postgres:
+    container_name: postgres-dev
+    image: postgres:16.3-alpine
+    env_file:
+      - ../../.env
+    networks:
+      - network
+    ports:
+      - '${MAPPED_PORT_DB}:5432'
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+  redis:
+    container_name: redis-dev
+    image: redis:7.0-alpine
+    env_file:
+      - ../../.env
+    networks:
+      - network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: '512M'
+    # ports:
+    #   - '${MAPPED_PORT_REDIS}:6379'
+    volumes:
+      - redis_data:/data
+    restart: always
+    command: redis-server --loglevel warning
+
+  nginx:
+    container_name: nginx-dev
+    image: nginx:1.25-alpine
+    env_file:
+      - ../../.env
+    depends_on:
+      - api
+    networks:
+      - network
+    ports:
+      - '${MAPPED_PORT_NGINX}:80'
+    volumes:
+      - ../../nginx.conf:/etc/nginx/nginx.conf:ro
+    restart: always
+
+networks:
+  network:
+
+
+volumes:
+  postgres_data:
+  redis_data:

@@ -1,11 +1,11 @@
-version: '3.9'
-
 services:
   api:
-    container_name: api-saas-and-ecommerce-boilerplate
-    build: .
+    container_name: api-prod
+    build:
+      context: ../..
+      dockerfile: docker/files/Dockerfile.prod
     env_file:
-      - .env
+      - ../../.env
     depends_on:
       - postgres
       - redis
@@ -14,12 +14,14 @@ services:
     # ports:
     #   - '${MAPPED_PORT_API}:${PORT_API}'
     volumes:
-      - .:/home/api/nestjs/saas-and-ecommerce-boilerplate-nestjs
+      - ../..:/home/api/nestjs/saas-and-ecommerce-boilerplate-nestjs
     restart: always
 
   postgres:
-    container_name: postgres-saas-and-ecommerce-boilerplate
+    container_name: postgres-prod
     image: postgres:16.3-alpine
+    env_file:
+      - ../../.env
     networks:
       - network
     ports:
@@ -33,8 +35,10 @@ services:
     restart: always
 
   redis:
-    container_name: redis-saas-and-ecommerce-boilerplate
+    container_name: redis-prod
     image: redis:7.0-alpine
+    env_file:
+      - ../../.env
     networks:
       - network
     deploy:
@@ -50,8 +54,10 @@ services:
     command: redis-server --loglevel warning
 
   nginx:
-    container_name: nginx-saas-and-ecommerce-boilerplate
+    container_name: nginx-prod
     image: nginx:1.25-alpine
+    env_file:
+      - ../../.env
     depends_on:
       - api
     networks:
@@ -59,7 +65,7 @@ services:
     ports:
       - '${MAPPED_PORT_NGINX}:80'
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ../../nginx.conf:/etc/nginx/nginx.conf:ro
     restart: always
 
 networks:
