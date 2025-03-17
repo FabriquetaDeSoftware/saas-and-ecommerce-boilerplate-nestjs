@@ -5,7 +5,7 @@ PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 ENV_FILE="$PROJECT_ROOT/.env"
 
 if [ -f "$ENV_FILE" ]; then
-    echo "Loading variables from the file $ENV_FILE"
+    echo "Loading variables from the file .env"
     export $(grep -v '^#' "$ENV_FILE" | xargs)
 else
     echo ".env file not found in $ENV_FILE"

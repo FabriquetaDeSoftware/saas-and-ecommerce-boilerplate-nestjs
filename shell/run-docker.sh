@@ -4,7 +4,6 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 CHECK_ENV_SCRIPT="$SCRIPT_DIR/check_env_vars.sh"
 if [ -f "$CHECK_ENV_SCRIPT" ]; then
-    echo "Running environment variable check..."
     bash "$CHECK_ENV_SCRIPT"
 
     if [ $? -ne 0 ]; then
@@ -18,7 +17,6 @@ fi
 ENV_FILE="$SCRIPT_DIR/../.env"
 
 if [ -f "$ENV_FILE" ]; then
-    echo "Loading variables from $ENV_FILE"
     export $(grep -v '^#' "$ENV_FILE" | xargs)
 else
     echo ".env file not found in project root."
@@ -29,16 +27,22 @@ ENV=$ENVIRONMENT
 echo "Environment detected: $ENV"
 
 if [ "$ENV" = "development" ] || [ "$ENV" = "dev" ]; then
-    echo "Running in development environment..."
+    echo "Dockerfile detected: Dockerfile.dev"
+    echo "Docker Compose detected: docker-compose.dev.yml"
+
     cd docker/composes
     docker-compose -f docker-compose.dev.yml --env-file ../../.env up -d
     cd ../..
+
     echo "Development containers launched successfully."
 elif [ "$ENV" = "production" ] || [ "$ENV" = "prod" ]; then
-    echo "Running in production environment..."
+    echo "Dockerfile detected: Dockerfile.dev"
+    echo "Docker Compose detected: docker-compose.dev.yml"
+
     cd docker/composes
     docker-compose -f docker-compose.prod.yml --env-file ../../.env up -d
     cd ../..
+
     echo "Production containers launched successfully."
 else
     echo "Environment '$ENV' not recognized. Use 'development/dev' or 'production/prod'."
