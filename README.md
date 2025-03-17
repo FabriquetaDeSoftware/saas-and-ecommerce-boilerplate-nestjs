@@ -79,9 +79,16 @@ $ pnpm install
 
 ### Compile and run the project
 
+#### Permission to execute the shell script
+
 ```bash
-# watch mode
-$ docker-compose up -d
+$ chmod +x shell/run-docker.sh
+```
+
+#### Run project
+
+```bash
+$ ./shell/run-docker.sh
 ```
 
 ### Activate Stripe WebHook Test
