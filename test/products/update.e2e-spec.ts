@@ -19,7 +19,6 @@ describe('AuthController from AppModule (e2e)', () => {
   let jwtService: JwtService;
   let cryptoUtil: ICryptoUtil;
   let generateTokenHelper: GenerateTokenHelper;
-  let accessToken: string;
 
   const VALID_PRODUCT_DATA: UpdateProductInfoDto = {
     name: 'product name',
@@ -30,14 +29,30 @@ describe('AuthController from AppModule (e2e)', () => {
       'https://t0.gstatic.com/licensed-image?q=tbn:ANd9GcTEVcrypslvdUeHleSabemh-hXNLNslN-H0XVxm7ObA2J28dKoXFD5zck7QPMjyHGBCWXhq2nmA4YA0IYslGIM',
   };
 
-  const testEmail = 'test@example.com';
-  const testUserId = '123';
-  const validRole = RolesEnum.ADMIN;
-  const notPerformerRole = RolesEnum.USER;
-  const invalidRole = 'INVALID_ROLE';
+  const TEST_USER = {
+    email: 'test@example.com',
+    id: '123',
+  };
+
+  const ROLES = {
+    VALID: RolesEnum.ADMIN,
+    NOTPERFORMER: RolesEnum.USER,
+    INVALID: 'INVALID_ROLE',
+  };
+
+  const generateAuthToken = async (
+    role: RolesEnum | string,
+  ): Promise<string> => {
+    const tokenDto: GenerateTokenDto = {
+      email: TEST_USER.email,
+      sub: TEST_USER.id,
+      role,
+    };
+    const tokens = await generateTokenHelper.execute(tokenDto);
+    return tokens.access_token;
+  };
 
   const validPublicId = '9f3b779d-1ffc-4812-ab14-4e3687741538';
-
   const types = ['single', 'subscription'];
   const mockProductResponse: Products = {
     id: 1,
@@ -72,12 +87,14 @@ describe('AuthController from AppModule (e2e)', () => {
     };
 
     const cryptoUtilMock = {
-      encryptData: jest.fn().mockImplementation((data: string) => {
-        return Promise.resolve(Buffer.from(data));
-      }),
-      decryptData: jest.fn().mockImplementation((data: Buffer) => {
-        return Promise.resolve(data.toString());
-      }),
+      encryptData: jest
+        .fn()
+        .mockImplementation((data: string) =>
+          Promise.resolve(Buffer.from(data)),
+        ),
+      decryptData: jest
+        .fn()
+        .mockImplementation((data: Buffer) => Promise.resolve(data.toString())),
     };
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -122,20 +139,13 @@ describe('AuthController from AppModule (e2e)', () => {
   it('Should return updated product', async () => {
     expect(productSingleRepositoryMock.findOneByPublicId);
 
-    const tokenDto: GenerateTokenDto = {
-      email: testEmail,
-      sub: testUserId,
-      role: validRole,
-    };
-
-    const tokens = await generateTokenHelper.execute(tokenDto);
-    accessToken = tokens.access_token;
+    const adminToken = await generateAuthToken(ROLES.VALID);
 
     await Promise.all(
       types.map((type) =>
         request(app.getHttpServer())
           .patch(`/products/update/${type}/${validPublicId}/`)
-          .set('Authorization', `Bearer ${accessToken}`)
+          .set('Authorization', `Bearer ${adminToken}`)
           .send(VALID_PRODUCT_DATA)
           .expect(HttpStatus.OK),
       ),
@@ -155,20 +165,13 @@ describe('AuthController from AppModule (e2e)', () => {
   });
 
   it('Should return 403 when user is not ADMIN', async () => {
-    const tokenDto: GenerateTokenDto = {
-      email: testEmail,
-      sub: testUserId,
-      role: invalidRole,
-    };
-
-    const tokens = await generateTokenHelper.execute(tokenDto);
-    accessToken = tokens.access_token;
+    const invalidRoleToken = await generateAuthToken(ROLES.INVALID);
 
     await Promise.all(
       types.map((type) =>
         request(app.getHttpServer())
           .patch(`/products/update/${type}/${validPublicId}/`)
-          .set('Authorization', `Bearer ${accessToken}`)
+          .set('Authorization', `Bearer ${invalidRoleToken}`)
           .send(VALID_PRODUCT_DATA)
           .expect(HttpStatus.FORBIDDEN),
       ),
@@ -179,20 +182,13 @@ describe('AuthController from AppModule (e2e)', () => {
   });
 
   it('Should return 401 when user is not athorized to perfom update operation', async () => {
-    const tokenDto: GenerateTokenDto = {
-      email: testEmail,
-      sub: testUserId,
-      role: notPerformerRole,
-    };
-
-    const tokens = await generateTokenHelper.execute(tokenDto);
-    accessToken = tokens.access_token;
+    const notPerformerToken = await generateAuthToken(ROLES.NOTPERFORMER);
 
     await Promise.all(
       types.map((type) =>
         request(app.getHttpServer())
           .patch(`/products/update/${type}/${validPublicId}/`)
-          .set('Authorization', `Bearer ${accessToken}`)
+          .set('Authorization', `Bearer ${notPerformerToken}`)
           .send(VALID_PRODUCT_DATA)
           .expect(HttpStatus.UNAUTHORIZED),
       ),
@@ -206,20 +202,13 @@ describe('AuthController from AppModule (e2e)', () => {
     productSingleRepositoryMock.findOneByPublicId.mockResolvedValue(null);
     productSubscriptionRepositoryMock.findOneByPublicId.mockResolvedValue(null);
 
-    const tokenDto: GenerateTokenDto = {
-      email: testEmail,
-      sub: testUserId,
-      role: validRole,
-    };
-
-    const tokens = await generateTokenHelper.execute(tokenDto);
-    accessToken = tokens.access_token;
+    const adminToken = await generateAuthToken(ROLES.VALID);
 
     await Promise.all(
       types.map((type) =>
         request(app.getHttpServer())
           .delete(`/products/update/${type}/${validPublicId}/`)
-          .set('Authorization', `Bearer ${accessToken}`)
+          .set('Authorization', `Bearer ${adminToken}`)
           .send(VALID_PRODUCT_DATA)
           .expect(HttpStatus.NOT_FOUND),
       ),
@@ -230,18 +219,11 @@ describe('AuthController from AppModule (e2e)', () => {
   });
 
   it('Should return 400 when type is invalid', async () => {
-    const tokenDto: GenerateTokenDto = {
-      email: testEmail,
-      sub: testUserId,
-      role: validRole,
-    };
-
-    const tokens = await generateTokenHelper.execute(tokenDto);
-    accessToken = tokens.access_token;
+    const adminToken = await generateAuthToken(ROLES.VALID);
 
     await request(app.getHttpServer())
       .patch(`/products/update/invalid-type/${validPublicId}/`)
-      .set('Authorization', `Bearer ${accessToken}`)
+      .set('Authorization', `Bearer ${adminToken}`)
       .send(VALID_PRODUCT_DATA)
       .expect(HttpStatus.BAD_REQUEST);
 
@@ -250,20 +232,13 @@ describe('AuthController from AppModule (e2e)', () => {
   });
 
   it('should validate required fields and return 400 for invalid data', async () => {
-    const tokenDto: GenerateTokenDto = {
-      email: testEmail,
-      sub: testUserId,
-      role: validRole,
-    };
-
-    const tokens = await generateTokenHelper.execute(tokenDto);
-    accessToken = tokens.access_token;
+    const adminToken = await generateAuthToken(ROLES.VALID);
 
     await Promise.all(
       types.map((type) =>
         request(app.getHttpServer())
           .patch(`/products/update/${type}/${validPublicId}/`)
-          .set('Authorization', `Bearer ${accessToken}`)
+          .set('Authorization', `Bearer ${adminToken}`)
           .send('invalid data')
           .expect(HttpStatus.BAD_REQUEST),
       ),
