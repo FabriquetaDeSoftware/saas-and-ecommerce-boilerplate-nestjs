@@ -14,20 +14,39 @@ describe('Protected route without roles to test (e2e)', () => {
   let cryptoUtil: ICryptoUtil;
   let generateTokenHelper: GenerateTokenHelper;
 
-  let accessToken: string;
-  let invalidToken: string = 'invalid_token';
+  const TEST_USER = {
+    email: 'test@example.com',
+    id: '123',
+  };
 
-  const testEmail = 'test@example.com';
-  const testUserId = '123';
+  const ROLES = {
+    VALID: RolesEnum.USER,
+  };
+
+  const TOKENS = {
+    INVALID: 'invalid_token',
+  };
+
+  const generateAuthToken = async (role: RolesEnum): Promise<string> => {
+    const tokenDto: GenerateTokenDto = {
+      email: TEST_USER.email,
+      sub: TEST_USER.id,
+      role,
+    };
+    const tokens = await generateTokenHelper.execute(tokenDto);
+    return tokens.access_token;
+  };
 
   beforeAll(async () => {
     const cryptoUtilMock = {
-      encryptData: jest.fn().mockImplementation((data: string) => {
-        return Promise.resolve(Buffer.from(data));
-      }),
-      decryptData: jest.fn().mockImplementation((data: Buffer) => {
-        return Promise.resolve(data.toString());
-      }),
+      encryptData: jest
+        .fn()
+        .mockImplementation((data: string) =>
+          Promise.resolve(Buffer.from(data)),
+        ),
+      decryptData: jest
+        .fn()
+        .mockImplementation((data: Buffer) => Promise.resolve(data.toString())),
     };
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -66,37 +85,34 @@ describe('Protected route without roles to test (e2e)', () => {
   });
 
   describe('GET /protected', () => {
-    it('Should return message to authenticated user', async () => {
-      const tokenDto: GenerateTokenDto = {
-        email: testEmail,
-        sub: testUserId,
-        role: RolesEnum.USER,
-      };
-
-      const tokens = await generateTokenHelper.execute(tokenDto);
-      accessToken = tokens.access_token;
+    it('should return message to authenticated user', async () => {
+      const validToken = await generateAuthToken(ROLES.VALID);
 
       const response = await request(app.getHttpServer())
         .get('/protected/')
-        .set('Authorization', `Bearer ${accessToken}`)
+        .set('Authorization', `Bearer ${validToken}`)
         .expect(HttpStatus.OK);
 
       expect(response.body).toHaveProperty('message');
+      expect(response.body.message).toBeTruthy();
     });
 
-    it('Should return 401 when token is invalid', async () => {
+    it('should return 401 when token is invalid', async () => {
       const response = await request(app.getHttpServer())
         .get('/protected/')
-        .set('Authorization', `Bearer ${invalidToken}`)
+        .set('Authorization', `Bearer ${TOKENS.INVALID}`)
         .expect(HttpStatus.UNAUTHORIZED);
 
       expect(response.body).toHaveProperty('message');
+      expect(response.body.message).toContain('Unauthorized');
     });
 
-    it('Should return 401 to request not authenticated', async () => {
-      await request(app.getHttpServer())
+    it('should return 401 when request has no authentication', async () => {
+      const response = await request(app.getHttpServer())
         .get('/protected/')
         .expect(HttpStatus.UNAUTHORIZED);
+
+      expect(response.body).toHaveProperty('message');
     });
   });
 

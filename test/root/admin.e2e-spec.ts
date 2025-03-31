@@ -8,28 +8,46 @@ import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
 import { GenerateTokenHelper } from 'src/modules/auth/shared/helpers/generate_token.helper';
 import { GenerateTokenDto } from 'src/modules/auth/application/dto/generate_token.dto';
 
-describe('Protected route with admin role to test (e2e)', () => {
+describe('Admin Protected Routes (e2e)', () => {
   let app: INestApplication;
   let jwtService: JwtService;
   let cryptoUtil: ICryptoUtil;
   let generateTokenHelper: GenerateTokenHelper;
 
-  let accessToken: string;
-  let invalidToken: string = 'invalid_token';
+  const TEST_USER = {
+    email: 'test@example.com',
+    id: '123',
+  };
 
-  const testEmail = 'test@example.com';
-  const testUserId = '123';
-  const validRole = RolesEnum.ADMIN;
-  const unvalidRole = RolesEnum.USER;
+  const ROLES = {
+    VALID: RolesEnum.ADMIN,
+    INVALID: RolesEnum.USER,
+  };
+
+  const TOKENS = {
+    INVALID: 'invalid_token',
+  };
+
+  const generateAuthToken = async (role: RolesEnum): Promise<string> => {
+    const tokenDto: GenerateTokenDto = {
+      email: TEST_USER.email,
+      sub: TEST_USER.id,
+      role,
+    };
+    const tokens = await generateTokenHelper.execute(tokenDto);
+    return tokens.access_token;
+  };
 
   beforeAll(async () => {
     const cryptoUtilMock = {
-      encryptData: jest.fn().mockImplementation((data: string) => {
-        return Promise.resolve(Buffer.from(data));
-      }),
-      decryptData: jest.fn().mockImplementation((data: Buffer) => {
-        return Promise.resolve(data.toString());
-      }),
+      encryptData: jest
+        .fn()
+        .mockImplementation((data: string) =>
+          Promise.resolve(Buffer.from(data)),
+        ),
+      decryptData: jest
+        .fn()
+        .mockImplementation((data: Buffer) => Promise.resolve(data.toString())),
     };
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -68,53 +86,46 @@ describe('Protected route with admin role to test (e2e)', () => {
   });
 
   describe('GET /admin', () => {
-    it('Should return message to authenticated user', async () => {
-      const tokenDto: GenerateTokenDto = {
-        email: testEmail,
-        sub: testUserId,
-        role: validRole,
-      };
-
-      const tokens = await generateTokenHelper.execute(tokenDto);
-      accessToken = tokens.access_token;
+    it('should return success message when user has admin role', async () => {
+      const adminToken = await generateAuthToken(ROLES.VALID);
 
       const response = await request(app.getHttpServer())
         .get('/admin/')
-        .set('Authorization', `Bearer ${accessToken}`)
+        .set('Authorization', `Bearer ${adminToken}`)
         .expect(HttpStatus.OK);
 
       expect(response.body).toHaveProperty('message');
+      expect(response.body.message).toBeTruthy();
     });
 
-    it('Should return 403 when user dont have role available', async () => {
-      const tokenDto: GenerateTokenDto = {
-        email: testEmail,
-        sub: testUserId,
-        role: unvalidRole,
-      };
+    it('should return 403 when user has insufficient role permissions', async () => {
+      const userToken = await generateAuthToken(ROLES.INVALID);
 
-      const tokens = await generateTokenHelper.execute(tokenDto);
-      accessToken = tokens.access_token;
-
-      await request(app.getHttpServer())
-        .get('/admin/')
-        .set('Authorization', `Bearer ${accessToken}`)
-        .expect(HttpStatus.FORBIDDEN);
-    });
-
-    it('Should return 401 when token is invalid', async () => {
       const response = await request(app.getHttpServer())
         .get('/admin/')
-        .set('Authorization', `Bearer ${invalidToken}`)
+        .set('Authorization', `Bearer ${userToken}`)
+        .expect(HttpStatus.FORBIDDEN);
+
+      expect(response.body).toHaveProperty('message');
+      expect(response.body.message).toContain('Forbidden');
+    });
+
+    it('should return 401 when token is invalid', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/admin/')
+        .set('Authorization', `Bearer ${TOKENS.INVALID}`)
         .expect(HttpStatus.UNAUTHORIZED);
 
       expect(response.body).toHaveProperty('message');
+      expect(response.body.message).toContain('Unauthorized');
     });
 
-    it('Should return 401 to request not authenticated', async () => {
-      await request(app.getHttpServer())
+    it('should return 401 when request has no authentication', async () => {
+      const response = await request(app.getHttpServer())
         .get('/admin/')
         .expect(HttpStatus.UNAUTHORIZED);
+
+      expect(response.body).toHaveProperty('message');
     });
   });
 
