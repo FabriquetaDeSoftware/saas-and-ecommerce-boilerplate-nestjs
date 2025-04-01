@@ -86,7 +86,7 @@ services:
       - network
 
   otel-collector:
-    image: otel/opentelemetry-collector:latest
+    image: otel/opentelemetry-collector:0.123.0
     container_name: otel-collector-dev
     command: [ "--config=/etc/otel-collector-config.yml" ]
     volumes:
