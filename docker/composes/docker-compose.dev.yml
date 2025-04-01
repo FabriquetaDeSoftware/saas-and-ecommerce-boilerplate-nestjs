@@ -9,6 +9,7 @@ services:
     depends_on:
       - postgres
       - redis
+      - jaeger
     networks:
       - network
     # ports:
@@ -67,6 +68,22 @@ services:
     volumes:
       - ../../nginx.conf:/etc/nginx/nginx.conf:ro
     restart: always
+
+  jaeger:
+    container_name: jaeger
+    image: jaegertracing/all-in-one:1.50
+    ports:
+      - "${MAPPED_PORT_JAEGER_UI}:16686"
+    environment:
+      - COLLECTOR_ZIPKIN_HTTP_PORT=9411
+      - JAEGER_SAMPLER_TYPE=const
+      - JAEGER_SAMPLER_PARAM=1
+    expose:
+      - "14268"
+      - "4317"
+      - "5778"
+    networks:
+      - network
 
 networks:
   network:
