@@ -82,6 +82,7 @@ services:
       - "14268" # Jaeger collector HTTP endpoint
       - "4317" # Jaeger gRPC endpoint
       - "5778" # Jaeger agent HTTP endpoint
+    restart: always
     networks:
       - network
 
@@ -99,6 +100,7 @@ services:
       - 55679 # zpages extension
     depends_on:
       - jaeger
+    restart: always
     networks:
       - network
 
