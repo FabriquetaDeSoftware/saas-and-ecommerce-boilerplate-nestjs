@@ -9,6 +9,7 @@ services:
     depends_on:
       - postgres
       - redis
+      - jaeger
     networks:
       - network
     # ports:
@@ -67,6 +68,41 @@ services:
     volumes:
       - ../../nginx.conf:/etc/nginx/nginx.conf:ro
     restart: always
+
+  jaeger:
+    container_name: jaeger-prod
+    image: jaegertracing/all-in-one:1.50
+    ports:
+      - "${MAPPED_PORT_JAEGER_UI}:16686"
+    environment:
+      - COLLECTOR_ZIPKIN_HTTP_PORT=9411
+      - JAEGER_SAMPLER_TYPE=const
+      - JAEGER_SAMPLER_PARAM=1
+    expose:
+      - "14268" # Jaeger collector HTTP endpoint
+      - "4317" # Jaeger gRPC endpoint
+      - "5778" # Jaeger agent HTTP endpoint
+    restart: always
+    networks:
+      - network
+
+  otel-collector:
+    image: otel/opentelemetry-collector:0.123.0
+    container_name: otel-collector-dev
+    command: [ "--config=/etc/otel-collector-config.yml" ]
+    volumes:
+      - ../../src/config/otel-collector-config.yml:/etc/otel-collector-config.yml
+    expose:
+      - 1888 # pprof extension
+      - 13133 # health_check extension
+      - 4317 # OTLP gRPC receiver
+      - 4318 # http gRPC receiver
+      - 55679 # zpages extension
+    depends_on:
+      - jaeger
+    restart: always
+    networks:
+      - network
 
 networks:
   network:
