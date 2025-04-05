@@ -12,8 +12,8 @@ services:
       - jaeger
     networks:
       - network
-    # ports:
-    #   - '${MAPPED_PORT_API}:${PORT_API}'
+    ports:
+      - '${MAPPED_PORT_API}:${PORT_API}'
     volumes:
       - ../..:/home/api/nestjs/saas-and-ecommerce-boilerplate-nestjs
     restart: always
@@ -47,8 +47,8 @@ services:
         limits:
           cpus: '0.2'
           memory: '512M'
-    # ports:
-    #   - '${MAPPED_PORT_REDIS}:6379'
+    ports:
+      - '${MAPPED_PORT_REDIS}:6379'
     volumes:
       - redis_data:/data
     restart: always
@@ -102,6 +102,28 @@ services:
       - jaeger
     links:
       - jaeger
+    restart: always
+    networks:
+      - network
+
+  prometheus:
+    container_name: prometheus-dev
+    image: prom/prometheus
+    volumes:
+      - ../../src/config/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - '${MAPPED_PORT_PROMETHEUS_UI}:9090'
+    restart: always
+    networks:
+      - network
+
+  grafana:
+    container_name: grafana-dev
+    image: grafana/grafana
+    ports:
+      - '${MAPPED_PORT_GRAFANA_UI}:3000'
     restart: always
     networks:
       - network

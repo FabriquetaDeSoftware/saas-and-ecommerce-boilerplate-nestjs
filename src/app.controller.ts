@@ -1,12 +1,21 @@
-import { Get, Controller, Render } from '@nestjs/common';
+import { Get, Controller, Render, Res } from '@nestjs/common';
 import { IsPublicRoute } from './common/decorators/is_public_route.decorator';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Roles } from './common/decorators/roles.decorator';
 import { RolesEnum } from './shared/enum/roles.enum';
+import { register } from 'prom-client';
+import { FastifyReply } from 'fastify';
 
 @ApiTags('app')
 @Controller()
 export class AppController {
+  @Get('metrics')
+  @IsPublicRoute()
+  async getMetrics(@Res() res: FastifyReply) {
+    const metrics = await register.metrics();
+    res.header('Content-Type', register.contentType).send(metrics);
+  }
+
   @IsPublicRoute()
   @Get()
   @Render('index')

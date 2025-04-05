@@ -6,6 +6,13 @@ receivers:
       http:
         endpoint: 0.0.0.0:4318
 
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: 'nestjs-api'
+          static_configs:
+            - targets: ['api:3003']
+
 exporters:
   debug:
     verbosity: detailed
@@ -14,6 +21,9 @@ exporters:
     endpoint: jaeger:4317
     tls:
       insecure: true
+
+  prometheus:
+    endpoint: 0.0.0.0:8889
 
 processors:
   batch: {}
@@ -28,7 +38,8 @@ service:
       receivers: [otlp]
       processors: [batch]
       exporters: [debug, otlp]
+
     metrics:
-      receivers: [otlp]
+      receivers: [otlp, prometheus]
       processors: [batch]
-      exporters: [debug]
+      exporters: [debug, prometheus]
