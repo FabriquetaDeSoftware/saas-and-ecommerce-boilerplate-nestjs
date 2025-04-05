@@ -10,6 +10,7 @@ services:
       - postgres
       - redis
       - jaeger
+      - prometheus
     networks:
       - network
     # ports:
@@ -88,7 +89,7 @@ services:
 
   otel-collector:
     image: otel/opentelemetry-collector:0.123.0
-    container_name: otel-collector-dev
+    container_name: otel-collector-prod
     command: [ "--config=/etc/otel-collector-config.yml" ]
     volumes:
       - ../../src/config/otel-collector-config.yml:/etc/otel-collector-config.yml
@@ -100,6 +101,33 @@ services:
       - 55679 # zpages extension
     depends_on:
       - jaeger
+      - prometheus
+    links:
+      - jaeger
+    restart: always
+    networks:
+      - network
+
+  prometheus:
+    container_name: prometheus-prod
+    image: prom/prometheus
+    volumes:
+      - ../../src/config/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    # ports:
+    #   - '${MAPPED_PORT_PROMETHEUS_UI}:9090'
+    restart: always
+    networks:
+      - network
+
+  grafana:
+    container_name: grafana-prod
+    image: grafana/grafana
+    ports:
+      - '${MAPPED_PORT_GRAFANA_UI}:3000'
+    depends_on:
+      - prometheus
     restart: always
     networks:
       - network

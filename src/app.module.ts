@@ -10,9 +10,16 @@ import { BillingModule } from './modules/billing/billing.module';
 import { CaslModule } from './common/casl/casl.module';
 import { ProductsModule } from './modules/products/products.module';
 import { AppController } from './app.controller';
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 
 @Module({
   imports: [
+    PrometheusModule.register({
+      defaultMetrics: {
+        enabled: true,
+      },
+      path: '/app/metrics',
+    }),
     BullModule.forRoot({
       connection: {
         host: 'redis',

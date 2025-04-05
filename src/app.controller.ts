@@ -9,13 +9,6 @@ import { FastifyReply } from 'fastify';
 @ApiTags('app')
 @Controller()
 export class AppController {
-  @Get('metrics')
-  @IsPublicRoute()
-  async getMetrics(@Res() res: FastifyReply) {
-    const metrics = await register.metrics();
-    res.header('Content-Type', register.contentType).send(metrics);
-  }
-
   @IsPublicRoute()
   @Get()
   @Render('index')
@@ -28,16 +21,23 @@ export class AppController {
   }
 
   @ApiBearerAuth()
+  @Roles(RolesEnum.USER)
+  @Get('user')
+  public userRoute(): { message: string } {
+    return { message: 'User Route' };
+  }
+
+  @ApiBearerAuth()
   @Roles(RolesEnum.ADMIN)
   @Get('admin')
   public adminRoute(): { message: string } {
     return { message: 'Admin Route' };
   }
 
-  @ApiBearerAuth()
-  @Roles(RolesEnum.USER)
-  @Get('user')
-  public userRoute(): { message: string } {
-    return { message: 'User Route' };
+  @Get('metrics')
+  @IsPublicRoute()
+  async getMetrics(@Res() res: FastifyReply) {
+    const metrics = await register.metrics();
+    res.header('Content-Type', register.contentType).send(metrics);
   }
 }

@@ -10,10 +10,11 @@ services:
       - postgres
       - redis
       - jaeger
+      - prometheus
     networks:
       - network
-    ports:
-      - '${MAPPED_PORT_API}:${PORT_API}'
+    # ports:
+    #   - '${MAPPED_PORT_API}:${PORT_API}'
     volumes:
       - ../..:/home/api/nestjs/saas-and-ecommerce-boilerplate-nestjs
     restart: always
@@ -47,8 +48,8 @@ services:
         limits:
           cpus: '0.2'
           memory: '512M'
-    ports:
-      - '${MAPPED_PORT_REDIS}:6379'
+    # ports:
+    #   - '${MAPPED_PORT_REDIS}:6379'
     volumes:
       - redis_data:/data
     restart: always
@@ -100,6 +101,7 @@ services:
       - 55679 # zpages extension
     depends_on:
       - jaeger
+      - prometheus
     links:
       - jaeger
     restart: always
@@ -113,8 +115,8 @@ services:
       - ../../src/config/prometheus.yml:/etc/prometheus/prometheus.yml
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
-    ports:
-      - '${MAPPED_PORT_PROMETHEUS_UI}:9090'
+    # ports:
+    #   - '${MAPPED_PORT_PROMETHEUS_UI}:9090'
     restart: always
     networks:
       - network
@@ -124,6 +126,8 @@ services:
     image: grafana/grafana
     ports:
       - '${MAPPED_PORT_GRAFANA_UI}:3000'
+    depends_on:
+      - prometheus
     restart: always
     networks:
       - network
