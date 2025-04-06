@@ -102,8 +102,6 @@ services:
     depends_on:
       - jaeger
       - prometheus
-    links:
-      - jaeger
     restart: always
     networks:
       - network
