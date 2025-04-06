@@ -111,8 +111,11 @@ services:
     image: prom/prometheus
     volumes:
       - ../../src/config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=15d'
     # ports:
     #   - '${MAPPED_PORT_PROMETHEUS_UI}:9090'
     restart: always
@@ -122,6 +125,8 @@ services:
   grafana:
     container_name: grafana-prod
     image: grafana/grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
     ports:
       - '${MAPPED_PORT_GRAFANA_UI}:3000'
     depends_on:
@@ -137,3 +142,5 @@ networks:
 volumes:
   postgres_data:
   redis_data:
+  prometheus_data:
+  grafana_data:
