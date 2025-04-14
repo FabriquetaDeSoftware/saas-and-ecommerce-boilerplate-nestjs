@@ -5,29 +5,49 @@ import { AppModule } from '../../src/app.module';
 import { ISubscriptionProductsRepository } from 'src/modules/products/domain/interfaces/repositories/subscription_products.repository.interface';
 import { ListManyProductsDto } from 'src/modules/products/application/dto/list_many_products.dto';
 import { ISingleProductsRepository } from 'src/modules/products/domain/interfaces/repositories/single_products.repository.interface';
+import { Products } from 'src/modules/products/domain/entities/products.entity';
 
 describe('AuthController from AppModule (e2e)', () => {
   let app: INestApplication;
   let productSubscriptionRepositoryMock: jest.Mocked<ISubscriptionProductsRepository>;
   let productSingleRepositoryMock: jest.Mocked<ISingleProductsRepository>;
 
+  const imageMockURl =
+    'https://t0.gstatic.com/licensed-image?q=tbn:ANd9GcTEVcrypslvdUeHleSabemh-hXNLNslN-H0XVxm7ObA2J28dKoXFD5zck7QPMjyHGBCWXhq2nmA4YA0IYslGIM';
+
   const validSlug = 'valid_slug';
   const invalidSlug = 'invalid_slug';
   const types = ['single', 'subscription'];
 
+  const RESPONSE_SUB_MOCK: Products = {
+    id: 1,
+    public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
+    name: 'Product 1 Subscription',
+    description: 'Description 1',
+    price: 10,
+    price_id: 'price_1N4v2cK0x5g3e7d8f8e8e8e8',
+    image: [imageMockURl, imageMockURl],
+    slug: 'product-1',
+    created_at: new Date(),
+    updated_at: new Date(),
+  };
+
+  const RESPONSE_SINGLE_MOCK: Products = {
+    id: 1,
+    public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
+    name: 'Product 1 Single',
+    description: 'Description 1',
+    price: 10,
+    price_id: 'price_1N4v2cK0x5g3e7d8f8e8e8e8',
+    image: [imageMockURl, imageMockURl],
+    slug: 'product-1',
+    created_at: new Date(),
+    updated_at: new Date(),
+  };
+
   beforeAll(async () => {
     productSingleRepositoryMock = {
-      findOneBySlug: jest.fn().mockResolvedValue({
-        id: 1,
-        public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
-        name: 'Product 1',
-        description: 'Description 1',
-        price: 10,
-        image: 'image1.jpg',
-        slug: 'product-1',
-        created_at: new Date(),
-        updated_at: new Date(),
-      }),
+      findOneBySlug: jest.fn().mockResolvedValue(RESPONSE_SINGLE_MOCK),
       update: jest.fn().mockResolvedValue(undefined),
       create: jest.fn().mockImplementation(undefined),
       delete: jest.fn().mockResolvedValue(undefined),
@@ -36,17 +56,7 @@ describe('AuthController from AppModule (e2e)', () => {
     };
 
     productSubscriptionRepositoryMock = {
-      findOneBySlug: jest.fn().mockResolvedValue({
-        id: 1,
-        public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
-        name: 'Product 1',
-        description: 'Description 1',
-        price: 10,
-        image: 'image1.jpg',
-        slug: 'product-1',
-        created_at: new Date(),
-        updated_at: new Date(),
-      }),
+      findOneBySlug: jest.fn().mockResolvedValue(RESPONSE_SUB_MOCK),
       update: jest.fn().mockResolvedValue(undefined),
       create: jest.fn().mockImplementation(undefined),
       delete: jest.fn().mockResolvedValue(undefined),
@@ -87,15 +97,20 @@ describe('AuthController from AppModule (e2e)', () => {
       ),
     );
 
-    responses.map((response) => {
+    responses.map((response, index) => {
+      const type = types[index];
+      const expectedMock =
+        type === 'subscription' ? RESPONSE_SUB_MOCK : RESPONSE_SINGLE_MOCK;
+
       expect(response.body).toEqual(
         expect.objectContaining({
-          public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
-          name: 'Product 1',
-          description: 'Description 1',
-          price: 10,
-          image: 'image1.jpg',
-          slug: 'product-1',
+          public_id: expectedMock.public_id,
+          name: expectedMock.name,
+          description: expectedMock.description,
+          price: expectedMock.price,
+          price_id: expectedMock.price_id,
+          image: expectedMock.image,
+          slug: expectedMock.slug,
           created_at: expect.any(String),
           updated_at: expect.any(String),
         }),

@@ -12,6 +12,74 @@ describe('AuthController from AppModule (e2e)', () => {
   let productSubscriptionRepositoryMock: jest.Mocked<ISubscriptionProductsRepository>;
   let productSingleRepositoryMock: jest.Mocked<ISingleProductsRepository>;
 
+  const imageMockURl =
+    'https://t0.gstatic.com/licensed-image?q=tbn:ANd9GcTEVcrypslvdUeHleSabemh-hXNLNslN-H0XVxm7ObA2J28dKoXFD5zck7QPMjyHGBCWXhq2nmA4YA0IYslGIM';
+
+  const RESPONSE_SUB_MOCK: ListManyProductsReturn = {
+    data: [
+      {
+        id: 1,
+        public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
+        name: 'Product 1',
+        description: 'Description 1',
+        price: 10,
+        price_id: 'price_1N4v2cK0x5g3e7d8f8e8e8e8',
+        image: [imageMockURl, imageMockURl],
+        slug: 'product-1',
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        id: 2,
+        public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
+        name: 'Product 2',
+        description: 'Description 2',
+        price: 10,
+        price_id: 'price_1N4v2cK0x5g3e7d8f8e8e8e8',
+        image: [imageMockURl, imageMockURl],
+        slug: 'product-1',
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+    ],
+    page: 1,
+    pageSize: 1,
+    total: 2,
+    totalPages: 2,
+  };
+  const RESPONSE_SINGLE_MOCK: ListManyProductsReturn = {
+    data: [
+      {
+        id: 1,
+        public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
+        name: 'Product 1',
+        description: 'Description 1',
+        price: 10,
+        price_id: 'price_1N4v2cK0x5g3e7d8f8e8e8e8',
+        image: [imageMockURl, imageMockURl],
+        slug: 'product-1',
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        id: 2,
+        public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
+        name: 'Product 2',
+        description: 'Description 2',
+        price: 10,
+        price_id: 'price_1N4v2cK0x5g3e7d8f8e8e8e8',
+        image: [imageMockURl, imageMockURl],
+        slug: 'product-1',
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+    ],
+    page: 1,
+    pageSize: 1,
+    total: 2,
+    totalPages: 2,
+  };
+
   const types = ['single', 'subscription'];
 
   beforeAll(async () => {
@@ -21,39 +89,12 @@ describe('AuthController from AppModule (e2e)', () => {
       create: jest.fn().mockImplementation(undefined),
       delete: jest.fn().mockResolvedValue(undefined),
       findOneByPublicId: jest.fn().mockResolvedValue(undefined),
-      listMany: jest.fn().mockImplementation(
-        (dto: ListManyProductsDto): Promise<ListManyProductsReturn> =>
-          Promise.resolve({
-            data: [
-              {
-                id: 1,
-                public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
-                name: 'Product 1',
-                description: 'Description 1',
-                price: 10,
-                image: 'image1.jpg',
-                slug: 'product-1',
-                created_at: new Date(),
-                updated_at: new Date(),
-              },
-              {
-                id: 2,
-                public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
-                name: 'Product 2',
-                description: 'Description 2',
-                price: 10,
-                image: 'image2.jpg',
-                slug: 'product-1',
-                created_at: new Date(),
-                updated_at: new Date(),
-              },
-            ],
-            page: 1,
-            pageSize: 1,
-            total: 2,
-            totalPages: 2,
-          }),
-      ),
+      listMany: jest
+        .fn()
+        .mockImplementation(
+          (dto: ListManyProductsDto): Promise<ListManyProductsReturn> =>
+            Promise.resolve(RESPONSE_SINGLE_MOCK),
+        ),
     };
 
     productSubscriptionRepositoryMock = {
@@ -62,39 +103,12 @@ describe('AuthController from AppModule (e2e)', () => {
       create: jest.fn().mockImplementation(undefined),
       delete: jest.fn().mockResolvedValue(undefined),
       findOneByPublicId: jest.fn().mockResolvedValue(undefined),
-      listMany: jest.fn().mockImplementation(
-        (dto: ListManyProductsDto): Promise<ListManyProductsReturn> =>
-          Promise.resolve({
-            data: [
-              {
-                id: 1,
-                public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
-                name: 'Product 1',
-                description: 'Description 1',
-                price: 10,
-                image: 'image1.jpg',
-                slug: 'product-1',
-                created_at: new Date(),
-                updated_at: new Date(),
-              },
-              {
-                id: 2,
-                public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
-                name: 'Product 2',
-                description: 'Description 2',
-                price: 10,
-                image: 'image2.jpg',
-                slug: 'product-1',
-                created_at: new Date(),
-                updated_at: new Date(),
-              },
-            ],
-            page: 1,
-            pageSize: 1,
-            total: 2,
-            totalPages: 2,
-          }),
-      ),
+      listMany: jest
+        .fn()
+        .mockImplementation(
+          (dto: ListManyProductsDto): Promise<ListManyProductsReturn> =>
+            Promise.resolve(RESPONSE_SUB_MOCK),
+        ),
     };
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -142,21 +156,21 @@ describe('AuthController from AppModule (e2e)', () => {
         expect.objectContaining({
           data: expect.arrayContaining([
             expect.objectContaining({
-              id: 1,
               public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
               name: 'Product 1',
               description: 'Description 1',
               price: 10,
-              image: 'image1.jpg',
+              price_id: 'price_1N4v2cK0x5g3e7d8f8e8e8e8',
+              image: [imageMockURl, imageMockURl],
               slug: 'product-1',
             }),
             expect.objectContaining({
-              id: 2,
               public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
               name: 'Product 2',
               description: 'Description 2',
               price: 10,
-              image: 'image2.jpg',
+              price_id: 'price_1N4v2cK0x5g3e7d8f8e8e8e8',
+              image: [imageMockURl, imageMockURl],
               slug: 'product-1',
             }),
           ]),

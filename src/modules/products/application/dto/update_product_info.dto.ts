@@ -35,6 +35,14 @@ export class UpdateProductInfoDto {
   price?: number;
 
   @ApiProperty({
+    description: 'Price id of the product',
+    example: 'price_1H9v6s2eZvKYlo2C5L4x4f7u',
+  })
+  @IsOptional()
+  @IsString()
+  price_id?: string;
+
+  @ApiProperty({
     description: 'New slug of the product',
     example: 'new_slug_product1',
   })
@@ -52,5 +60,5 @@ export class UpdateProductInfoDto {
   @IsOptional()
   @IsArray()
   @IsUrl({}, { each: true })
-  image?: string;
+  image?: string[];
 }
