@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsArray,
   IsNumber,
   IsOptional,
   IsPositive,
@@ -43,10 +44,13 @@ export class UpdateProductInfoDto {
 
   @ApiProperty({
     description: 'New url image of the product',
-    example:
+    example: [
       'https://t0.gstatic.com/licensed-image?q=tbn:ANd9GcTEVcrypslvdUeHleSabemh-hXNLNslN-H0XVxm7ObA2J28dKoXFD5zck7QPMjyHGBCWXhq2nmA4YA0IYslGIM',
+      'https://t0.gstatic.com/licensed-image?q=tbn:ANd9GcTEVcrypslvdUeHleSabemh-hXNLNslN-H0XVxm7ObA2J28dKoXFD5zck7QPMjyHGBCWXhq2nmA4YA0IYslGIM',
+    ],
   })
   @IsOptional()
-  @IsUrl()
+  @IsArray()
+  @IsUrl({}, { each: true })
   image?: string;
 }

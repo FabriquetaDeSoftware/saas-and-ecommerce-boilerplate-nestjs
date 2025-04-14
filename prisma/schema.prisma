@@ -55,9 +55,12 @@ model SinglePurchaseProducts {
 
   name        String
   description String
-  price       Int
-  slug        String  @unique
-  image       String?
+
+  price    Int
+  price_id String? @unique
+
+  slug  String   @unique
+  image String[]
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -71,9 +74,12 @@ model SubscriptionPurchaseProducts {
 
   name        String
   description String
-  price       Int
-  slug        String  @unique
-  image       String?
+
+  price    Int
+  price_id String? @unique
+
+  slug  String   @unique
+  image String[]
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
