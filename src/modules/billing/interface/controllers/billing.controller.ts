@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Headers,
   HttpCode,
@@ -13,6 +14,9 @@ import { FastifyRequest } from 'fastify';
 import { IWebhookService } from '../../domain/interfaces/services/webhook.service.interface';
 import { IOneTimePaymentUseCase } from '../../domain/interfaces/use_cases/one_time_payment.use_case.interface';
 import { ISubscriptionPaymentUseCase } from '../../domain/interfaces/use_cases/subscription_payment.use_case.interface';
+import { IJwtUserPayload } from 'src/shared/interfaces/jwt_user_payload.interface';
+import { CurrentUser } from 'src/common/decorators/current_user.decorator';
+import { PaymentDto } from '../../application/dto/payment.dto';
 
 @ApiTags('billing')
 @Controller('billing')
@@ -29,9 +33,12 @@ export class BillingController {
   @ApiBearerAuth()
   @Post('payment/one-time')
   @HttpCode(303)
-  public async oneTime(): Promise<{ url: string }> {
-    const priceId = 'price_1Qnj8hAIFECoCtHiGReB5Rpl';
-    const paymentIntent = await this._oneTimepaymentService.execute(priceId);
+  public async oneTime(
+    @Body() data: PaymentDto,
+    @CurrentUser() user: IJwtUserPayload,
+  ): Promise<{ url: string }> {
+    // const priceId = 'price_1Qnj8hAIFECoCtHiGReB5Rpl';
+    const paymentIntent = await this._oneTimepaymentService.execute(data, user);
 
     return paymentIntent;
   }
@@ -39,10 +46,15 @@ export class BillingController {
   @ApiBearerAuth()
   @Post('payment/subscription')
   @HttpCode(303)
-  public async subscription(): Promise<{ url: string }> {
-    const priceId = 'price_1QouBMAIFECoCtHid1E2PjEM';
-    const paymentIntent =
-      await this._subscriptionPaymentService.execute(priceId);
+  public async subscription(
+    @Body() data: PaymentDto,
+    @CurrentUser() user: IJwtUserPayload,
+  ): Promise<{ url: string }> {
+    // const priceId = 'price_1QouBMAIFECoCtHid1E2PjEM';
+    const paymentIntent = await this._subscriptionPaymentService.execute(
+      data,
+      user,
+    );
 
     return paymentIntent;
   }

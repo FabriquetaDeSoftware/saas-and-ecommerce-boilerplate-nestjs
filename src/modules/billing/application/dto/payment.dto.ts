@@ -1,13 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsUUID } from 'class-validator';
 
 export class PaymentDto {
   @ApiProperty({
-    description: 'Payment amount',
-    example: 10,
+    description: 'Public id of the product',
+    example: 'f1b9d1c4-0c8f-4e6c-8c5c-1e0c7f8e1b8a',
   })
   @IsNotEmpty()
-  amount: number;
-
-  currency?: string;
+  @IsUUID()
+  public_id: string;
 }

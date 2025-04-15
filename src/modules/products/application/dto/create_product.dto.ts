@@ -39,9 +39,9 @@ export class CreateProductDto {
     description: 'Price id of the product',
     example: 'price_1H9v6s2eZvKYlo2C5L4x4f7u',
   })
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
-  price_id?: string;
+  price_id: string;
 
   @ApiProperty({
     description: 'Slug of the product',

@@ -76,7 +76,7 @@ model SubscriptionPurchaseProducts {
   description String
 
   price    Int
-  price_id String? @unique
+  price_id String @unique
 
   slug  String   @unique
   image String[]
