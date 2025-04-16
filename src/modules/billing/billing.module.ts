@@ -5,8 +5,10 @@ import { WebhookService } from './infrastructure/services/webhook.service';
 import { OneTimePaymentUseCase } from './application/use_cases/one_time_payment.use_case';
 import { SubscriptionPaymentUseCase } from './application/use_cases/subscription_payment.use_case';
 import { PaymentGatewayAdapter } from './infrastructure/gateway/adapters/payment.gateway.adapter';
+import { SharedModule } from 'src/shared/shared.module';
 
 @Module({
+  imports: [SharedModule],
   controllers: [BillingController],
   providers: [
     PaymentGatewayAdapter,

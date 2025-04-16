@@ -37,7 +37,6 @@ export class BillingController {
     @Body() data: PaymentDto,
     @CurrentUser() user: IJwtUserPayload,
   ): Promise<{ url: string }> {
-    // const priceId = 'price_1Qnj8hAIFECoCtHiGReB5Rpl';
     const paymentIntent = await this._oneTimepaymentService.execute(data, user);
 
     return paymentIntent;
@@ -50,7 +49,6 @@ export class BillingController {
     @Body() data: PaymentDto,
     @CurrentUser() user: IJwtUserPayload,
   ): Promise<{ url: string }> {
-    // const priceId = 'price_1QouBMAIFECoCtHid1E2PjEM';
     const paymentIntent = await this._subscriptionPaymentService.execute(
       data,
       user,

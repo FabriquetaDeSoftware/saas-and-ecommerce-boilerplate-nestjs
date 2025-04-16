@@ -12,15 +12,24 @@ export class StripeGateway {
     });
   }
 
-  public async createOneTimePayment(priceId: string): Promise<{ url: string }> {
+  public async createOneTimePayment(
+    priceId: string,
+    customerId: string,
+    customerEmail: string,
+  ): Promise<{ url: string }> {
     const session = await this._stripe.checkout.sessions.create({
       payment_method_types: ['card'],
+      customer_email: customerEmail,
       line_items: [
         {
           price: priceId,
           quantity: 1,
         },
       ],
+      metadata: {
+        customerId,
+        customerEmail,
+      },
       mode: 'payment',
       success_url: gatewayConstants.success_url,
       cancel_url: gatewayConstants.cancel_url,
@@ -31,15 +40,22 @@ export class StripeGateway {
 
   public async createSubscriptionPayment(
     priceId: string,
+    customerId: string,
+    customerEmail: string,
   ): Promise<{ url: string }> {
     const session = await this._stripe.checkout.sessions.create({
       payment_method_types: ['card'],
+      customer_email: customerEmail,
       line_items: [
         {
           price: priceId,
           quantity: 1,
         },
       ],
+      metadata: {
+        customerId,
+        customerEmail,
+      },
       mode: 'subscription',
       success_url: gatewayConstants.success_url,
       cancel_url: gatewayConstants.cancel_url,
@@ -68,6 +84,13 @@ export class StripeGateway {
         break;
 
       case 'checkout.session.completed':
+        const session = event.data.object;
+
+        const customerEmailFromSession = session.customer_email;
+
+        const customerId = session.metadata?.customerId;
+        const customerEmail = session.metadata?.customerEmail;
+
         console.log('Checkout session completed');
         break;
 
