@@ -11,11 +11,13 @@ export class PaymentGatewayAdapter implements IPaymentGatewayAdapter {
     priceId: string,
     customerId: string,
     customerEmail: string,
+    productId: string,
   ): Promise<{ url: string }> {
     return this._stripeGateway.createOneTimePayment(
       priceId,
       customerId,
       customerEmail,
+      productId,
     );
   }
 
@@ -23,11 +25,13 @@ export class PaymentGatewayAdapter implements IPaymentGatewayAdapter {
     priceId: string,
     customerId: string,
     customerEmail: string,
+    productId: string,
   ): Promise<{ url: string }> {
     return this._stripeGateway.createSubscriptionPayment(
       priceId,
       customerId,
       customerEmail,
+      productId,
     );
   }
 

@@ -35,6 +35,7 @@ export class OneTimePaymentUseCase implements IOneTimePaymentUseCase {
       'price_1Qnj8hAIFECoCtHiGReB5Rpl',
       userPublicId,
       userEmail,
+      dataOfProduct.public_id,
     );
   }
 

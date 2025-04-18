@@ -20,6 +20,7 @@ export class StripeGateway {
     priceId: string,
     customerId: string,
     customerEmail: string,
+    productId: string,
   ): Promise<{ url: string }> {
     const session = await this._stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -33,6 +34,7 @@ export class StripeGateway {
       metadata: {
         customerId,
         customerEmail,
+        productId,
       },
       mode: 'payment',
       success_url: gatewayConstants.success_url,
@@ -46,6 +48,7 @@ export class StripeGateway {
     priceId: string,
     customerId: string,
     customerEmail: string,
+    productId: string,
   ): Promise<{ url: string }> {
     const session = await this._stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -59,6 +62,7 @@ export class StripeGateway {
       metadata: {
         customerId,
         customerEmail,
+        productId,
       },
       mode: 'subscription',
       success_url: gatewayConstants.success_url,
@@ -92,13 +96,24 @@ export class StripeGateway {
 
         const customerId = session.metadata?.customerId;
         const customerEmail = session.metadata?.customerEmail;
+        const productId = session.metadata?.productId;
+        const paymentType =
+          session.mode === 'subscription' ? 'subscription' : 'one_time';
 
-        this._eventEmitter.emit('checkout.session.completed', {
-          customerId,
+        this._eventEmitter.emit('checkout.session.completed.send.email', {
           customerEmail,
+          paymentType,
         });
 
-        console.log('Checkout session completed');
+        this._eventEmitter.emit('checkout.session.completed.update.database', {
+          customerId,
+          productId,
+          paymentType,
+        });
+
+        console.log('Checkout session completed', {
+          paymentType,
+        });
         break;
 
       case 'payment_intent.created':

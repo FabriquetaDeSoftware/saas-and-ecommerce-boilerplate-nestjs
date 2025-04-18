@@ -35,6 +35,7 @@ export class SubscriptionPaymentUseCase implements ISubscriptionPaymentUseCase {
       'price_1QouBMAIFECoCtHid1E2PjEM',
       userPublicId,
       userEmail,
+      dataOfProduct.public_id,
     );
   }
 

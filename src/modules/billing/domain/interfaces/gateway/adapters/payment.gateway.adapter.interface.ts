@@ -3,11 +3,13 @@ export interface IPaymentGatewayAdapter {
     priceId: string,
     customerId: string,
     customerEmail: string,
+    productId: string,
   ): Promise<{ url: string }>;
   createSubscriptionPayment(
     priceId: string,
     customerId: string,
     customerEmail: string,
+    productId: string,
   ): Promise<{ url: string }>;
   handleWebhookEvent(
     payload: Buffer<ArrayBufferLike>,
