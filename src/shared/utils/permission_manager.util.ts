@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { IPermissionManagerUtil } from './interfaces/permission_manager.util.interface';
 import { RolesEnum } from '../enum/roles.enum';
 import { CaslAbilityFactory } from 'src/common/casl/casl_ability.factory';
-import { Action } from '../enum/actions.enum';
+import { ActionEnum } from '../enum/actions.enum';
 import { CaslSubjectType } from 'src/common/casl/domain/types/casl_subject.type';
 
 @Injectable()
@@ -13,7 +13,7 @@ export class PermissionManagerUtil implements IPermissionManagerUtil {
   public validateFieldPermissions(
     role: RolesEnum,
     input: object,
-    action: Action,
+    action: ActionEnum,
     entity: CaslSubjectType,
   ): boolean {
     const ability = this._caslAbilityFactory.createForUser(role);
@@ -29,7 +29,7 @@ export class PermissionManagerUtil implements IPermissionManagerUtil {
   public filterAllowedFields(
     role: RolesEnum,
     input: object,
-    action: Action,
+    action: ActionEnum,
     entity: CaslSubjectType,
   ): Partial<CaslSubjectType> {
     const ability = this._caslAbilityFactory.createForUser(role);

@@ -8,7 +8,7 @@ import { IUpdateSubscriptionProductInfoUseCase } from '../../domain/interfaces/u
 import { UpdateProductInfoDto } from '../dto/update_product_info.dto';
 import { Products } from '../../domain/entities/products.entity';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
-import { Action } from 'src/shared/enum/actions.enum';
+import { ActionEnum } from 'src/shared/enum/actions.enum';
 import { IPermissionManagerUtil } from 'src/shared/utils/interfaces/permission_manager.util.interface';
 import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
 import { ISubscriptionProductsRepository } from '../../domain/interfaces/repositories/subscription_products.repository.interface';
@@ -73,7 +73,7 @@ export class UpdateSubscriptionProductInfoUseCase
     const isAllowed = this._permissionManagerUtil.validateFieldPermissions(
       role as RolesEnum,
       { publicId },
-      Action.Update,
+      ActionEnum.Update,
       Products,
     );
 

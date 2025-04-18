@@ -9,7 +9,7 @@ import { CreateProductDto } from '../dto/create_product.dto';
 import { Products } from '../../domain/entities/products.entity';
 import { ISubscriptionProductsRepository } from '../../domain/interfaces/repositories/subscription_products.repository.interface';
 import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
-import { Action } from 'src/shared/enum/actions.enum';
+import { ActionEnum } from 'src/shared/enum/actions.enum';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { IPermissionManagerUtil } from 'src/shared/utils/interfaces/permission_manager.util.interface';
 
@@ -57,7 +57,7 @@ export class CreateSubscriptionProductUseCase
     const isAllowed = this._permissionManagerUtil.validateFieldPermissions(
       role as RolesEnum,
       input,
-      Action.Create,
+      ActionEnum.Create,
       Products,
     );
 

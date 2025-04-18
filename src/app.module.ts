@@ -11,6 +11,7 @@ import { CaslModule } from './common/casl/casl.module';
 import { ProductsModule } from './modules/products/products.module';
 import { AppController } from './app.controller';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
       },
       path: '/app/metrics',
     }),
+    EventEmitterModule.forRoot(),
     BullModule.forRoot({
       connection: {
         host: 'redis',

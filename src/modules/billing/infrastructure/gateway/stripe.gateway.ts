@@ -1,9 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import Stripe from 'stripe';
 import { gatewayConstants } from '../../domain/constants/gateway.constant';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class StripeGateway {
+  @Inject()
+  private readonly _eventEmitter: EventEmitter2;
+
   private readonly _stripe: Stripe;
 
   constructor() {
@@ -84,12 +88,15 @@ export class StripeGateway {
         break;
 
       case 'checkout.session.completed':
-        const session = event.data.object;
-
-        const customerEmailFromSession = session.customer_email;
+        const session = event.data.object as Stripe.Checkout.Session;
 
         const customerId = session.metadata?.customerId;
         const customerEmail = session.metadata?.customerEmail;
+
+        this._eventEmitter.emit('checkout.session.completed', {
+          customerId,
+          customerEmail,
+        });
 
         console.log('Checkout session completed');
         break;

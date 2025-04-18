@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Products } from '../../domain/entities/products.entity';
 import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
-import { Action } from 'src/shared/enum/actions.enum';
+import { ActionEnum } from 'src/shared/enum/actions.enum';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { IPermissionManagerUtil } from 'src/shared/utils/interfaces/permission_manager.util.interface';
 import { ISingleProductsRepository } from '../../domain/interfaces/repositories/single_products.repository.interface';
@@ -45,7 +45,7 @@ export class DeleteSingleProductUseCase implements IDeleteSingleProductUseCase {
     const isAllowed = this._permissionManagerUtil.validateFieldPermissions(
       role as RolesEnum,
       { publicId },
-      Action.Delete,
+      ActionEnum.Delete,
       Products,
     );
 

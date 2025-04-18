@@ -11,7 +11,7 @@ import { IPermissionManagerUtil } from 'src/shared/utils/interfaces/permission_m
 import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
 import { ISingleProductsRepository } from '../../domain/interfaces/repositories/single_products.repository.interface';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
-import { Action } from 'src/shared/enum/actions.enum';
+import { ActionEnum } from 'src/shared/enum/actions.enum';
 
 @Injectable()
 export class UpdateSingleProductInfoUseCase
@@ -73,7 +73,7 @@ export class UpdateSingleProductInfoUseCase
     const isAllowed = this._permissionManagerUtil.validateFieldPermissions(
       role as RolesEnum,
       { publicId },
-      Action.Update,
+      ActionEnum.Update,
       Products,
     );
 

@@ -6,14 +6,14 @@ import {
   MongoAbility,
 } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
-import { Action } from 'src/shared/enum/actions.enum';
+import { ActionEnum } from 'src/shared/enum/actions.enum';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { CaslSubjectType } from './domain/types/casl_subject.type';
 import { CaslEntities } from './domain/entities/casl_entities.entity';
 
 type Subjects = InferSubjects<CaslSubjectType> | 'all';
 
-type AppAbility = MongoAbility<[Action, Subjects]>;
+type AppAbility = MongoAbility<[ActionEnum, Subjects]>;
 
 @Injectable()
 export class CaslAbilityFactory {
@@ -24,14 +24,14 @@ export class CaslAbilityFactory {
 
     switch (role) {
       case RolesEnum.ADMIN:
-        can(Action.Manage, CaslEntities.Products);
+        can(ActionEnum.Manage, CaslEntities.Products);
         break;
 
       case RolesEnum.USER:
-        cannot(Action.Create, CaslEntities.Products);
-        cannot(Action.Delete, CaslEntities.Products);
-        cannot(Action.Read, CaslEntities.Products);
-        cannot(Action.Update, CaslEntities.Products);
+        cannot(ActionEnum.Create, CaslEntities.Products);
+        cannot(ActionEnum.Delete, CaslEntities.Products);
+        cannot(ActionEnum.Read, CaslEntities.Products);
+        cannot(ActionEnum.Update, CaslEntities.Products);
         break;
 
       default:
