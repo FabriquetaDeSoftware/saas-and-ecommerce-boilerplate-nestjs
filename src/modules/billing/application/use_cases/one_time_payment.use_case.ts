@@ -26,17 +26,22 @@ export class OneTimePaymentUseCase implements IOneTimePaymentUseCase {
     dataOfProduct: PaymentDto,
     user: IJwtUserPayload,
   ): Promise<{ url: string }> {
-    const [userPublicId, userEmail] = await Promise.all([
+    const [userPublicId, userEmail, priceIdOfProduct] = await Promise.all([
       this.decryptPayload(Buffer.from(user.sub, 'base64')),
       this.decryptPayload(Buffer.from(user.email, 'base64')),
+      this.getPriceIdOfProduct(dataOfProduct.public_id),
     ]);
 
     return this._paymentGatewayAdapter.createOneTimePayment(
-      'price_1Qnj8hAIFECoCtHiGReB5Rpl',
+      priceIdOfProduct,
       userPublicId,
       userEmail,
       dataOfProduct.public_id,
     );
+  }
+
+  private async getPriceIdOfProduct(public_id: string): Promise<string> {
+    return 'price_1Qnj8hAIFECoCtHiGReB5Rpl';
   }
 
   private async decryptPayload(data: Buffer): Promise<string> {

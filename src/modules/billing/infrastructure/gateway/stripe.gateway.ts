@@ -111,9 +111,7 @@ export class StripeGateway {
           paymentType,
         });
 
-        console.log('Checkout session completed', {
-          paymentType,
-        });
+        console.log('Checkout session completed');
         break;
 
       case 'payment_intent.created':

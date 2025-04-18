@@ -26,17 +26,22 @@ export class SubscriptionPaymentUseCase implements ISubscriptionPaymentUseCase {
     dataOfProduct: PaymentDto,
     user: IJwtUserPayload,
   ): Promise<{ url: string }> {
-    const [userPublicId, userEmail] = await Promise.all([
+    const [userPublicId, userEmail, priceIdOfProduct] = await Promise.all([
       this.decryptPayload(Buffer.from(user.sub, 'base64')),
       this.decryptPayload(Buffer.from(user.email, 'base64')),
+      this.getPriceIdOfProduct(dataOfProduct.public_id),
     ]);
 
     return this._paymentGatewayAdapter.createSubscriptionPayment(
-      'price_1QouBMAIFECoCtHid1E2PjEM',
+      priceIdOfProduct,
       userPublicId,
       userEmail,
       dataOfProduct.public_id,
     );
+  }
+
+  private async getPriceIdOfProduct(public_id: string): Promise<string> {
+    return 'price_1QouBMAIFECoCtHid1E2PjEM';
   }
 
   private async decryptPayload(data: Buffer): Promise<string> {
