@@ -8,11 +8,17 @@ import { PaymentGatewayAdapter } from './infrastructure/gateway/adapters/payment
 import { SharedModule } from 'src/shared/shared.module';
 import { CommonModule } from 'src/common/common.module';
 import { SinglePurchasesRepository } from './infrastructure/repositories/single_purchases.repository';
+import { SubscriptionPurchasesRepository } from './infrastructure/repositories/subscription_purchases.repository';
 
 @Module({
   imports: [SharedModule, CommonModule],
   controllers: [BillingController],
   providers: [
+    SubscriptionPurchasesRepository,
+    {
+      provide: 'ISubscriptionPurchasesRepository',
+      useExisting: SubscriptionPurchasesRepository,
+    },
     SinglePurchasesRepository,
     {
       provide: 'ISinglePurchasesRepository',

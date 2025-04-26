@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ISinglePurchasesRepository } from '../../domain/interfaces/repositories/single_purchases.repository.interface';
 import { SaveSinglePurchasesProductDto } from '../dto/save_purchases.dto';
 import { IDatabaseAdapter } from 'src/common/databases/interfaces/database.adapter.interface';
-import { UserSinglePurchases } from '../../domain/entities/user_single_purchases.entity';
+import { UserSinglePurchases } from '../../domain/entities/user_purchases.entity';
 
 @Injectable()
 export class SinglePurchasesRepository implements ISinglePurchasesRepository {
@@ -18,10 +18,10 @@ export class SinglePurchasesRepository implements ISinglePurchasesRepository {
       this._model,
       {
         Auth: {
-          connect: { id: data.public_user_id },
+          connect: { id: data.user_id },
         },
         SinglePurchaseProducts: {
-          connect: { id: data.public_product_id },
+          connect: { id: data.product_id },
         },
       },
     );
