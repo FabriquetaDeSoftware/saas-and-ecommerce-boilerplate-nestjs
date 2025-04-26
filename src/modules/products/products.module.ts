@@ -86,5 +86,6 @@ import { ShowSingleProductUseCase } from './application/use_cases/show_single_pr
       useExisting: CreateSubscriptionProductUseCase,
     },
   ],
+  exports: ['ISubscriptionProductsRepository', 'ISingleProductsRepository'],
 })
 export class ProductsModule {}

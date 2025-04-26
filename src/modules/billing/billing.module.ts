@@ -10,11 +10,24 @@ import { CommonModule } from 'src/common/common.module';
 import { SinglePurchasesRepository } from './infrastructure/repositories/single_purchases.repository';
 import { SubscriptionPurchasesRepository } from './infrastructure/repositories/subscription_purchases.repository';
 import { PurchasesOrchestrators } from './infrastructure/orchestrators/purchases.orchestrators';
+import { ProductsModule } from '../products/products.module';
+import { SinglePurchasesService } from './infrastructure/services/single_purchases.service';
+import { SubscriptionPurchasesService } from './infrastructure/services/subscription_purchases.repository';
 
 @Module({
-  imports: [SharedModule, CommonModule],
+  imports: [SharedModule, CommonModule, ProductsModule],
   controllers: [BillingController],
   providers: [
+    SinglePurchasesService,
+    {
+      provide: 'ISinglePurchasesService',
+      useExisting: SinglePurchasesService,
+    },
+    SubscriptionPurchasesService,
+    {
+      provide: 'ISubscriptionPurchasesService',
+      useExisting: SubscriptionPurchasesService,
+    },
     PurchasesOrchestrators,
     {
       provide: 'IPurchasesOrchestrators',
