@@ -4,6 +4,7 @@ import { IPaymentGatewayAdapter } from '../../domain/interfaces/gateway/adapters
 import { PaymentDto } from '../dto/payment.dto';
 import { IJwtUserPayload } from 'src/shared/interfaces/jwt_user_payload.interface';
 import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
+import { ISingleProductsRepository } from 'src/modules/products/domain/interfaces/repositories/single_products.repository.interface';
 
 @Injectable()
 export class OneTimePaymentUseCase implements IOneTimePaymentUseCase {
@@ -12,6 +13,9 @@ export class OneTimePaymentUseCase implements IOneTimePaymentUseCase {
 
   @Inject('ICryptoUtil')
   private readonly _cryptoUtil: ICryptoUtil;
+
+  @Inject('ISingleProductsRepository')
+  private readonly _singleProductsRepository: ISingleProductsRepository;
 
   public async execute(
     dataOfProduct: PaymentDto,
@@ -41,7 +45,10 @@ export class OneTimePaymentUseCase implements IOneTimePaymentUseCase {
   }
 
   private async getPriceIdOfProduct(public_id: string): Promise<string> {
-    return 'price_1Qnj8hAIFECoCtHiGReB5Rpl';
+    const getProduct =
+      await this._singleProductsRepository.findOneByPublicId(public_id);
+
+    return getProduct.price_id;
   }
 
   private async decryptPayload(data: Buffer): Promise<string> {

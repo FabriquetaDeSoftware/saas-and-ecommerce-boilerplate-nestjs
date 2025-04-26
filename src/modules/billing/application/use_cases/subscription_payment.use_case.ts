@@ -4,6 +4,7 @@ import { IPaymentGatewayAdapter } from '../../domain/interfaces/gateway/adapters
 import { IJwtUserPayload } from 'src/shared/interfaces/jwt_user_payload.interface';
 import { PaymentDto } from '../dto/payment.dto';
 import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
+import { ISubscriptionProductsRepository } from 'src/modules/products/domain/interfaces/repositories/subscription_products.repository.interface';
 
 @Injectable()
 export class SubscriptionPaymentUseCase implements ISubscriptionPaymentUseCase {
@@ -12,6 +13,9 @@ export class SubscriptionPaymentUseCase implements ISubscriptionPaymentUseCase {
 
   @Inject('ICryptoUtil')
   private readonly _cryptoUtil: ICryptoUtil;
+
+  @Inject('ISubscriptionProductsRepository')
+  private readonly _subscriptionProductsRepository: ISubscriptionProductsRepository;
 
   public async execute(
     dataOfProduct: PaymentDto,
@@ -41,7 +45,10 @@ export class SubscriptionPaymentUseCase implements ISubscriptionPaymentUseCase {
   }
 
   private async getPriceIdOfProduct(public_id: string): Promise<string> {
-    return 'price_1QouBMAIFECoCtHid1E2PjEM';
+    const getProduct =
+      await this._subscriptionProductsRepository.findOneByPublicId(public_id);
+
+    return getProduct.price_id;
   }
 
   private async decryptPayload(data: Buffer): Promise<string> {
