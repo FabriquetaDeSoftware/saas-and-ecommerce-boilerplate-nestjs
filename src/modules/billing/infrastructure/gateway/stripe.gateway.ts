@@ -98,20 +98,14 @@ export class StripeGateway {
         const customerEmail = session.metadata?.customerEmail;
         const productId = session.metadata?.productId;
         const paymentType =
-          session.mode === 'subscription' ? 'subscription' : 'one_time';
+          session.mode === 'subscription' ? 'subscription' : 'single';
 
         this._eventEmitter.emit('checkout.session.completed.send.email', {
           customerEmail,
           paymentType,
         });
 
-        this._eventEmitter.emit('checkout.session.completed.update.database', {
-          customerId,
-          productId,
-          paymentType,
-        });
-
-        console.log('Checkout session completed');
+        console.log('custumerId: ', customerId, 'productId', productId);
         break;
 
       case 'payment_intent.created':

@@ -6,9 +6,10 @@ import { OneTimePaymentUseCase } from './application/use_cases/one_time_payment.
 import { SubscriptionPaymentUseCase } from './application/use_cases/subscription_payment.use_case';
 import { PaymentGatewayAdapter } from './infrastructure/gateway/adapters/payment.gateway.adapter';
 import { SharedModule } from 'src/shared/shared.module';
+import { CommonModule } from 'src/common/common.module';
 
 @Module({
-  imports: [SharedModule],
+  imports: [SharedModule, CommonModule],
   controllers: [BillingController],
   providers: [
     PaymentGatewayAdapter,
