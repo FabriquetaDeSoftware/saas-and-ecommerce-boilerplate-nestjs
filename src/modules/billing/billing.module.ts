@@ -13,9 +13,10 @@ import { PurchasesOrchestrators } from './infrastructure/orchestrators/purchases
 import { ProductsModule } from '../products/products.module';
 import { SinglePurchasesService } from './infrastructure/services/single_purchases.service';
 import { SubscriptionPurchasesService } from './infrastructure/services/subscription_purchases.repository';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
-  imports: [SharedModule, CommonModule, ProductsModule],
+  imports: [SharedModule, CommonModule, ProductsModule, UserModule],
   controllers: [BillingController],
   providers: [
     SinglePurchasesService,
