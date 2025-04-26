@@ -9,11 +9,17 @@ import { SharedModule } from 'src/shared/shared.module';
 import { CommonModule } from 'src/common/common.module';
 import { SinglePurchasesRepository } from './infrastructure/repositories/single_purchases.repository';
 import { SubscriptionPurchasesRepository } from './infrastructure/repositories/subscription_purchases.repository';
+import { PurchasesOrchestrators } from './infrastructure/orchestrators/purchases.orchestrators';
 
 @Module({
   imports: [SharedModule, CommonModule],
   controllers: [BillingController],
   providers: [
+    PurchasesOrchestrators,
+    {
+      provide: 'IPurchasesOrchestrators',
+      useExisting: PurchasesOrchestrators,
+    },
     SubscriptionPurchasesRepository,
     {
       provide: 'ISubscriptionPurchasesRepository',

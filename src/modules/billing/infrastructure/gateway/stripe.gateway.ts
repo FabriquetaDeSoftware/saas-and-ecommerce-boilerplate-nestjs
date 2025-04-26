@@ -3,14 +3,15 @@ import Stripe from 'stripe';
 import { gatewayConstants } from '../../domain/constants/gateway.constant';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ISinglePurchasesRepository } from '../../domain/interfaces/repositories/single_purchases.repository.interface';
+import { IPurchasesOrchestrators } from '../../domain/interfaces/orchestrators/purchases.orchestrators.interface';
 
 @Injectable()
 export class StripeGateway {
   @Inject()
   private readonly _eventEmitter: EventEmitter2;
 
-  @Inject('ISinglePurchasesRepository')
-  private readonly _singlePurchasesRepository: ISinglePurchasesRepository;
+  @Inject('IPurchasesOrchestrators')
+  private readonly _purchasesOrchestrators: IPurchasesOrchestrators;
 
   private readonly _stripe: Stripe;
 
@@ -109,10 +110,12 @@ export class StripeGateway {
           paymentType,
         });
 
-        await this._singlePurchasesRepository.saveSinglePurchaseProductToUser({
-          user_id: 1,
-          product_id: 2,
-        });
+        await this._purchasesOrchestrators.savePurchaseProductToUser(
+          paymentType,
+          customerId,
+          productId,
+        );
+
         break;
 
       case 'payment_intent.created':
