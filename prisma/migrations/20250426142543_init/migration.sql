@@ -44,8 +44,9 @@ CREATE TABLE "SinglePurchaseProducts" (
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "price" INTEGER NOT NULL,
+    "price_id" TEXT,
     "slug" TEXT NOT NULL,
-    "image" TEXT,
+    "image" TEXT[],
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -59,8 +60,9 @@ CREATE TABLE "SubscriptionPurchaseProducts" (
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "price" INTEGER NOT NULL,
+    "price_id" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
-    "image" TEXT,
+    "image" TEXT[],
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -89,10 +91,16 @@ CREATE UNIQUE INDEX "Auth_email_key" ON "Auth"("email");
 CREATE UNIQUE INDEX "SinglePurchaseProducts_public_id_key" ON "SinglePurchaseProducts"("public_id");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "SinglePurchaseProducts_price_id_key" ON "SinglePurchaseProducts"("price_id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "SinglePurchaseProducts_slug_key" ON "SinglePurchaseProducts"("slug");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "SubscriptionPurchaseProducts_public_id_key" ON "SubscriptionPurchaseProducts"("public_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "SubscriptionPurchaseProducts_price_id_key" ON "SubscriptionPurchaseProducts"("price_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "SubscriptionPurchaseProducts_slug_key" ON "SubscriptionPurchaseProducts"("slug");

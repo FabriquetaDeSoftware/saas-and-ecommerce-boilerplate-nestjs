@@ -110,8 +110,8 @@ export class StripeGateway {
         });
 
         await this._singlePurchasesRepository.saveSinglePurchaseProductToUser({
-          public_user_id: 1,
-          public_product_id: 2,
+          user_id: 1,
+          product_id: 2,
         });
         break;
 
