@@ -1,14 +1,22 @@
-import { IsEnum, IsNotEmpty, IsUUID } from 'class-validator';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsPositive,
+  IsUUID,
+} from 'class-validator';
 import { StatusSubscriptionProductEnum } from 'src/shared/enum/status_subscription_product.enum';
 
 export class SavePurchasesProductDto {
   @IsNotEmpty()
-  @IsUUID()
-  public_user_id: string;
+  @IsNumber()
+  @IsPositive()
+  public_user_id: number;
 
   @IsNotEmpty()
-  @IsUUID()
-  public_product_id: string;
+  @IsNumber()
+  @IsPositive()
+  public_product_id: number;
 }
 
 export class SaveSinglePurchasesProductDto extends SavePurchasesProductDto {}

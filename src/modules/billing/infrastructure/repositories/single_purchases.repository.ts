@@ -17,7 +17,12 @@ export class SinglePurchasesRepository implements ISinglePurchasesRepository {
     const result = await this._databaseAdapter.create<UserSinglePurchases>(
       this._model,
       {
-        ...data,
+        Auth: {
+          connect: { id: data.public_user_id },
+        },
+        SinglePurchaseProducts: {
+          connect: { id: data.public_product_id },
+        },
       },
     );
 
