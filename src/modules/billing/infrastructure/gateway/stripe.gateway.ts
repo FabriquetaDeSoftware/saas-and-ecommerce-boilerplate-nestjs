@@ -1,9 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import Stripe from 'stripe';
 import { gatewayConstants } from '../../domain/constants/gateway.constant';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { ISinglePurchasesRepository } from '../../domain/interfaces/repositories/single_purchases.repository.interface';
+import { IPurchasesOrchestrators } from '../../domain/interfaces/orchestrators/purchases.orchestrators.interface';
 
 @Injectable()
 export class StripeGateway {
+  @Inject()
+  private readonly _eventEmitter: EventEmitter2;
+
+  @Inject('IPurchasesOrchestrators')
+  private readonly _purchasesOrchestrators: IPurchasesOrchestrators;
+
   private readonly _stripe: Stripe;
 
   constructor() {
@@ -12,15 +21,26 @@ export class StripeGateway {
     });
   }
 
-  public async createOneTimePayment(priceId: string): Promise<{ url: string }> {
+  public async createOneTimePayment(
+    priceId: string,
+    customerId: string,
+    customerEmail: string,
+    productId: string,
+  ): Promise<{ url: string }> {
     const session = await this._stripe.checkout.sessions.create({
       payment_method_types: ['card'],
+      customer_email: customerEmail,
       line_items: [
         {
           price: priceId,
           quantity: 1,
         },
       ],
+      metadata: {
+        customerId,
+        customerEmail,
+        productId,
+      },
       mode: 'payment',
       success_url: gatewayConstants.success_url,
       cancel_url: gatewayConstants.cancel_url,
@@ -31,15 +51,24 @@ export class StripeGateway {
 
   public async createSubscriptionPayment(
     priceId: string,
+    customerId: string,
+    customerEmail: string,
+    productId: string,
   ): Promise<{ url: string }> {
     const session = await this._stripe.checkout.sessions.create({
       payment_method_types: ['card'],
+      customer_email: customerEmail,
       line_items: [
         {
           price: priceId,
           quantity: 1,
         },
       ],
+      metadata: {
+        customerId,
+        customerEmail,
+        productId,
+      },
       mode: 'subscription',
       success_url: gatewayConstants.success_url,
       cancel_url: gatewayConstants.cancel_url,
@@ -68,7 +97,25 @@ export class StripeGateway {
         break;
 
       case 'checkout.session.completed':
-        console.log('Checkout session completed');
+        const session = event.data.object as Stripe.Checkout.Session;
+
+        const customerId = session.metadata?.customerId;
+        const customerEmail = session.metadata?.customerEmail;
+        const productId = session.metadata?.productId;
+        const paymentType =
+          session.mode === 'subscription' ? 'subscription' : 'single';
+
+        this._eventEmitter.emit('checkout.session.completed.send.email', {
+          customerEmail,
+          paymentType,
+        });
+
+        await this._purchasesOrchestrators.savePurchaseProductToUser(
+          paymentType,
+          customerId,
+          productId,
+        );
+
         break;
 
       case 'payment_intent.created':

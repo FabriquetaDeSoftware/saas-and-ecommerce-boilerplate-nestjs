@@ -7,14 +7,32 @@ export class PaymentGatewayAdapter implements IPaymentGatewayAdapter {
   @Inject()
   private readonly _stripeGateway: StripeGateway;
 
-  public async createOneTimePayment(priceId: string): Promise<{ url: string }> {
-    return this._stripeGateway.createOneTimePayment(priceId);
+  public async createOneTimePayment(
+    priceId: string,
+    customerId: string,
+    customerEmail: string,
+    productId: string,
+  ): Promise<{ url: string }> {
+    return this._stripeGateway.createOneTimePayment(
+      priceId,
+      customerId,
+      customerEmail,
+      productId,
+    );
   }
 
   public async createSubscriptionPayment(
     priceId: string,
+    customerId: string,
+    customerEmail: string,
+    productId: string,
   ): Promise<{ url: string }> {
-    return this._stripeGateway.createSubscriptionPayment(priceId);
+    return this._stripeGateway.createSubscriptionPayment(
+      priceId,
+      customerId,
+      customerEmail,
+      productId,
+    );
   }
 
   public async handleWebhookEvent(

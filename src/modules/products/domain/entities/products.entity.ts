@@ -4,8 +4,9 @@ export class Products {
   name: string;
   description: string;
   price: number;
+  price_id: string;
   slug: string;
-  image: string;
+  image: string[];
   created_at: Date;
   updated_at: Date;
 }

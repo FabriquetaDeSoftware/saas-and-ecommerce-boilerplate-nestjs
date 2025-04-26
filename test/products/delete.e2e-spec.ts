@@ -19,6 +19,9 @@ describe('AuthController from AppModule (e2e)', () => {
   let cryptoUtil: ICryptoUtil;
   let generateTokenHelper: GenerateTokenHelper;
 
+  const imageMockURl =
+    'https://t0.gstatic.com/licensed-image?q=tbn:ANd9GcTEVcrypslvdUeHleSabemh-hXNLNslN-H0XVxm7ObA2J28dKoXFD5zck7QPMjyHGBCWXhq2nmA4YA0IYslGIM';
+
   const TEST_USER = {
     email: 'test@example.com',
     id: '123',
@@ -50,9 +53,9 @@ describe('AuthController from AppModule (e2e)', () => {
     name: 'Product 1',
     description: 'Product 1 description',
     price: 100,
+    price_id: 'price_1N4v2cK0x5g3e7d8f8e8e8e8',
     slug: 'product-1',
-    image:
-      'https://t0.gstatic.com/licensed-image?q=tbn:ANd9GcTEVcrypslvdUeHleSabemh-hXNLNslN-H0XVxm7ObA2J28dKoXFD5zck7QPMjyHGBCWXhq2nmA4YA0IYslGIM',
+    image: [imageMockURl, imageMockURl],
     created_at: new Date(),
     updated_at: new Date(),
   };
