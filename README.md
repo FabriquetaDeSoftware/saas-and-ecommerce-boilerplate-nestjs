@@ -79,28 +79,20 @@ To run the project you need to have the following software installed:
 $ pnpm install
 ```
 
-### Compile and run the project
+### Compile and Run the Project
 
-#### Permission to execute the shell script
-
-```bash
-# enable shell script
-$ chmod +x shell/check_env_vars.sh
-$ chmod +x shell/run-docker.sh
-```
-
-#### Run project
+#### Permission to Execute the Shell Script and Run Project
 
 ```bash
-# run docker
-$ ./shell/run-docker.sh
+# enable shell script and run docker
+$ make run_docker
 ```
 
 ### Activate Stripe WebHook Test
 
 ```bash
 # webhook
-$ stripe listen --forward-to http://localhost:8080/billing/webhook
+$ stripe listen --forward-to http://localhost:<MAPPED_PORT_NGINX>/billing/webhook
 ```
 
 ### Run tests in Docker environment

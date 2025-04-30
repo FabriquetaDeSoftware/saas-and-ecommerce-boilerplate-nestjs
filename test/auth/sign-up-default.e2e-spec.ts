@@ -4,7 +4,7 @@ import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { SignUpDefaultDto } from 'src/modules/auth/application/dto/sign_up_default.dto';
 import { IAuthRepository } from 'src/modules/auth/domain/interfaces/repositories/auth.repository.interface';
-import { Auth } from 'src/modules/auth/domain/entities/auth.entity';
+import { User } from 'src/shared/entities/user.entity';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
 import { ISendEmailQueueJob } from 'src/shared/modules/email/domain/interfaces/jobs/send_email_queue.job.interface';
@@ -16,6 +16,7 @@ describe('AuthController (e2e)', () => {
   let sendEmailQueueJobMock: jest.Mocked<ISendEmailQueueJob>;
 
   const VALID_USER_DATA: SignUpDefaultDto = {
+    name: 'Test User',
     email: 'test@example.com',
     password: 'Password123!',
     newsletter_subscription: true,
@@ -24,9 +25,10 @@ describe('AuthController (e2e)', () => {
 
   const HASHED_PASSWORD = 'hashedText';
 
-  const mockAuthResponse = (userData: SignUpDefaultDto): Partial<Auth> => ({
+  const mockUser = (userData: SignUpDefaultDto): Partial<User> => ({
     public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
     role: RolesEnum.USER,
+    name: userData.name,
     email: userData.email,
     is_verified_account: false,
     newsletter_subscription: userData.newsletter_subscription,
@@ -56,8 +58,8 @@ describe('AuthController (e2e)', () => {
             code: string,
             expires_at: Date,
             exclude?: any,
-          ): Promise<Partial<Auth>> => {
-            return Promise.resolve(mockAuthResponse(dto));
+          ): Promise<Partial<User>> => {
+            return Promise.resolve(mockUser(dto));
           },
         ),
       findOneByEmail: jest.fn().mockResolvedValue(null),
@@ -102,6 +104,7 @@ describe('AuthController (e2e)', () => {
       expect(response.body).toEqual(
         expect.objectContaining({
           public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
+          name: VALID_USER_DATA.name,
           email: VALID_USER_DATA.email,
           newsletter_subscription: VALID_USER_DATA.newsletter_subscription,
           terms_and_conditions_accepted:

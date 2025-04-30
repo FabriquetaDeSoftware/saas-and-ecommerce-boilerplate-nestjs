@@ -1,7 +1,7 @@
 import { Inject } from '@nestjs/common';
 import { IDatabaseAdapter } from 'src/common/databases/interfaces/database.adapter.interface';
 import { User } from 'src/shared/entities/user.entity';
-import { IUserRepository } from 'src/user/domain/interfaces/repositories/user.repository.interface';
+import { IUserRepository } from '../../domain/interfaces/repositories/user.repository.interface';
 
 export class UserRepository implements IUserRepository {
   @Inject('IDatabaseAdapter')

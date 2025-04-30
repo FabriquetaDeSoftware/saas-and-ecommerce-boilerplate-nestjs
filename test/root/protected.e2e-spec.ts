@@ -17,6 +17,7 @@ describe('Protected route without roles to test (e2e)', () => {
   const TEST_USER = {
     email: 'test@example.com',
     id: '123',
+    name: 'Test User',
   };
 
   const ROLES = {
@@ -31,6 +32,7 @@ describe('Protected route without roles to test (e2e)', () => {
     const tokenDto: GenerateTokenDto = {
       email: TEST_USER.email,
       sub: TEST_USER.id,
+      name: TEST_USER.name,
       role,
     };
     const tokens = await generateTokenHelper.execute(tokenDto);

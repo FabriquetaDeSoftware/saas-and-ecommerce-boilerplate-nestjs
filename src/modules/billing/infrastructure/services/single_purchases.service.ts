@@ -3,7 +3,7 @@ import { ISinglePurchasesService } from '../../domain/interfaces/services/single
 import { UserSinglePurchases } from '../../domain/entities/user_purchases.entity';
 import { ISinglePurchasesRepository } from '../../domain/interfaces/repositories/single_purchases.repository.interface';
 import { ISingleProductsRepository } from 'src/modules/products/domain/interfaces/repositories/single_products.repository.interface';
-import { IUserRepository } from 'src/user/domain/interfaces/repositories/user.repository.interface';
+import { IUserRepository } from 'src/modules/user/domain/interfaces/repositories/user.repository.interface';
 
 @Injectable()
 export class SinglePurchasesService implements ISinglePurchasesService {

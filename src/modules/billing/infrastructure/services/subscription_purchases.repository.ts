@@ -3,7 +3,7 @@ import { UserSinglePurchases } from '../../domain/entities/user_purchases.entity
 import { ISinglePurchasesRepository } from '../../domain/interfaces/repositories/single_purchases.repository.interface';
 import { ISingleProductsRepository } from 'src/modules/products/domain/interfaces/repositories/single_products.repository.interface';
 import { ISubscriptionPurchasesService } from '../../domain/interfaces/services/subscription_purchases.service.interface';
-import { IUserRepository } from 'src/user/domain/interfaces/repositories/user.repository.interface';
+import { IUserRepository } from 'src/modules/user/domain/interfaces/repositories/user.repository.interface';
 import { ISubscriptionPurchasesRepository } from '../../domain/interfaces/repositories/subscription_purchases.repository.interface';
 import { ISubscriptionProductsRepository } from 'src/modules/products/domain/interfaces/repositories/subscription_products.repository.interface';
 import { StatusSubscriptionProductEnum } from 'src/shared/enum/status_subscription_product.enum';

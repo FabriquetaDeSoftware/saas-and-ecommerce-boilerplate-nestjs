@@ -9,7 +9,7 @@ import { ISendEmailQueueJob } from 'src/shared/modules/email/domain/interfaces/j
 import { ISignUpDefaultUseCase } from '../../domain/interfaces/use_cases/sign_up.use_case.interface';
 import { IAuthRepository } from '../../domain/interfaces/repositories/auth.repository.interface';
 import { IFindUserByEmailHelper } from '../../domain/interfaces/helpers/find_user_by_email.helper.interface';
-import { Auth } from '../../domain/entities/auth.entity';
+import { User } from 'src/shared/entities/user.entity';
 
 @Injectable()
 export class SignUpDefaultUseCase implements ISignUpDefaultUseCase {
@@ -31,13 +31,13 @@ export class SignUpDefaultUseCase implements ISignUpDefaultUseCase {
   @Inject('ISendEmailQueueJob')
   private readonly _sendEmailQueueJob: ISendEmailQueueJob;
 
-  public async execute(input: SignUpDefaultDto): Promise<Partial<Auth>> {
+  public async execute(input: SignUpDefaultDto): Promise<Partial<User>> {
     const response = await this.intermediary(input);
 
     return response;
   }
 
-  private async intermediary(data: SignUpDefaultDto): Promise<Partial<Auth>> {
+  private async intermediary(data: SignUpDefaultDto): Promise<Partial<User>> {
     const [, hashedPassword, verificationCodeAndExpiresDate] =
       await Promise.all([
         this.checkEmailExistsAndError(data.email),
@@ -79,7 +79,7 @@ export class SignUpDefaultUseCase implements ISignUpDefaultUseCase {
     hashedPassword: string,
     hashedCode: string,
     expiresDate: Date,
-  ): Promise<Partial<Auth>> {
+  ): Promise<Partial<User>> {
     const response = await this._authRepository.create(
       {
         ...data,

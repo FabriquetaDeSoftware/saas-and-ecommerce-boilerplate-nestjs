@@ -30,16 +30,18 @@ export class GenerateTokenHelper implements IGenerateTokenHelper {
   private async intermediry(
     data: GenerateTokenDto,
   ): Promise<ITokensReturnsHelper> {
-    const [sub, email, role] = await Promise.all([
+    const [sub, email, role, name] = await Promise.all([
       this.encryptPayload(data.sub),
       this.encryptPayload(data.email),
       this.encryptPayload(data.role),
+      this.encryptPayload(data.name),
     ]);
 
     const payload: IJwtUserPayload = {
       sub,
       email,
       role,
+      name,
     };
 
     const { access_token, refresh_token, token } = await this.generateTokens(

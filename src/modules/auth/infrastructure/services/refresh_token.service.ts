@@ -9,7 +9,7 @@ import { IGenerateTokenHelper } from '../../domain/interfaces/helpers/generate_t
 import { RefreshTokenDto } from '../../application/dto/refresh_token.dto';
 import { ITokensReturnsHelper } from '../../domain/interfaces/helpers/tokens_returns.helper.interface';
 import { IJwtUserPayload } from '../../../../shared/interfaces/jwt_user_payload.interface';
-import { Auth } from '../../domain/entities/auth.entity';
+import { User } from 'src/shared/entities/user.entity';
 
 @Injectable()
 export class RefreshTokenService implements IRefreshTokenService {
@@ -34,16 +34,17 @@ export class RefreshTokenService implements IRefreshTokenService {
   ): Promise<ITokensReturnsHelper> {
     const payload = await this.verifyRefreshTokenIsValid(refreshToken);
 
-    const [sub, email, role] = await Promise.all([
+    const [sub, email, role, name] = await Promise.all([
       this.decryptPayload(Buffer.from(payload.sub, 'base64')),
       this.decryptPayload(Buffer.from(payload.email, 'base64')),
       this.decryptPayload(Buffer.from(payload.role, 'base64')),
+      this.decryptPayload(Buffer.from(payload.name, 'base64')),
     ]);
 
     await this.checkEmailExistsOrError(email);
 
     const { access_token, refresh_token } =
-      await this._generateTokenUtil.execute({ email, role, sub });
+      await this._generateTokenUtil.execute({ email, role, sub, name });
 
     return { access_token, refresh_token };
   }
@@ -69,7 +70,7 @@ export class RefreshTokenService implements IRefreshTokenService {
     return payload;
   }
 
-  private async checkEmailExistsOrError(email: string): Promise<Partial<Auth>> {
+  private async checkEmailExistsOrError(email: string): Promise<Partial<User>> {
     const findUserByEmail = await this._findUserByEmailHelper.execute(email);
 
     if (!findUserByEmail) {

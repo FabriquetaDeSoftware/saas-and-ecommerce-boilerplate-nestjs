@@ -3,7 +3,7 @@ import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { IAuthRepository } from 'src/modules/auth/domain/interfaces/repositories/auth.repository.interface';
-import { Auth } from 'src/modules/auth/domain/entities/auth.entity';
+import { User } from 'src/shared/entities/user.entity';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { EmailDto } from 'src/modules/auth/application/dto/email.dto';
 import { ISendEmailQueueJob } from 'src/shared/modules/email/domain/interfaces/jobs/send_email_queue.job.interface';
@@ -13,10 +13,11 @@ describe('AuthController from AppModule (e2e)', () => {
   let authRepositoryMock: jest.Mocked<IAuthRepository>;
   let sendEmailQueueJobMock: jest.Mocked<ISendEmailQueueJob>;
 
-  const mockAuth: Auth = {
+  const mockUser: User = {
     id: 1,
     public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
     role: RolesEnum.USER,
+    name: 'Test User',
     email: 'test@gmail.com',
     password: '123456',
     is_verified_account: true,
@@ -39,7 +40,7 @@ describe('AuthController from AppModule (e2e)', () => {
 
     authRepositoryMock = {
       create: jest.fn(),
-      findOneByEmail: jest.fn().mockResolvedValue(mockAuth),
+      findOneByEmail: jest.fn().mockResolvedValue(mockUser),
       updateInfoByIdAuth: jest.fn().mockResolvedValue(undefined),
       updateInfoByPublicIdAuth: jest.fn().mockResolvedValue(undefined),
       updateInfoByEmailAuth: jest.fn().mockResolvedValue(undefined),
@@ -67,7 +68,7 @@ describe('AuthController from AppModule (e2e)', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    authRepositoryMock.findOneByEmail.mockResolvedValue(mockAuth);
+    authRepositoryMock.findOneByEmail.mockResolvedValue(mockUser);
   });
 
   describe('POST /auth/forgot-password', () => {

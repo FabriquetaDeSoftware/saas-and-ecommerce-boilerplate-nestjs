@@ -1,12 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import {
-  IsBoolean,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  MinLength,
-} from 'class-validator';
+import { IsBoolean, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class UpdateInfoDto {
   @ApiProperty({
@@ -35,14 +29,4 @@ export class UpdateInfoDto {
   @IsOptional()
   @IsBoolean()
   newsletter_subscription: boolean;
-
-  @ApiProperty({
-    description: 'Accepts or not the terms and conditions',
-    type: 'boolean',
-    example: true,
-  })
-  @IsNotEmpty()
-  @IsOptional()
-  @IsBoolean()
-  terms_and_conditions_accepted: boolean;
 }

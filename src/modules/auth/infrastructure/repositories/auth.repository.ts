@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { IDatabaseAdapter } from 'src/common/databases/interfaces/database.adapter.interface';
 import { IAuthRepository } from '../../domain/interfaces/repositories/auth.repository.interface';
-import { Auth } from '../../domain/entities/auth.entity';
+import { User } from 'src/shared/entities/user.entity';
 import { UpdateInfoDto } from '../../application/dto/update_info.dto';
 import { SignUpDefaultDto } from '../../application/dto/sign_up_default.dto';
 
@@ -11,15 +11,15 @@ export class AuthRepository implements IAuthRepository {
   @Inject('IDatabaseAdapter')
   private readonly _databaseAdapter: IDatabaseAdapter;
 
-  private readonly _model = 'auth';
+  private readonly _model = 'user';
 
   public async create(
     signUpDefaultDto: SignUpDefaultDto,
     code: string,
     expires_at: Date,
-    omitFields?: Partial<Record<keyof Auth, true>>,
-  ): Promise<Partial<Auth>> {
-    const result = await this._databaseAdapter.create<Auth>(
+    omitFields?: Partial<Record<keyof User, true>>,
+  ): Promise<Partial<User>> {
+    const result = await this._databaseAdapter.create<User>(
       this._model,
       {
         ...signUpDefaultDto,
@@ -38,9 +38,9 @@ export class AuthRepository implements IAuthRepository {
 
   public async findOneByEmail(
     email: string,
-    omitFields?: Partial<Record<keyof Auth, true>>,
-  ): Promise<Partial<Auth>> {
-    const result = await this._databaseAdapter.findOne<Auth>(
+    omitFields?: Partial<Record<keyof User, true>>,
+  ): Promise<Partial<User>> {
+    const result = await this._databaseAdapter.findOne<User>(
       this._model,
       {
         email,
@@ -58,9 +58,9 @@ export class AuthRepository implements IAuthRepository {
   public async updateInfoByIdAuth(
     id: number,
     updateInfoDto: Partial<UpdateInfoDto>,
-    omitFields?: Partial<Record<keyof Auth, true>>,
-  ): Promise<Partial<Auth>> {
-    const result = await this._databaseAdapter.update<Auth>(
+    omitFields?: Partial<Record<keyof User, true>>,
+  ): Promise<Partial<User>> {
+    const result = await this._databaseAdapter.update<User>(
       this._model,
       { id },
       { ...updateInfoDto },
@@ -73,9 +73,9 @@ export class AuthRepository implements IAuthRepository {
   public async updateInfoByPublicIdAuth(
     public_id: string,
     updateInfoDto: Partial<UpdateInfoDto>,
-    omitFields?: Partial<Record<keyof Auth, true>>,
-  ): Promise<Partial<Auth>> {
-    const result = await this._databaseAdapter.update<Auth>(
+    omitFields?: Partial<Record<keyof User, true>>,
+  ): Promise<Partial<User>> {
+    const result = await this._databaseAdapter.update<User>(
       this._model,
       { public_id },
       { ...updateInfoDto },
@@ -88,9 +88,9 @@ export class AuthRepository implements IAuthRepository {
   public async updateInfoByEmailAuth(
     email: string,
     updateInfoDto: Partial<UpdateInfoDto>,
-    omitFields?: Partial<Record<keyof Auth, true>>,
-  ): Promise<Partial<Auth>> {
-    const result = await this._databaseAdapter.update<Auth>(
+    omitFields?: Partial<Record<keyof User, true>>,
+  ): Promise<Partial<User>> {
+    const result = await this._databaseAdapter.update<User>(
       this._model,
       { email },
       { ...updateInfoDto },

@@ -6,17 +6,18 @@ import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
 import { IAuthRepository } from 'src/modules/auth/domain/interfaces/repositories/auth.repository.interface';
 import { SignInDefaultDto } from 'src/modules/auth/application/dto/sign_in_default.dto';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
-import { Auth } from 'src/modules/auth/domain/entities/auth.entity';
+import { User } from 'src/shared/entities/user.entity';
 
 describe('AuthController from AppModule (e2e)', () => {
   let app: INestApplication;
   let authRepositoryMock: jest.Mocked<IAuthRepository>;
   let hashUtilMock: jest.Mocked<IHashUtil>;
 
-  const mockAuth: Auth = {
+  const mockUser: User = {
     id: 1,
     public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
     role: RolesEnum.USER,
+    name: 'Test User',
     email: 'test@gmail.com',
     password: 'hashedText',
     is_verified_account: true,
@@ -39,7 +40,7 @@ describe('AuthController from AppModule (e2e)', () => {
 
     authRepositoryMock = {
       create: jest.fn(),
-      findOneByEmail: jest.fn().mockResolvedValue(mockAuth),
+      findOneByEmail: jest.fn().mockResolvedValue(mockUser),
       updateInfoByIdAuth: jest.fn().mockResolvedValue(undefined),
       updateInfoByPublicIdAuth: jest.fn().mockResolvedValue(undefined),
       updateInfoByEmailAuth: jest.fn().mockResolvedValue(undefined),
@@ -60,7 +61,7 @@ describe('AuthController from AppModule (e2e)', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    authRepositoryMock.findOneByEmail.mockResolvedValue(mockAuth);
+    authRepositoryMock.findOneByEmail.mockResolvedValue(mockUser);
     hashUtilMock.compareHash.mockResolvedValue(true);
   });
 
@@ -79,7 +80,7 @@ describe('AuthController from AppModule (e2e)', () => {
       );
       expect(hashUtilMock.compareHash).toHaveBeenCalledWith(
         signInData.password,
-        mockAuth.password,
+        mockUser.password,
       );
     });
 
@@ -132,13 +133,13 @@ describe('AuthController from AppModule (e2e)', () => {
       );
       expect(hashUtilMock.compareHash).toHaveBeenCalledWith(
         invalidPasswordData.password,
-        mockAuth.password,
+        mockUser.password,
       );
     });
 
     it('Should return 401 when account is not verified', async () => {
       const unverifiedAuth = {
-        ...mockAuth,
+        ...mockUser,
         is_verified_account: false,
       };
       authRepositoryMock.findOneByEmail.mockResolvedValueOnce(unverifiedAuth);

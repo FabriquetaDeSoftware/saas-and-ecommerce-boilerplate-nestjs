@@ -36,6 +36,7 @@ export class ForgotPasswordService implements IForgotPasswordService {
       email: findUserByEmail.email,
       role: findUserByEmail.role,
       sub: findUserByEmail.public_id,
+      name: findUserByEmail.name,
       type: TokenEnum.RECOVERY_PASSWORD_TOKEN,
     });
 
