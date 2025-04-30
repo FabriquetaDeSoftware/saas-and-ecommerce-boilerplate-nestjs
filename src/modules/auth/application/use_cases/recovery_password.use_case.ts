@@ -14,7 +14,7 @@ import { IRecoveryPasswordUseCase } from '../../domain/interfaces/use_cases/reco
 import { IAuthRepository } from '../../domain/interfaces/repositories/auth.repository.interface';
 import { IFindUserByEmailHelper } from '../../domain/interfaces/helpers/find_user_by_email.helper.interface';
 import { IJwtUserPayload } from '../../../../shared/interfaces/jwt_user_payload.interface';
-import { Auth } from '../../domain/entities/auth.entity';
+import { User } from 'src/shared/entities/user.entity';
 
 @Injectable()
 export class RecoveryPasswordUseCase implements IRecoveryPasswordUseCase {
@@ -63,7 +63,7 @@ export class RecoveryPasswordUseCase implements IRecoveryPasswordUseCase {
 
   private async findUserByEmailAndValidate(
     email: string,
-  ): Promise<Partial<Auth>> {
+  ): Promise<Partial<User>> {
     const findUserByEmail = await this._findUserByEmailHelper.execute(email);
 
     if (!findUserByEmail) {

@@ -6,14 +6,14 @@ import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
 import { IAuthRepository } from 'src/modules/auth/domain/interfaces/repositories/auth.repository.interface';
 import { SignInDefaultDto } from 'src/modules/auth/application/dto/sign_in_default.dto';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
-import { Auth } from 'src/modules/auth/domain/entities/auth.entity';
+import { User } from 'src/shared/entities/user.entity';
 
 describe('AuthController from AppModule (e2e)', () => {
   let app: INestApplication;
   let authRepositoryMock: jest.Mocked<IAuthRepository>;
   let hashUtilMock: jest.Mocked<IHashUtil>;
 
-  const mockAuth: Auth = {
+  const mockAuth: User = {
     id: 1,
     public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
     role: RolesEnum.USER,

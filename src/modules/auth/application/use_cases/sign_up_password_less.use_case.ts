@@ -7,7 +7,7 @@ import { IGenerateNumberCodeUtil } from 'src/shared/utils/interfaces/generate_nu
 import { ISendEmailQueueJob } from 'src/shared/modules/email/domain/interfaces/jobs/send_email_queue.job.interface';
 import { IAuthRepository } from '../../domain/interfaces/repositories/auth.repository.interface';
 import { IFindUserByEmailHelper } from '../../domain/interfaces/helpers/find_user_by_email.helper.interface';
-import { Auth } from '../../domain/entities/auth.entity';
+import { User } from 'src/shared/entities/user.entity';
 import { ISignUpPasswordLessUseCase } from '../../domain/interfaces/use_cases/sign_up_magic_link.use_case.interface';
 import { SignUpMagicLinkDto } from '../dto/sign_up_magic_link.dto';
 
@@ -31,13 +31,13 @@ export class SignUpPasswordLessUseCase implements ISignUpPasswordLessUseCase {
   @Inject('ISendEmailQueueJob')
   private readonly _sendEmailQueueJob: ISendEmailQueueJob;
 
-  public async execute(input: SignUpMagicLinkDto): Promise<Partial<Auth>> {
+  public async execute(input: SignUpMagicLinkDto): Promise<Partial<User>> {
     const response = await this.intermediary(input);
 
     return response;
   }
 
-  private async intermediary(data: SignUpMagicLinkDto): Promise<Partial<Auth>> {
+  private async intermediary(data: SignUpMagicLinkDto): Promise<Partial<User>> {
     const [, verificationCodeAndExpiresDate] = await Promise.all([
       this.checkEmailExistsAndError(data.email),
       this.generateCodeOfVerificationAndExpiresDate(),
@@ -75,7 +75,7 @@ export class SignUpPasswordLessUseCase implements ISignUpPasswordLessUseCase {
     data: SignUpMagicLinkDto,
     hashedCode: string,
     expiresDate: Date,
-  ): Promise<Partial<Auth>> {
+  ): Promise<Partial<User>> {
     const response = await this._authRepository.create(
       data,
       hashedCode,

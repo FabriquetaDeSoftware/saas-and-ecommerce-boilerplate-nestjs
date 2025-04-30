@@ -15,7 +15,7 @@ import { IVerifyAccountUseCase } from '../../domain/interfaces/use_cases/verify_
 import { IVerificationCodesRepository } from '../../domain/interfaces/repositories/verification_codes.repository.interface';
 import { IFindUserByEmailHelper } from '../../domain/interfaces/helpers/find_user_by_email.helper.interface';
 import { IAuthRepository } from '../../domain/interfaces/repositories/auth.repository.interface';
-import { Auth } from '../../domain/entities/auth.entity';
+import { User } from 'src/shared/entities/user.entity';
 import { VerificationCodes } from '../../domain/entities/verification_codes.entity';
 
 @Injectable()
@@ -121,7 +121,7 @@ export class VerifyAccountUseCase implements IVerifyAccountUseCase {
   private async updateAccountIsVerify(
     email: string,
     is_verified_account: boolean,
-  ): Promise<Partial<Auth>> {
+  ): Promise<Partial<User>> {
     const result = await this._authRepository.updateInfoByEmailAuth(email, {
       is_verified_account,
     });
@@ -139,7 +139,7 @@ export class VerifyAccountUseCase implements IVerifyAccountUseCase {
     return isMatch;
   }
 
-  private async findUserByEmail(email: string): Promise<Partial<Auth>> {
+  private async findUserByEmail(email: string): Promise<Partial<User>> {
     const user = await this._findUserByEmailHelper.execute(email);
 
     if (!user) {

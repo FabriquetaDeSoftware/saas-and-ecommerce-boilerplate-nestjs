@@ -9,7 +9,7 @@ import { IGenerateTokenHelper } from '../../domain/interfaces/helpers/generate_t
 import { RefreshTokenDto } from '../../application/dto/refresh_token.dto';
 import { ITokensReturnsHelper } from '../../domain/interfaces/helpers/tokens_returns.helper.interface';
 import { IJwtUserPayload } from '../../../../shared/interfaces/jwt_user_payload.interface';
-import { Auth } from '../../domain/entities/auth.entity';
+import { User } from 'src/shared/entities/user.entity';
 
 @Injectable()
 export class RefreshTokenService implements IRefreshTokenService {
@@ -69,7 +69,7 @@ export class RefreshTokenService implements IRefreshTokenService {
     return payload;
   }
 
-  private async checkEmailExistsOrError(email: string): Promise<Partial<Auth>> {
+  private async checkEmailExistsOrError(email: string): Promise<Partial<User>> {
     const findUserByEmail = await this._findUserByEmailHelper.execute(email);
 
     if (!findUserByEmail) {

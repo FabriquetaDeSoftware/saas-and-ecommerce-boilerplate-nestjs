@@ -4,7 +4,7 @@ import { ISignInDefaultUseCase } from '../../domain/interfaces/use_cases/sign_in
 import { IFindUserByEmailHelper } from '../../domain/interfaces/helpers/find_user_by_email.helper.interface';
 import { IGenerateTokenHelper } from '../../domain/interfaces/helpers/generate_token.helper.interface';
 import { ITokensReturnsHelper } from '../../domain/interfaces/helpers/tokens_returns.helper.interface';
-import { Auth } from '../../domain/entities/auth.entity';
+import { User } from 'src/shared/entities/user.entity';
 
 @Injectable()
 export class SignInDefaultUseCase implements ISignInDefaultUseCase {
@@ -31,7 +31,7 @@ export class SignInDefaultUseCase implements ISignInDefaultUseCase {
     return { access_token, refresh_token };
   }
 
-  private async checkEmailExistsOrError(email: string): Promise<Partial<Auth>> {
+  private async checkEmailExistsOrError(email: string): Promise<Partial<User>> {
     const findUserByEmail = await this._findUserByEmailHelper.execute(email);
 
     if (!findUserByEmail) {

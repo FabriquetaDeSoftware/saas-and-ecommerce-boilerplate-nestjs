@@ -5,7 +5,7 @@ import { AppModule } from '../../src/app.module';
 import { SignUpMagicLinkDto } from 'src/modules/auth/application/dto/sign_up_magic_link.dto';
 import { IAuthRepository } from 'src/modules/auth/domain/interfaces/repositories/auth.repository.interface';
 import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
-import { Auth } from 'src/modules/auth/domain/entities/auth.entity';
+import { User } from 'src/shared/entities/user.entity';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { ISendEmailQueueJob } from 'src/shared/modules/email/domain/interfaces/jobs/send_email_queue.job.interface';
 
@@ -23,7 +23,7 @@ describe('AuthController PasswordLess (e2e)', () => {
 
   const HASHED_CODE = 'hashedText';
 
-  const mockAuthResponse = (userData: SignUpMagicLinkDto): Partial<Auth> => ({
+  const mockAuth = (userData: SignUpMagicLinkDto): Partial<User> => ({
     public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
     role: RolesEnum.USER,
     email: userData.email,
@@ -55,8 +55,8 @@ describe('AuthController PasswordLess (e2e)', () => {
             code: string,
             expires_at: Date,
             exclude?: any,
-          ): Promise<Partial<Auth>> => {
-            return Promise.resolve(mockAuthResponse(dto));
+          ): Promise<Partial<User>> => {
+            return Promise.resolve(mockAuth(dto));
           },
         ),
       findOneByEmail: jest.fn().mockResolvedValue(null),

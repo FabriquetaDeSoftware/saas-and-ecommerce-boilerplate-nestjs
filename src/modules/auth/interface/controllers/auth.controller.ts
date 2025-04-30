@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { SignUpDefaultDto } from '../../application/dto/sign_up_default.dto';
-import { Auth } from '../../domain/entities/auth.entity';
+import { User } from 'src/shared/entities/user.entity';
 import { IsPublicRoute } from 'src/common/decorators/is_public_route.decorator';
 import { SignInDefaultDto } from '../../application/dto/sign_in_default.dto';
 import { LocalAuthGuard } from '../guards/local_auth.guard';
@@ -59,7 +59,7 @@ export class AuthController {
   @Post('sign-up-default')
   public async signUpDefault(
     @Body() input: SignUpDefaultDto,
-  ): Promise<Partial<Auth>> {
+  ): Promise<Partial<User>> {
     const response = await this._signUpDefaultUseCase.execute(input);
 
     return response;
@@ -69,7 +69,7 @@ export class AuthController {
   @Post('sign-up-password-less')
   public async signUpMagicLink(
     @Body() input: SignUpMagicLinkDto,
-  ): Promise<Partial<Auth>> {
+  ): Promise<Partial<User>> {
     const response = await this._signUpPasswordLessUseCase.execute(input);
 
     return response;

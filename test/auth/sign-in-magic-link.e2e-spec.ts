@@ -5,7 +5,7 @@ import { AppModule } from '../../src/app.module';
 import { IAuthRepository } from 'src/modules/auth/domain/interfaces/repositories/auth.repository.interface';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { EmailDto } from 'src/modules/auth/application/dto/email.dto';
-import { Auth } from 'src/modules/auth/domain/entities/auth.entity';
+import { User } from 'src/shared/entities/user.entity';
 import { ISendEmailQueueJob } from 'src/shared/modules/email/domain/interfaces/jobs/send_email_queue.job.interface';
 
 describe('AuthController from AppModule (e2e)', () => {
@@ -13,7 +13,7 @@ describe('AuthController from AppModule (e2e)', () => {
   let authRepositoryMock: jest.Mocked<IAuthRepository>;
   let sendEmailQueueJobMock: jest.Mocked<ISendEmailQueueJob>;
 
-  const mockAuth: Auth = {
+  const mockAuth: User = {
     id: 1,
     public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
     role: RolesEnum.USER,

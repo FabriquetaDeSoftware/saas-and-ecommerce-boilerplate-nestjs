@@ -1,7 +1,7 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { IFindUserByEmailHelper } from '../../domain/interfaces/helpers/find_user_by_email.helper.interface';
 import { IGenerateTokenHelper } from '../../domain/interfaces/helpers/generate_token.helper.interface';
-import { Auth } from '../../domain/entities/auth.entity';
+import { User } from 'src/shared/entities/user.entity';
 import { EmailDto } from '../dto/email.dto';
 import { ISendEmailQueueJob } from 'src/shared/modules/email/domain/interfaces/jobs/send_email_queue.job.interface';
 import { LanguageEnum } from 'src/shared/enum/language.enum';
@@ -45,7 +45,7 @@ export class SignInMagicLinkUseCase implements ISignInMagicLinkUseCase {
     });
   }
 
-  private async validateUser(email: string): Promise<Partial<Auth>> {
+  private async validateUser(email: string): Promise<Partial<User>> {
     const user = await this._findUserByEmailHelper.execute(email);
 
     if (!user || !user.is_verified_account) {

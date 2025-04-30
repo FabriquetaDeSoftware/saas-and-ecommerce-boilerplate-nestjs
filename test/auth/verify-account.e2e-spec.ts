@@ -6,7 +6,7 @@ import { VerificationCodeDto } from 'src/modules/auth/application/dto/verificati
 import { IAuthRepository } from 'src/modules/auth/domain/interfaces/repositories/auth.repository.interface';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { IVerificationCodesRepository } from 'src/modules/auth/domain/interfaces/repositories/verification_codes.repository.interface';
-import { Auth } from 'src/modules/auth/domain/entities/auth.entity';
+import { User } from 'src/shared/entities/user.entity';
 import { VerificationCodes } from 'src/modules/auth/domain/entities/verification_codes.entity';
 import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
 import { ISendEmailQueueJob } from 'src/shared/modules/email/domain/interfaces/jobs/send_email_queue.job.interface';
@@ -26,10 +26,7 @@ describe('AuthController Verification (e2e)', () => {
   const MOCK_AUTH_ID = 1;
   const HASHED_CODE = 'hashedText';
 
-  const mockAuthResponse = (
-    email: string,
-    isVerified: boolean = false,
-  ): Auth => ({
+  const mockAuth = (email: string, isVerified: boolean = false): User => ({
     id: MOCK_AUTH_ID,
     public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
     role: RolesEnum.USER,
@@ -82,16 +79,15 @@ describe('AuthController Verification (e2e)', () => {
       findOneByEmail: jest
         .fn()
         .mockImplementation(
-          (email: string): Promise<Auth> =>
-            Promise.resolve(mockAuthResponse(email)),
+          (email: string): Promise<User> => Promise.resolve(mockAuth(email)),
         ),
       updateInfoByIdAuth: jest.fn().mockResolvedValue(undefined),
       updateInfoByPublicIdAuth: jest.fn().mockResolvedValue(undefined),
       updateInfoByEmailAuth: jest
         .fn()
         .mockImplementation(
-          (email: string, data: any): Promise<Auth> =>
-            Promise.resolve(mockAuthResponse(email, true)),
+          (email: string, data: any): Promise<User> =>
+            Promise.resolve(mockAuth(email, true)),
         ),
     };
 
