@@ -26,11 +26,13 @@ describe('AuthController from AppModule (e2e)', () => {
   const invalidToken = 'invalid_token';
   const testEmail = 'test@example.com';
   const testUserPublicId = '9f3b779d-1ffc-4812-ab14-4e3687741538';
+  const testName = 'Test User';
 
   const mockJwtPayload: IJwtUserPayload = {
     email: Buffer.from(testEmail).toString('base64'),
     role: Buffer.from(RolesEnum.USER).toString('base64'),
     sub: Buffer.from(testUserPublicId).toString('base64'),
+    name: Buffer.from(testName).toString('base64'),
     type: Buffer.from(TokenEnum.REFRESH_TOKEN).toString('base64'),
   };
 

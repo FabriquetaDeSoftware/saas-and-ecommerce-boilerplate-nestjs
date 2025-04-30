@@ -16,6 +16,7 @@ describe('AuthController PasswordLess (e2e)', () => {
   let sendEmailQueueJobMock: jest.Mocked<ISendEmailQueueJob>;
 
   const VALID_USER_DATA: SignUpMagicLinkDto = {
+    name: 'Test User',
     email: 'test@example.com',
     newsletter_subscription: true,
     terms_and_conditions_accepted: true,
@@ -23,9 +24,10 @@ describe('AuthController PasswordLess (e2e)', () => {
 
   const HASHED_CODE = 'hashedText';
 
-  const mockAuth = (userData: SignUpMagicLinkDto): Partial<User> => ({
+  const mockUser = (userData: SignUpMagicLinkDto): Partial<User> => ({
     public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
     role: RolesEnum.USER,
+    name: userData.name,
     email: userData.email,
     is_verified_account: false,
     newsletter_subscription: userData.newsletter_subscription,
@@ -56,7 +58,7 @@ describe('AuthController PasswordLess (e2e)', () => {
             expires_at: Date,
             exclude?: any,
           ): Promise<Partial<User>> => {
-            return Promise.resolve(mockAuth(dto));
+            return Promise.resolve(mockUser(dto));
           },
         ),
       findOneByEmail: jest.fn().mockResolvedValue(null),
@@ -101,6 +103,7 @@ describe('AuthController PasswordLess (e2e)', () => {
       expect(response.body).toEqual(
         expect.objectContaining({
           public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
+          name: VALID_USER_DATA.name,
           email: VALID_USER_DATA.email,
           newsletter_subscription: VALID_USER_DATA.newsletter_subscription,
           terms_and_conditions_accepted:

@@ -1,7 +1,21 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsEmail, IsNotEmpty, IsOptional } from 'class-validator';
+import {
+  IsBoolean,
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class SignUpMagicLinkDto {
+  @ApiProperty({
+    description: 'Name of the user',
+    example: 'Name Test1',
+  })
+  @IsNotEmpty()
+  @IsString()
+  name: string;
+
   @ApiProperty({
     description: 'Email of the user',
     example: 'teste1@gmail.com',

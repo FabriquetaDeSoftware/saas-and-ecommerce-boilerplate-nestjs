@@ -26,6 +26,7 @@ export class SignInDefaultUseCase implements ISignInDefaultUseCase {
         sub: findUserByEmail.public_id,
         email: findUserByEmail.email,
         role: findUserByEmail.role,
+        name: findUserByEmail.name,
       });
 
     return { access_token, refresh_token };

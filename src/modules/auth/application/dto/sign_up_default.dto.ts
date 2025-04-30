@@ -10,6 +10,14 @@ import {
 
 export class SignUpDefaultDto {
   @ApiProperty({
+    description: 'Name of the user',
+    example: 'Name Test1',
+  })
+  @IsNotEmpty()
+  @IsString()
+  name: string;
+
+  @ApiProperty({
     description: 'Email of the user',
     example: 'teste@gmail.com',
   })

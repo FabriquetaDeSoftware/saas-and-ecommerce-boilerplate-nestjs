@@ -12,6 +12,7 @@ model User {
   public_id String @unique @default(uuid())
 
   role     RolesUser @default(USER)
+  name     String
   email    String    @unique
   password String?
 

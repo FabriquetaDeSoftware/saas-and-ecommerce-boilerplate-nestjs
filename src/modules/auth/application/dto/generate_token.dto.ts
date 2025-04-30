@@ -18,6 +18,10 @@ export class GenerateTokenDto {
 
   @IsNotEmpty()
   @IsString()
+  name: string;
+
+  @IsNotEmpty()
+  @IsString()
   role: string;
 
   @IsOptional()

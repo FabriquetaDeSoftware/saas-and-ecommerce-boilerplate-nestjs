@@ -5,6 +5,7 @@ export class User {
   public_id: string;
 
   role: RolesEnum;
+  name: string;
   email: string;
   password: string;
 

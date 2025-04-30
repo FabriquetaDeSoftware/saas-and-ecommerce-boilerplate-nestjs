@@ -26,10 +26,11 @@ describe('AuthController Verification (e2e)', () => {
   const MOCK_AUTH_ID = 1;
   const HASHED_CODE = 'hashedText';
 
-  const mockAuth = (email: string, isVerified: boolean = false): User => ({
+  const mockUser = (email: string, isVerified: boolean = false): User => ({
     id: MOCK_AUTH_ID,
     public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
     role: RolesEnum.USER,
+    name: 'Test User',
     email,
     password: HASHED_CODE,
     is_verified_account: isVerified,
@@ -79,7 +80,7 @@ describe('AuthController Verification (e2e)', () => {
       findOneByEmail: jest
         .fn()
         .mockImplementation(
-          (email: string): Promise<User> => Promise.resolve(mockAuth(email)),
+          (email: string): Promise<User> => Promise.resolve(mockUser(email)),
         ),
       updateInfoByIdAuth: jest.fn().mockResolvedValue(undefined),
       updateInfoByPublicIdAuth: jest.fn().mockResolvedValue(undefined),
@@ -87,7 +88,7 @@ describe('AuthController Verification (e2e)', () => {
         .fn()
         .mockImplementation(
           (email: string, data: any): Promise<User> =>
-            Promise.resolve(mockAuth(email, true)),
+            Promise.resolve(mockUser(email, true)),
         ),
     };
 

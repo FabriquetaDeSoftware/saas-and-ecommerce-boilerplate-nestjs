@@ -31,6 +31,7 @@ export class SignInMagicLinkUseCase implements ISignInMagicLinkUseCase {
         sub: findUserByEmail.public_id,
         email: findUserByEmail.email,
         role: findUserByEmail.role,
+        name: findUserByEmail.name,
       });
 
     return await this._sendEmailQueueJob.execute({

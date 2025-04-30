@@ -9,6 +9,7 @@ CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
     "public_id" TEXT NOT NULL,
     "role" "RolesUser" NOT NULL DEFAULT 'USER',
+    "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT,
     "is_verified_account" BOOLEAN NOT NULL DEFAULT false,
