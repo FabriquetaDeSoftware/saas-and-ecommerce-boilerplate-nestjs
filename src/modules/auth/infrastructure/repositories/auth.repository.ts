@@ -11,7 +11,7 @@ export class AuthRepository implements IAuthRepository {
   @Inject('IDatabaseAdapter')
   private readonly _databaseAdapter: IDatabaseAdapter;
 
-  private readonly _model = 'auth';
+  private readonly _model = 'user';
 
   public async create(
     signUpDefaultDto: SignUpDefaultDto,
