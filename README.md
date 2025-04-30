@@ -88,6 +88,20 @@ $ pnpm install
 $ make run_docker
 ```
 
+### Atention
+
+```bash
+# if received chmod +x shell/check_env_vars.sh
+chmod +x shell/run-docker.sh
+./shell/run-docker.sh
+make: ./shell/run-docker.sh: No such file or directory
+make: *** [Makefile:4: run_docker] Error 127
+
+# run
+$ sed -i 's/\r$//' ./shell/check_env_vars.sh
+$ sed -i 's/\r$//' ./shell/run-docker.sh
+```
+
 ### Activate Stripe WebHook Test
 
 ```bash

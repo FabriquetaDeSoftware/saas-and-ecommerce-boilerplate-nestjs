@@ -7,7 +7,7 @@ export class UserRepository implements IUserRepository {
   @Inject('IDatabaseAdapter')
   private readonly _databaseAdapter: IDatabaseAdapter;
 
-  private readonly _model = 'auth';
+  private readonly _model = 'user';
 
   public async findOneByPublicId(
     publicUserId: string,

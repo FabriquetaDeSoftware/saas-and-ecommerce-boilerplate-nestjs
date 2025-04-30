@@ -20,7 +20,7 @@ export class SubscriptionPurchasesRepository
       await this._databaseAdapter.create<UserSubscriptionPurchases>(
         this._model,
         {
-          Auth: {
+          User: {
             connect: { id: data.user_id },
           },
           SubscriptionPurchaseProducts: {
