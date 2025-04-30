@@ -1,14 +1,14 @@
 -- CreateEnum
-CREATE TYPE "RolesAuth" AS ENUM ('ADMIN', 'USER');
+CREATE TYPE "RolesUser" AS ENUM ('ADMIN', 'USER');
 
 -- CreateEnum
 CREATE TYPE "StatusSubscriptionPurchaseProducts" AS ENUM ('ACTIVE', 'EXPIRE', 'CANCELED');
 
 -- CreateTable
-CREATE TABLE "Auth" (
+CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
     "public_id" TEXT NOT NULL,
-    "role" "RolesAuth" NOT NULL DEFAULT 'USER',
+    "role" "RolesUser" NOT NULL DEFAULT 'USER',
     "email" TEXT NOT NULL,
     "password" TEXT,
     "is_verified_account" BOOLEAN NOT NULL DEFAULT false,
@@ -17,24 +17,24 @@ CREATE TABLE "Auth" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Auth_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "UserSinglePurchases" (
-    "authId" INTEGER NOT NULL,
-    "singlePurchaseProductsId" INTEGER NOT NULL,
+    "user_id" INTEGER NOT NULL,
+    "single_purchase_products_id" INTEGER NOT NULL,
 
-    CONSTRAINT "UserSinglePurchases_pkey" PRIMARY KEY ("authId","singlePurchaseProductsId")
+    CONSTRAINT "UserSinglePurchases_pkey" PRIMARY KEY ("user_id","single_purchase_products_id")
 );
 
 -- CreateTable
 CREATE TABLE "UserSubscriptionPurchases" (
     "status" "StatusSubscriptionPurchaseProducts" NOT NULL,
-    "authId" INTEGER NOT NULL,
-    "subscriptionPurchaseProductsId" INTEGER NOT NULL,
+    "user_id" INTEGER NOT NULL,
+    "subscription_purchase_products_id" INTEGER NOT NULL,
 
-    CONSTRAINT "UserSubscriptionPurchases_pkey" PRIMARY KEY ("authId","subscriptionPurchaseProductsId")
+    CONSTRAINT "UserSubscriptionPurchases_pkey" PRIMARY KEY ("user_id","subscription_purchase_products_id")
 );
 
 -- CreateTable
@@ -76,16 +76,16 @@ CREATE TABLE "VerificationCodes" (
     "code" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "expires_at" TIMESTAMP(3) NOT NULL,
-    "auth_id" INTEGER NOT NULL,
+    "user_id" INTEGER NOT NULL,
 
     CONSTRAINT "VerificationCodes_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Auth_public_id_key" ON "Auth"("public_id");
+CREATE UNIQUE INDEX "User_public_id_key" ON "User"("public_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Auth_email_key" ON "Auth"("email");
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "SinglePurchaseProducts_public_id_key" ON "SinglePurchaseProducts"("public_id");
@@ -109,19 +109,19 @@ CREATE UNIQUE INDEX "SubscriptionPurchaseProducts_slug_key" ON "SubscriptionPurc
 CREATE UNIQUE INDEX "VerificationCodes_public_id_key" ON "VerificationCodes"("public_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "VerificationCodes_auth_id_key" ON "VerificationCodes"("auth_id");
+CREATE UNIQUE INDEX "VerificationCodes_user_id_key" ON "VerificationCodes"("user_id");
 
 -- AddForeignKey
-ALTER TABLE "UserSinglePurchases" ADD CONSTRAINT "UserSinglePurchases_authId_fkey" FOREIGN KEY ("authId") REFERENCES "Auth"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "UserSinglePurchases" ADD CONSTRAINT "UserSinglePurchases_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserSinglePurchases" ADD CONSTRAINT "UserSinglePurchases_singlePurchaseProductsId_fkey" FOREIGN KEY ("singlePurchaseProductsId") REFERENCES "SinglePurchaseProducts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "UserSinglePurchases" ADD CONSTRAINT "UserSinglePurchases_single_purchase_products_id_fkey" FOREIGN KEY ("single_purchase_products_id") REFERENCES "SinglePurchaseProducts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserSubscriptionPurchases" ADD CONSTRAINT "UserSubscriptionPurchases_authId_fkey" FOREIGN KEY ("authId") REFERENCES "Auth"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "UserSubscriptionPurchases" ADD CONSTRAINT "UserSubscriptionPurchases_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserSubscriptionPurchases" ADD CONSTRAINT "UserSubscriptionPurchases_subscriptionPurchaseProductsId_fkey" FOREIGN KEY ("subscriptionPurchaseProductsId") REFERENCES "SubscriptionPurchaseProducts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "UserSubscriptionPurchases" ADD CONSTRAINT "UserSubscriptionPurchases_subscription_purchase_products_i_fkey" FOREIGN KEY ("subscription_purchase_products_id") REFERENCES "SubscriptionPurchaseProducts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "VerificationCodes" ADD CONSTRAINT "VerificationCodes_auth_id_fkey" FOREIGN KEY ("auth_id") REFERENCES "Auth"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "VerificationCodes" ADD CONSTRAINT "VerificationCodes_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
