@@ -5,6 +5,7 @@ import { CreateProductDto } from '../../application/dto/create_product.dto';
 import { Products } from '../../domain/entities/products.entity';
 import { ListManyProductsReturn } from '../../domain/interfaces/returns/list_many_products_return.interface';
 import { UpdateProductInfoDto } from '../../application/dto/update_product_info.dto';
+import { TablesEnum } from 'src/shared/enum/tables.enum';
 
 @Injectable()
 export class SubscriptionProductsRepository
@@ -13,7 +14,7 @@ export class SubscriptionProductsRepository
   @Inject('IDatabaseAdapter')
   private readonly _databaseAdapter: IDatabaseAdapter;
 
-  private readonly _model = 'subscription_purchase_products';
+  private readonly _model = TablesEnum.SUBSCRIPTION_PURCHASE_PRODUCT;
 
   public async create(
     data: CreateProductDto,

@@ -3,13 +3,14 @@ import { ISinglePurchasesRepository } from '../../domain/interfaces/repositories
 import { SaveSinglePurchasesProductDto } from '../dto/save_purchases.dto';
 import { IDatabaseAdapter } from 'src/common/databases/interfaces/database.adapter.interface';
 import { UserSinglePurchases } from '../../domain/entities/user_purchases.entity';
+import { TablesEnum } from 'src/shared/enum/tables.enum';
 
 @Injectable()
 export class SinglePurchasesRepository implements ISinglePurchasesRepository {
   @Inject('IDatabaseAdapter')
   private readonly _databaseAdapter: IDatabaseAdapter;
 
-  private readonly _model = 'user_single_purchases';
+  private readonly _model = TablesEnum.USER_SINGLE_PURCHASE;
 
   public async saveSinglePurchaseProductToUser(
     data: SaveSinglePurchasesProductDto,

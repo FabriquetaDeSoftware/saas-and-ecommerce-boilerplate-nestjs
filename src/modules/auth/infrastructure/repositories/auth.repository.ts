@@ -5,13 +5,14 @@ import { IAuthRepository } from '../../domain/interfaces/repositories/auth.repos
 import { User } from 'src/shared/entities/user.entity';
 import { UpdateInfoDto } from '../../application/dto/update_info.dto';
 import { SignUpDefaultDto } from '../../application/dto/sign_up_default.dto';
+import { TablesEnum } from 'src/shared/enum/tables.enum';
 
 @Injectable()
 export class AuthRepository implements IAuthRepository {
   @Inject('IDatabaseAdapter')
   private readonly _databaseAdapter: IDatabaseAdapter;
 
-  private readonly _model = 'user';
+  private readonly _model = TablesEnum.USER;
 
   public async create(
     signUpDefaultDto: SignUpDefaultDto,

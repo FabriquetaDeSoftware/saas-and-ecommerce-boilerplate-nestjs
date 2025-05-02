@@ -23,34 +23,34 @@ model user {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  verification_code      verification_code?
-  single_purchases       user_single_purchases[]
-  subscription_purchases user_subscription_purchases[]
+  verification_code     verification_code?
+  single_purchase       user_single_purchase[]
+  subscription_purchase user_subscription_purchase[]
 }
 
-model user_single_purchases {
+model user_single_purchase {
   user_id Int
   user    user @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   single_purchase_products_id Int
-  single_purchase_products    single_purchase_products @relation(fields: [single_purchase_products_id], references: [id], onDelete: Cascade)
+  single_purchase_product     single_purchase_product @relation(fields: [single_purchase_products_id], references: [id], onDelete: Cascade)
 
   @@id([user_id, single_purchase_products_id])
 }
 
-model user_subscription_purchases {
+model user_subscription_purchase {
   status status_subscription_purchase_product
 
   user_id Int
   user    user @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   subscription_purchase_products_id Int
-  subscription_purchase_products    subscription_purchase_products @relation(fields: [subscription_purchase_products_id], references: [id], onDelete: Cascade)
+  subscription_purchase_product     subscription_purchase_product @relation(fields: [subscription_purchase_products_id], references: [id], onDelete: Cascade)
 
   @@id([user_id, subscription_purchase_products_id])
 }
 
-model single_purchase_products {
+model single_purchase_product {
   id        Int    @id @default(autoincrement())
   public_id String @unique @default(uuid())
 
@@ -66,10 +66,10 @@ model single_purchase_products {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  purchases user_single_purchases[]
+  purchases user_single_purchase[]
 }
 
-model subscription_purchase_products {
+model subscription_purchase_product {
   id        Int    @id @default(autoincrement())
   public_id String @unique @default(uuid())
 
@@ -85,7 +85,7 @@ model subscription_purchase_products {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  purchases user_subscription_purchases[]
+  purchases user_subscription_purchase[]
 }
 
 model verification_code {

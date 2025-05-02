@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { IDatabaseAdapter } from 'src/common/databases/interfaces/database.adapter.interface';
 import { IVerificationCodesRepository } from '../../domain/interfaces/repositories/verification_codes.repository.interface';
 import { VerificationCodes } from '../../domain/entities/verification_codes.entity';
+import { TablesEnum } from 'src/shared/enum/tables.enum';
 
 @Injectable()
 export class VerificationCodesRepository
@@ -10,7 +11,7 @@ export class VerificationCodesRepository
   @Inject('IDatabaseAdapter')
   private readonly _databaseAdapter: IDatabaseAdapter;
 
-  private readonly _model = 'verification_code';
+  private readonly _model = TablesEnum.VERIFICATION_CODE;
 
   public async findVerificationCodeByAuthorId(
     auth_id: number,

@@ -3,6 +3,7 @@ import { ISubscriptionPurchasesRepository } from '../../domain/interfaces/reposi
 import { IDatabaseAdapter } from 'src/common/databases/interfaces/database.adapter.interface';
 import { SaveSubscriptionPurchasesProductDto } from '../dto/save_purchases.dto';
 import { UserSubscriptionPurchases } from '../../domain/entities/user_purchases.entity';
+import { TablesEnum } from 'src/shared/enum/tables.enum';
 
 @Injectable()
 export class SubscriptionPurchasesRepository
@@ -11,7 +12,7 @@ export class SubscriptionPurchasesRepository
   @Inject('IDatabaseAdapter')
   private readonly _databaseAdapter: IDatabaseAdapter;
 
-  private readonly _model = 'user_subscription_purchases';
+  private readonly _model = TablesEnum.USER_SUBSCRIPTION_PURCHASE;
 
   public async saveSubscriptionPurchaseProductToUser(
     data: SaveSubscriptionPurchasesProductDto,
