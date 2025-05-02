@@ -9,7 +9,7 @@ export class SinglePurchasesRepository implements ISinglePurchasesRepository {
   @Inject('IDatabaseAdapter')
   private readonly _databaseAdapter: IDatabaseAdapter;
 
-  private readonly _model = 'userSinglePurchases';
+  private readonly _model = 'user_single_purchases';
 
   public async saveSinglePurchaseProductToUser(
     data: SaveSinglePurchasesProductDto,

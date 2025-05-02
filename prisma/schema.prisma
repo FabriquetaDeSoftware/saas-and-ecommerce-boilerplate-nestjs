@@ -7,11 +7,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model user {
   id        Int    @id @default(autoincrement())
   public_id String @unique @default(uuid())
 
-  role     RolesUser @default(USER)
+  role     role_user @default(USER)
   name     String
   email    String    @unique
   password String?
@@ -23,34 +23,34 @@ model User {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  verification_code     VerificationCodes?
-  singlePurchases       UserSinglePurchases[]
-  subscriptionPurchases UserSubscriptionPurchases[]
+  verification_code      verification_code?
+  single_purchases       user_single_purchases[]
+  subscription_purchases user_subscription_purchases[]
 }
 
-model UserSinglePurchases {
+model user_single_purchases {
   user_id Int
-  User    User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user    user @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   single_purchase_products_id Int
-  SinglePurchaseProducts      SinglePurchaseProducts @relation(fields: [single_purchase_products_id], references: [id], onDelete: Cascade)
+  single_purchase_products    single_purchase_products @relation(fields: [single_purchase_products_id], references: [id], onDelete: Cascade)
 
   @@id([user_id, single_purchase_products_id])
 }
 
-model UserSubscriptionPurchases {
-  status StatusSubscriptionPurchaseProducts
+model user_subscription_purchases {
+  status status_subscription_purchase_product
 
   user_id Int
-  User    User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user    user @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   subscription_purchase_products_id Int
-  SubscriptionPurchaseProducts      SubscriptionPurchaseProducts @relation(fields: [subscription_purchase_products_id], references: [id], onDelete: Cascade)
+  subscription_purchase_products    subscription_purchase_products @relation(fields: [subscription_purchase_products_id], references: [id], onDelete: Cascade)
 
   @@id([user_id, subscription_purchase_products_id])
 }
 
-model SinglePurchaseProducts {
+model single_purchase_products {
   id        Int    @id @default(autoincrement())
   public_id String @unique @default(uuid())
 
@@ -66,10 +66,10 @@ model SinglePurchaseProducts {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  purchases UserSinglePurchases[]
+  purchases user_single_purchases[]
 }
 
-model SubscriptionPurchaseProducts {
+model subscription_purchase_products {
   id        Int    @id @default(autoincrement())
   public_id String @unique @default(uuid())
 
@@ -85,10 +85,10 @@ model SubscriptionPurchaseProducts {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  subscriptionPurchases UserSubscriptionPurchases[]
+  purchases user_subscription_purchases[]
 }
 
-model VerificationCodes {
+model verification_code {
   id        Int    @id @default(autoincrement())
   public_id String @unique @default(uuid())
 
@@ -99,15 +99,15 @@ model VerificationCodes {
 
   user_id Int @unique
 
-  User User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user user @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
-enum RolesUser {
+enum role_user {
   ADMIN
   USER
 }
 
-enum StatusSubscriptionPurchaseProducts {
+enum status_subscription_purchase_product {
   ACTIVE
   EXPIRE
   CANCELED

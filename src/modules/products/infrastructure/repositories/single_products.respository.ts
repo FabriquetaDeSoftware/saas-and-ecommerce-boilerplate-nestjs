@@ -11,7 +11,7 @@ export class SingleProductsRepository implements ISingleProductsRepository {
   @Inject('IDatabaseAdapter')
   private readonly _databaseAdapter: IDatabaseAdapter;
 
-  private readonly _model = 'singlePurchaseProducts';
+  private readonly _model = 'single_purchase_products';
 
   public async create(
     data: CreateProductDto,

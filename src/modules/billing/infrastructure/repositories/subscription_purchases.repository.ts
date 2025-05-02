@@ -11,7 +11,7 @@ export class SubscriptionPurchasesRepository
   @Inject('IDatabaseAdapter')
   private readonly _databaseAdapter: IDatabaseAdapter;
 
-  private readonly _model = 'userSubscriptionPurchases';
+  private readonly _model = 'user_subscription_purchases';
 
   public async saveSubscriptionPurchaseProductToUser(
     data: SaveSubscriptionPurchasesProductDto,

@@ -13,7 +13,7 @@ export class SubscriptionProductsRepository
   @Inject('IDatabaseAdapter')
   private readonly _databaseAdapter: IDatabaseAdapter;
 
-  private readonly _model = 'subscriptionPurchaseProducts';
+  private readonly _model = 'subscription_purchase_products';
 
   public async create(
     data: CreateProductDto,

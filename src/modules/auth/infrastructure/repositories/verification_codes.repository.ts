@@ -10,7 +10,7 @@ export class VerificationCodesRepository
   @Inject('IDatabaseAdapter')
   private readonly _databaseAdapter: IDatabaseAdapter;
 
-  private readonly _model = 'verificationCodes';
+  private readonly _model = 'verification_code';
 
   public async findVerificationCodeByAuthorId(
     auth_id: number,
