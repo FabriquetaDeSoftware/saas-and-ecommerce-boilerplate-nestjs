@@ -81,11 +81,15 @@ $ pnpm install
 
 ### Compile and Run the Project
 
-#### Permission to Execute the Shell Script and Run Project
-
 ```bash
-# enable shell script and run docker
-$ make run_docker
+# run this command to execute production docker
+$ make run_production_docker
+
+# run this command to execute development docker
+$ make run_development_docker
+
+# run this command to delete docker volumes to make them available for running tests
+$ make run_test_docker
 ```
 
 ### Atention
