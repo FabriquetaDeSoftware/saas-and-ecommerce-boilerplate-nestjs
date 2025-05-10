@@ -110,6 +110,28 @@ export class AuthController {
   }
 
   @IsPublicRoute()
+  @Post('send-temporary-password')
+  @HttpCode(200)
+  public async sendTemporaryPassword(
+    @Body() input: EmailDto,
+  ): Promise<{ message: string }> {
+    return {
+      message: 'method to send email with temporary password to execute login',
+    };
+  }
+
+  @IsPublicRoute()
+  @Post('sign-in-temporary-password')
+  @HttpCode(200)
+  public async signInTemporaryPassword(
+    @Body() input: SignInDefaultDto,
+  ): Promise<{ message: string }> {
+    return {
+      message: 'method to execute login with email and temporary password',
+    };
+  }
+
+  @IsPublicRoute()
   @Post('refresh-token')
   @HttpCode(200)
   public async refreshToken(
