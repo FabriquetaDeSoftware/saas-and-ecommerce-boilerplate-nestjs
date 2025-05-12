@@ -1,15 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from '../../src/app.module';
-import { ISingleProductsRepository } from 'src/modules/products/domain/interfaces/repositories/single_products.repository.interface';
+import { AppModule } from 'src/app.module';
+import { RolesEnum } from 'src/shared/enum/roles.enum';
+import { Products } from 'src/modules/products/domain/entities/products.entity';
 import { ISubscriptionProductsRepository } from 'src/modules/products/domain/interfaces/repositories/subscription_products.repository.interface';
+import { ISingleProductsRepository } from 'src/modules/products/domain/interfaces/repositories/single_products.repository.interface';
 import { JwtService } from '@nestjs/jwt';
 import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
 import { GenerateTokenHelper } from 'src/modules/auth/shared/helpers/generate_token.helper';
-import { RolesEnum } from 'src/shared/enum/roles.enum';
-import { Products } from 'src/modules/products/domain/entities/products.entity';
 import { GenerateTokenDto } from 'src/modules/auth/application/dto/generate_token.dto';
+import { UpdateProductInfoDto } from 'src/modules/products/application/dto/update_product_info.dto';
 
 describe('AuthController from AppModule (e2e)', () => {
   let app: INestApplication;
@@ -21,6 +22,15 @@ describe('AuthController from AppModule (e2e)', () => {
 
   const imageMockURl =
     'https://t0.gstatic.com/licensed-image?q=tbn:ANd9GcTEVcrypslvdUeHleSabemh-hXNLNslN-H0XVxm7ObA2J28dKoXFD5zck7QPMjyHGBCWXhq2nmA4YA0IYslGIM';
+
+  const VALID_PRODUCT_DATA: UpdateProductInfoDto = {
+    name: 'product name',
+    description: 'the best product',
+    price: 12345,
+    price_id: 'price_1N4v2cK0x5g3e7d8f8e8e8e8',
+    slug: 'slug_product1',
+    image: [imageMockURl, imageMockURl],
+  };
 
   const TEST_USER = {
     email: 'test@example.com',
@@ -54,7 +64,7 @@ describe('AuthController from AppModule (e2e)', () => {
     public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
     name: 'Product 1',
     description: 'Product 1 description',
-    price: 100,
+    price: 10000,
     price_id: 'price_1N4v2cK0x5g3e7d8f8e8e8e8',
     slug: 'product-1',
     image: [imageMockURl, imageMockURl],
@@ -131,92 +141,116 @@ describe('AuthController from AppModule (e2e)', () => {
     jest.clearAllMocks();
   });
 
-  it('Should return 204 delete product', async () => {
+  it('Should return updated product', async () => {
+    expect(productSingleRepositoryMock.findOneByPublicId);
+
     const adminToken = await generateAuthToken(ROLES.VALID);
 
     await Promise.all(
       types.map((type) =>
         request(app.getHttpServer())
-          .delete(`/products/delete/${type}/${validPublicId}/`)
+          .patch(`/products/update/${type}/${validPublicId}/`)
           .set('Authorization', `Bearer ${adminToken}`)
-          .expect(HttpStatus.NO_CONTENT),
+          .send(VALID_PRODUCT_DATA)
+          .expect(HttpStatus.OK),
       ),
     );
 
-    expect(productSubscriptionRepositoryMock.delete).toHaveBeenCalledWith(
+    expect(productSubscriptionRepositoryMock.update).toHaveBeenCalledWith(
       validPublicId,
+      { ...VALID_PRODUCT_DATA },
+      { id: true },
     );
-    expect(productSingleRepositoryMock.delete).toHaveBeenCalledWith(
+
+    expect(productSingleRepositoryMock.update).toHaveBeenCalledWith(
       validPublicId,
+      { ...VALID_PRODUCT_DATA },
+      { id: true },
     );
   });
 
-  it('Should return 403 when user have a invalid ROlE', async () => {
-    const invalidToken = await generateAuthToken(ROLES.INVALID);
+  it('Should return 403 when user is not ADMIN', async () => {
+    const invalidRoleToken = await generateAuthToken(ROLES.INVALID);
 
     await Promise.all(
       types.map((type) =>
         request(app.getHttpServer())
-          .delete(`/products/delete/${type}/${validPublicId}/`)
-          .set('Authorization', `Bearer ${invalidToken}`)
+          .patch(`/products/update/${type}/${validPublicId}/`)
+          .set('Authorization', `Bearer ${invalidRoleToken}`)
+          .send(VALID_PRODUCT_DATA)
           .expect(HttpStatus.FORBIDDEN),
       ),
     );
 
-    expect(productSubscriptionRepositoryMock.delete).not.toHaveBeenCalled();
-    expect(productSingleRepositoryMock.delete).not.toHaveBeenCalled();
+    expect(productSubscriptionRepositoryMock.update).not.toHaveBeenCalled();
+    expect(productSingleRepositoryMock.update).not.toHaveBeenCalled;
   });
 
-  it('Should return 401 when user is not athorized to perfom delete operation', async () => {
+  it('Should return 401 when user is not athorized to perfom update operation', async () => {
     const notPerformerToken = await generateAuthToken(ROLES.NOTPERFORMER);
 
     await Promise.all(
       types.map((type) =>
         request(app.getHttpServer())
-          .delete(`/products/delete/${type}/${validPublicId}/`)
+          .patch(`/products/update/${type}/${validPublicId}/`)
           .set('Authorization', `Bearer ${notPerformerToken}`)
+          .send(VALID_PRODUCT_DATA)
           .expect(HttpStatus.UNAUTHORIZED),
       ),
     );
 
-    expect(productSubscriptionRepositoryMock.delete).not.toHaveBeenCalled();
-    expect(productSingleRepositoryMock.delete).not.toHaveBeenCalled();
+    expect(productSubscriptionRepositoryMock.update).not.toHaveBeenCalled();
+    expect(productSingleRepositoryMock.update).not.toHaveBeenCalled();
   });
 
   it('Should return 404 when product not found', async () => {
     productSingleRepositoryMock.findOneByPublicId.mockResolvedValue(null);
     productSubscriptionRepositoryMock.findOneByPublicId.mockResolvedValue(null);
 
-    const validToken = await generateAuthToken(ROLES.VALID);
+    const adminToken = await generateAuthToken(ROLES.VALID);
 
     await Promise.all(
       types.map((type) =>
         request(app.getHttpServer())
-          .delete(`/products/delete/${type}/${validPublicId}/`)
-          .set('Authorization', `Bearer ${validToken}`)
+          .delete(`/products/update/${type}/${validPublicId}/`)
+          .set('Authorization', `Bearer ${adminToken}`)
+          .send(VALID_PRODUCT_DATA)
           .expect(HttpStatus.NOT_FOUND),
       ),
     );
 
-    expect(
-      productSubscriptionRepositoryMock.findOneByPublicId,
-    ).toHaveBeenCalled();
-    expect(productSingleRepositoryMock.findOneByPublicId).toHaveBeenCalled();
-
-    expect(productSubscriptionRepositoryMock.delete).not.toHaveBeenCalled();
-    expect(productSingleRepositoryMock.delete).not.toHaveBeenCalled();
+    expect(productSubscriptionRepositoryMock.update).not.toHaveBeenCalled();
+    expect(productSingleRepositoryMock.update).not.toHaveBeenCalled();
   });
 
   it('Should return 400 when type is invalid', async () => {
-    const validToken = await generateAuthToken(ROLES.VALID);
+    const adminToken = await generateAuthToken(ROLES.VALID);
 
     await request(app.getHttpServer())
-      .delete(`/products/delete/invalid-type/${validPublicId}/`)
-      .set('Authorization', `Bearer ${validToken}`)
+      .patch(`/products/update/invalid-type/${validPublicId}/`)
+      .set('Authorization', `Bearer ${adminToken}`)
+      .send(VALID_PRODUCT_DATA)
       .expect(HttpStatus.BAD_REQUEST);
 
-    expect(productSubscriptionRepositoryMock.delete).not.toHaveBeenCalled();
-    expect(productSingleRepositoryMock.delete).not.toHaveBeenCalled();
+    expect(productSubscriptionRepositoryMock.update).not.toHaveBeenCalled();
+    expect(productSingleRepositoryMock.update).not.toHaveBeenCalled();
+  });
+
+  it('should validate required fields and return 400 for invalid data', async () => {
+    const adminToken = await generateAuthToken(ROLES.VALID);
+
+    await Promise.all(
+      types.map((type) =>
+        request(app.getHttpServer())
+          .patch(`/products/update/${type}/${validPublicId}/`)
+          .set('Authorization', `Bearer ${adminToken}`)
+          .send('invalid data')
+          .expect(HttpStatus.BAD_REQUEST),
+      ),
+    );
+
+    expect(productSubscriptionRepositoryMock.update).not.toHaveBeenCalled();
+    expect(productSingleRepositoryMock.update).not.toHaveBeenCalled();
   });
 
   afterAll(async () => {

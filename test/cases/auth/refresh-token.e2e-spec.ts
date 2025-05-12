@@ -1,20 +1,20 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import {
-  INestApplication,
   BadRequestException,
-  ValidationPipe,
   HttpStatus,
+  INestApplication,
+  ValidationPipe,
 } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from '../../src/app.module';
-import { PasswordDto } from 'src/modules/auth/application/dto/password.dto';
+import { AppModule } from 'src/app.module';
+import { RefreshTokenDto } from 'src/modules/auth/application/dto/refresh_token.dto';
 import { JwtService } from '@nestjs/jwt';
-import { IJwtUserPayload } from 'src/shared/interfaces/jwt_user_payload.interface';
 import { TokenEnum } from 'src/shared/enum/token.enum';
+import { IJwtUserPayload } from 'src/shared/interfaces/jwt_user_payload.interface';
 import { IAuthRepository } from 'src/modules/auth/domain/interfaces/repositories/auth.repository.interface';
 import { jwtKeysConstants } from 'src/shared/constants/jwt_keys.constants';
-import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
+import { RolesEnum } from 'src/shared/enum/roles.enum';
 
 describe('AuthController from AppModule (e2e)', () => {
   let app: INestApplication;
@@ -25,7 +25,6 @@ describe('AuthController from AppModule (e2e)', () => {
   const validToken = 'valid_token';
   const invalidToken = 'invalid_token';
   const testEmail = 'test@example.com';
-  const testPassword = '123456';
   const testUserPublicId = '9f3b779d-1ffc-4812-ab14-4e3687741538';
   const testName = 'Test User';
 
@@ -34,11 +33,15 @@ describe('AuthController from AppModule (e2e)', () => {
     role: Buffer.from(RolesEnum.USER).toString('base64'),
     sub: Buffer.from(testUserPublicId).toString('base64'),
     name: Buffer.from(testName).toString('base64'),
-    type: Buffer.from(TokenEnum.RECOVERY_PASSWORD_TOKEN).toString('base64'),
+    type: Buffer.from(TokenEnum.REFRESH_TOKEN).toString('base64'),
   };
 
-  const recoveryPasswordData: PasswordDto = {
-    password: testPassword,
+  const validRefreshTokenData: RefreshTokenDto = {
+    refresh_token: validToken,
+  };
+
+  const invalidRefreshTokenData: RefreshTokenDto = {
+    refresh_token: invalidToken,
   };
 
   beforeAll(async () => {
@@ -57,8 +60,8 @@ describe('AuthController from AppModule (e2e)', () => {
         if (data.toString() === 'encrypted_sub') {
           return testUserPublicId;
         }
-        if (data.toString() === 'recovery_password_token') {
-          return TokenEnum.RECOVERY_PASSWORD_TOKEN;
+        if (data.toString() === 'refresh_token') {
+          return TokenEnum.REFRESH_TOKEN;
         }
         return 'default_decrypted_value';
       }),
@@ -74,14 +77,15 @@ describe('AuthController from AppModule (e2e)', () => {
             throw new BadRequestException('Invalid or expired token');
           }
         }),
+      sign: jest.fn().mockImplementation(() => 'new_access_token'),
     } as any;
 
     authRepositoryMock = {
-      updateInfoByEmailAuth: jest.fn().mockResolvedValue(undefined),
       findOneByEmail: jest.fn().mockResolvedValue({
         id: 1,
         public_id: testUserPublicId,
         email: testEmail,
+        role: 'user',
       }),
     } as any;
 
@@ -111,26 +115,25 @@ describe('AuthController from AppModule (e2e)', () => {
     jest.clearAllMocks();
   });
 
-  describe('POST /auth/recovery-password', () => {
-    it('Should return password recovery success', async () => {
+  describe('POST /auth/refresh-token', () => {
+    it('Should return new authentication payload', async () => {
       const response = await request(app.getHttpServer())
-        .post(`/auth/recovery-password?token=${validToken}`)
-        .send(recoveryPasswordData)
+        .post('/auth/refresh-token/')
+        .send(validRefreshTokenData)
         .expect(HttpStatus.OK);
-      expect(response.body).toHaveProperty(
-        'message',
-        'Password recovered successfully',
-      );
+      expect(response.body).toHaveProperty('access_token');
+      expect(response.body).toHaveProperty('refresh_token');
       expect(jwtServiceMock.verify).toHaveBeenCalledWith(validToken, {
-        secret: jwtKeysConstants.secret_recovery_password_token_key,
+        secret: jwtKeysConstants.secret_refresh_token_key,
       });
-      expect(authRepositoryMock.updateInfoByEmailAuth).toHaveBeenCalled();
+      expect(jwtServiceMock.sign).toHaveBeenCalled();
+      expect(authRepositoryMock.findOneByEmail).toHaveBeenCalled();
     });
 
     it('Should return 400 when token is invalid', async () => {
       const response = await request(app.getHttpServer())
-        .post(`/auth/recovery-password?token=${invalidToken}`)
-        .send(recoveryPasswordData)
+        .post('/auth/refresh-token/')
+        .send(invalidRefreshTokenData)
         .expect(HttpStatus.BAD_REQUEST);
 
       expect(response.body).toHaveProperty('statusCode', 400);
@@ -138,22 +141,21 @@ describe('AuthController from AppModule (e2e)', () => {
         'message',
         'Invalid or expired token',
       );
-
       expect(jwtServiceMock.verify).toHaveBeenCalledWith(invalidToken, {
-        secret: jwtKeysConstants.secret_recovery_password_token_key,
+        secret: jwtKeysConstants.secret_refresh_token_key,
       });
-      expect(authRepositoryMock.updateInfoByEmailAuth).not.toHaveBeenCalled();
+      expect(jwtServiceMock.sign).not.toHaveBeenCalled();
     });
 
-    it('Should return 400 when password is missing', async () => {
+    it('Should return 400 when refresh_token is missing', async () => {
       const response = await request(app.getHttpServer())
-        .post(`/auth/recovery-password?token=${validToken}`)
+        .post('/auth/refresh-token/')
         .send({})
         .expect(HttpStatus.BAD_REQUEST);
 
       expect(response.body).toHaveProperty('statusCode', 400);
       expect(jwtServiceMock.verify).not.toHaveBeenCalled();
-      expect(authRepositoryMock.updateInfoByEmailAuth).not.toHaveBeenCalled();
+      expect(jwtServiceMock.sign).not.toHaveBeenCalled();
     });
   });
 

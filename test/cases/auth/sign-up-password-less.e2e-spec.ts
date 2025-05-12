@@ -1,19 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, HttpStatus, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from '../../src/app.module';
-import { SignUpDefaultDto } from 'src/modules/auth/application/dto/sign_up_default.dto';
+import { AppModule } from 'src/app.module';
+import { SignUpMagicLinkDto } from 'src/modules/auth/application/dto/sign_up_magic_link.dto';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { IGenerateNumberCodeUtil } from 'src/shared/utils/interfaces/generate_number_code.util.interface';
 
-describe('AuthController (e2e)', () => {
+describe('AuthController PasswordLess (e2e)', () => {
   let app: INestApplication;
   let generateNumberCodeUtilMock: jest.Mocked<IGenerateNumberCodeUtil>;
 
-  const VALID_USER_DATA: SignUpDefaultDto = {
+  const VALID_USER_DATA: SignUpMagicLinkDto = {
     name: 'Test User',
-    email: 'signupdefault@example.com',
-    password: 'Password123!',
+    email: 'signuppassless@example.com',
     newsletter_subscription: true,
     terms_and_conditions_accepted: true,
   };
@@ -45,10 +44,10 @@ describe('AuthController (e2e)', () => {
     jest.clearAllMocks();
   });
 
-  describe('POST /auth/sign-up-default/', () => {
-    it('should create a new user and return 201 with user data', async () => {
+  describe('POST /auth/sign-up-password-less/', () => {
+    it('should create a new user with magic link and return 201', async () => {
       const response = await request(app.getHttpServer())
-        .post('/auth/sign-up-default/')
+        .post('/auth/sign-up-password-less/')
         .send(VALID_USER_DATA)
         .expect(HttpStatus.CREATED);
 
@@ -73,7 +72,7 @@ describe('AuthController (e2e)', () => {
 
     it('should return 409 when email already exists', async () => {
       const response = await request(app.getHttpServer())
-        .post('/auth/sign-up-default/')
+        .post('/auth/sign-up-password-less/')
         .send(VALID_USER_DATA)
         .expect(HttpStatus.CONFLICT);
 
@@ -87,20 +86,13 @@ describe('AuthController (e2e)', () => {
     it('should validate required fields and return 400 for invalid data', async () => {
       const invalidData = {
         email: 'invalid-email',
-        password: '123',
         newsletter_subscription: true,
-        terms_and_conditions_accepted: false,
       };
 
-      const response = await request(app.getHttpServer())
-        .post('/auth/sign-up-default/')
+      await request(app.getHttpServer())
+        .post('/auth/sign-up-password-less/')
         .send(invalidData)
         .expect(HttpStatus.BAD_REQUEST);
-
-      expect(response.body).toHaveProperty(
-        'statusCode',
-        HttpStatus.BAD_REQUEST,
-      );
     });
   });
 

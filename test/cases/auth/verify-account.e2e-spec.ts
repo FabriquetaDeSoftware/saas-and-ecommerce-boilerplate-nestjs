@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, HttpStatus } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from '../../src/app.module';
+import { AppModule } from 'src/app.module';
 import { VerificationCodeDto } from 'src/modules/auth/application/dto/verification_code.dto';
 import { IAuthRepository } from 'src/modules/auth/domain/interfaces/repositories/auth.repository.interface';
 import { RolesEnum } from 'src/shared/enum/roles.enum';

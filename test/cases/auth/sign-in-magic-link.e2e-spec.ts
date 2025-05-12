@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from '../../src/app.module';
+import { AppModule } from 'src/app.module';
 import { IAuthRepository } from 'src/modules/auth/domain/interfaces/repositories/auth.repository.interface';
-import { User } from 'src/shared/entities/user.entity';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { EmailDto } from 'src/modules/auth/application/dto/email.dto';
+import { User } from 'src/shared/entities/user.entity';
 import { ISendEmailQueueJob } from 'src/shared/modules/email/domain/interfaces/jobs/send_email_queue.job.interface';
 
 describe('AuthController from AppModule (e2e)', () => {
@@ -17,9 +17,9 @@ describe('AuthController from AppModule (e2e)', () => {
     id: 1,
     public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
     role: RolesEnum.USER,
-    name: 'Test User',
     email: 'test@gmail.com',
-    password: '123456',
+    name: 'Test User',
+    password: 'hashedText',
     is_verified_account: true,
     newsletter_subscription: true,
     terms_and_conditions_accepted: true,
@@ -27,7 +27,7 @@ describe('AuthController from AppModule (e2e)', () => {
     updated_at: new Date(),
   };
 
-  const forgotPassData: EmailDto = {
+  const validEmailData: EmailDto = {
     email: 'test@gmail.com',
   };
 
@@ -71,37 +71,67 @@ describe('AuthController from AppModule (e2e)', () => {
     authRepositoryMock.findOneByEmail.mockResolvedValue(mockUser);
   });
 
-  describe('POST /auth/forgot-password', () => {
-    it('Should return email sent to user', async () => {
+  describe('POST /auth/sign-in-magic-link', () => {
+    it('Should return success message when email is valid', async () => {
       const response = await request(app.getHttpServer())
-        .post('/auth/forgot-password/')
-        .send(forgotPassData)
+        .post('/auth/sign-in-magic-link/')
+        .send(validEmailData)
         .expect(HttpStatus.OK);
 
       expect(response.body).toHaveProperty(
         'message',
         'Email sent successfully',
       );
-      expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledTimes(1);
       expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
-        forgotPassData.email,
+        validEmailData.email,
         {},
       );
-      expect(sendEmailQueueJobMock.execute).toHaveBeenCalledTimes(1);
+      expect(sendEmailQueueJobMock.execute).toHaveBeenCalled();
     });
 
-    it('Should return 404 when email is invalid', async () => {
+    it('Should return 401 when email is invalid', async () => {
       authRepositoryMock.findOneByEmail.mockResolvedValueOnce(null);
 
-      const response = await request(app.getHttpServer())
-        .post('/auth/forgot-password/')
-        .send(forgotPassData)
-        .expect(HttpStatus.NOT_FOUND);
+      const invalidEmailData: EmailDto = {
+        email: 'wrong@gmail.com',
+      };
 
-      expect(response.body).toHaveProperty('message', 'User not found');
-      expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledTimes(1);
+      const response = await request(app.getHttpServer())
+        .post('/auth/sign-in-magic-link/')
+        .send(invalidEmailData)
+        .expect(HttpStatus.UNAUTHORIZED);
+
+      expect(response.body).toHaveProperty('statusCode', 401);
+      expect(response.body).toHaveProperty(
+        'message',
+        'Invalid credentials or account not verified',
+      );
       expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
-        forgotPassData.email,
+        invalidEmailData.email,
+        {},
+      );
+      expect(sendEmailQueueJobMock.execute).not.toHaveBeenCalled();
+    });
+
+    it('Should return 401 when account is not verified', async () => {
+      const unverifiedAuth = {
+        ...mockUser,
+        is_verified_account: false,
+      };
+      authRepositoryMock.findOneByEmail.mockResolvedValueOnce(unverifiedAuth);
+
+      const response = await request(app.getHttpServer())
+        .post('/auth/sign-in-magic-link/')
+        .send(validEmailData)
+        .expect(HttpStatus.UNAUTHORIZED);
+
+      expect(response.body).toHaveProperty('statusCode', 401);
+      expect(response.body).toHaveProperty(
+        'message',
+        'Invalid credentials or account not verified',
+      );
+      expect(authRepositoryMock.findOneByEmail).toHaveBeenCalledWith(
+        validEmailData.email,
         {},
       );
       expect(sendEmailQueueJobMock.execute).not.toHaveBeenCalled();
@@ -109,12 +139,13 @@ describe('AuthController from AppModule (e2e)', () => {
 
     it('Should return 400 when email is missing', async () => {
       const response = await request(app.getHttpServer())
-        .post('/auth/forgot-password/')
+        .post('/auth/sign-in-magic-link/')
         .send({})
         .expect(HttpStatus.BAD_REQUEST);
 
       expect(response.body).toHaveProperty('statusCode', 400);
       expect(authRepositoryMock.findOneByEmail).not.toHaveBeenCalled();
+      expect(sendEmailQueueJobMock.execute).not.toHaveBeenCalled();
     });
   });
 
