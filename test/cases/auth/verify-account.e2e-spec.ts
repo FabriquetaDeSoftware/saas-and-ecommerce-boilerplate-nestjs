@@ -9,6 +9,10 @@ describe('AuthController Verification (e2e)', () => {
   let app: INestApplication;
 
   const VALID_VERIFICATION_DATA: VerificationCodeDto[] = [];
+  const INVALID_VERIFICATION_DATA: VerificationCodeDto = {
+    email: 'codeexpired@exemple.com',
+    code: 123456,
+  };
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -52,30 +56,22 @@ describe('AuthController Verification (e2e)', () => {
       });
     });
 
-    // it('should return 400 when code is expired', async () => {
-    //   const expiredDate = new Date();
-    //   expiredDate.setDate(expiredDate.getDate() - 1);
+    it('should return 400 when code is expired', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/auth/verify-account/')
+        .send(INVALID_VERIFICATION_DATA)
+        .expect(HttpStatus.BAD_REQUEST);
 
-    //   const responses = await Promise.all(
-    //     VALID_VERIFICATION_DATA.map((data) => {
-    //       return request(app.getHttpServer())
-    //         .post('/auth/verify-account/')
-    //         .send(data)
-    //         .expect(HttpStatus.BAD_REQUEST);
-    //     }),
-    //   );
+      expect(response.body).toHaveProperty(
+        'statusCode',
+        HttpStatus.BAD_REQUEST,
+      );
 
-    //   responses.map((response) => {
-    //     expect(response.body).toHaveProperty(
-    //       'statusCode',
-    //       HttpStatus.BAD_REQUEST,
-    //     );
-    //     expect(response.body).toHaveProperty(
-    //       'message',
-    //       'Invalid or expired code',
-    //     );
-    //   });
-    // });
+      expect(response.body).toHaveProperty(
+        'message',
+        'Invalid or expired code',
+      );
+    });
 
     it('should verify user account when code is valid', async () => {
       const DATA: VerificationCodeDto[] = [
