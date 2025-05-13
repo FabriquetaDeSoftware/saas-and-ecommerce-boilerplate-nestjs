@@ -35,6 +35,9 @@ describe('AuthController from AppModule (e2e)', () => {
 
       expect(response.body).toHaveProperty('access_token');
       expect(response.body).toHaveProperty('refresh_token');
+
+      testData.tokensReturns.access_token = response.body.access_token;
+      testData.tokensReturns.refresh_token = response.body.refresh_token;
     });
 
     it('Should return 401 when email is invalid', async () => {

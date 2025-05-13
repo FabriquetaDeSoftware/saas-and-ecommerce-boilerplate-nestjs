@@ -4,7 +4,7 @@ describe('🧪 E2E Test - Execution Order', () => {
   require('./cases/auth/verify-account.e2e-spec');
   require('./cases/auth/sign-in-default.e2e-spec');
   require('./cases/auth/sign-in-magic-link.e2e-spec');
-  // require('./cases/auth/refresh-token.e2e-spec');
+  require('./cases/auth/refresh-token.e2e-spec');
   // require('./cases/auth/forgot-password.e2e-spec');
   // require('./cases/auth/recovery-password.e2e-spec');
 
