@@ -14,20 +14,20 @@ export class VerificationCodesRepository
   private readonly _model = TablesEnum.VERIFICATION_CODE;
 
   public async findVerificationCodeByAuthorId(
-    auth_id: number,
+    user_id: number,
   ): Promise<Partial<VerificationCodes>> {
     const result = await this._databaseAdapter.findOne<VerificationCodes>(
       this._model,
-      { auth_id },
+      { user_id },
     );
 
     return result;
   }
 
   public async deleteVerificationCodeByAuthorId(
-    auth_id: number,
+    user_id: number,
   ): Promise<void> {
-    await this._databaseAdapter.delete(this._model, { auth_id });
+    await this._databaseAdapter.delete(this._model, { user_id });
 
     return;
   }
