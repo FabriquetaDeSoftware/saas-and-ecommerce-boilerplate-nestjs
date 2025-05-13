@@ -2,12 +2,11 @@ import { VerificationCodes } from 'src/modules/auth/domain/entities/verification
 import { Products } from 'src/modules/products/domain/entities/products.entity';
 import { User } from 'src/shared/entities/user.entity';
 
-const user = new User();
-const product = new Products();
-const verificationCode = new VerificationCodes();
-
 export const testData = {
-  user,
-  product,
-  verificationCode,
+  userAdmin: new User(),
+  userSignupDefault: new User(),
+  userSignupPasswordLess: new User(),
+  productSinglePurchase: new Products(),
+  productSubscription: new Products(),
+  verificationCode: new VerificationCodes(),
 };

@@ -5,6 +5,7 @@ import { AppModule } from 'src/app.module';
 import { SignUpDefaultDto } from 'src/modules/auth/application/dto/sign_up_default.dto';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { IGenerateNumberCodeUtil } from 'src/shared/utils/interfaces/generate_number_code.util.interface';
+import { testData } from '../../mocks/data/test.data';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
@@ -18,9 +19,11 @@ describe('AuthController (e2e)', () => {
     terms_and_conditions_accepted: true,
   };
 
+  const VALID_NUMBER_CODE: string = '123456';
+
   beforeAll(async () => {
     generateNumberCodeUtilMock = {
-      execute: jest.fn().mockResolvedValue('123456'),
+      execute: jest.fn().mockResolvedValue(VALID_NUMBER_CODE),
     };
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -69,6 +72,11 @@ describe('AuthController (e2e)', () => {
       expect(response.body).toHaveProperty('updated_at');
       expect(response.body).not.toHaveProperty('id');
       expect(response.body).not.toHaveProperty('password');
+
+      testData.userSignupDefault.email = VALID_USER_DATA.email;
+      testData.userSignupDefault.password = VALID_USER_DATA.password;
+      testData.verificationCode.code = VALID_NUMBER_CODE;
+      testData.verificationCode.expires_at = new Date();
     });
 
     it('should return 409 when email already exists', async () => {
