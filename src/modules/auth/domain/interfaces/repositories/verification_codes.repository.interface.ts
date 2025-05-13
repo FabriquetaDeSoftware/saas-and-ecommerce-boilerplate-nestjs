@@ -5,5 +5,5 @@ export interface IVerificationCodesRepository {
     user_id: number,
   ): Promise<Partial<VerificationCodes>>;
 
-  deleteVerificationCodeByAuthorId(auth_id: number): Promise<void>;
+  deleteVerificationCodeByAuthorId(user_id: number): Promise<void>;
 }
