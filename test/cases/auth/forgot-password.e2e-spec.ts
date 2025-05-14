@@ -4,9 +4,11 @@ import * as request from 'supertest';
 import { AppModule } from 'src/app.module';
 import { EmailDto } from 'src/modules/auth/application/dto/email.dto';
 import { testData } from '../../mocks/data/test.data';
+import { IGenerateTokenHelper } from 'src/modules/auth/domain/interfaces/helpers/generate_token.helper.interface';
 
 describe('AuthController from AppModule (e2e)', () => {
   let app: INestApplication;
+  let generateTokenSpy: jest.SpyInstance;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -21,6 +23,12 @@ describe('AuthController from AppModule (e2e)', () => {
         transform: true,
       }),
     );
+
+    const generateTokenHelper = moduleFixture.get<IGenerateTokenHelper>(
+      'IGenerateTokenHelper',
+    );
+    generateTokenSpy = jest.spyOn(generateTokenHelper, 'execute');
+
     await app.init();
   });
 
@@ -43,6 +51,10 @@ describe('AuthController from AppModule (e2e)', () => {
         'message',
         'Email sent successfully',
       );
+
+      const generatedToken = await generateTokenSpy.mock.results[0].value;
+
+      testData.tokensReturns.token = generatedToken;
     });
 
     it('Should return 404 when email is invalid', async () => {

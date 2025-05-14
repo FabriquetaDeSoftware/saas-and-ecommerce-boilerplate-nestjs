@@ -14,6 +14,9 @@ describe('AuthController from AppModule (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+
+    app.useLogger(false);
+
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
@@ -46,7 +49,8 @@ describe('AuthController from AppModule (e2e)', () => {
         But it should be adjusted to return 401,
         with the "message" object with the text "Invalid or expired token".`, async () => {
       const data: RefreshTokenDto = {
-        refresh_token: 'invalid_token',
+        refresh_token:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30',
       };
 
       const response = await request(app.getHttpServer())
