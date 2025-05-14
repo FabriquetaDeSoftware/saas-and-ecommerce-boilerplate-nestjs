@@ -4,8 +4,6 @@ import { User } from 'src/shared/entities/user.entity';
 import { ITokensReturnsHelper } from 'src/modules/auth/domain/interfaces/helpers/tokens_returns.helper.interface';
 
 export const testData = {
-  userAdmin: new User(),
-
   userSignupDefault: new User(),
   userSignupDefaultVerificationCode: new VerificationCodes(),
 
