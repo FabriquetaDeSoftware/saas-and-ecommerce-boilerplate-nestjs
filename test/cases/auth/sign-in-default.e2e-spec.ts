@@ -23,21 +23,40 @@ describe('AuthController from AppModule (e2e)', () => {
 
   describe('POST /auth/sign-in-default', () => {
     it('Should return authenticated user', async () => {
-      const data: SignInDefaultDto = {
+      const dataUser: SignInDefaultDto = {
         email: testData.userSignupDefault.email,
         password: testData.userSignupDefault.password,
       };
 
-      const response = await request(app.getHttpServer())
+      const responseUser = await request(app.getHttpServer())
         .post('/auth/sign-in-default/')
-        .send(data)
+        .send(dataUser)
         .expect(HttpStatus.OK);
 
-      expect(response.body).toHaveProperty('access_token');
-      expect(response.body).toHaveProperty('refresh_token');
+      expect(responseUser.body).toHaveProperty('access_token');
+      expect(responseUser.body).toHaveProperty('refresh_token');
 
-      testData.tokensReturns.access_token = response.body.access_token;
-      testData.tokensReturns.refresh_token = response.body.refresh_token;
+      testData.tokensReturnsUser.access_token = responseUser.body.access_token;
+      testData.tokensReturnsUser.refresh_token =
+        responseUser.body.refresh_token;
+
+      const dataAdmin: SignInDefaultDto = {
+        email: 'testadmin@exemple.com',
+        password: 'Password123!',
+      };
+
+      const responseAdmin = await request(app.getHttpServer())
+        .post('/auth/sign-in-default/')
+        .send(dataAdmin)
+        .expect(HttpStatus.OK);
+
+      expect(responseAdmin.body).toHaveProperty('access_token');
+      expect(responseAdmin.body).toHaveProperty('refresh_token');
+
+      testData.tokensReturnsAdmin.access_token =
+        responseAdmin.body.access_token;
+      testData.tokensReturnsAdmin.refresh_token =
+        responseAdmin.body.refresh_token;
     });
 
     it('Should return 401 when email is invalid', async () => {

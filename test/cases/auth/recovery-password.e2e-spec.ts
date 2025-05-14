@@ -38,7 +38,7 @@ describe('AuthController from AppModule (e2e)', () => {
 
   describe('POST /auth/recovery-password', () => {
     it('Should return password recovery success', async () => {
-      const validToken = testData.tokensReturns.token;
+      const validToken = testData.tokensReturnsUser.token;
       const recoveryPasswordData: PasswordDto = {
         password: 'Password123!',
       };
@@ -72,7 +72,7 @@ describe('AuthController from AppModule (e2e)', () => {
     });
 
     it('Should return 400 when password is missing', async () => {
-      const validToken = testData.tokensReturns.token;
+      const validToken = testData.tokensReturnsUser.token;
 
       const response = await request(app.getHttpServer())
         .post(`/auth/recovery-password?token=${validToken}`)

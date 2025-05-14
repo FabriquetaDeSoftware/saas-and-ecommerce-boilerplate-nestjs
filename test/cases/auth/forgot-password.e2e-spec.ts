@@ -54,7 +54,7 @@ describe('AuthController from AppModule (e2e)', () => {
 
       const generatedToken = await generateTokenSpy.mock.results[0].value;
 
-      testData.tokensReturns.token = generatedToken.token;
+      testData.tokensReturnsUser.token = generatedToken.token;
     });
 
     it('Should return 404 when email is invalid', async () => {

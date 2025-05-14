@@ -34,7 +34,7 @@ describe('AuthController from AppModule (e2e)', () => {
   describe('POST /auth/refresh-token', () => {
     it('Should return new authentication payload', async () => {
       const data: RefreshTokenDto = {
-        refresh_token: testData.tokensReturns.refresh_token,
+        refresh_token: testData.tokensReturnsUser.refresh_token,
       };
 
       const response = await request(app.getHttpServer())

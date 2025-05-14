@@ -15,5 +15,6 @@ export const testData = {
   productSinglePurchase: new Products(),
   productSubscription: new Products(),
 
-  tokensReturns: {} as ITokensReturnsHelper,
+  tokensReturnsUser: {} as ITokensReturnsHelper,
+  tokensReturnsAdmin: {} as ITokensReturnsHelper,
 };
