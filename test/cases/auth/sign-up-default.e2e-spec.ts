@@ -9,7 +9,7 @@ import { testData } from '../../mocks/data/test.data';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
-  let generateNumberCodeUtilMock: jest.Mocked<IGenerateNumberCodeUtil>;
+  let generateCodeSpy: jest.SpyInstance;
 
   const VALID_USER_DATA: SignUpDefaultDto = {
     name: 'Test User',
@@ -19,19 +19,10 @@ describe('AuthController (e2e)', () => {
     terms_and_conditions_accepted: true,
   };
 
-  const VALID_NUMBER_CODE: string = '123456';
-
   beforeAll(async () => {
-    generateNumberCodeUtilMock = {
-      execute: jest.fn().mockResolvedValue(VALID_NUMBER_CODE),
-    };
-
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    })
-      .overrideProvider('IGenerateNumberCodeUtil')
-      .useValue(generateNumberCodeUtilMock)
-      .compile();
+    }).compile();
 
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(
@@ -41,6 +32,12 @@ describe('AuthController (e2e)', () => {
         transform: true,
       }),
     );
+
+    const generateNumberCodeUtil = moduleFixture.get<IGenerateNumberCodeUtil>(
+      'IGenerateNumberCodeUtil',
+    );
+    generateCodeSpy = jest.spyOn(generateNumberCodeUtil, 'execute');
+
     await app.init();
   });
 
@@ -54,6 +51,8 @@ describe('AuthController (e2e)', () => {
         .post('/auth/sign-up-default/')
         .send(VALID_USER_DATA)
         .expect(HttpStatus.CREATED);
+
+      const generatedCode = await generateCodeSpy.mock.results[0].value;
 
       expect(response.body).toHaveProperty('public_id');
       expect(response.body).toHaveProperty('name', VALID_USER_DATA.name);
@@ -75,8 +74,8 @@ describe('AuthController (e2e)', () => {
 
       testData.userSignupDefault.email = VALID_USER_DATA.email;
       testData.userSignupDefault.password = VALID_USER_DATA.password;
-      testData.verificationCode.code = VALID_NUMBER_CODE;
-      testData.verificationCode.expires_at = new Date();
+      testData.userSignupDefaultVerificationCode.code = generatedCode;
+      testData.userSignupDefaultVerificationCode.expires_at = new Date();
     });
 
     it('should return 409 when email already exists', async () => {

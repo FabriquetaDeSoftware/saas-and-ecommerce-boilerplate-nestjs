@@ -5,10 +5,15 @@ import { ITokensReturnsHelper } from 'src/modules/auth/domain/interfaces/helpers
 
 export const testData = {
   userAdmin: new User(),
+
   userSignupDefault: new User(),
+  userSignupDefaultVerificationCode: new VerificationCodes(),
+
   userSignupPasswordLess: new User(),
+  userSignupPasswordLessVerificationCode: new VerificationCodes(),
+
   productSinglePurchase: new Products(),
   productSubscription: new Products(),
-  verificationCode: new VerificationCodes(),
+
   tokensReturns: {} as ITokensReturnsHelper,
 };

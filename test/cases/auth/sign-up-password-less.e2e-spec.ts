@@ -9,7 +9,7 @@ import { testData } from '../../mocks/data/test.data';
 
 describe('AuthController PasswordLess (e2e)', () => {
   let app: INestApplication;
-  let generateNumberCodeUtilMock: jest.Mocked<IGenerateNumberCodeUtil>;
+  let generateCodeSpy: jest.SpyInstance;
 
   const VALID_USER_DATA: SignUpMagicLinkDto = {
     name: 'Test User',
@@ -18,19 +18,10 @@ describe('AuthController PasswordLess (e2e)', () => {
     terms_and_conditions_accepted: true,
   };
 
-  const VALID_NUMBER_CODE: string = '123456';
-
   beforeAll(async () => {
-    generateNumberCodeUtilMock = {
-      execute: jest.fn().mockResolvedValue(VALID_NUMBER_CODE),
-    };
-
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    })
-      .overrideProvider('IGenerateNumberCodeUtil')
-      .useValue(generateNumberCodeUtilMock)
-      .compile();
+    }).compile();
 
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(
@@ -40,6 +31,12 @@ describe('AuthController PasswordLess (e2e)', () => {
         transform: true,
       }),
     );
+
+    const generateNumberCodeUtil = moduleFixture.get<IGenerateNumberCodeUtil>(
+      'IGenerateNumberCodeUtil',
+    );
+    generateCodeSpy = jest.spyOn(generateNumberCodeUtil, 'execute');
+
     await app.init();
   });
 
@@ -53,6 +50,8 @@ describe('AuthController PasswordLess (e2e)', () => {
         .post('/auth/sign-up-password-less/')
         .send(VALID_USER_DATA)
         .expect(HttpStatus.CREATED);
+
+      const generatedCode = await generateCodeSpy.mock.results[0].value;
 
       expect(response.body).toHaveProperty('public_id');
       expect(response.body).toHaveProperty('name', VALID_USER_DATA.name);
@@ -73,8 +72,8 @@ describe('AuthController PasswordLess (e2e)', () => {
       expect(response.body).not.toHaveProperty('password');
 
       testData.userSignupPasswordLess.email = VALID_USER_DATA.email;
-      testData.verificationCode.code = VALID_NUMBER_CODE;
-      testData.verificationCode.expires_at = new Date();
+      testData.userSignupPasswordLessVerificationCode.code = generatedCode;
+      testData.userSignupPasswordLessVerificationCode.expires_at = new Date();
     });
 
     it('should return 409 when email already exists', async () => {
@@ -82,7 +81,6 @@ describe('AuthController PasswordLess (e2e)', () => {
         .post('/auth/sign-up-password-less/')
         .send(VALID_USER_DATA)
         .expect(HttpStatus.CONFLICT);
-
       expect(response.body).toHaveProperty('statusCode', HttpStatus.CONFLICT);
       expect(response.body).toHaveProperty(
         'message',
@@ -95,7 +93,6 @@ describe('AuthController PasswordLess (e2e)', () => {
         email: 'invalid-email',
         newsletter_subscription: true,
       };
-
       await request(app.getHttpServer())
         .post('/auth/sign-up-password-less/')
         .send(invalidData)

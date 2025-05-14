@@ -77,11 +77,11 @@ describe('AuthController Verification (e2e)', () => {
       const DATA: VerificationCodeDto[] = [
         {
           email: testData.userSignupDefault.email,
-          code: parseInt(testData.verificationCode.code),
+          code: parseInt(testData.userSignupDefaultVerificationCode.code),
         },
         {
           email: testData.userSignupPasswordLess.email,
-          code: parseInt(testData.verificationCode.code),
+          code: parseInt(testData.userSignupPasswordLessVerificationCode.code),
         },
       ];
 
@@ -103,28 +103,18 @@ describe('AuthController Verification (e2e)', () => {
     });
 
     it('should return 404 when email is not found', async () => {
-      const invalidEmailData = VALID_VERIFICATION_DATA.map((data) => ({
-        ...data,
-        code: testData.verificationCode.code,
+      const data: VerificationCodeDto = {
         email: 'wrong@gmail.com',
-      }));
+        code: parseInt(testData.userSignupDefaultVerificationCode.code),
+      };
 
-      const responses = await Promise.all(
-        invalidEmailData.map((data) => {
-          return request(app.getHttpServer())
-            .post('/auth/verify-account/')
-            .send(data)
-            .expect(HttpStatus.NOT_FOUND);
-        }),
-      );
+      const response = await request(app.getHttpServer())
+        .post('/auth/verify-account/')
+        .send(data)
+        .expect(HttpStatus.NOT_FOUND);
 
-      responses.map((response) => {
-        expect(response.body).toHaveProperty(
-          'statusCode',
-          HttpStatus.NOT_FOUND,
-        );
-        expect(response.body).toHaveProperty('message', 'User email not found');
-      });
+      expect(response.body).toHaveProperty('statusCode', HttpStatus.NOT_FOUND);
+      expect(response.body).toHaveProperty('message', 'User email not found');
     });
   });
 
