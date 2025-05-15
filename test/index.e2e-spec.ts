@@ -14,7 +14,7 @@ describe('🧪 E2E Test - Execution Order', () => {
 
   require('./cases/products/create.e2e-spec');
   require('./cases/products/update.e2e-spec');
-  // require('./cases/products/list-many.e2e-spec');
-  // require('./cases/products/show-one.e2e-spec');
-  // require('./cases/products/delete.e2e-spec');
+  require('./cases/products/list-many.e2e-spec');
+  require('./cases/products/show-one.e2e-spec');
+  require('./cases/products/delete.e2e-spec');
 });
