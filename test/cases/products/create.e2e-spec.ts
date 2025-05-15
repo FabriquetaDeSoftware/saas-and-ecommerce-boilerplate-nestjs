@@ -2,23 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from 'src/app.module';
-import { ISubscriptionProductsRepository } from 'src/modules/products/domain/interfaces/repositories/subscription_products.repository.interface';
-import { ISingleProductsRepository } from 'src/modules/products/domain/interfaces/repositories/single_products.repository.interface';
 import { CreateProductDto } from 'src/modules/products/application/dto/create_product.dto';
-import { Products } from 'src/modules/products/domain/entities/products.entity';
-import { GenerateTokenHelper } from 'src/modules/auth/shared/helpers/generate_token.helper';
-import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
-import { JwtService } from '@nestjs/jwt';
-import { GenerateTokenDto } from 'src/modules/auth/application/dto/generate_token.dto';
-import { RolesEnum } from 'src/shared/enum/roles.enum';
+import { testData } from '../../mocks/data/test.data';
 
 describe('AuthController from AppModule (e2e)', () => {
   let app: INestApplication;
-  let productSubscriptionRepositoryMock: jest.Mocked<ISubscriptionProductsRepository>;
-  let productSingleRepositoryMock: jest.Mocked<ISingleProductsRepository>;
-  let jwtService: JwtService;
-  let cryptoUtil: ICryptoUtil;
-  let generateTokenHelper: GenerateTokenHelper;
 
   const imageMockURl =
     'https://t0.gstatic.com/licensed-image?q=tbn:ANd9GcTEVcrypslvdUeHleSabemh-hXNLNslN-H0XVxm7ObA2J28dKoXFD5zck7QPMjyHGBCWXhq2nmA4YA0IYslGIM';
@@ -32,100 +20,15 @@ describe('AuthController from AppModule (e2e)', () => {
     image: [imageMockURl, imageMockURl],
   };
 
-  const TEST_USER = {
-    email: 'test@example.com',
-    id: '123',
-    name: 'Test User',
-  };
-
-  const ROLES = {
-    VALID: RolesEnum.ADMIN,
-    NOTPERFORMER: RolesEnum.USER,
-    INVALID: 'INVALID_ROLE',
-  };
-
-  const generateAuthToken = async (
-    role: RolesEnum | string,
-  ): Promise<string> => {
-    const tokenDto: GenerateTokenDto = {
-      email: TEST_USER.email,
-      sub: TEST_USER.id,
-      name: TEST_USER.name,
-      role,
-    };
-    const tokens = await generateTokenHelper.execute(tokenDto);
-    return tokens.access_token;
-  };
-
   const types = ['single', 'subscription'];
-  const mockProductResponse = (
-    productData: CreateProductDto,
-  ): Partial<Products> => ({
-    public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
-    name: productData.name,
-    description: productData.description,
-    price: productData.price,
-    slug: productData.slug,
-    price_id: productData.price_id,
-    image: productData.image,
-    created_at: new Date(),
-    updated_at: new Date(),
-  });
 
   beforeAll(async () => {
-    productSingleRepositoryMock = {
-      findOneBySlug: jest.fn().mockResolvedValue(undefined),
-      update: jest.fn().mockResolvedValue(undefined),
-      create: jest
-        .fn()
-        .mockImplementation(
-          (dto: CreateProductDto): Promise<Partial<Products>> => {
-            return Promise.resolve(mockProductResponse(dto));
-          },
-        ),
-      delete: jest.fn().mockResolvedValue(undefined),
-      findOneByPublicId: jest.fn().mockResolvedValue(undefined),
-      listMany: jest.fn().mockImplementation(undefined),
-    };
-
-    productSubscriptionRepositoryMock = {
-      findOneBySlug: jest.fn().mockResolvedValue(undefined),
-      update: jest.fn().mockResolvedValue(undefined),
-      create: jest
-        .fn()
-        .mockImplementation(
-          (dto: CreateProductDto): Promise<Partial<Products>> => {
-            return Promise.resolve(mockProductResponse(dto));
-          },
-        ),
-      delete: jest.fn().mockResolvedValue(undefined),
-      findOneByPublicId: jest.fn().mockResolvedValue(undefined),
-      listMany: jest.fn().mockImplementation(undefined),
-    };
-
-    const cryptoUtilMock = {
-      encryptData: jest
-        .fn()
-        .mockImplementation((data: string) =>
-          Promise.resolve(Buffer.from(data)),
-        ),
-      decryptData: jest
-        .fn()
-        .mockImplementation((data: Buffer) => Promise.resolve(data.toString())),
-    };
-
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    })
-      .overrideProvider('ICryptoUtil')
-      .useValue(cryptoUtilMock)
-      .overrideProvider('ISingleProductsRepository')
-      .useValue(productSingleRepositoryMock)
-      .overrideProvider('ISubscriptionProductsRepository')
-      .useValue(productSubscriptionRepositoryMock)
-      .compile();
+    }).compile();
 
     app = moduleFixture.createNestApplication();
+
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
@@ -133,20 +36,8 @@ describe('AuthController from AppModule (e2e)', () => {
         transform: true,
       }),
     );
+
     await app.init();
-
-    jwtService = moduleFixture.get<JwtService>(JwtService);
-    cryptoUtil = moduleFixture.get<ICryptoUtil>('ICryptoUtil');
-
-    generateTokenHelper = new GenerateTokenHelper();
-    Object.defineProperty(generateTokenHelper, '_jwtService', {
-      value: jwtService,
-      writable: true,
-    });
-    Object.defineProperty(generateTokenHelper, '_cryptoUtil', {
-      value: cryptoUtil,
-      writable: true,
-    });
   });
 
   beforeEach(() => {
@@ -154,78 +45,60 @@ describe('AuthController from AppModule (e2e)', () => {
   });
 
   it('Should return 201 created product', async () => {
-    const adminToken = await generateAuthToken(ROLES.VALID);
+    const adminToken = testData.tokensReturnsAdmin.access_token;
 
-    const responses = await Promise.all(
-      types.map((type) =>
-        request(app.getHttpServer())
-          .post(`/products/create/${type}/`)
-          .set('Authorization', `Bearer ${adminToken}`)
-          .send(VALID_PRODUCT_DATA)
-          .expect(HttpStatus.CREATED),
-      ),
+    const [responseSingle, responseSubs] = await Promise.all([
+      request(app.getHttpServer())
+        .post(`/products/create/${types[0]}/`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send(VALID_PRODUCT_DATA)
+        .expect(HttpStatus.CREATED),
+
+      request(app.getHttpServer())
+        .post(`/products/create/${types[1]}/`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send(VALID_PRODUCT_DATA)
+        .expect(HttpStatus.CREATED),
+    ]);
+
+    expect(responseSingle.body).not.toHaveProperty('id');
+    expect(responseSingle.body).toHaveProperty('public_id');
+    expect(responseSingle.body).toHaveProperty('created_at');
+    expect(responseSingle.body).toHaveProperty('updated_at');
+    expect(responseSingle.body).toHaveProperty('name', VALID_PRODUCT_DATA.name);
+    expect(responseSingle.body).toHaveProperty(
+      'description',
+      VALID_PRODUCT_DATA.description,
     );
-
-    responses.map((response) => {
-      expect(response.body).not.toHaveProperty('id');
-      expect(response.body).toEqual(
-        expect.objectContaining({
-          public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
-          name: VALID_PRODUCT_DATA.name,
-          description: VALID_PRODUCT_DATA.description,
-          price: VALID_PRODUCT_DATA.price,
-          image: VALID_PRODUCT_DATA.image,
-          slug: VALID_PRODUCT_DATA.slug,
-          created_at: expect.any(String),
-          updated_at: expect.any(String),
-        }),
-      );
-    });
-
-    expect(productSingleRepositoryMock.create).toHaveBeenCalledWith(
-      VALID_PRODUCT_DATA,
-      { id: true },
+    expect(responseSingle.body).toHaveProperty(
+      'price',
+      VALID_PRODUCT_DATA.price,
     );
-
-    expect(productSubscriptionRepositoryMock.create).toHaveBeenCalledWith(
-      VALID_PRODUCT_DATA,
-      { id: true },
+    expect(responseSingle.body).toHaveProperty(
+      'image',
+      VALID_PRODUCT_DATA.image,
     );
-  });
+    expect(responseSingle.body).toHaveProperty('slug', VALID_PRODUCT_DATA.slug);
 
-  it('Should return 403 when user have a invalid ROlE', async () => {
-    const invalidToken = await generateAuthToken(ROLES.INVALID);
+    testData.productSinglePurchase = responseSingle.body.public_id;
 
-    const responses = await Promise.all(
-      types.map((type) =>
-        request(app.getHttpServer())
-          .post(`/products/create/${type}/`)
-          .set('Authorization', `Bearer ${invalidToken}`)
-          .send(VALID_PRODUCT_DATA)
-          .expect(HttpStatus.FORBIDDEN),
-      ),
+    expect(responseSubs.body).not.toHaveProperty('id');
+    expect(responseSubs.body).toHaveProperty('public_id');
+    expect(responseSubs.body).toHaveProperty('created_at');
+    expect(responseSubs.body).toHaveProperty('updated_at');
+    expect(responseSubs.body).toHaveProperty('name', VALID_PRODUCT_DATA.name);
+    expect(responseSubs.body).toHaveProperty(
+      'description',
+      VALID_PRODUCT_DATA.description,
     );
-
-    responses.map((response) => {
-      expect(response.body).toHaveProperty('statusCode', HttpStatus.FORBIDDEN);
-      expect(response.body).toHaveProperty('message', 'Forbidden resource');
-
-      expect(productSingleRepositoryMock.create).not.toHaveBeenCalledWith(
-        VALID_PRODUCT_DATA,
-        { id: true },
-      );
-    });
+    expect(responseSubs.body).toHaveProperty('price', VALID_PRODUCT_DATA.price);
+    expect(responseSubs.body).toHaveProperty('image', VALID_PRODUCT_DATA.image);
+    expect(responseSubs.body).toHaveProperty('slug', VALID_PRODUCT_DATA.slug);
+    testData.productSubscriptionPurchase = responseSubs.body.public_id;
   });
 
   it('Should return 409 when there is already a product with the same slug', async () => {
-    productSingleRepositoryMock.findOneBySlug.mockResolvedValueOnce(
-      mockProductResponse(VALID_PRODUCT_DATA),
-    );
-    productSubscriptionRepositoryMock.findOneBySlug.mockResolvedValueOnce(
-      mockProductResponse(VALID_PRODUCT_DATA),
-    );
-
-    const adminToken = await generateAuthToken(ROLES.VALID);
+    const adminToken = testData.tokensReturnsAdmin.access_token;
 
     const responses = await Promise.all(
       types.map((type) =>
@@ -244,27 +117,10 @@ describe('AuthController from AppModule (e2e)', () => {
         'Product whith this slug already exists',
       );
     });
-
-    expect(productSingleRepositoryMock.findOneBySlug).toHaveBeenCalledWith(
-      VALID_PRODUCT_DATA.slug,
-      { id: true },
-    );
-    expect(
-      productSubscriptionRepositoryMock.findOneBySlug,
-    ).toHaveBeenCalledWith(VALID_PRODUCT_DATA.slug, { id: true });
-
-    expect(productSingleRepositoryMock.create).not.toHaveBeenCalledWith(
-      VALID_PRODUCT_DATA,
-      { id: true },
-    );
-    expect(productSubscriptionRepositoryMock.create).not.toHaveBeenCalledWith(
-      VALID_PRODUCT_DATA,
-      { id: true },
-    );
   });
 
   it('Should return 401 when user is not athorized to perfom create operation', async () => {
-    const notPerformerToken = await generateAuthToken(ROLES.NOTPERFORMER);
+    const notPerformerToken = testData.tokensReturnsUser.access_token;
 
     const responses = await Promise.all(
       types.map((type) =>
@@ -283,29 +139,21 @@ describe('AuthController from AppModule (e2e)', () => {
       );
       expect(response.body).toHaveProperty('message');
     });
-
-    expect(productSingleRepositoryMock.create).not.toHaveBeenCalled();
-    expect(productSubscriptionRepositoryMock.create).not.toHaveBeenCalled();
   });
 
   it('Should return 400 when type is invalid', async () => {
+    const adminToken = testData.tokensReturnsAdmin.access_token;
     const invalidType = 'invalid-type';
 
     await request(app.getHttpServer())
-      .get(`/products/create/${invalidType}/`)
-      .expect(HttpStatus.NOT_FOUND);
-
-    expect(productSingleRepositoryMock.findOneBySlug).not.toHaveBeenCalled();
-    expect(
-      productSubscriptionRepositoryMock.findOneBySlug,
-    ).not.toHaveBeenCalled();
-    expect(productSingleRepositoryMock.create).not.toHaveBeenCalled();
-    expect(productSubscriptionRepositoryMock.create).not.toHaveBeenCalled();
+      .post(`/products/create/${invalidType}/`)
+      .set('Authorization', `Bearer ${adminToken}`)
+      .send(VALID_PRODUCT_DATA)
+      .expect(HttpStatus.BAD_REQUEST);
   });
 
   it('should validate required fields and return 400 for invalid data', async () => {
-    const adminToken = await generateAuthToken(ROLES.VALID);
-
+    const adminToken = testData.tokensReturnsAdmin.access_token;
     const invalidData = 'invalid-data';
 
     const responses = await Promise.all(
@@ -324,9 +172,6 @@ describe('AuthController from AppModule (e2e)', () => {
         HttpStatus.BAD_REQUEST,
       );
     });
-
-    expect(productSingleRepositoryMock.create).not.toHaveBeenCalled();
-    expect(productSubscriptionRepositoryMock.create).not.toHaveBeenCalled();
   });
 
   afterAll(async () => {

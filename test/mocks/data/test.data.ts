@@ -11,7 +11,7 @@ export const testData = {
   userSignupPasswordLessVerificationCode: new VerificationCodes(),
 
   productSinglePurchase: new Products(),
-  productSubscription: new Products(),
+  productSubscriptionPurchase: new Products(),
 
   tokensReturnsUser: {} as ITokensReturnsHelper,
   tokensReturnsAdmin: {} as ITokensReturnsHelper,

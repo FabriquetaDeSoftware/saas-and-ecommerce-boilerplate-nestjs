@@ -27,13 +27,6 @@ export class CaslAbilityFactory {
         can(ActionEnum.Manage, CaslEntities.Products);
         break;
 
-      case RolesEnum.USER:
-        cannot(ActionEnum.Create, CaslEntities.Products);
-        cannot(ActionEnum.Delete, CaslEntities.Products);
-        cannot(ActionEnum.Read, CaslEntities.Products);
-        cannot(ActionEnum.Update, CaslEntities.Products);
-        break;
-
       default:
         break;
     }
