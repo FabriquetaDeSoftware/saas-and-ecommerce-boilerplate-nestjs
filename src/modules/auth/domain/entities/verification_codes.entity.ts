@@ -7,5 +7,5 @@ export class VerificationCodes {
   created_at: Date;
   expires_at: Date;
 
-  auth_id: number;
+  user_id: number;
 }

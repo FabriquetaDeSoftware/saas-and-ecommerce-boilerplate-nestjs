@@ -32,11 +32,11 @@ export class DeleteSubscriptionProductUseCase
   }
 
   private async intermediry(role: string, publicId: string): Promise<void> {
-    await this.verifyIfProductExist(publicId);
-
     const roleDecoded = await this.decryptPayload(role);
 
     this.isAllowedAction(roleDecoded, publicId);
+
+    await this.verifyIfProductExist(publicId);
 
     const result = await this._subscriptionProductsRepository.delete(publicId);
 

@@ -117,6 +117,7 @@ $ stripe listen --forward-to http://localhost:<MAPPED_PORT_NGINX>/billing/webhoo
 
 ```bash
 # e2e tests
+$ docker exec -it <container_id> pnpm run seed
 $ docker exec -it <container_id> pnpm run test:e2e
 ```
 

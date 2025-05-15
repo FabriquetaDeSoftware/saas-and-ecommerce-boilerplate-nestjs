@@ -109,7 +109,7 @@ export class SignUpDefaultUseCase implements ISignUpDefaultUseCase {
     hashedCode: string;
     verificationCode: string;
   }> {
-    const twentyFourHoursInMilliseconds = 86400000;
+    const twentyFourHoursInMilliseconds = 86_400_000;
     const expiresDate = new Date(
       new Date().getTime() + twentyFourHoursInMilliseconds,
     );

@@ -5,7 +5,7 @@ import * as bcrypt from 'bcryptjs';
 @Injectable()
 export class HashUtil implements IHashUtil {
   public async generateHash(data: string): Promise<string> {
-    const salt = await bcrypt.genSalt();
+    const salt = await bcrypt.genSalt(12);
 
     const hashedData = await bcrypt.hash(data, salt);
 

@@ -1,0 +1,82 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
+import * as request from 'supertest';
+import { AppModule } from 'src/app.module';
+import { testData } from '../../mocks/data/test.data';
+
+describe('Protected route without roles to test (e2e)', () => {
+  let app: INestApplication;
+
+  beforeAll(async () => {
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile();
+
+    app = moduleFixture.createNestApplication();
+
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transform: true,
+      }),
+    );
+
+    await app.init();
+  });
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe('GET /protected', () => {
+    it('should return message to authenticated user', async () => {
+      const responseUser = await request(app.getHttpServer())
+        .get('/protected/')
+        .set(
+          'Authorization',
+          `Bearer ${testData.tokensReturnsUser.access_token}`,
+        )
+        .expect(HttpStatus.OK);
+
+      expect(responseUser.body).toHaveProperty('message');
+      expect(responseUser.body.message).toBeTruthy();
+
+      const responseAdmin = await request(app.getHttpServer())
+        .get('/protected/')
+        .set(
+          'Authorization',
+          `Bearer ${testData.tokensReturnsAdmin.access_token}`,
+        )
+        .expect(HttpStatus.OK);
+
+      expect(responseAdmin.body).toHaveProperty('message');
+      expect(responseAdmin.body.message).toBeTruthy();
+    });
+
+    it('should return 401 when token is invalid', async () => {
+      const invalidToken =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30';
+
+      const response = await request(app.getHttpServer())
+        .get('/protected/')
+        .set('Authorization', `Bearer ${invalidToken}`)
+        .expect(HttpStatus.UNAUTHORIZED);
+
+      expect(response.body).toHaveProperty('message');
+      expect(response.body.message).toContain('Unauthorized');
+    });
+
+    it('should return 401 when request has no authentication', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/protected/')
+        .expect(HttpStatus.UNAUTHORIZED);
+
+      expect(response.body).toHaveProperty('message');
+    });
+  });
+
+  afterAll(async () => {
+    await app.close();
+  });
+});
