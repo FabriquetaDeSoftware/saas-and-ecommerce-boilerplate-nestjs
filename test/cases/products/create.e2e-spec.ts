@@ -46,6 +46,8 @@ describe('AuthController from AppModule (e2e)', () => {
 
   it('Should return 201 created product', async () => {
     const adminToken = testData.tokensReturnsAdmin.access_token;
+    const testDataSingle = testData.productSinglePurchase;
+    const testDataSubs = testData.productSubscriptionPurchase;
 
     const [responseSingle, responseSubs] = await Promise.all([
       request(app.getHttpServer())
@@ -80,7 +82,15 @@ describe('AuthController from AppModule (e2e)', () => {
     );
     expect(responseSingle.body).toHaveProperty('slug', VALID_PRODUCT_DATA.slug);
 
-    testData.productSinglePurchase = responseSingle.body.public_id;
+    testDataSingle.public_id = responseSingle.body.public_id;
+    testDataSingle.name = responseSingle.body.name;
+    testDataSingle.description = responseSingle.body.description;
+    testDataSingle.price = responseSingle.body.price;
+    testDataSingle.image = responseSingle.body.image;
+    testDataSingle.slug = responseSingle.body.slug;
+    testDataSingle.price_id = responseSingle.body.price_id;
+    testDataSingle.created_at = responseSingle.body.created_at;
+    testDataSingle.updated_at = responseSingle.body.updated_at;
 
     expect(responseSubs.body).not.toHaveProperty('id');
     expect(responseSubs.body).toHaveProperty('public_id');
@@ -94,7 +104,16 @@ describe('AuthController from AppModule (e2e)', () => {
     expect(responseSubs.body).toHaveProperty('price', VALID_PRODUCT_DATA.price);
     expect(responseSubs.body).toHaveProperty('image', VALID_PRODUCT_DATA.image);
     expect(responseSubs.body).toHaveProperty('slug', VALID_PRODUCT_DATA.slug);
-    testData.productSubscriptionPurchase = responseSubs.body.public_id;
+
+    testDataSubs.public_id = responseSubs.body.public_id;
+    testDataSubs.name = responseSubs.body.name;
+    testDataSubs.description = responseSubs.body.description;
+    testDataSubs.price = responseSubs.body.price;
+    testDataSubs.image = responseSubs.body.image;
+    testDataSubs.slug = responseSubs.body.slug;
+    testDataSubs.price_id = responseSubs.body.price_id;
+    testDataSubs.created_at = responseSubs.body.created_at;
+    testDataSubs.updated_at = responseSubs.body.updated_at;
   });
 
   it('Should return 409 when there is already a product with the same slug', async () => {
