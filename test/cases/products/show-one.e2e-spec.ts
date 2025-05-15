@@ -2,76 +2,17 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from 'src/app.module';
-import { ISubscriptionProductsRepository } from 'src/modules/products/domain/interfaces/repositories/subscription_products.repository.interface';
-import { ListManyProductsDto } from 'src/modules/products/application/dto/list_many_products.dto';
-import { ISingleProductsRepository } from 'src/modules/products/domain/interfaces/repositories/single_products.repository.interface';
-import { Products } from 'src/modules/products/domain/entities/products.entity';
+import { testData } from '../../mocks/data/test.data';
 
 describe('AuthController from AppModule (e2e)', () => {
   let app: INestApplication;
-  let productSubscriptionRepositoryMock: jest.Mocked<ISubscriptionProductsRepository>;
-  let productSingleRepositoryMock: jest.Mocked<ISingleProductsRepository>;
 
-  const imageMockURl =
-    'https://t0.gstatic.com/licensed-image?q=tbn:ANd9GcTEVcrypslvdUeHleSabemh-hXNLNslN-H0XVxm7ObA2J28dKoXFD5zck7QPMjyHGBCWXhq2nmA4YA0IYslGIM';
-
-  const validSlug = 'valid_slug';
-  const invalidSlug = 'invalid_slug';
   const types = ['single', 'subscription'];
 
-  const RESPONSE_SUB_MOCK: Products = {
-    id: 1,
-    public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
-    name: 'Product 1 Subscription',
-    description: 'Description 1',
-    price: 10,
-    price_id: 'price_1N4v2cK0x5g3e7d8f8e8e8e8',
-    image: [imageMockURl, imageMockURl],
-    slug: 'product-1',
-    created_at: new Date(),
-    updated_at: new Date(),
-  };
-
-  const RESPONSE_SINGLE_MOCK: Products = {
-    id: 1,
-    public_id: '9f3b779d-1ffc-4812-ab14-4e3687741538',
-    name: 'Product 1 Single',
-    description: 'Description 1',
-    price: 10,
-    price_id: 'price_1N4v2cK0x5g3e7d8f8e8e8e8',
-    image: [imageMockURl, imageMockURl],
-    slug: 'product-1',
-    created_at: new Date(),
-    updated_at: new Date(),
-  };
-
   beforeAll(async () => {
-    productSingleRepositoryMock = {
-      findOneBySlug: jest.fn().mockResolvedValue(RESPONSE_SINGLE_MOCK),
-      update: jest.fn().mockResolvedValue(undefined),
-      create: jest.fn().mockImplementation(undefined),
-      delete: jest.fn().mockResolvedValue(undefined),
-      findOneByPublicId: jest.fn().mockResolvedValue(undefined),
-      listMany: jest.fn().mockImplementation(undefined),
-    };
-
-    productSubscriptionRepositoryMock = {
-      findOneBySlug: jest.fn().mockResolvedValue(RESPONSE_SUB_MOCK),
-      update: jest.fn().mockResolvedValue(undefined),
-      create: jest.fn().mockImplementation(undefined),
-      delete: jest.fn().mockResolvedValue(undefined),
-      findOneByPublicId: jest.fn().mockResolvedValue(undefined),
-      listMany: jest.fn().mockImplementation(undefined),
-    };
-
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    })
-      .overrideProvider('ISingleProductsRepository')
-      .useValue(productSingleRepositoryMock)
-      .overrideProvider('ISubscriptionProductsRepository')
-      .useValue(productSubscriptionRepositoryMock)
-      .compile();
+    }).compile();
 
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(
@@ -89,47 +30,50 @@ describe('AuthController from AppModule (e2e)', () => {
   });
 
   it('Should return one product', async () => {
-    const responses = await Promise.all(
-      types.map((type) =>
-        request(app.getHttpServer())
-          .get(`/products/show-one/${type}/${validSlug}/`)
-          .expect(HttpStatus.OK),
-      ),
+    const testDataSingle = testData.productSinglePurchase;
+    const testDataSubs = testData.productSubscriptionPurchase;
+    const validSlugSingle = testDataSingle.slug;
+    const validSlugSubscription = testDataSubs.slug;
+
+    const responseSingle = await request(app.getHttpServer())
+      .get(`/products/show-one/${types[0]}/${validSlugSingle}/`)
+      .expect(HttpStatus.OK);
+
+    expect(responseSingle.body).toEqual(
+      expect.objectContaining({
+        public_id: testDataSingle.public_id,
+        name: testDataSingle.name,
+        description: testDataSingle.description,
+        price: testDataSingle.price,
+        price_id: testDataSingle.price_id,
+        image: testDataSingle.image,
+        slug: testDataSingle.slug,
+        created_at: testDataSingle.created_at,
+        updated_at: testDataSingle.updated_at,
+      }),
     );
 
-    responses.map((response, index) => {
-      const type = types[index];
-      const expectedMock =
-        type === 'subscription' ? RESPONSE_SUB_MOCK : RESPONSE_SINGLE_MOCK;
+    const responseSubs = await request(app.getHttpServer())
+      .get(`/products/show-one/${types[1]}/${validSlugSubscription}/`)
+      .expect(HttpStatus.OK);
 
-      expect(response.body).toEqual(
-        expect.objectContaining({
-          public_id: expectedMock.public_id,
-          name: expectedMock.name,
-          description: expectedMock.description,
-          price: expectedMock.price,
-          price_id: expectedMock.price_id,
-          image: expectedMock.image,
-          slug: expectedMock.slug,
-          created_at: expect.any(String),
-          updated_at: expect.any(String),
-        }),
-      );
-    });
-
-    expect(
-      productSubscriptionRepositoryMock.findOneBySlug,
-    ).toHaveBeenCalledWith(validSlug, { id: true });
-
-    expect(productSingleRepositoryMock.findOneBySlug).toHaveBeenCalledWith(
-      validSlug,
-      { id: true },
+    expect(responseSubs.body).toEqual(
+      expect.objectContaining({
+        public_id: testDataSubs.public_id,
+        name: testDataSubs.name,
+        description: testDataSubs.description,
+        price: testDataSubs.price,
+        price_id: testDataSubs.price_id,
+        image: testDataSubs.image,
+        slug: testDataSubs.slug,
+        created_at: testDataSubs.created_at,
+        updated_at: testDataSubs.updated_at,
+      }),
     );
   });
 
   it('Should return 404 when slug not exists', async () => {
-    productSingleRepositoryMock.findOneBySlug.mockResolvedValueOnce(null);
-    productSubscriptionRepositoryMock.findOneBySlug.mockResolvedValueOnce(null);
+    const invalidSlug = 'invalid-slug';
 
     await Promise.all(
       types.map((type) =>
@@ -138,28 +82,15 @@ describe('AuthController from AppModule (e2e)', () => {
           .expect(HttpStatus.NOT_FOUND),
       ),
     );
-
-    expect(productSingleRepositoryMock.findOneBySlug).toHaveBeenCalledWith(
-      invalidSlug,
-      { id: true },
-    );
-
-    expect(
-      productSubscriptionRepositoryMock.findOneBySlug,
-    ).toHaveBeenCalledWith(invalidSlug, { id: true });
   });
 
   it('Should return 400 when type is invalid', async () => {
+    const validSlugSingle = testData.productSinglePurchase.slug;
     const invalidType = 'invalid-type';
 
     await request(app.getHttpServer())
-      .get(`/products/show-one/${invalidType}/${validSlug}/`)
+      .get(`/products/show-one/${invalidType}/${validSlugSingle}/`)
       .expect(HttpStatus.BAD_REQUEST);
-
-    expect(productSingleRepositoryMock.findOneBySlug).not.toHaveBeenCalled();
-    expect(
-      productSubscriptionRepositoryMock.findOneBySlug,
-    ).not.toHaveBeenCalled();
   });
 
   afterAll(async () => {

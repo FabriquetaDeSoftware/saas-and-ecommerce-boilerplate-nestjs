@@ -46,10 +46,10 @@ describe('AuthController from AppModule (e2e)', () => {
 
   it('Should return updated product', async () => {
     const adminToken = testData.tokensReturnsAdmin.access_token;
-    const productSingleId = testData.productSinglePurchase.public_id;
-    const productSubsId = testData.productSubscriptionPurchase.public_id;
     const testDataSingle = testData.productSinglePurchase;
     const testDataSubs = testData.productSubscriptionPurchase;
+    const productSingleId = testDataSingle.public_id;
+    const productSubsId = testDataSubs.public_id;
 
     const responseSingle = await request(app.getHttpServer())
       .patch(`/products/update/${types[0]}/${productSingleId}/`)
