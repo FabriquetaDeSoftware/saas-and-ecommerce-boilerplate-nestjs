@@ -1,0 +1,146 @@
+services:
+  api:
+    container_name: api-test
+    build:
+      context: ../..
+      dockerfile: docker/files/Dockerfile.test
+    env_file:
+      - ../../.env
+    depends_on:
+      - postgres
+      - redis
+      - jaeger
+      - prometheus
+    networks:
+      - network
+    # ports:
+    #   - '${MAPPED_PORT_API}:${PORT_API}'
+    volumes:
+      - ../..:/home/api/nestjs/saas-and-ecommerce-boilerplate-nestjs
+    restart: unless-stopped
+
+  postgres:
+    container_name: postgres-test
+    image: postgres:16.3-alpine
+    env_file:
+      - ../../.env
+    networks:
+      - network
+    ports:
+      - '${MAPPED_PORT_DB}:5432'
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    container_name: redis-test
+    image: redis:7.0-alpine
+    env_file:
+      - ../../.env
+    networks:
+      - network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: '512M'
+    # ports:
+    #   - '${MAPPED_PORT_REDIS}:6379'
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    command: redis-server --loglevel warning
+
+  nginx:
+    container_name: nginx-test
+    image: nginx:1.25-alpine
+    env_file:
+      - ../../.env
+    depends_on:
+      - api
+    networks:
+      - network
+    ports:
+      - '${MAPPED_PORT_NGINX}:80'
+    volumes:
+      - ../../nginx.conf:/etc/nginx/nginx.conf:ro
+    restart: unless-stopped
+
+  jaeger:
+    container_name: jaeger-test
+    image: jaegertracing/all-in-one:1.50
+    ports:
+      - "${MAPPED_PORT_JAEGER_UI}:16686"
+    environment:
+      - COLLECTOR_ZIPKIN_HTTP_PORT=9411
+      - JAEGER_SAMPLER_TYPE=const
+      - JAEGER_SAMPLER_PARAM=1
+    expose:
+      - "14268" # Jaeger collector HTTP endpoint
+      - "4317" # Jaeger gRPC endpoint
+      - "5778" # Jaeger agent HTTP endpoint
+    restart: unless-stopped
+    networks:
+      - network
+
+  otel-collector:
+    image: otel/opentelemetry-collector:0.123.0
+    container_name: otel-collector-test
+    command: [ "--config=/etc/otel-collector-config.yml" ]
+    volumes:
+      - ../../src/config/otel-collector-config.yml:/etc/otel-collector-config.yml
+    expose:
+      - 1888 # pprof extension
+      - 13133 # health_check extension
+      - 4317 # OTLP gRPC receiver
+      - 4318 # http gRPC receiver
+      - 55679 # zpages extension
+    depends_on:
+      - jaeger
+      - prometheus
+    restart: unless-stopped
+    networks:
+      - network
+
+  prometheus:
+    container_name: prometheus-test
+    image: prom/prometheus
+    volumes:
+      - ../../src/config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=15d'
+    # ports:
+    #   - '${MAPPED_PORT_PROMETHEUS_UI}:9090'
+    restart: unless-stopped
+    networks:
+      - network
+
+  grafana:
+    container_name: grafana-test
+    image: grafana/grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
+    ports:
+      - '${MAPPED_PORT_GRAFANA_UI}:3000'
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+    networks:
+      - network
+
+networks:
+  network:
+
+
+volumes:
+  postgres_data:
+  redis_data:
+  prometheus_data:
+  grafana_data:
