@@ -10,7 +10,7 @@ import { AppModule } from 'src/app.module';
 import { PasswordDto } from 'src/modules/auth/application/dto/password.dto';
 import { testData } from '../../mocks/data/test.data';
 
-describe('AuthController from AppModule (e2e)', () => {
+describe('AuthController Recovery Password (e2e)', () => {
   let app: INestApplication;
 
   beforeAll(async () => {

@@ -5,7 +5,7 @@ import { AppModule } from 'src/app.module';
 import { SignInDefaultDto } from 'src/modules/auth/application/dto/sign_in_default.dto';
 import { testData } from '../../mocks/data/test.data';
 
-describe('AuthController from AppModule (e2e)', () => {
+describe('AuthController SignIn Default (e2e)', () => {
   let app: INestApplication;
 
   beforeAll(async () => {

@@ -5,7 +5,7 @@ import { AppModule } from 'src/app.module';
 import { RefreshTokenDto } from 'src/modules/auth/application/dto/refresh_token.dto';
 import { testData } from '../../mocks/data/test.data';
 
-describe('AuthController from AppModule (e2e)', () => {
+describe('AuthController Refresh Token (e2e)', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
