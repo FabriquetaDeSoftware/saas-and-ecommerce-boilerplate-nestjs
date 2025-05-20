@@ -4,7 +4,7 @@ import * as request from 'supertest';
 import { AppModule } from 'src/app.module';
 import { testData } from '../../mocks/data/test.data';
 
-describe('AuthController from AppModule (e2e)', () => {
+describe('ProductsController Show One (e2e)', () => {
   let app: INestApplication;
 
   const types = ['single', 'subscription'];
