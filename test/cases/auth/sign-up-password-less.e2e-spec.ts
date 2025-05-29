@@ -7,7 +7,7 @@ import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { IGenerateNumberCodeUtil } from 'src/shared/utils/interfaces/generate_number_code.util.interface';
 import { testData } from '../../mocks/data/test.data';
 
-describe('AuthController PasswordLess (e2e)', () => {
+describe('AuthController SignUp Password Less (e2e)', () => {
   let app: INestApplication;
   let generateCodeSpy: jest.SpyInstance;
 

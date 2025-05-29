@@ -5,7 +5,7 @@ import { AppModule } from 'src/app.module';
 import { VerificationCodeDto } from 'src/modules/auth/application/dto/verification_code.dto';
 import { testData } from '../../mocks/data/test.data';
 
-describe('AuthController Verification (e2e)', () => {
+describe('AuthController Verification Account (e2e)', () => {
   let app: INestApplication;
 
   const VALID_VERIFICATION_DATA: VerificationCodeDto[] = [];

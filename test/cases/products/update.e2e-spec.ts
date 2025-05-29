@@ -5,7 +5,7 @@ import { AppModule } from 'src/app.module';
 import { UpdateProductInfoDto } from 'src/modules/products/application/dto/update_product_info.dto';
 import { testData } from '../../mocks/data/test.data';
 
-describe('AuthController from AppModule (e2e)', () => {
+describe('ProductsController Update (e2e)', () => {
   let app: INestApplication;
 
   const imageMockURl =

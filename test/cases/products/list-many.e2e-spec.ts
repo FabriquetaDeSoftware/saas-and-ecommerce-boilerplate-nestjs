@@ -5,7 +5,7 @@ import { AppModule } from 'src/app.module';
 import { ListManyProductsDto } from 'src/modules/products/application/dto/list_many_products.dto';
 import { testData } from '../../mocks/data/test.data';
 
-describe('AuthController from AppModule (e2e)', () => {
+describe('ProductsController List Many (e2e)', () => {
   let app: INestApplication;
 
   const types = ['single', 'subscription'];

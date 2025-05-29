@@ -6,7 +6,7 @@ import { EmailDto } from 'src/modules/auth/application/dto/email.dto';
 import { testData } from '../../mocks/data/test.data';
 import { IGenerateTokenHelper } from 'src/modules/auth/domain/interfaces/helpers/generate_token.helper.interface';
 
-describe('AuthController from AppModule (e2e)', () => {
+describe('AuthController Forgot Password (e2e)', () => {
   let app: INestApplication;
   let generateTokenSpy: jest.SpyInstance;
 
