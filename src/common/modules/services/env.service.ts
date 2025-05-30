@@ -5,71 +5,71 @@ import { ConfigService } from '@nestjs/config';
 export class EnvService {
   constructor(private readonly configService: ConfigService) {}
 
-  get databaseUrl(): string {
+  public get databaseUrl(): string {
     return this.configService.get<string>('DATABASE_URL');
   }
 
-  get secretAccessTokenKey(): string {
+  public get secretAccessTokenKey(): string {
     return this.configService.get<string>('SECRET_ACCESS_TOKEN_KEY');
   }
 
-  get secretRefreshTokenKey(): string {
+  public get secretRefreshTokenKey(): string {
     return this.configService.get<string>('SECRET_REFRESH_TOKEN_KEY');
   }
 
-  get secretRecoveryPasswordTokenKey(): string {
+  public get secretRecoveryPasswordTokenKey(): string {
     return this.configService.get<string>('SECRET_RECOVERY_PASSWORD_TOKEN_KEY');
   }
 
-  get portApi(): number {
+  public get portApi(): number {
     return this.configService.get<number>('PORT_API');
   }
 
-  get encryptPassword(): string {
+  public get encryptPassword(): string {
     return this.configService.get<string>('ENCRYPT_PASSWORD');
   }
 
-  get encryptSalt(): string {
+  public get encryptSalt(): string {
     return this.configService.get<string>('ENCRYPT_SALT');
   }
 
-  get emailFrom(): string {
+  public get emailFrom(): string {
     return this.configService.get<string>('EMAIL_FROM');
   }
 
-  get emailHost(): string {
+  public get emailHost(): string {
     return this.configService.get<string>('EMAIL_HOST');
   }
 
-  get emailPort(): number {
+  public get emailPort(): number {
     return this.configService.get<number>('EMAIL_PORT');
   }
 
-  get emailUser(): string {
+  public get emailUser(): string {
     return this.configService.get<string>('EMAIL_USER');
   }
 
-  get emailPassword(): string {
+  public get emailPassword(): string {
     return this.configService.get<string>('EMAIL_PASSWORD');
   }
 
-  get stripeSecretKey(): string {
+  public get stripeSecretKey(): string {
     return this.configService.get<string>('STRIPE_SECRET_KEY');
   }
 
-  get stripeWebhookSecret(): string {
+  public get stripeWebhookSecret(): string {
     return this.configService.get<string>('STRIPE_WEBHOOK_SECRET');
   }
 
-  get stripeSuccessUrl(): string {
+  public get stripeSuccessUrl(): string {
     return this.configService.get<string>('STRIPE_SUCCESS_URL');
   }
 
-  get stripeCancelUrl(): string {
+  public get stripeCancelUrl(): string {
     return this.configService.get<string>('STRIPE_CANCEL_URL');
   }
 
-  public get(key: string): string {
-    return this.configService.get<string>(key);
+  public get<T>(key: string): T {
+    return this.configService.get<T>(key);
   }
 }
