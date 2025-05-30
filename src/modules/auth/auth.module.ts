@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtKeysConstants } from 'src/shared/constants/jwt_keys.constants';
 import { APP_GUARD } from '@nestjs/core';
 import { CommonModule } from 'src/common/common.module';
 import { AuthController } from './interface/controllers/auth.controller';
@@ -22,12 +21,17 @@ import { LocalStrategy } from './infrastructure/strategies/local.strategy';
 import { JwtAuthGuard } from './interface/guards/jwt_auth.guard';
 import { SignInMagicLinkUseCase } from './application/use_cases/sign_in_magic_link.use_case';
 import { SignUpPasswordLessUseCase } from './application/use_cases/sign_up_password_less.use_case';
+import { EnvService } from 'src/common/modules/services/env.service';
 
 @Module({
   imports: [
-    JwtModule.register({
-      secret: jwtKeysConstants.secret_access_token_key,
-      signOptions: { expiresIn: '30m' },
+    JwtModule.registerAsync({
+      imports: [CommonModule],
+      inject: [EnvService],
+      useFactory: (envServide: EnvService) => ({
+        secret: envServide.secretAccessTokenKey,
+        signOptions: { expiresIn: '30m' },
+      }),
     }),
     SharedModule,
     CommonModule,

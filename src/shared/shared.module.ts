@@ -5,9 +5,10 @@ import { HashUtil } from './utils/hash.util';
 import { EmailModule } from './modules/email/email.module';
 import { PermissionManagerUtil } from './utils/permission_manager.util';
 import { CaslModule } from 'src/common/casl/casl.module';
+import { ServiceModule } from 'src/common/modules/services/service.module';
 
 @Module({
-  imports: [EmailModule, CaslModule],
+  imports: [EmailModule, CaslModule, ServiceModule],
   providers: [
     PermissionManagerUtil,
     {

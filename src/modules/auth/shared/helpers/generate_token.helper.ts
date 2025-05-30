@@ -6,7 +6,7 @@ import { GenerateTokenDto } from '../../application/dto/generate_token.dto';
 import { ITokensReturnsHelper } from '../../domain/interfaces/helpers/tokens_returns.helper.interface';
 import { IJwtUserPayload } from '../../../../shared/interfaces/jwt_user_payload.interface';
 import { TokenEnum } from 'src/shared/enum/token.enum';
-import { jwtKeysConstants } from 'src/shared/constants/jwt_keys.constants';
+import { EnvService } from 'src/common/modules/services/env.service';
 
 @Injectable()
 export class GenerateTokenHelper implements IGenerateTokenHelper {
@@ -15,6 +15,9 @@ export class GenerateTokenHelper implements IGenerateTokenHelper {
 
   @Inject('ICryptoUtil')
   private readonly _cryptoUtil: ICryptoUtil;
+
+  @Inject()
+  private readonly _envService: EnvService;
 
   public async execute(input: GenerateTokenDto): Promise<ITokensReturnsHelper> {
     const { access_token, refresh_token, token } =
@@ -61,7 +64,7 @@ export class GenerateTokenHelper implements IGenerateTokenHelper {
 
       const token = this._jwtService.sign(
         { ...payload, type: typeEcripted },
-        { secret: jwtKeysConstants.secret_recovery_password_token_key },
+        { secret: this._envService.secretRecoveryPasswordTokenKey },
       );
 
       return { token };
@@ -76,7 +79,7 @@ export class GenerateTokenHelper implements IGenerateTokenHelper {
       this._jwtService.sign({ ...payload, type: ACCESS_TOKEN_ENUM }),
       this._jwtService.sign(
         { ...payload, type: REFRESH_TOKEN_ENUM },
-        { expiresIn: '7d', secret: jwtKeysConstants.secret_refresh_token_key },
+        { expiresIn: '7d', secret: this._envService.secretRefreshTokenKey },
       ),
     ];
 

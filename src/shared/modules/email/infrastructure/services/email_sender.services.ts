@@ -3,12 +3,17 @@ import { EmailSenderDto } from '../../application/dto/email_sender.dto';
 import * as nodemailer from 'nodemailer';
 import { IEmailSenderService } from '../../domain/interfaces/services/email_sender.service.interface';
 import { IProcessHtmlHelper } from 'src/shared/modules/email/domain/interfaces/helpers/proccess_html.helper.interface';
-import { emailConstants } from '../../domain/constants/email.constants';
+import { EnvService } from 'src/common/modules/services/env.service';
 
 @Injectable()
 export class EmailSenderService implements IEmailSenderService {
+  @Inject()
+  private readonly _envService: EnvService;
+
   @Inject('IProcessHtmlHelper')
   private readonly _processHTMLUtil: IProcessHtmlHelper;
+
+  private readonly _emailTemplateBasePath: 'src/shared/modules/email/infrastructure/templates';
 
   public async execute(input: EmailSenderDto): Promise<void> {
     await this.intermediary(input);
@@ -29,7 +34,7 @@ export class EmailSenderService implements IEmailSenderService {
     processedTemplate: string,
   ): Promise<void> {
     const mailOptions = {
-      from: `"Seu Nome" ${emailConstants.email_from}`,
+      from: `"Seu Nome" <${this._envService.emailFrom}>`,
       to: input.emailTo,
       subject: input.subject,
       html: processedTemplate,
@@ -43,7 +48,7 @@ export class EmailSenderService implements IEmailSenderService {
   }
 
   private async generateTemplate(input: EmailSenderDto): Promise<string> {
-    const templatePath = `${emailConstants.email_template_base_path}/${input.language}/${input.template}`;
+    const templatePath = `${this._emailTemplateBasePath}/${input.language}/${input.template}`;
 
     const processedTemplate = await this._processHTMLUtil.execute(
       templatePath,
@@ -55,11 +60,11 @@ export class EmailSenderService implements IEmailSenderService {
 
   private transporter(): nodemailer.Transporter {
     const transporter = nodemailer.createTransport({
-      host: emailConstants.email_host,
-      port: parseInt(emailConstants.email_port),
+      host: this._envService.emailHost,
+      port: this._envService.emailPort,
       auth: {
-        user: emailConstants.email_user,
-        pass: emailConstants.email_password,
+        user: this._envService.emailUser,
+        pass: this._envService.emailPassword,
       },
       debug: true,
     });

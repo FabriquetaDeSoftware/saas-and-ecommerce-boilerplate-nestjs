@@ -6,10 +6,10 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
-import { serverConstants } from './shared/constants/server.constant';
 import { swaggerConfig } from './config/swagger.config';
 import { corsConfig } from './config/cors.config';
 import { renderPageConfig } from './config/render_page.config';
+import { EnvService } from './common/modules/services/env.service';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -35,13 +35,15 @@ async function bootstrap() {
     }),
   );
 
+  const envService = app.get(EnvService);
+
   renderPageConfig(app);
 
   corsConfig(app);
 
   swaggerConfig(app);
 
-  const port = parseInt(serverConstants.port_api);
+  const port = envService.portApi;
   await app.listen({ port, host: '0.0.0.0' });
 }
 bootstrap();

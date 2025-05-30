@@ -13,9 +13,14 @@ import { AppController } from './app.controller';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { UserModule } from './modules/user/user.module';
+import { ServiceModule } from './common/modules/services/service.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     PrometheusModule.register({
       defaultMetrics: {
         enabled: true,
@@ -41,6 +46,7 @@ import { UserModule } from './modules/user/user.module';
     CaslModule,
     ProductsModule,
     UserModule,
+    ServiceModule,
   ],
   controllers: [AppController],
   providers: [],

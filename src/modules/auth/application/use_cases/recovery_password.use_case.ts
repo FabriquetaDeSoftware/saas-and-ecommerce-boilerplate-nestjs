@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import { PasswordDto } from '../dto/password.dto';
 import { JwtService } from '@nestjs/jwt';
-import { jwtKeysConstants } from 'src/shared/constants/jwt_keys.constants';
 import { TokenEnum } from 'src/shared/enum/token.enum';
 import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
 import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
@@ -15,6 +14,7 @@ import { IAuthRepository } from '../../domain/interfaces/repositories/auth.repos
 import { IFindUserByEmailHelper } from '../../domain/interfaces/helpers/find_user_by_email.helper.interface';
 import { IJwtUserPayload } from '../../../../shared/interfaces/jwt_user_payload.interface';
 import { User } from 'src/shared/entities/user.entity';
+import { EnvService } from 'src/common/modules/services/env.service';
 
 @Injectable()
 export class RecoveryPasswordUseCase implements IRecoveryPasswordUseCase {
@@ -32,6 +32,9 @@ export class RecoveryPasswordUseCase implements IRecoveryPasswordUseCase {
 
   @Inject('IHashUtil')
   private readonly _hashUtil: IHashUtil;
+
+  @Inject()
+  private readonly _envService: EnvService;
 
   public async execute(
     token: string,
@@ -77,7 +80,7 @@ export class RecoveryPasswordUseCase implements IRecoveryPasswordUseCase {
     token: string,
   ): Promise<IJwtUserPayload> {
     const payload: IJwtUserPayload = await this._jwtService.verify(token, {
-      secret: jwtKeysConstants.secret_recovery_password_token_key,
+      secret: this._envService.secretRefreshTokenKey,
     });
 
     const payloadType = await this.decryptPayload(

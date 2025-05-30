@@ -1,12 +1,17 @@
 import { ForbiddenException } from '@nestjs/common';
 import { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { RawServerDefault } from 'fastify';
-import { serverConstants } from 'src/shared/constants/server.constant';
 
 export function corsConfig(
   app: NestFastifyApplication<RawServerDefault>,
 ): void {
-  const host = serverConstants.host;
+  const host: string[] = [
+    '0.0.0.0',
+    'http://localhost:3000',
+    'http://localhost:8080',
+    'http://localhost:3003',
+  ];
+
   app.enableCors({
     origin: (origin, callback) => {
       if (!origin || host.includes(origin)) {

@@ -5,9 +5,13 @@ import { SendEmailQueueJob } from './infrastructure/jobs/send_email_queue.job';
 import { SendEmailConsumerJob } from './infrastructure/jobs/send_email_consumer.job';
 import { BullModule } from '@nestjs/bullmq';
 import { ProcessHtmlHelper } from './shared/helpers/proccess_html.helper';
+import { ServiceModule } from 'src/common/modules/services/service.module';
 
 @Module({
-  imports: [BullModule.registerQueue({ name: 'SEND_EMAIL_QUEUE' })],
+  imports: [
+    BullModule.registerQueue({ name: 'SEND_EMAIL_QUEUE' }),
+    ServiceModule,
+  ],
   controllers: [EmailController],
   providers: [
     SendEmailConsumerJob,

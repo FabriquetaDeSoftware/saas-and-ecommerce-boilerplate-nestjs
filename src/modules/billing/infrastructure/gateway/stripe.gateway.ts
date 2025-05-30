@@ -1,9 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import Stripe from 'stripe';
-import { gatewayConstants } from '../../domain/constants/gateway.constant';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { ISinglePurchasesRepository } from '../../domain/interfaces/repositories/single_purchases.repository.interface';
 import { IPurchasesOrchestrators } from '../../domain/interfaces/orchestrators/purchases.orchestrators.interface';
+import { EnvService } from 'src/common/modules/services/env.service';
 
 @Injectable()
 export class StripeGateway {
@@ -13,10 +12,13 @@ export class StripeGateway {
   @Inject('IPurchasesOrchestrators')
   private readonly _purchasesOrchestrators: IPurchasesOrchestrators;
 
+  @Inject()
+  private readonly _envService: EnvService;
+
   private readonly _stripe: Stripe;
 
-  constructor() {
-    this._stripe = new Stripe(gatewayConstants.stripe_secret_key, {
+  constructor(private readonly envService: EnvService) {
+    this._stripe = new Stripe(envService.stripeSecretKey, {
       apiVersion: '2025-02-24.acacia',
     });
   }
@@ -42,8 +44,8 @@ export class StripeGateway {
         productId,
       },
       mode: 'payment',
-      success_url: gatewayConstants.success_url,
-      cancel_url: gatewayConstants.cancel_url,
+      success_url: this._envService.stripeSuccessUrl,
+      cancel_url: this._envService.stripeCancelUrl,
     });
 
     return { url: session.url };
@@ -70,8 +72,8 @@ export class StripeGateway {
         productId,
       },
       mode: 'subscription',
-      success_url: gatewayConstants.success_url,
-      cancel_url: gatewayConstants.cancel_url,
+      success_url: this._envService.stripeSuccessUrl,
+      cancel_url: this._envService.stripeCancelUrl,
     });
 
     return { url: session.url };
@@ -84,7 +86,7 @@ export class StripeGateway {
     const event = this._stripe.webhooks.constructEvent(
       payload,
       signature,
-      gatewayConstants.stripe_webhook_secret,
+      this._envService.stripeWebhookSecret,
     );
 
     switch (event.type) {
