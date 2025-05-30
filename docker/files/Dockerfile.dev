@@ -5,7 +5,7 @@ COPY . .
 
 RUN rm -rf node_modules
 RUN npm install -g pnpm
-RUN pnpm i
+RUN pnpm install --frozen-lockfile   
 
 RUN pnpm add @prisma/client@6.4.1
 RUN npx prisma generate
