@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AuthModule } from './modules/auth/auth.module';
 import { SharedModule } from './shared/shared.module';
-import { DatabaseModule } from './common/databases/database.module';
+import { DatabaseModule } from './common/modules/databases/database.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { BullModule } from '@nestjs/bullmq';
 import { EmailModule } from './shared/modules/email/email.module';

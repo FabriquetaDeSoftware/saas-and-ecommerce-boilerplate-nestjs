@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ISingleProductsRepository } from '../../domain/interfaces/repositories/single_products.repository.interface';
-import { IDatabaseAdapter } from 'src/common/databases/interfaces/database.adapter.interface';
+import { IDatabaseAdapter } from 'src/common/modules/databases/interfaces/database.adapter.interface';
 import { CreateProductDto } from '../../application/dto/create_product.dto';
 import { Products } from '../../domain/entities/products.entity';
 import { ListManyProductsReturn } from '../../domain/interfaces/returns/list_many_products_return.interface';

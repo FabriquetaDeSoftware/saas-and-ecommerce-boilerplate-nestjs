@@ -1,5 +1,5 @@
 import { Inject } from '@nestjs/common';
-import { IDatabaseAdapter } from 'src/common/databases/interfaces/database.adapter.interface';
+import { IDatabaseAdapter } from 'src/common/modules/databases/interfaces/database.adapter.interface';
 import { User } from 'src/shared/entities/user.entity';
 import { IUserRepository } from '../../domain/interfaces/repositories/user.repository.interface';
 import { TablesEnum } from 'src/shared/enum/tables.enum';

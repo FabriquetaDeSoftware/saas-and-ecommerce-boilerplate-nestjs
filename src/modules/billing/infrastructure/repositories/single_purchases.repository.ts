@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ISinglePurchasesRepository } from '../../domain/interfaces/repositories/single_purchases.repository.interface';
 import { SaveSinglePurchasesProductDto } from '../dto/save_purchases.dto';
-import { IDatabaseAdapter } from 'src/common/databases/interfaces/database.adapter.interface';
+import { IDatabaseAdapter } from 'src/common/modules/databases/interfaces/database.adapter.interface';
 import { UserSinglePurchases } from '../../domain/entities/user_purchases.entity';
 import { TablesEnum } from 'src/shared/enum/tables.enum';
 
