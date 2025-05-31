@@ -28,8 +28,8 @@ import { EnvService } from 'src/common/modules/services/env.service';
     JwtModule.registerAsync({
       imports: [CommonModule],
       inject: [EnvService],
-      useFactory: (envServide: EnvService) => ({
-        secret: envServide.secretAccessTokenKey,
+      useFactory: (envService: EnvService) => ({
+        secret: envService.secretAccessTokenKey,
         signOptions: { expiresIn: '30m' },
       }),
     }),
