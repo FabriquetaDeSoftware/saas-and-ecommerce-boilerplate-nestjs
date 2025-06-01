@@ -26,6 +26,7 @@ model user {
   verification_code     verification_code?
   single_purchase       user_single_purchase[]
   subscription_purchase user_subscription_purchase[]
+  one_time_password     one_time_password?
 }
 
 model user_single_purchase {
@@ -93,6 +94,20 @@ model verification_code {
   public_id String @unique @default(uuid())
 
   code String
+
+  created_at DateTime @default(now())
+  expires_at DateTime
+
+  user_id Int @unique
+
+  user user @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model one_time_password {
+  id        Int    @id @default(autoincrement())
+  public_id String @unique @default(uuid())
+
+  password String
 
   created_at DateTime @default(now())
   expires_at DateTime

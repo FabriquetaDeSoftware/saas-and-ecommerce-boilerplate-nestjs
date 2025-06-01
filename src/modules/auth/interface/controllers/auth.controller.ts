@@ -110,7 +110,7 @@ export class AuthController {
   }
 
   @IsPublicRoute()
-  @Post('send-temporary-password')
+  @Post('send-one-time-password')
   @HttpCode(200)
   public async sendTemporaryPassword(
     @Body() input: EmailDto,
@@ -121,7 +121,7 @@ export class AuthController {
   }
 
   @IsPublicRoute()
-  @Post('sign-in-temporary-password')
+  @Post('sign-in-one-time-password')
   @HttpCode(200)
   public async signInTemporaryPassword(
     @Body() input: SignInDefaultDto,
