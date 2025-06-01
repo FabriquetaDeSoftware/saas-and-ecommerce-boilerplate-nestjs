@@ -74,7 +74,7 @@ describe('AuthController SignUp Default (e2e)', () => {
 
       testData.userSignupDefault.email = VALID_USER_DATA.email;
       testData.userSignupDefault.password = VALID_USER_DATA.password;
-      testData.userSignupDefaultVerificationCode.code = generatedCode;
+      testData.userSignupDefaultVerificationCode.code = generatedCode.code;
       testData.userSignupDefaultVerificationCode.expires_at = new Date();
     });
 

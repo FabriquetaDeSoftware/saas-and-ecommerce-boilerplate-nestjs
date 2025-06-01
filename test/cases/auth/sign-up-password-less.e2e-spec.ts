@@ -72,7 +72,7 @@ describe('AuthController SignUp Password Less (e2e)', () => {
       expect(response.body).not.toHaveProperty('password');
 
       testData.userSignupPasswordLess.email = VALID_USER_DATA.email;
-      testData.userSignupPasswordLessVerificationCode.code = generatedCode;
+      testData.userSignupPasswordLessVerificationCode.code = generatedCode.code;
       testData.userSignupPasswordLessVerificationCode.expires_at = new Date();
     });
 
