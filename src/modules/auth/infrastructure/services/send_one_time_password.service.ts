@@ -7,7 +7,7 @@ import { LanguageEnum } from 'src/shared/enum/language.enum';
 import { TemplateEnum } from 'src/shared/modules/email/application/enum/template.enum';
 import { User } from 'src/shared/entities/user.entity';
 import { IGenerateNumberCodeUtil } from 'src/shared/utils/interfaces/generate_number_code.util.interface';
-import { IHashUtil } from 'src/shared/utils/interfaces/hash.util.interface';
+import { IOneTimePasswordRepository } from '../../domain/interfaces/repositories/one_time_password.repository.interface';
 
 Injectable();
 export class SendOneTimePasswordService implements ISendOneTimePasswordService {
@@ -20,6 +20,9 @@ export class SendOneTimePasswordService implements ISendOneTimePasswordService {
   @Inject('IGenerateNumberCodeUtil')
   private readonly _generateCodeOfVerificationUtil: IGenerateNumberCodeUtil;
 
+  @Inject('IOneTimePasswordRepository')
+  private readonly _oneTimePasswordRepository: IOneTimePasswordRepository;
+
   public async execute(input: EmailDto): Promise<{ message: string }> {
     const result = await this.intermediary(input.email);
 
@@ -30,6 +33,12 @@ export class SendOneTimePasswordService implements ISendOneTimePasswordService {
     const findUserByEmail = await this.validateUser(email);
 
     const otp = await this.generateOneTimePasswordAndExpiresDate();
+
+    await this._oneTimePasswordRepository.create(
+      otp.hashedCode,
+      findUserByEmail.id,
+      otp.expiresDate,
+    );
 
     return await this._sendEmailQueueJob.execute({
       emailTo: email,

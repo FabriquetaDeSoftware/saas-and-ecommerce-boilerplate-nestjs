@@ -27,6 +27,7 @@ import { IRecoveryPasswordUseCase } from '../../domain/interfaces/use_cases/reco
 import { ISignInMagicLinkUseCase } from '../../domain/interfaces/use_cases/sign_in_magic_link.use_case';
 import { SignUpMagicLinkDto } from '../../application/dto/sign_up_magic_link.dto';
 import { ISignUpPasswordLessUseCase } from '../../domain/interfaces/use_cases/sign_up_magic_link.use_case.interface';
+import { ISendOneTimePasswordService } from '../../domain/interfaces/services/send_one_time_password.service.interface';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -54,6 +55,9 @@ export class AuthController {
 
   @Inject('ISignUpPasswordLessUseCase')
   private readonly _signUpPasswordLessUseCase: ISignUpPasswordLessUseCase;
+
+  @Inject('ISendOneTimePasswordService')
+  private readonly _sendOneTimePasswordService: ISendOneTimePasswordService;
 
   @IsPublicRoute()
   @Post('sign-up-default')
@@ -115,9 +119,9 @@ export class AuthController {
   public async sendTemporaryPassword(
     @Body() input: EmailDto,
   ): Promise<{ message: string }> {
-    return {
-      message: 'method to send email with temporary password to execute login',
-    };
+    const response = await this._sendOneTimePasswordService.execute(input);
+
+    return response;
   }
 
   @IsPublicRoute()
