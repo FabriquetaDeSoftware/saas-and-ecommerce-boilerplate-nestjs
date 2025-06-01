@@ -13,7 +13,8 @@ export class EmailSenderService implements IEmailSenderService {
   @Inject('IProcessHtmlHelper')
   private readonly _processHTMLUtil: IProcessHtmlHelper;
 
-  private readonly _emailTemplateBasePath: 'src/shared/modules/email/infrastructure/templates';
+  private readonly _emailTemplateBasePath: string =
+    'src/shared/modules/email/infrastructure/templates';
 
   public async execute(input: EmailSenderDto): Promise<void> {
     await this.intermediary(input);

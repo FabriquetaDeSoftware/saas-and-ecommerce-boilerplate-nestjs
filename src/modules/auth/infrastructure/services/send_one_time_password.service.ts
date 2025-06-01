@@ -44,7 +44,7 @@ export class SendOneTimePasswordService implements ISendOneTimePasswordService {
       emailTo: email,
       language: LanguageEnum.PT_BR,
       subject: 'Login com senha de uso único',
-      template: TemplateEnum.MAGIC_LINK_LOGIN,
+      template: TemplateEnum.ONE_TIME_PASSWORD,
       variables: {
         NAME: findUserByEmail.name,
         OTP: otp.code,
