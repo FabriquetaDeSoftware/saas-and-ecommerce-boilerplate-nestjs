@@ -1,9 +1,13 @@
 import { OneTimePassword } from '../../entities/one_time_password.entity';
 
 export interface IOneTimePasswordRepository {
-  create(): Promise<OneTimePassword>;
+  create(
+    password: string,
+    user_id: number,
+    expires_at: Date,
+  ): Promise<Partial<OneTimePassword>>;
 
-  findOneByUserId(user_id: number): Promise<OneTimePassword>;
+  findOneByUserId(user_id: number): Promise<Partial<OneTimePassword>>;
 
-  deleteByAuthorId(): Promise<void>;
+  deleteByUserId(user_id: number): Promise<void>;
 }
