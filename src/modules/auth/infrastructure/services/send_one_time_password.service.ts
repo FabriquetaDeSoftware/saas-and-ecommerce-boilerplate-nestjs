@@ -20,9 +20,6 @@ export class SendOneTimePasswordService implements ISendOneTimePasswordService {
   @Inject('IGenerateNumberCodeUtil')
   private readonly _generateCodeOfVerificationUtil: IGenerateNumberCodeUtil;
 
-  @Inject('IHashUtil')
-  private readonly _hashUtil: IHashUtil;
-
   public async execute(input: EmailDto): Promise<{ message: string }> {
     const result = await this.intermediary(input.email);
 
@@ -64,14 +61,11 @@ export class SendOneTimePasswordService implements ISendOneTimePasswordService {
     code: string;
   }> {
     const fiveMinutesInMilliseconds = 300_000;
-    const expiresDate = new Date(
-      new Date().getTime() + fiveMinutesInMilliseconds,
+
+    const code = await this._generateCodeOfVerificationUtil.execute(
+      fiveMinutesInMilliseconds,
     );
 
-    const code = await this._generateCodeOfVerificationUtil.execute();
-
-    const hashedCode = await this._hashUtil.generateHash(code);
-
-    return { expiresDate, hashedCode, code };
+    return code;
   }
 }

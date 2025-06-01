@@ -103,15 +103,11 @@ export class SignUpPasswordLessUseCase implements ISignUpPasswordLessUseCase {
     verificationCode: string;
   }> {
     const twentyFourHoursInMilliseconds = 86400000;
-    const expiresDate = new Date(
-      new Date().getTime() + twentyFourHoursInMilliseconds,
+
+    const verificationCode = await this._generateCodeOfVerificationUtil.execute(
+      twentyFourHoursInMilliseconds,
     );
 
-    const verificationCode =
-      await this._generateCodeOfVerificationUtil.execute();
-
-    const hashedCode = await this._hashUtil.generateHash(verificationCode);
-
-    return { expiresDate, hashedCode, verificationCode };
+    return { ...verificationCode, verificationCode: verificationCode.code };
   }
 }
