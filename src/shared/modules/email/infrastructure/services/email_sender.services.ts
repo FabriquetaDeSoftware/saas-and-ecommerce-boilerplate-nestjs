@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { EmailSenderDto } from '../../application/dto/email_sender.dto';
 import * as nodemailer from 'nodemailer';
 import { IEmailSenderService } from '../../domain/interfaces/services/email_sender.service.interface';
-import { IProcessHtmlHelper } from 'src/shared/modules/email/domain/interfaces/helpers/proccess_html.helper.interface';
+import { IProcessHtmlHelper } from 'src/shared/modules/email/domain/interfaces/helpers/process_html.helper.interface';
 import { EnvService } from 'src/common/modules/services/env.service';
 
 @Injectable()
@@ -13,7 +13,8 @@ export class EmailSenderService implements IEmailSenderService {
   @Inject('IProcessHtmlHelper')
   private readonly _processHTMLUtil: IProcessHtmlHelper;
 
-  private readonly _emailTemplateBasePath: 'src/shared/modules/email/infrastructure/templates';
+  private readonly _emailTemplateBasePath: string =
+    'src/shared/modules/email/infrastructure/templates';
 
   public async execute(input: EmailSenderDto): Promise<void> {
     await this.intermediary(input);

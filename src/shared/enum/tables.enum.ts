@@ -5,4 +5,5 @@ export enum TablesEnum {
   SINGLE_PURCHASE_PRODUCT = 'single_purchase_product',
   SUBSCRIPTION_PURCHASE_PRODUCT = 'subscription_purchase_product',
   VERIFICATION_CODE = 'verification_code',
+  ONE_TIME_PASSWORD = 'one_time_password',
 }

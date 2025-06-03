@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as fs from 'node:fs/promises';
-import { IProcessHtmlHelper } from '../../domain/interfaces/helpers/proccess_html.helper.interface';
+import { IProcessHtmlHelper } from '../../domain/interfaces/helpers/process_html.helper.interface';
 
 @Injectable()
 export class ProcessHtmlHelper implements IProcessHtmlHelper {

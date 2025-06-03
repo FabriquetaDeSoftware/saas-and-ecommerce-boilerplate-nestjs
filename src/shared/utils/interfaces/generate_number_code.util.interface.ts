@@ -1,3 +1,5 @@
 export interface IGenerateNumberCodeUtil {
-  execute(): Promise<string>;
+  execute(
+    milliSecondsToExpire: number,
+  ): Promise<{ expiresDate: Date; hashedCode: string; code: string }>;
 }

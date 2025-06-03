@@ -22,6 +22,9 @@ import { JwtAuthGuard } from './interface/guards/jwt_auth.guard';
 import { SignInMagicLinkUseCase } from './application/use_cases/sign_in_magic_link.use_case';
 import { SignUpPasswordLessUseCase } from './application/use_cases/sign_up_password_less.use_case';
 import { EnvService } from 'src/common/modules/services/env.service';
+import { SendOneTimePasswordService } from './infrastructure/services/send_one_time_password.service';
+import { SignInOneTimePasswordUseCase } from './application/use_cases/sign_in_one_time_password.use_case';
+import { OneTimePasswordRepository } from './infrastructure/repositories/one_time_password.repository';
 
 @Module({
   imports: [
@@ -39,6 +42,21 @@ import { EnvService } from 'src/common/modules/services/env.service';
   ],
   controllers: [AuthController],
   providers: [
+    OneTimePasswordRepository,
+    {
+      provide: 'IOneTimePasswordRepository',
+      useExisting: OneTimePasswordRepository,
+    },
+    SignInOneTimePasswordUseCase,
+    {
+      provide: 'ISignInOneTimePasswordUseCase',
+      useExisting: SignInOneTimePasswordUseCase,
+    },
+    SendOneTimePasswordService,
+    {
+      provide: 'ISendOneTimePasswordService',
+      useExisting: SendOneTimePasswordService,
+    },
     SignUpPasswordLessUseCase,
     {
       provide: 'ISignUpPasswordLessUseCase',

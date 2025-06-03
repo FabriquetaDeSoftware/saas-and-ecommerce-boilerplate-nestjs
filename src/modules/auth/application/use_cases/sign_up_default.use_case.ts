@@ -110,15 +110,11 @@ export class SignUpDefaultUseCase implements ISignUpDefaultUseCase {
     verificationCode: string;
   }> {
     const twentyFourHoursInMilliseconds = 86_400_000;
-    const expiresDate = new Date(
-      new Date().getTime() + twentyFourHoursInMilliseconds,
+
+    const verificationCode = await this._generateCodeOfVerificationUtil.execute(
+      twentyFourHoursInMilliseconds,
     );
 
-    const verificationCode =
-      await this._generateCodeOfVerificationUtil.execute();
-
-    const hashedCode = await this._hashUtil.generateHash(verificationCode);
-
-    return { expiresDate, hashedCode, verificationCode };
+    return { ...verificationCode, verificationCode: verificationCode.code };
   }
 }
