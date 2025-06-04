@@ -5,6 +5,7 @@ import { AppModule } from 'src/app.module';
 import { testData } from '../../mocks/data/test.data';
 import { EmailDto } from 'src/modules/auth/application/dto/email.dto';
 import { IGenerateNumberCodeUtil } from 'src/shared/utils/interfaces/generate_number_code.util.interface';
+import { userData } from '../../mocks/data/user.data';
 
 describe('AuthController Send Temporary Password (e2e)', () => {
   let app: INestApplication;
@@ -29,18 +30,20 @@ describe('AuthController Send Temporary Password (e2e)', () => {
     jest.clearAllMocks();
   });
 
-  describe('POST /auth/send-temporary-password', () => {
-    it('Should return authenticated user', async () => {
+  describe('POST /auth/send-one-time-password', () => {
+    it('Should return email with OTP', async () => {
       const data: EmailDto = {
         email: testData.userSignupPasswordLess.email,
       };
 
       const response = await request(app.getHttpServer())
-        .post('/auth/send-temporary-password/')
+        .post('/auth/send-one-time-password/')
         .send(data)
         .expect(HttpStatus.OK);
 
       const generatedCode = await generateCodeSpy.mock.results[0].value;
+
+      userData.oneTimePassword.password = generatedCode.code;
 
       expect(response.body).toHaveProperty(
         'message',
@@ -54,7 +57,7 @@ describe('AuthController Send Temporary Password (e2e)', () => {
       };
 
       const response = await request(app.getHttpServer())
-        .post('/auth/send-temporary-password/')
+        .post('/auth/send-one-time-password/')
         .send(invalidEmailData)
         .expect(HttpStatus.UNAUTHORIZED);
 
@@ -71,7 +74,7 @@ describe('AuthController Send Temporary Password (e2e)', () => {
       };
 
       const response = await request(app.getHttpServer())
-        .post('/auth/send-temporary-password/')
+        .post('/auth/send-one-time-password/')
         .send(data)
         .expect(HttpStatus.UNAUTHORIZED);
 

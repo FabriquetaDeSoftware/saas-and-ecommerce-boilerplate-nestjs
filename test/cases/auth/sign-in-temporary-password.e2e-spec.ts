@@ -4,11 +4,11 @@ import * as request from 'supertest';
 import { AppModule } from 'src/app.module';
 import { testData } from '../../mocks/data/test.data';
 import { IGenerateNumberCodeUtil } from 'src/shared/utils/interfaces/generate_number_code.util.interface';
-import { SignInDefaultDto } from 'src/modules/auth/application/dto/sign_in_default.dto';
+import { SignInOneTimePasswordDto } from 'src/modules/auth/application/dto/sign_in_one_time_password.dto';
+import { userData } from '../../mocks/data/user.data';
 
 describe('AuthController SignIn Temporary Password (e2e)', () => {
   let app: INestApplication;
-  let generateCodeSpy: jest.SpyInstance;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -17,11 +17,6 @@ describe('AuthController SignIn Temporary Password (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
 
-    const generateNumberCodeUtil = moduleFixture.get<IGenerateNumberCodeUtil>(
-      'IGenerateNumberCodeUtil',
-    );
-    generateCodeSpy = jest.spyOn(generateNumberCodeUtil, 'execute');
-
     await app.init();
   });
 
@@ -29,32 +24,30 @@ describe('AuthController SignIn Temporary Password (e2e)', () => {
     jest.clearAllMocks();
   });
 
-  describe('POST /auth/sign-in-temporary-password', () => {
+  describe('POST /auth/sign-in-one-time-password', () => {
     it('Should return authenticated user', async () => {
-      const data: SignInDefaultDto = {
+      const data: SignInOneTimePasswordDto = {
         email: testData.userSignupPasswordLess.email,
+        password: userData.oneTimePassword.password,
       };
 
       const response = await request(app.getHttpServer())
-        .post('/auth/sign-in-temporary-password/')
+        .post('/auth/sign-in-one-time-password/')
         .send(data)
         .expect(HttpStatus.OK);
 
-      const generatedCode = await generateCodeSpy.mock.results[0].value;
-
-      expect(response.body).toHaveProperty(
-        'message',
-        'Email sent successfully',
-      );
+      expect(response.body).toHaveProperty('access_token');
+      expect(response.body).toHaveProperty('refresh_token');
     });
 
     it('Should return 401 when email is invalid', async () => {
-      const invalidEmailData: SignInDefaultDto = {
+      const invalidEmailData: SignInOneTimePasswordDto = {
         email: 'wrong@gmail.com',
+        password: userData.oneTimePassword.password,
       };
 
       const response = await request(app.getHttpServer())
-        .post('/auth/sign-in-temporary-password/')
+        .post('/auth/sign-in-one-time-password/')
         .send(invalidEmailData)
         .expect(HttpStatus.UNAUTHORIZED);
 
@@ -65,13 +58,37 @@ describe('AuthController SignIn Temporary Password (e2e)', () => {
       );
     });
 
-    it('Should return 401 when account is not verified', async () => {
-      const data: SignInDefaultDto = {
-        email: 'notverify@exemple.com',
+    it('Should return 401 when password is invalid', async () => {
+      const invalidPass = (userData.oneTimePassword.password || '')
+        .split('')
+        .sort(() => Math.random() - 0.5)
+        .join('');
+
+      const invalidPasswordData: SignInOneTimePasswordDto = {
+        email: testData.userSignupDefault.email,
+        password: invalidPass,
       };
 
       const response = await request(app.getHttpServer())
-        .post('/auth/sign-in-temporary-password/')
+        .post('/auth/sign-in-default/')
+        .send(invalidPasswordData)
+        .expect(HttpStatus.UNAUTHORIZED);
+
+      expect(response.body).toHaveProperty('statusCode', 401);
+      expect(response.body).toHaveProperty(
+        'message',
+        'Invalid credentials or account not verified',
+      );
+    });
+
+    it('Should return 401 when account is not verified', async () => {
+      const data: SignInOneTimePasswordDto = {
+        email: 'notverify@exemple.com',
+        password: userData.oneTimePassword.password,
+      };
+
+      const response = await request(app.getHttpServer())
+        .post('/auth/sign-in-one-time-password/')
         .send(data)
         .expect(HttpStatus.UNAUTHORIZED);
 

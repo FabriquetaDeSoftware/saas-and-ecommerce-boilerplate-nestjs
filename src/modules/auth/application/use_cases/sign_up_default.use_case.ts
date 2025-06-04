@@ -45,12 +45,12 @@ export class SignUpDefaultUseCase implements ISignUpDefaultUseCase {
         this.generateCodeOfVerificationAndExpiresDate(),
       ]);
 
-    const twentyFourHoursInSeconds = 86400;
+    const fiveHoursInSeconds = 18_000;
 
     await this._cacheManager.set(
       `accountVerificationCode:${data.email}`,
       verificationCodeAndExpiresDate.hashedCode,
-      twentyFourHoursInSeconds,
+      fiveHoursInSeconds,
     );
 
     const result = await this.createAccount(

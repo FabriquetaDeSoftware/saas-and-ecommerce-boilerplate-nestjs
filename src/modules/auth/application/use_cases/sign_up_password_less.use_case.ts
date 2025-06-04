@@ -43,19 +43,20 @@ export class SignUpPasswordLessUseCase implements ISignUpPasswordLessUseCase {
       this.generateCodeOfVerificationAndExpiresDate(),
     ]);
 
-    const twentyFourHoursInSeconds = 86400;
+    const fiveHoursInSeconds = 18_000;
 
-    await this._cacheManager.set(
-      `accountVerificationCode:${data.email}`,
-      verificationCodeAndExpiresDate.hashedCode,
-      twentyFourHoursInSeconds,
-    );
-
-    const result = await this.createAccount(
-      data,
-      verificationCodeAndExpiresDate.hashedCode,
-      verificationCodeAndExpiresDate.expiresDate,
-    );
+    const [, result] = await Promise.all([
+      this._cacheManager.set(
+        `accountVerificationCode:${data.email}`,
+        verificationCodeAndExpiresDate.hashedCode,
+        fiveHoursInSeconds,
+      ),
+      this.createAccount(
+        data,
+        verificationCodeAndExpiresDate.hashedCode,
+        verificationCodeAndExpiresDate.expiresDate,
+      ),
+    ]);
 
     await this._sendEmailQueueJob.execute({
       emailTo: result.email,
@@ -102,7 +103,7 @@ export class SignUpPasswordLessUseCase implements ISignUpPasswordLessUseCase {
     hashedCode: string;
     verificationCode: string;
   }> {
-    const twentyFourHoursInMilliseconds = 86400000;
+    const twentyFourHoursInMilliseconds = 86_400_000;
 
     const verificationCode = await this._generateCodeOfVerificationUtil.execute(
       twentyFourHoursInMilliseconds,

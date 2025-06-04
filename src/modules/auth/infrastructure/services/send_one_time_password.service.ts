@@ -8,11 +8,15 @@ import { TemplateEnum } from 'src/shared/modules/email/application/enum/template
 import { User } from 'src/shared/entities/user.entity';
 import { IGenerateNumberCodeUtil } from 'src/shared/utils/interfaces/generate_number_code.util.interface';
 import { IOneTimePasswordRepository } from '../../domain/interfaces/repositories/one_time_password.repository.interface';
+import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 
 Injectable();
 export class SendOneTimePasswordService implements ISendOneTimePasswordService {
   @Inject('ISendEmailQueueJob')
   private readonly _sendEmailQueueJob: ISendEmailQueueJob;
+
+  @Inject(CACHE_MANAGER)
+  private readonly _cacheManager: Cache;
 
   @Inject('IFindUserByEmailHelper')
   private readonly _findUserByEmailHelper: IFindUserByEmailHelper;
@@ -34,11 +38,20 @@ export class SendOneTimePasswordService implements ISendOneTimePasswordService {
 
     const otp = await this.generateOneTimePasswordAndExpiresDate();
 
-    await this._oneTimePasswordRepository.create(
-      otp.hashedCode,
-      findUserByEmail.id,
-      otp.expiresDate,
-    );
+    const twentyFourHoursInSeconds = 86400;
+
+    const [,] = await Promise.all([
+      this._cacheManager.set(
+        `oneTimePassword:${findUserByEmail.email}`,
+        otp.hashedCode,
+        twentyFourHoursInSeconds,
+      ),
+      await this._oneTimePasswordRepository.create(
+        otp.hashedCode,
+        findUserByEmail.id,
+        otp.expiresDate,
+      ),
+    ]);
 
     return await this._sendEmailQueueJob.execute({
       emailTo: email,
@@ -69,10 +82,10 @@ export class SendOneTimePasswordService implements ISendOneTimePasswordService {
     hashedCode: string;
     code: string;
   }> {
-    const fiveMinutesInMilliseconds = 300_000;
+    const tenMinutesInMilliseconds = 600_000;
 
     const code = await this._generateCodeOfVerificationUtil.execute(
-      fiveMinutesInMilliseconds,
+      tenMinutesInMilliseconds,
     );
 
     return code;

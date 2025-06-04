@@ -28,6 +28,7 @@ import { ISignInMagicLinkUseCase } from '../../domain/interfaces/use_cases/sign_
 import { SignUpMagicLinkDto } from '../../application/dto/sign_up_magic_link.dto';
 import { ISignUpPasswordLessUseCase } from '../../domain/interfaces/use_cases/sign_up_magic_link.use_case.interface';
 import { ISendOneTimePasswordService } from '../../domain/interfaces/services/send_one_time_password.service.interface';
+import { ISignInOneTimePasswordUseCase } from '../../domain/interfaces/use_cases/sign_in_one_time_password.use_case.interface';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -58,6 +59,9 @@ export class AuthController {
 
   @Inject('ISendOneTimePasswordService')
   private readonly _sendOneTimePasswordService: ISendOneTimePasswordService;
+
+  @Inject('ISignInOneTimePasswordUseCase')
+  private readonly _signInOneTimePasswordUseCase: ISignInOneTimePasswordUseCase;
 
   @IsPublicRoute()
   @Post('sign-up-default')
@@ -129,10 +133,10 @@ export class AuthController {
   @HttpCode(200)
   public async signInTemporaryPassword(
     @Body() input: SignInDefaultDto,
-  ): Promise<{ message: string }> {
-    return {
-      message: 'method to execute login with email and temporary password',
-    };
+  ): Promise<ITokensReturnsHelper> {
+    const response = await this._signInOneTimePasswordUseCase.execute(input);
+
+    return response;
   }
 
   @IsPublicRoute()
