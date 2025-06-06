@@ -1,14 +1,17 @@
 FROM node:22.14-bullseye-slim
 WORKDIR /home/api/nestjs/saas-and-ecommerce-boilerplate-nestjs
 
-COPY . .
+COPY package.json pnpm-lock.yaml ./
 
-RUN rm -rf node_modules
 RUN npm install -g pnpm
 RUN pnpm install --prod --frozen-lockfile
 
+COPY . .
+
 RUN pnpm add @prisma/client@6.4.1
 RUN npx prisma generate
+
+RUN pnpm prune --prod
 
 EXPOSE ${PORT_API}
 
