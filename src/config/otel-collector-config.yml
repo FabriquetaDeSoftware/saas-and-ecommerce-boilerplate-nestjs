@@ -10,12 +10,13 @@ receivers:
     config:
       scrape_configs:
         - job_name: 'nestjs-api'
+          scrape_interval: 60s
           static_configs:
             - targets: ['api:3003']
 
 exporters:
   debug:
-    verbosity: detailed
+    verbosity: basic
 
   otlp:
     endpoint: jaeger:4317

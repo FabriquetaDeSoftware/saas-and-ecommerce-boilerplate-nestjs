@@ -7,7 +7,7 @@ export function swaggerConfig(
 ): void {
   const config = new DocumentBuilder()
     .setTitle('Api to SaaS and E-commerce Boilerplate')
-    .setDescription('API for testing saas and e-comerce boilerplate routes')
+    .setDescription('API for testing saas and e-commerce boilerplate routes')
     .setVersion('1.0')
     .addBearerAuth()
     .addTag('auth')
