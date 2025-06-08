@@ -15,8 +15,8 @@ services:
       - network
     # ports:
     #   - '${MAPPED_PORT_API}:${PORT_API}'
-    volumes:
-      - ../..:/home/api/nestjs/saas-and-ecommerce-boilerplate-nestjs
+    # volumes:
+    #   - ../..:/home/api/nestjs/saas-and-ecommerce-boilerplate-nestjs
     restart: unless-stopped
 
   postgres:

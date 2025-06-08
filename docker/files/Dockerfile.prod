@@ -11,6 +11,8 @@ COPY . .
 RUN pnpm add @prisma/client@6.4.1
 RUN npx prisma generate
 
+RUN pnpm run build
+RUN rm -rf src test
 RUN pnpm prune --prod
 
 EXPOSE ${PORT_API}
