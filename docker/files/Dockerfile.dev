@@ -5,11 +5,14 @@ COPY . .
 
 RUN rm -rf node_modules
 RUN npm install -g pnpm
+RUN npm i -g @nestjs/cli
 RUN pnpm install --frozen-lockfile   
 
 RUN pnpm add @prisma/client@6.4.1
 RUN npx prisma generate
 
+RUN pnpm run build
+
 EXPOSE ${PORT_API}
 
-CMD ["sh", "-c", "npx prisma migrate deploy && pnpm run start:dev"]
+CMD ["sh", "-c", "npx prisma migrate dev && pnpm run start:dev"]

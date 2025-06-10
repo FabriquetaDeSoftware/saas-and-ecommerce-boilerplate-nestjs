@@ -66,7 +66,7 @@ importers:
         specifier: ^2.0.0
         version: 2.0.0(@opentelemetry/api@1.9.0)
       '@prisma/client':
-        specifier: ^6.4.1
+        specifier: 6.4.1
         version: 6.4.1(prisma@6.4.1(typescript@5.7.3))(typescript@5.7.3)
       '@prisma/instrumentation':
         specifier: ^6.5.0

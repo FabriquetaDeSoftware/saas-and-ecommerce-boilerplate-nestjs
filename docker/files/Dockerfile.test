@@ -12,4 +12,4 @@ RUN npx prisma generate
 
 EXPOSE ${PORT_API}
 
-CMD ["sh", "-c", "npx prisma migrate deploy && pnpm run start:dev"]
+CMD ["sh", "-c", "npx prisma migrate dev && pnpm run start:dev"]
