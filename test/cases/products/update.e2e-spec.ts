@@ -3,7 +3,11 @@ import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from 'src/app.module';
 import { UpdateProductInfoDto } from 'src/modules/products/application/dto/update_product_info.dto';
-import { testData } from '../../mocks/data/test.data';
+import { tokensReturns } from '../../mocks/data/user.data';
+import {
+  productSingleData,
+  productSubscriptionData,
+} from '../../mocks/data/product.data';
 
 describe('ProductsController Update (e2e)', () => {
   let app: INestApplication;
@@ -45,9 +49,9 @@ describe('ProductsController Update (e2e)', () => {
   });
 
   it('Should return updated product', async () => {
-    const adminToken = testData.tokensReturnsAdmin.access_token;
-    const testDataSingle = testData.productSinglePurchase;
-    const testDataSubs = testData.productSubscriptionPurchase;
+    const adminToken = tokensReturns.tokensAdmin.access_token;
+    const testDataSingle = productSingleData.product;
+    const testDataSubs = productSubscriptionData.product;
     const productSingleId = testDataSingle.public_id;
     const productSubsId = testDataSubs.public_id;
 
@@ -85,11 +89,11 @@ describe('ProductsController Update (e2e)', () => {
   });
 
   it('Should return 401 when user is not athorized to perfom update operation', async () => {
-    const notPerformerToken = testData.tokensReturnsUser.access_token;
+    const notPerformerToken = tokensReturns.tokensUser.access_token;
 
     await request(app.getHttpServer())
       .patch(
-        `/products/update/${types[0]}/${testData.productSinglePurchase.public_id}/`,
+        `/products/update/${types[0]}/${productSingleData.product.public_id}/`,
       )
       .set('Authorization', `Bearer ${notPerformerToken}`)
       .send(VALID_PRODUCT_DATA)
@@ -97,7 +101,7 @@ describe('ProductsController Update (e2e)', () => {
 
     await request(app.getHttpServer())
       .patch(
-        `/products/update/${types[1]}/${testData.productSubscriptionPurchase.public_id}/`,
+        `/products/update/${types[1]}/${productSubscriptionData.product.public_id}/`,
       )
       .set('Authorization', `Bearer ${notPerformerToken}`)
       .send(VALID_PRODUCT_DATA)
@@ -105,12 +109,12 @@ describe('ProductsController Update (e2e)', () => {
   });
 
   it('Should return 404 when product not found', async () => {
-    const adminToken = testData.tokensReturnsAdmin.access_token;
+    const adminToken = tokensReturns.tokensAdmin.access_token;
 
     const [,] = await Promise.all([
       request(app.getHttpServer())
         .delete(
-          `/products/update/${types[0]}/${testData.productSinglePurchase.public_id}/`,
+          `/products/update/${types[0]}/${productSingleData.product.public_id}/`,
         )
         .set('Authorization', `Bearer ${adminToken}`)
         .send(VALID_PRODUCT_DATA)
@@ -118,7 +122,7 @@ describe('ProductsController Update (e2e)', () => {
 
       request(app.getHttpServer())
         .delete(
-          `/products/update/${types[1]}/${testData.productSubscriptionPurchase.public_id}/`,
+          `/products/update/${types[1]}/${productSubscriptionData.product.public_id}/`,
         )
         .set('Authorization', `Bearer ${adminToken}`)
         .send(VALID_PRODUCT_DATA)
@@ -127,11 +131,11 @@ describe('ProductsController Update (e2e)', () => {
   });
 
   it('Should return 400 when type is invalid', async () => {
-    const adminToken = testData.tokensReturnsAdmin.access_token;
+    const adminToken = tokensReturns.tokensAdmin.access_token;
 
     await request(app.getHttpServer())
       .patch(
-        `/products/update/invalid-type/${testData.productSinglePurchase.public_id}/`,
+        `/products/update/invalid-type/${productSingleData.product.public_id}/`,
       )
       .set('Authorization', `Bearer ${adminToken}`)
       .send(VALID_PRODUCT_DATA)
@@ -139,12 +143,12 @@ describe('ProductsController Update (e2e)', () => {
   });
 
   it('should validate required fields and return 400 for invalid data', async () => {
-    const adminToken = testData.tokensReturnsAdmin.access_token;
+    const adminToken = tokensReturns.tokensAdmin.access_token;
 
     const [,] = await Promise.all([
       request(app.getHttpServer())
         .patch(
-          `/products/update/${types[0]}/${testData.productSinglePurchase.public_id}/`,
+          `/products/update/${types[0]}/${productSingleData.product.public_id}/`,
         )
         .set('Authorization', `Bearer ${adminToken}`)
         .send('invalid data')
@@ -152,7 +156,7 @@ describe('ProductsController Update (e2e)', () => {
 
       request(app.getHttpServer())
         .patch(
-          `/products/update/${types[1]}/${testData.productSubscriptionPurchase.public_id}/`,
+          `/products/update/${types[1]}/${productSubscriptionData.product.public_id}/`,
         )
         .set('Authorization', `Bearer ${adminToken}`)
         .send('invalid data')

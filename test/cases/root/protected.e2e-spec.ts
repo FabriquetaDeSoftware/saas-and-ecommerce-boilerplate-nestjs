@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from 'src/app.module';
-import { testData } from '../../mocks/data/test.data';
+import { tokensReturns } from '../../mocks/data/user.data';
 
 describe('Protected route without roles to test (e2e)', () => {
   let app: INestApplication;
@@ -33,10 +33,7 @@ describe('Protected route without roles to test (e2e)', () => {
     it('should return message to authenticated user', async () => {
       const responseUser = await request(app.getHttpServer())
         .get('/protected/')
-        .set(
-          'Authorization',
-          `Bearer ${testData.tokensReturnsUser.access_token}`,
-        )
+        .set('Authorization', `Bearer ${tokensReturns.tokensUser.access_token}`)
         .expect(HttpStatus.OK);
 
       expect(responseUser.body).toHaveProperty('message');
@@ -46,7 +43,7 @@ describe('Protected route without roles to test (e2e)', () => {
         .get('/protected/')
         .set(
           'Authorization',
-          `Bearer ${testData.tokensReturnsAdmin.access_token}`,
+          `Bearer ${tokensReturns.tokensAdmin.access_token}`,
         )
         .expect(HttpStatus.OK);
 

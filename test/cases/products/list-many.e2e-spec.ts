@@ -3,7 +3,10 @@ import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from 'src/app.module';
 import { ListManyProductsDto } from 'src/modules/products/application/dto/list_many_products.dto';
-import { testData } from '../../mocks/data/test.data';
+import {
+  productSingleData,
+  productSubscriptionData,
+} from '../../mocks/data/product.data';
 
 describe('ProductsController List Many (e2e)', () => {
   let app: INestApplication;
@@ -31,8 +34,8 @@ describe('ProductsController List Many (e2e)', () => {
   });
 
   it('Should return products[]', async () => {
-    const testDataSingle = testData.productSinglePurchase;
-    const testDataSubs = testData.productSubscriptionPurchase;
+    const testDataSingle = productSingleData.product;
+    const testDataSubs = productSubscriptionData.product;
     const listManyProductsData: ListManyProductsDto = {
       page: 1,
       pageSize: 1,

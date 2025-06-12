@@ -3,7 +3,10 @@ import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from 'src/app.module';
 import { EmailDto } from 'src/modules/auth/application/dto/email.dto';
-import { testData } from '../../mocks/data/test.data';
+import {
+  userSignupDefaultData,
+  tokensReturns,
+} from '../../mocks/data/user.data';
 import { IGenerateTokenHelper } from 'src/modules/auth/domain/interfaces/helpers/generate_token.helper.interface';
 
 describe('AuthController Forgot Password (e2e)', () => {
@@ -39,7 +42,7 @@ describe('AuthController Forgot Password (e2e)', () => {
   describe('POST /auth/forgot-password', () => {
     it('Should return email sent to user', async () => {
       const data: EmailDto = {
-        email: testData.userSignupDefault.email,
+        email: userSignupDefaultData.user.email,
       };
 
       const response = await request(app.getHttpServer())
@@ -54,7 +57,7 @@ describe('AuthController Forgot Password (e2e)', () => {
 
       const generatedToken = await generateTokenSpy.mock.results[0].value;
 
-      testData.tokensReturnsUser.token = generatedToken.token;
+      tokensReturns.tokensUser.token = generatedToken.token;
     });
 
     it('Should return 404 when email is invalid', async () => {

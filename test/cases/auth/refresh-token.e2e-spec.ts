@@ -3,7 +3,7 @@ import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from 'src/app.module';
 import { RefreshTokenDto } from 'src/modules/auth/application/dto/refresh_token.dto';
-import { testData } from '../../mocks/data/test.data';
+import { tokensReturns } from '../../mocks/data/user.data';
 
 describe('AuthController Refresh Token (e2e)', () => {
   let app: INestApplication;
@@ -34,7 +34,7 @@ describe('AuthController Refresh Token (e2e)', () => {
   describe('POST /auth/refresh-token', () => {
     it('Should return new authentication payload', async () => {
       const data: RefreshTokenDto = {
-        refresh_token: testData.tokensReturnsUser.refresh_token,
+        refresh_token: tokensReturns.tokensUser.refresh_token,
       };
 
       const response = await request(app.getHttpServer())

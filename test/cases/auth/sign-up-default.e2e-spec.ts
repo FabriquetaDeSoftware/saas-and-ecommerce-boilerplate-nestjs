@@ -5,7 +5,7 @@ import { AppModule } from 'src/app.module';
 import { SignUpDefaultDto } from 'src/modules/auth/application/dto/sign_up_default.dto';
 import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { IGenerateNumberCodeUtil } from 'src/shared/utils/interfaces/generate_number_code.util.interface';
-import { testData } from '../../mocks/data/test.data';
+import { userSignupDefaultData } from '../../mocks/data/user.data';
 
 describe('AuthController SignUp Default (e2e)', () => {
   let app: INestApplication;
@@ -72,10 +72,10 @@ describe('AuthController SignUp Default (e2e)', () => {
       expect(response.body).not.toHaveProperty('id');
       expect(response.body).not.toHaveProperty('password');
 
-      testData.userSignupDefault.email = VALID_USER_DATA.email;
-      testData.userSignupDefault.password = VALID_USER_DATA.password;
-      testData.userSignupDefaultVerificationCode.code = generatedCode.code;
-      testData.userSignupDefaultVerificationCode.expires_at = new Date();
+      userSignupDefaultData.user.email = VALID_USER_DATA.email;
+      userSignupDefaultData.user.password = VALID_USER_DATA.password;
+      userSignupDefaultData.verificationCode.code = generatedCode.code;
+      userSignupDefaultData.verificationCode.expires_at = new Date();
     });
 
     it('should return 409 when email already exists', async () => {

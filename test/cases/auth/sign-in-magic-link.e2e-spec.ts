@@ -3,7 +3,7 @@ import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from 'src/app.module';
 import { EmailDto } from 'src/modules/auth/application/dto/email.dto';
-import { testData } from '../../mocks/data/test.data';
+import { userSignupPasswordLessData } from '../../mocks/data/user.data';
 
 describe('AuthController SignIn Magic Link (e2e)', () => {
   let app: INestApplication;
@@ -31,7 +31,7 @@ describe('AuthController SignIn Magic Link (e2e)', () => {
   describe('POST /auth/sign-in-magic-link', () => {
     it('Should return success message when email is valid', async () => {
       const data: EmailDto = {
-        email: testData.userSignupPasswordLess.email,
+        email: userSignupPasswordLessData.user.email,
       };
 
       const response = await request(app.getHttpServer())

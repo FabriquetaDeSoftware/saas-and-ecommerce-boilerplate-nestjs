@@ -2,10 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from 'src/app.module';
-import { testData } from '../../mocks/data/test.data';
 import { EmailDto } from 'src/modules/auth/application/dto/email.dto';
 import { IGenerateNumberCodeUtil } from 'src/shared/utils/interfaces/generate_number_code.util.interface';
-import { userData } from '../../mocks/data/user.data';
+import { userSignupPasswordLessData } from '../../mocks/data/user.data';
 
 describe('AuthController Send Temporary Password (e2e)', () => {
   let app: INestApplication;
@@ -33,7 +32,7 @@ describe('AuthController Send Temporary Password (e2e)', () => {
   describe('POST /auth/send-one-time-password', () => {
     it('Should return email with OTP', async () => {
       const data: EmailDto = {
-        email: testData.userSignupPasswordLess.email,
+        email: userSignupPasswordLessData.user.email,
       };
 
       const response = await request(app.getHttpServer())
@@ -43,7 +42,7 @@ describe('AuthController Send Temporary Password (e2e)', () => {
 
       const generatedCode = await generateCodeSpy.mock.results[0].value;
 
-      userData.oneTimePassword.password = generatedCode.code;
+      userSignupPasswordLessData.oneTimePassword.password = generatedCode.code;
 
       expect(response.body).toHaveProperty(
         'message',

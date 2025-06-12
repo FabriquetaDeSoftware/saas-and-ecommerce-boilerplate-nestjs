@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from 'src/app.module';
-import { testData } from '../../mocks/data/test.data';
+import { tokensReturns } from '../../mocks/data/user.data';
 
 describe('User Protected Routes (e2e)', () => {
   let app: INestApplication;
@@ -31,7 +31,7 @@ describe('User Protected Routes (e2e)', () => {
 
   describe('GET /user', () => {
     it('should return success message when user has user role', async () => {
-      const userToken = testData.tokensReturnsUser.access_token;
+      const userToken = tokensReturns.tokensUser.access_token;
 
       const response = await request(app.getHttpServer())
         .get('/user/')
@@ -43,7 +43,7 @@ describe('User Protected Routes (e2e)', () => {
     });
 
     it('should return 403 when user has insufficient role permissions', async () => {
-      const adminToken = testData.tokensReturnsAdmin.access_token;
+      const adminToken = tokensReturns.tokensAdmin.access_token;
 
       const response = await request(app.getHttpServer())
         .get('/user/')

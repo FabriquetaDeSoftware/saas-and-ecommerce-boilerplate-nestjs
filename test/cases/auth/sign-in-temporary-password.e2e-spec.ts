@@ -2,10 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from 'src/app.module';
-import { testData } from '../../mocks/data/test.data';
-import { IGenerateNumberCodeUtil } from 'src/shared/utils/interfaces/generate_number_code.util.interface';
 import { SignInOneTimePasswordDto } from 'src/modules/auth/application/dto/sign_in_one_time_password.dto';
-import { userData } from '../../mocks/data/user.data';
+import {
+  userSignupDefaultData,
+  userSignupPasswordLessData,
+} from '../../mocks/data/user.data';
 
 describe('AuthController SignIn Temporary Password (e2e)', () => {
   let app: INestApplication;
@@ -27,8 +28,8 @@ describe('AuthController SignIn Temporary Password (e2e)', () => {
   describe('POST /auth/sign-in-one-time-password', () => {
     it('Should return authenticated user', async () => {
       const data: SignInOneTimePasswordDto = {
-        email: testData.userSignupPasswordLess.email,
-        password: userData.oneTimePassword.password,
+        email: userSignupPasswordLessData.user.email,
+        password: userSignupPasswordLessData.oneTimePassword.password,
       };
 
       const response = await request(app.getHttpServer())
@@ -43,7 +44,7 @@ describe('AuthController SignIn Temporary Password (e2e)', () => {
     it('Should return 401 when email is invalid', async () => {
       const invalidEmailData: SignInOneTimePasswordDto = {
         email: 'wrong@gmail.com',
-        password: userData.oneTimePassword.password,
+        password: userSignupPasswordLessData.oneTimePassword.password,
       };
 
       const response = await request(app.getHttpServer())
@@ -59,13 +60,15 @@ describe('AuthController SignIn Temporary Password (e2e)', () => {
     });
 
     it('Should return 401 when password is invalid', async () => {
-      const invalidPass = (userData.oneTimePassword.password || '')
+      const invalidPass = (
+        userSignupPasswordLessData.oneTimePassword.password || ''
+      )
         .split('')
         .sort(() => Math.random() - 0.5)
         .join('');
 
       const invalidPasswordData: SignInOneTimePasswordDto = {
-        email: testData.userSignupDefault.email,
+        email: userSignupDefaultData.user.email,
         password: invalidPass,
       };
 
@@ -84,7 +87,7 @@ describe('AuthController SignIn Temporary Password (e2e)', () => {
     it('Should return 401 when account is not verified', async () => {
       const data: SignInOneTimePasswordDto = {
         email: 'notverify@exemple.com',
-        password: userData.oneTimePassword.password,
+        password: userSignupPasswordLessData.oneTimePassword.password,
       };
 
       const response = await request(app.getHttpServer())

@@ -1,14 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import {
-  INestApplication,
-  BadRequestException,
-  ValidationPipe,
-  HttpStatus,
-} from '@nestjs/common';
+import { INestApplication, ValidationPipe, HttpStatus } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from 'src/app.module';
 import { PasswordDto } from 'src/modules/auth/application/dto/password.dto';
-import { testData } from '../../mocks/data/test.data';
+import { tokensReturns } from '../../mocks/data/user.data';
 
 describe('AuthController Recovery Password (e2e)', () => {
   let app: INestApplication;
@@ -38,7 +33,7 @@ describe('AuthController Recovery Password (e2e)', () => {
 
   describe('POST /auth/recovery-password', () => {
     it('Should return password recovery success', async () => {
-      const validToken = testData.tokensReturnsUser.token;
+      const validToken = tokensReturns.tokensUser.token;
       const recoveryPasswordData: PasswordDto = {
         password: 'Password123!',
       };
@@ -72,7 +67,7 @@ describe('AuthController Recovery Password (e2e)', () => {
     });
 
     it('Should return 400 when password is missing', async () => {
-      const validToken = testData.tokensReturnsUser.token;
+      const validToken = tokensReturns.tokensUser.token;
 
       const response = await request(app.getHttpServer())
         .post(`/auth/recovery-password?token=${validToken}`)

@@ -3,7 +3,10 @@ import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from 'src/app.module';
 import { SignInDefaultDto } from 'src/modules/auth/application/dto/sign_in_default.dto';
-import { testData } from '../../mocks/data/test.data';
+import {
+  userSignupDefaultData,
+  tokensReturns,
+} from '../../mocks/data/user.data';
 
 describe('AuthController SignIn Default (e2e)', () => {
   let app: INestApplication;
@@ -24,8 +27,8 @@ describe('AuthController SignIn Default (e2e)', () => {
   describe('POST /auth/sign-in-default', () => {
     it('Should return authenticated user', async () => {
       const dataUser: SignInDefaultDto = {
-        email: testData.userSignupDefault.email,
-        password: testData.userSignupDefault.password,
+        email: userSignupDefaultData.user.email,
+        password: userSignupDefaultData.user.password,
       };
 
       const responseUser = await request(app.getHttpServer())
@@ -36,9 +39,8 @@ describe('AuthController SignIn Default (e2e)', () => {
       expect(responseUser.body).toHaveProperty('access_token');
       expect(responseUser.body).toHaveProperty('refresh_token');
 
-      testData.tokensReturnsUser.access_token = responseUser.body.access_token;
-      testData.tokensReturnsUser.refresh_token =
-        responseUser.body.refresh_token;
+      tokensReturns.tokensUser.access_token = responseUser.body.access_token;
+      tokensReturns.tokensUser.refresh_token = responseUser.body.refresh_token;
 
       const dataAdmin: SignInDefaultDto = {
         email: 'testadmin@exemple.com',
@@ -53,16 +55,15 @@ describe('AuthController SignIn Default (e2e)', () => {
       expect(responseAdmin.body).toHaveProperty('access_token');
       expect(responseAdmin.body).toHaveProperty('refresh_token');
 
-      testData.tokensReturnsAdmin.access_token =
-        responseAdmin.body.access_token;
-      testData.tokensReturnsAdmin.refresh_token =
+      tokensReturns.tokensAdmin.access_token = responseAdmin.body.access_token;
+      tokensReturns.tokensAdmin.refresh_token =
         responseAdmin.body.refresh_token;
     });
 
     it('Should return 401 when email is invalid', async () => {
       const invalidEmailData = {
         email: 'wrong@gmail.com',
-        password: testData.userSignupDefault.password,
+        password: userSignupDefaultData.user.password,
       };
 
       const response = await request(app.getHttpServer())
@@ -79,7 +80,7 @@ describe('AuthController SignIn Default (e2e)', () => {
 
     it('Should return 401 when password is invalid', async () => {
       const invalidPasswordData = {
-        email: testData.userSignupDefault.email,
+        email: userSignupDefaultData.user.email,
         password: 'wrong123',
       };
 
@@ -98,7 +99,7 @@ describe('AuthController SignIn Default (e2e)', () => {
     it('Should return 401 when account is not verified', async () => {
       const data: SignInDefaultDto = {
         email: 'notverify@exemple.com',
-        password: testData.userSignupDefault.password,
+        password: userSignupDefaultData.user.password,
       };
 
       const response = await request(app.getHttpServer())

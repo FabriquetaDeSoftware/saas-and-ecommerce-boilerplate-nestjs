@@ -3,7 +3,10 @@ import { INestApplication, HttpStatus } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from 'src/app.module';
 import { VerificationCodeDto } from 'src/modules/auth/application/dto/verification_code.dto';
-import { testData } from '../../mocks/data/test.data';
+import {
+  userSignupDefaultData,
+  userSignupPasswordLessData,
+} from '../../mocks/data/user.data';
 
 describe('AuthController Verification Account (e2e)', () => {
   let app: INestApplication;
@@ -31,7 +34,7 @@ describe('AuthController Verification Account (e2e)', () => {
     it('should return 400 when verification code is invalid', async () => {
       const invalidCodeData = VALID_VERIFICATION_DATA.map((data) => ({
         ...data,
-        email: testData.userSignupDefault.email,
+        email: userSignupDefaultData.user.email,
         code: 654321,
       }));
 
@@ -76,12 +79,12 @@ describe('AuthController Verification Account (e2e)', () => {
     it('should verify user account when code is valid', async () => {
       const DATA: VerificationCodeDto[] = [
         {
-          email: testData.userSignupDefault.email,
-          code: parseInt(testData.userSignupDefaultVerificationCode.code),
+          email: userSignupDefaultData.user.email,
+          code: parseInt(userSignupDefaultData.verificationCode.code),
         },
         {
-          email: testData.userSignupPasswordLess.email,
-          code: parseInt(testData.userSignupPasswordLessVerificationCode.code),
+          email: userSignupPasswordLessData.user.email,
+          code: parseInt(userSignupPasswordLessData.verificationCode.code),
         },
       ];
 
@@ -105,7 +108,7 @@ describe('AuthController Verification Account (e2e)', () => {
     it('should return 404 when email is not found', async () => {
       const data: VerificationCodeDto = {
         email: 'wrong@gmail.com',
-        code: parseInt(testData.userSignupDefaultVerificationCode.code),
+        code: parseInt(userSignupDefaultData.verificationCode.code),
       };
 
       const response = await request(app.getHttpServer())

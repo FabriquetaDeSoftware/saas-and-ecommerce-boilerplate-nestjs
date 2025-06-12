@@ -2,7 +2,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from 'src/app.module';
-import { testData } from '../../mocks/data/test.data';
+import {
+  productSingleData,
+  productSubscriptionData,
+} from '../../mocks/data/product.data';
 
 describe('ProductsController Show One (e2e)', () => {
   let app: INestApplication;
@@ -30,8 +33,8 @@ describe('ProductsController Show One (e2e)', () => {
   });
 
   it('Should return one product', async () => {
-    const testDataSingle = testData.productSinglePurchase;
-    const testDataSubs = testData.productSubscriptionPurchase;
+    const testDataSingle = productSingleData.product;
+    const testDataSubs = productSubscriptionData.product;
     const validSlugSingle = testDataSingle.slug;
     const validSlugSubscription = testDataSubs.slug;
 
@@ -85,7 +88,7 @@ describe('ProductsController Show One (e2e)', () => {
   });
 
   it('Should return 400 when type is invalid', async () => {
-    const validSlugSingle = testData.productSinglePurchase.slug;
+    const validSlugSingle = productSingleData.product.slug;
     const invalidType = 'invalid-type';
 
     await request(app.getHttpServer())

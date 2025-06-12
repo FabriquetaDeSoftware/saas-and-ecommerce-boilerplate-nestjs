@@ -2,7 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from 'src/app.module';
-import { testData } from '../../mocks/data/test.data';
+import { tokensReturns } from '../../mocks/data/user.data';
+import {
+  productSingleData,
+  productSubscriptionData,
+} from '../../mocks/data/product.data';
 
 describe('ProductsController Delete (e2e)', () => {
   let app: INestApplication;
@@ -32,9 +36,9 @@ describe('ProductsController Delete (e2e)', () => {
   });
 
   it('Should return 204 delete product', async () => {
-    const adminToken = testData.tokensReturnsAdmin.access_token;
-    const productSingleId = testData.productSinglePurchase.public_id;
-    const productSubsId = testData.productSubscriptionPurchase.public_id;
+    const adminToken = tokensReturns.tokensAdmin.access_token;
+    const productSingleId = productSingleData.product.public_id;
+    const productSubsId = productSubscriptionData.product.public_id;
 
     await request(app.getHttpServer())
       .delete(`/products/delete/${types[0]}/${productSingleId}/`)
@@ -48,9 +52,9 @@ describe('ProductsController Delete (e2e)', () => {
   });
 
   it('Should return 401 when user is not athorized to perfom delete operation', async () => {
-    const notPerformerToken = testData.tokensReturnsUser.access_token;
-    const productSingleId = testData.productSinglePurchase.public_id;
-    const productSubsId = testData.productSubscriptionPurchase.public_id;
+    const notPerformerToken = tokensReturns.tokensUser.access_token;
+    const productSingleId = productSingleData.product.public_id;
+    const productSubsId = productSubscriptionData.product.public_id;
 
     await request(app.getHttpServer())
       .delete(`/products/delete/${types[0]}/${productSingleId}/`)
@@ -64,8 +68,8 @@ describe('ProductsController Delete (e2e)', () => {
   });
 
   it('Should return 400 when type is invalid', async () => {
-    const adminToken = testData.tokensReturnsAdmin.access_token;
-    const productSingleId = testData.productSinglePurchase.public_id;
+    const adminToken = tokensReturns.tokensAdmin.access_token;
+    const productSingleId = productSingleData.product.public_id;
 
     await request(app.getHttpServer())
       .delete(`/products/delete/invalid-type/${productSingleId}/`)
@@ -74,9 +78,9 @@ describe('ProductsController Delete (e2e)', () => {
   });
 
   it('Should return 404 when product not found', async () => {
-    const adminToken = testData.tokensReturnsAdmin.access_token;
-    const productSingleId = testData.productSinglePurchase.public_id;
-    const productSubsId = testData.productSubscriptionPurchase.public_id;
+    const adminToken = tokensReturns.tokensAdmin.access_token;
+    const productSingleId = productSingleData.product.public_id;
+    const productSubsId = productSubscriptionData.product.public_id;
 
     await request(app.getHttpServer())
       .delete(`/products/delete/${types[0]}/${productSingleId}/`)

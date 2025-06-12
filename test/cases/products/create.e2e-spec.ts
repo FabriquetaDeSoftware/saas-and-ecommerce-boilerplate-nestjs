@@ -3,7 +3,11 @@ import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from 'src/app.module';
 import { CreateProductDto } from 'src/modules/products/application/dto/create_product.dto';
-import { testData } from '../../mocks/data/test.data';
+import { tokensReturns } from '../../mocks/data/user.data';
+import {
+  productSingleData,
+  productSubscriptionData,
+} from '../../mocks/data/product.data';
 
 describe('ProductsController Create (e2e)', () => {
   let app: INestApplication;
@@ -45,9 +49,9 @@ describe('ProductsController Create (e2e)', () => {
   });
 
   it('Should return 201 created product', async () => {
-    const adminToken = testData.tokensReturnsAdmin.access_token;
-    const testDataSingle = testData.productSinglePurchase;
-    const testDataSubs = testData.productSubscriptionPurchase;
+    const adminToken = tokensReturns.tokensAdmin.access_token;
+    const testDataSingle = productSingleData.product;
+    const testDataSubs = productSubscriptionData.product;
 
     const [responseSingle, responseSubs] = await Promise.all([
       request(app.getHttpServer())
@@ -117,7 +121,7 @@ describe('ProductsController Create (e2e)', () => {
   });
 
   it('Should return 409 when there is already a product with the same slug', async () => {
-    const adminToken = testData.tokensReturnsAdmin.access_token;
+    const adminToken = tokensReturns.tokensAdmin.access_token;
 
     const responses = await Promise.all(
       types.map((type) =>
@@ -139,7 +143,7 @@ describe('ProductsController Create (e2e)', () => {
   });
 
   it('Should return 401 when user is not athorized to perfom create operation', async () => {
-    const notPerformerToken = testData.tokensReturnsUser.access_token;
+    const notPerformerToken = tokensReturns.tokensUser.access_token;
 
     const responses = await Promise.all(
       types.map((type) =>
@@ -161,7 +165,7 @@ describe('ProductsController Create (e2e)', () => {
   });
 
   it('Should return 400 when type is invalid', async () => {
-    const adminToken = testData.tokensReturnsAdmin.access_token;
+    const adminToken = tokensReturns.tokensAdmin.access_token;
     const invalidType = 'invalid-type';
 
     await request(app.getHttpServer())
@@ -172,7 +176,7 @@ describe('ProductsController Create (e2e)', () => {
   });
 
   it('should validate required fields and return 400 for invalid data', async () => {
-    const adminToken = testData.tokensReturnsAdmin.access_token;
+    const adminToken = tokensReturns.tokensAdmin.access_token;
     const invalidData = 'invalid-data';
 
     const responses = await Promise.all(
