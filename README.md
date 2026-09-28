@@ -2,125 +2,76 @@
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+<h1 align="center">SaaS and E-commerce Boilerplate (NestJS)</h1>
 
-<p align="center">A modular and scalable boilerplate for building SaaS and e-commerce applications with NestJS.
-</p>
+<p align="center">A modular and scalable boilerplate for building SaaS and e-commerce back-ends with NestJS.</p>
 
-## Table of Contents
+## About
 
-- [Description](#description)
-- [Patterns](#patterns)
-- [Features](#features)
-- [Prerequisites](#prerequisites)
-- [Recommended](#recommended)
-- [Project setup](#project-setup)
-- [License](#license)
+This project was born from the need for advanced open source content in the SaaS and e-commerce space. Its goal is to give new back-end projects a solid starting point: authentication, access control, a product catalog, payments, transactional e-mails and observability, all organized with Clean Architecture and DDD so that each piece can be replaced without touching the core.
 
-## Description
+> **Project status:** the project is under active development. Authentication, access control and the product catalog work end to end. The **payment flow is only partially implemented** (checkout works, but purchases are not persisted yet). See [Project status & roadmap](docs/project-status.md) before using it in production.
 
-This repository provides a modular and scalable boilerplate designed to simplify the development of SaaS (Software as a Service) and e-commerce applications using NestJS.
+## Features
 
-This project was born from the need to have advanced open source content in the area today. Its purpose is to facilitate the development of new back-end projects in the area of ​​e-commerce and SaaS.
+| Feature | Status |
+| --- | --- |
+| Clean Architecture + DDD modules with dependency inversion | ✅ |
+| JWT authentication (access + refresh tokens) with encrypted claims | ✅ |
+| Password-less sign-up, magic link and one-time password (OTP) sign-in | ✅ |
+| Account verification and password recovery by e-mail | ⚠️ recovery has a known bug |
+| RBAC (`@Roles`) and ABAC (CASL) | ✅ |
+| Product catalog (single purchase and subscription products) | ✅ |
+| Stripe Checkout (one-time and subscription) | 🚧 partial |
+| Transactional e-mails through a BullMQ queue | ✅ (dev) / ⚠️ (prod image) |
+| Observability: OpenTelemetry + Jaeger, Prometheus, Grafana | 🚧 partial |
+| Nginx reverse proxy | ✅ |
+| Docker environments for development, tests and production | ✅ |
+| End-to-end tests | ✅ auth, products, root / ❌ billing |
 
-The project follows best practices such as modular architecture, dependency injection, and clean code principles.
+## Tech stack
 
-Welcome to open issues and and improvements on code-base. You are invited to contribute to the code base
+NestJS 10 (Fastify) · TypeScript · Prisma 6 + PostgreSQL 16 · Redis 7 + BullMQ · Passport (JWT/local) · CASL · Stripe · Nodemailer · OpenTelemetry · Jaeger · Prometheus · Grafana · Nginx · Jest + Supertest · Docker Compose · pnpm 10
 
-### Following the Patterns
+## Quick start
 
-- **Clean Code**: The project follows Clean Code principles, ensuring that the code is clear, concise, and easy to maintain. Keeping the design simple helps with the project's evolution and facilitates collaboration among developers, making it easier to make changes and add new features without impacting other parts of the system.
-
-- **Clean Architecture**: The separation of responsibilities across the layers of the system ensures that business logic and implementation details (such as the database and APIs) are decoupled. This makes it easier to replace components without affecting the core of the application, while also improving testability and scalability over time.
-
-- **Solid**: Applying SOLID principles results in more modular and flexible code. The use of abstractions and clearly defined responsibilities for each component makes the system easier to understand, test, and extend, minimizing side effects when adding new features. In particular, the use of the Dependency Inversion Principle enhances dependency injection, allowing easy replacement of services without changing core code.
-
-- **DDD**: Using DDD helps to model the business domain more accurately, creating a common language between developers and business experts. Dividing the system into bounded contexts allows different parts of the system to evolve independently, reflecting the real complexities of the domain. This results in a codebase that is more aligned with business needs and easier to maintain as the project grows.
-
-### Features
-
-- **Modular Clean Architecture**: Follows Clean Architecture and DDD, ensuring maintainability and scalability.
-
-- **Loose Coupling**: Enables easy replacement of services without breaking the core system.
-
-- **Authentication**: Includes JWT-based authentication and passwordless login.
-
-- **Reverse Proxy**: Include reverse proxy with Ngnix configuration
-
-- **RBAC & ABAC**: Supports Role-Based Access Control (RBAC) and Attribute-Based Access Control (ABAC) using CASL and Roles Guard.
-
-- **Billing integration**: Supports Stripe for payments, designed to allow easy integration with other providers.
-
-- **Queue processing**: Implements background job processing using BullMQ.
-
-- **Docker support**: Runs efficiently in a containerized environment.
-
-- **Testing**: Includes e2e testing strategies.
-
-- **Environment**: Includes prod and dev environment, choose in the `.env`
-
-## Prerequisites
-
-To run the project you need to have the following software installed:
-
-- [node](https://nodejs.org) (version 22.11.0 or higher)
-- [pnpm](https://pnpm.io) (version 9.12.3 or higher)
-
-## Recommended
-
-- [Docker](https://www.docker.com/) to ensure it works optimally
-
-## Project Setup
-
-### Verify the .env.example file to configure your project.
+Requirements: [Docker](https://www.docker.com/) with Docker Compose v2 and `make` (optional).
 
 ```bash
-$ pnpm install
+git clone https://github.com/FabriquetaDeSoftware/saas-and-ecommerce-boilerplate-nestjs.git
+cd saas-and-ecommerce-boilerplate-nestjs
+
+cp .env.example .env   # then fill in the values, see docs/configuration.md
+
+make run_development_docker
 ```
 
-### Compile and Run the Project
+Then open `http://localhost:<MAPPED_PORT_NGINX>/docs` to explore the API with Swagger.
 
-```bash
-# run this command to execute production docker
-$ make run_production_docker
+The full guide, including the test and production environments, is in [Getting started](docs/getting-started.md).
 
-# run this command to execute development docker
-$ make run_development_docker
+## Documentation
 
-# run this command to delete docker volumes to make them available for running tests
-$ make run_test_docker
-```
+| Document | What you will find |
+| --- | --- |
+| [Getting started](docs/getting-started.md) | Running the project with Docker, environments, useful commands |
+| [Configuration](docs/configuration.md) | Every environment variable and hard-coded setting |
+| [Architecture](docs/architecture.md) | Layers, modules, dependency injection, request lifecycle |
+| [API reference](docs/api-reference.md) | All HTTP endpoints at a glance |
+| [Database](docs/database.md) | Data model, migrations and seed |
+| [Auth module](docs/modules/auth.md) | Sign-up, sign-in flows, tokens |
+| [Products module](docs/modules/products.md) | Catalog and permissions |
+| [Billing module](docs/modules/billing.md) | Stripe payment flow and what is missing |
+| [Email module](docs/modules/email.md) | Queue, templates and how to add new ones |
+| [Observability](docs/observability.md) | Tracing, metrics and dashboards |
+| [Testing](docs/testing.md) | How the e2e suite works and how to extend it |
+| [Troubleshooting](docs/troubleshooting.md) | Common errors and how to fix them |
+| [Project status & roadmap](docs/project-status.md) | What is done, what is unfinished and known issues |
 
-### Atention
+## Contributing
 
-```bash
-# if received chmod +x shell/check_env_vars.sh
-chmod +x shell/run-docker.sh
-./shell/run-docker.sh
-make: ./shell/run-docker.sh: No such file or directory
-make: *** [Makefile:4: run_docker] Error 127
-
-# run
-$ sed -i 's/\r$//' ./shell/check_env_vars.sh
-$ sed -i 's/\r$//' ./shell/run-docker.sh
-```
-
-### Activate Stripe WebHook Test
-
-```bash
-# webhook
-$ stripe listen --forward-to http://localhost:<MAPPED_PORT_NGINX>/billing/webhook
-```
-
-### Run tests in Docker environment
-
-```bash
-# e2e tests
-$ docker exec -it <container_id> pnpm run seed
-$ docker exec -it <container_id> pnpm run test:e2e
-```
+Contributions are welcome! Read the [contributing guide](CONTRIBUTING.md) to learn how to set up the project, the code conventions and how to open a pull request. You can also join the community on [Discord](https://discord.gg/YkubrFbtpG).
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+The project does not declare a license yet (`package.json` is marked as `UNLICENSED`). See [Project status & roadmap](docs/project-status.md#repository-and-tooling).
