@@ -2,7 +2,7 @@ import {
   Inject,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { Products } from '../../domain/entities/products.entity';
 import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
@@ -50,7 +50,7 @@ export class DeleteSingleProductUseCase implements IDeleteSingleProductUseCase {
     );
 
     if (!isAllowed) {
-      throw new UnauthorizedException('Unauthorized to perform this action');
+      throw new ForbiddenException('Unauthorized to perform this action');
     }
   }
 

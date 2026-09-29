@@ -2,7 +2,7 @@ import {
   Inject,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { Products } from '../../domain/entities/products.entity';
 import { ISubscriptionProductsRepository } from '../../domain/interfaces/repositories/subscription_products.repository.interface';
@@ -52,7 +52,7 @@ export class DeleteSubscriptionProductUseCase
     );
 
     if (!isAllowed) {
-      throw new UnauthorizedException('Unauthorized to perform this action');
+      throw new ForbiddenException('Unauthorized to perform this action');
     }
   }
 

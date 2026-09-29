@@ -51,7 +51,7 @@ describe('ProductsController Delete (e2e)', () => {
       .expect(HttpStatus.NO_CONTENT);
   });
 
-  it('Should return 401 when user is not athorized to perfom delete operation', async () => {
+  it('Should return 403 when user is not athorized to perfom delete operation', async () => {
     const notPerformerToken = tokensReturns.tokensUser.access_token;
     const productSingleId = productSingleData.product.public_id;
     const productSubsId = productSubscriptionData.product.public_id;
@@ -59,12 +59,12 @@ describe('ProductsController Delete (e2e)', () => {
     await request(app.getHttpServer())
       .delete(`/products/delete/${types[0]}/${productSingleId}/`)
       .set('Authorization', `Bearer ${notPerformerToken}`)
-      .expect(HttpStatus.UNAUTHORIZED);
+      .expect(HttpStatus.FORBIDDEN);
 
     await request(app.getHttpServer())
       .delete(`/products/delete/${types[0]}/${productSubsId}/`)
       .set('Authorization', `Bearer ${notPerformerToken}`)
-      .expect(HttpStatus.UNAUTHORIZED);
+      .expect(HttpStatus.FORBIDDEN);
   });
 
   it('Should return 400 when type is invalid', async () => {
