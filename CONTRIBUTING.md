@@ -133,4 +133,4 @@ Do not open public issues for vulnerabilities that can be exploited. Contact the
 
 ## License
 
-The project does not have a license yet (see [Project status](docs/project-status.md#repository-and-tooling)). Choosing one is a pending decision for the maintainers.
+The project is licensed under the [MIT License](LICENSE). By contributing, you agree that your contributions are licensed under the same license.
