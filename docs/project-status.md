@@ -76,13 +76,12 @@ Confirmed problems, grouped by area, with the issue that tracks each one. Commen
 
 ### Infrastructure
 
-- The dev, test and prod compose files share the project name `composes`: `make run_test_docker` deletes the development database, and the environments overwrite the same image tag. [#18]
-- The base image `node:22.14-bullseye-slim` runs on Debian 11, which is out of support: `apt-get` fails with `404`. [#24]
-- `.devcontainer/devcontainer.json` references `../docker-compose.yml`, which does not exist. [#25]
-- The `Makefile` calls `docker-compose`, which is missing on installations that only have the `docker compose` plugin. [#30]
-- `src/config/prometheus.yml` targets `otel-collector-dev`, which only exists in the development stack. [#26]
-- Redis host, tracing endpoint and CORS origins are hard-coded (see [Configuration](configuration.md#hard-coded-settings)). [#29]
-- Hot reload does not work on Windows when the repository is on the Windows file system (see [Getting started](getting-started.md#windows-notes)).
+- The dev, test and prod compose files share the project name `composes`: `make run_test_docker` deletes the development database, and the three environments overwrite the same image tag.
+- The base image `node:22.14-bullseye-slim` runs on Debian 11, which is out of support: `apt-get` fails with `404`.
+- `.devcontainer/devcontainer.json` references `../docker-compose.yml`, which does not exist.
+- The `Makefile` calls `docker-compose`, which is missing on installations that only have the `docker compose` plugin.
+- Redis host, tracing endpoint and CORS origins are hard-coded (see [Configuration](configuration.md#hard-coded-settings)).
+- Hot reload does not work on Windows when the repository is on the Windows file system.
 
 ### Repository and tooling
 
