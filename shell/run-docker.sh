@@ -23,6 +23,8 @@ else
     exit 1
 fi
 
+COMPOSE="${COMPOSE:-docker compose}"
+
 ENV=$ENVIRONMENT
 echo "Environment detected: $ENV"
 
@@ -31,7 +33,7 @@ if [ "$ENV" = "development" ] || [ "$ENV" = "dev" ]; then
     echo "Docker Compose detected: docker-compose.dev.yml"
 
     cd docker/composes
-    docker-compose -f docker-compose.dev.yml --env-file ../../.env up -d
+    $COMPOSE -f docker-compose.dev.yml --env-file ../../.env up -d
     cd ../..
 
     echo "Development containers launched successfully."
@@ -40,7 +42,7 @@ elif [ "$ENV" = "production" ] || [ "$ENV" = "prod" ]; then
     echo "Docker Compose detected: docker-compose.dev.yml"
 
     cd docker/composes
-    docker-compose -f docker-compose.prod.yml --env-file ../../.env up -d
+    $COMPOSE -f docker-compose.prod.yml --env-file ../../.env up -d
     cd ../..
 
     echo "Production containers launched successfully."
