@@ -7,10 +7,14 @@ services:
     env_file:
       - ../../.env
     depends_on:
-      - postgres
-      - redis
-      - jaeger
-      - prometheus
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      jaeger:
+        condition: service_started
+      prometheus:
+        condition: service_started
     networks:
       - network
     # ports:
@@ -34,6 +38,11 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
     restart: unless-stopped
 
   redis:

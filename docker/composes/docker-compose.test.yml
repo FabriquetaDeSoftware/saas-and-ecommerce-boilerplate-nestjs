@@ -7,16 +7,24 @@ services:
     env_file:
       - ../../.env
     depends_on:
-      - postgres
-      - redis
-      - jaeger
-      - prometheus
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      jaeger:
+        condition: service_started
+      prometheus:
+        condition: service_started
     networks:
       - network
     # ports:
     #   - '${MAPPED_PORT_API}:${PORT_API}'
+    # Mount only the source folders: mounting the project root hides the
+    # node_modules (and the generated Prisma Client) installed in the image
     volumes:
-      - ../..:/home/api/nestjs/saas-and-ecommerce-boilerplate-nestjs
+      - ../../src:/home/api/nestjs/saas-and-ecommerce-boilerplate-nestjs/src
+      - ../../prisma:/home/api/nestjs/saas-and-ecommerce-boilerplate-nestjs/prisma
+      - ../../test:/home/api/nestjs/saas-and-ecommerce-boilerplate-nestjs/test
     restart: unless-stopped
 
   postgres:
@@ -34,6 +42,11 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
     restart: unless-stopped
 
   redis:
