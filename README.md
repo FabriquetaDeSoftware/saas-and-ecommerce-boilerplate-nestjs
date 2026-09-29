@@ -70,7 +70,7 @@ The full guide, including the test and production environments, is in [Getting s
 
 ## Contributing
 
-Contributions are welcome! Read the [contributing guide](CONTRIBUTING.md) to learn how to set up the project, the code conventions and how to open a pull request. You can also join the community on [Discord](https://discord.gg/YkubrFbtpG).
+Contributions are welcome! Read the [contributing guide](CONTRIBUTING.md) to learn how to set up the project, the code conventions and how to open a pull request. You can also join the community on [Discord](https://discord.gg/W6sKEvXvtv).
 
 ## License
 
