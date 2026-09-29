@@ -1,6 +1,6 @@
 # Contributing
 
-Thank you for helping! This project is maintained by the [Fabriqueta de Software](https://github.com/FabriquetaDeSoftware) community, and contributions of every size are welcome: bug fixes, features, tests, documentation and reviews.
+Thank you for helping! This project is maintained by the [Sawtooth Works](https://github.com/sawtooth-works) community, and contributions of every size are welcome: bug fixes, features, tests, documentation and reviews.
 
 Questions and ideas can be discussed on [Discord](https://discord.gg/W6sKEvXvtv) or in a GitHub issue.
 
@@ -8,7 +8,7 @@ Questions and ideas can be discussed on [Discord](https://discord.gg/W6sKEvXvtv)
 
 - [Project status & roadmap](docs/project-status.md) lists what is unfinished and the known bugs.
 - The [billing module](docs/modules/billing.md#suggested-plan-to-finish-the-flow) has a step-by-step plan to finish the payment flow, where help is most needed.
-- Issues labeled [`good first issue`](https://github.com/FabriquetaDeSoftware/saas-and-ecommerce-boilerplate-nestjs/labels/good%20first%20issue) and [`help wanted`](https://github.com/FabriquetaDeSoftware/saas-and-ecommerce-boilerplate-nestjs/labels/help%20wanted) are a good entry point.
+- Issues labeled [`good first issue`](https://github.com/sawtooth-works/saas-and-ecommerce-boilerplate-nestjs/labels/good%20first%20issue) and [`help wanted`](https://github.com/sawtooth-works/saas-and-ecommerce-boilerplate-nestjs/labels/help%20wanted) are a good entry point.
 
 Before working on something that is not a small fix, open an issue (or comment on an existing one) describing what you plan to do. This avoids duplicated work and lets the maintainers confirm the approach.
 
