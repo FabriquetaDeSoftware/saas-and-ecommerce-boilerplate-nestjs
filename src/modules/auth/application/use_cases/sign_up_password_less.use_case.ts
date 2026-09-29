@@ -43,13 +43,13 @@ export class SignUpPasswordLessUseCase implements ISignUpPasswordLessUseCase {
       this.generateCodeOfVerificationAndExpiresDate(),
     ]);
 
-    const fiveHoursInSeconds = 18_000;
+    const fiveHoursInMilliseconds = 18_000_000;
 
     const [, result] = await Promise.all([
       this._cacheManager.set(
         `accountVerificationCode:${data.email}`,
         verificationCodeAndExpiresDate.hashedCode,
-        fiveHoursInSeconds,
+        fiveHoursInMilliseconds,
       ),
       this.createAccount(
         data,

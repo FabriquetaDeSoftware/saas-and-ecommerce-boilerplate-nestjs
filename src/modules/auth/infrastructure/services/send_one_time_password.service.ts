@@ -38,13 +38,13 @@ export class SendOneTimePasswordService implements ISendOneTimePasswordService {
 
     const otp = await this.generateOneTimePasswordAndExpiresDate();
 
-    const twentyFourHoursInSeconds = 86400;
+    const tenMinutesInMilliseconds = 600_000;
 
     const [,] = await Promise.all([
       this._cacheManager.set(
         `oneTimePassword:${findUserByEmail.email}`,
         otp.hashedCode,
-        twentyFourHoursInSeconds,
+        tenMinutesInMilliseconds,
       ),
       await this._oneTimePasswordRepository.create(
         otp.hashedCode,
