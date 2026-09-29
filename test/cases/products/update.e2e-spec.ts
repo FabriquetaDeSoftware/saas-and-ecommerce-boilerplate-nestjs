@@ -88,7 +88,7 @@ describe('ProductsController Update (e2e)', () => {
     testDataSubs.updated_at = responseSubs.body.updated_at;
   });
 
-  it('Should return 401 when user is not athorized to perfom update operation', async () => {
+  it('Should return 403 when user is not athorized to perfom update operation', async () => {
     const notPerformerToken = tokensReturns.tokensUser.access_token;
 
     await request(app.getHttpServer())
@@ -97,7 +97,7 @@ describe('ProductsController Update (e2e)', () => {
       )
       .set('Authorization', `Bearer ${notPerformerToken}`)
       .send(VALID_PRODUCT_DATA)
-      .expect(HttpStatus.UNAUTHORIZED);
+      .expect(HttpStatus.FORBIDDEN);
 
     await request(app.getHttpServer())
       .patch(
@@ -105,7 +105,7 @@ describe('ProductsController Update (e2e)', () => {
       )
       .set('Authorization', `Bearer ${notPerformerToken}`)
       .send(VALID_PRODUCT_DATA)
-      .expect(HttpStatus.UNAUTHORIZED);
+      .expect(HttpStatus.FORBIDDEN);
   });
 
   it('Should return 404 when product not found', async () => {

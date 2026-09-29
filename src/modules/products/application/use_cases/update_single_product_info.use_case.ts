@@ -2,7 +2,7 @@ import {
   Inject,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { UpdateProductInfoDto } from '../dto/update_product_info.dto';
 import { Products } from '../../domain/entities/products.entity';
@@ -78,7 +78,7 @@ export class UpdateSingleProductInfoUseCase
     );
 
     if (!isAllowed) {
-      throw new UnauthorizedException('Unauthorized to perform this action');
+      throw new ForbiddenException('Unauthorized to perform this action');
     }
   }
 

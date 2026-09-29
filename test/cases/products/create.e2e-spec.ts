@@ -142,7 +142,7 @@ describe('ProductsController Create (e2e)', () => {
     });
   });
 
-  it('Should return 401 when user is not athorized to perfom create operation', async () => {
+  it('Should return 403 when user is not athorized to perfom create operation', async () => {
     const notPerformerToken = tokensReturns.tokensUser.access_token;
 
     const responses = await Promise.all(
@@ -151,15 +151,12 @@ describe('ProductsController Create (e2e)', () => {
           .post(`/products/create/${type}/`)
           .set('Authorization', `Bearer ${notPerformerToken}`)
           .send(VALID_PRODUCT_DATA)
-          .expect(HttpStatus.UNAUTHORIZED),
+          .expect(HttpStatus.FORBIDDEN),
       ),
     );
 
     responses.map((response) => {
-      expect(response.body).toHaveProperty(
-        'statusCode',
-        HttpStatus.UNAUTHORIZED,
-      );
+      expect(response.body).toHaveProperty('statusCode', HttpStatus.FORBIDDEN);
       expect(response.body).toHaveProperty('message');
     });
   });

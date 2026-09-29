@@ -2,7 +2,7 @@ import {
   ConflictException,
   Inject,
   Injectable,
-  UnauthorizedException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { ICreateSubscriptionProductUseCase } from '../../domain/interfaces/use_cases/create_subscription_product.use_case.interface';
 import { CreateProductDto } from '../dto/create_product.dto';
@@ -62,7 +62,7 @@ export class CreateSubscriptionProductUseCase
     );
 
     if (!isAllowed) {
-      throw new UnauthorizedException('Unauthorized to perform this action');
+      throw new ForbiddenException('Unauthorized to perform this action');
     }
   }
 
