@@ -2,7 +2,7 @@
 
 `src/modules/billing` integrates the catalog with Stripe Checkout, for one-time purchases and subscriptions.
 
-> **Status: partially implemented.** Creating a checkout session and receiving the Stripe webhook work. Recording the purchase after payment **does not** work yet, and the subscription lifecycle, confirmation e-mails and purchase queries are not implemented. See [What is missing](#what-is-missing). The work is tracked in the epic [#21](https://github.com/FabriquetaDeSoftware/saas-and-ecommerce-boilerplate-nestjs/issues/21), and the persistence bug in [#13](https://github.com/FabriquetaDeSoftware/saas-and-ecommerce-boilerplate-nestjs/issues/13).
+> **Status: partially implemented.** Creating a checkout session and receiving the Stripe webhook work. Recording the purchase after payment **does not** work yet, and the subscription lifecycle, confirmation e-mails and purchase queries are not implemented. See [What is missing](#what-is-missing). The work is tracked in the epic [#21](https://github.com/sawtooth-works/saas-and-ecommerce-boilerplate-nestjs/issues/21), and the persistence bug in [#13](https://github.com/sawtooth-works/saas-and-ecommerce-boilerplate-nestjs/issues/13).
 
 ## Payment flow
 
