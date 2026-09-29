@@ -74,4 +74,4 @@ Contributions are welcome! Read the [contributing guide](CONTRIBUTING.md) to lea
 
 ## License
 
-The project does not declare a license yet (`package.json` is marked as `UNLICENSED`). See [Project status & roadmap](docs/project-status.md#repository-and-tooling).
+This project is licensed under the [MIT License](LICENSE).
