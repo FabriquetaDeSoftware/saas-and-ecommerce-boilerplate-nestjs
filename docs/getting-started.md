@@ -41,8 +41,6 @@ or, without `make`:
 docker compose -f docker/composes/docker-compose.dev.yml --env-file .env up -d --build
 ```
 
-The `Makefile` calls the `docker-compose` binary. Docker Desktop ships it, but some Linux installations only have the `docker compose` plugin. In that case, use the command above.
-
 When the `api` container starts it:
 
 1. waits for Postgres to be healthy;
