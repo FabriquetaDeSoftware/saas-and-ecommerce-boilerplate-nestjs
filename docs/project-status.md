@@ -107,24 +107,24 @@ Not planned or prioritized yet. Open a discussion or an issue before starting on
 - **Developer experience:** unit test setup, working ESLint config, working dev container, running without Docker.
 - **Internationalization** of e-mails and API messages.
 
-[#12]: https://github.com/FabriquetaDeSoftware/saas-and-ecommerce-boilerplate-nestjs/issues/12
-[#13]: https://github.com/FabriquetaDeSoftware/saas-and-ecommerce-boilerplate-nestjs/issues/13
-[#14]: https://github.com/FabriquetaDeSoftware/saas-and-ecommerce-boilerplate-nestjs/issues/14
-[#15]: https://github.com/FabriquetaDeSoftware/saas-and-ecommerce-boilerplate-nestjs/issues/15
-[#16]: https://github.com/FabriquetaDeSoftware/saas-and-ecommerce-boilerplate-nestjs/issues/16
-[#17]: https://github.com/FabriquetaDeSoftware/saas-and-ecommerce-boilerplate-nestjs/issues/17
-[#18]: https://github.com/FabriquetaDeSoftware/saas-and-ecommerce-boilerplate-nestjs/issues/18
-[#19]: https://github.com/FabriquetaDeSoftware/saas-and-ecommerce-boilerplate-nestjs/issues/19
-[#20]: https://github.com/FabriquetaDeSoftware/saas-and-ecommerce-boilerplate-nestjs/issues/20
-[#21]: https://github.com/FabriquetaDeSoftware/saas-and-ecommerce-boilerplate-nestjs/issues/21
-[#22]: https://github.com/FabriquetaDeSoftware/saas-and-ecommerce-boilerplate-nestjs/issues/22
-[#23]: https://github.com/FabriquetaDeSoftware/saas-and-ecommerce-boilerplate-nestjs/issues/23
-[#24]: https://github.com/FabriquetaDeSoftware/saas-and-ecommerce-boilerplate-nestjs/issues/24
-[#25]: https://github.com/FabriquetaDeSoftware/saas-and-ecommerce-boilerplate-nestjs/issues/25
-[#26]: https://github.com/FabriquetaDeSoftware/saas-and-ecommerce-boilerplate-nestjs/issues/26
-[#27]: https://github.com/FabriquetaDeSoftware/saas-and-ecommerce-boilerplate-nestjs/issues/27
-[#28]: https://github.com/FabriquetaDeSoftware/saas-and-ecommerce-boilerplate-nestjs/issues/28
-[#29]: https://github.com/FabriquetaDeSoftware/saas-and-ecommerce-boilerplate-nestjs/issues/29
-[#30]: https://github.com/FabriquetaDeSoftware/saas-and-ecommerce-boilerplate-nestjs/issues/30
-[#32]: https://github.com/FabriquetaDeSoftware/saas-and-ecommerce-boilerplate-nestjs/issues/32
-[#33]: https://github.com/FabriquetaDeSoftware/saas-and-ecommerce-boilerplate-nestjs/issues/33
+[#12]: https://github.com/sawtooth-works/saas-and-ecommerce-boilerplate-nestjs/issues/12
+[#13]: https://github.com/sawtooth-works/saas-and-ecommerce-boilerplate-nestjs/issues/13
+[#14]: https://github.com/sawtooth-works/saas-and-ecommerce-boilerplate-nestjs/issues/14
+[#15]: https://github.com/sawtooth-works/saas-and-ecommerce-boilerplate-nestjs/issues/15
+[#16]: https://github.com/sawtooth-works/saas-and-ecommerce-boilerplate-nestjs/issues/16
+[#17]: https://github.com/sawtooth-works/saas-and-ecommerce-boilerplate-nestjs/issues/17
+[#18]: https://github.com/sawtooth-works/saas-and-ecommerce-boilerplate-nestjs/issues/18
+[#19]: https://github.com/sawtooth-works/saas-and-ecommerce-boilerplate-nestjs/issues/19
+[#20]: https://github.com/sawtooth-works/saas-and-ecommerce-boilerplate-nestjs/issues/20
+[#21]: https://github.com/sawtooth-works/saas-and-ecommerce-boilerplate-nestjs/issues/21
+[#22]: https://github.com/sawtooth-works/saas-and-ecommerce-boilerplate-nestjs/issues/22
+[#23]: https://github.com/sawtooth-works/saas-and-ecommerce-boilerplate-nestjs/issues/23
+[#24]: https://github.com/sawtooth-works/saas-and-ecommerce-boilerplate-nestjs/issues/24
+[#25]: https://github.com/sawtooth-works/saas-and-ecommerce-boilerplate-nestjs/issues/25
+[#26]: https://github.com/sawtooth-works/saas-and-ecommerce-boilerplate-nestjs/issues/26
+[#27]: https://github.com/sawtooth-works/saas-and-ecommerce-boilerplate-nestjs/issues/27
+[#28]: https://github.com/sawtooth-works/saas-and-ecommerce-boilerplate-nestjs/issues/28
+[#29]: https://github.com/sawtooth-works/saas-and-ecommerce-boilerplate-nestjs/issues/29
+[#30]: https://github.com/sawtooth-works/saas-and-ecommerce-boilerplate-nestjs/issues/30
+[#32]: https://github.com/sawtooth-works/saas-and-ecommerce-boilerplate-nestjs/issues/32
+[#33]: https://github.com/sawtooth-works/saas-and-ecommerce-boilerplate-nestjs/issues/33

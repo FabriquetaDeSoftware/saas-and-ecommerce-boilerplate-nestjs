@@ -38,7 +38,7 @@ NestJS 10 (Fastify) · TypeScript · Prisma 6 + PostgreSQL 16 · Redis 7 + BullM
 Requirements: [Docker](https://www.docker.com/) with Docker Compose v2 and `make` (optional).
 
 ```bash
-git clone https://github.com/FabriquetaDeSoftware/saas-and-ecommerce-boilerplate-nestjs.git
+git clone https://github.com/sawtooth-works/saas-and-ecommerce-boilerplate-nestjs.git
 cd saas-and-ecommerce-boilerplate-nestjs
 
 cp .env.example .env   # then fill in the values, see docs/configuration.md
