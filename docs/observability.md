@@ -22,7 +22,7 @@ Open the Jaeger UI and search for the `api-service` service to see the traces.
 ## Metrics
 
 - The API exposes the default `prom-client` metrics (process, heap, event loop, GC) at `GET /metrics`, which is public. `PrometheusModule` also registers `/app/metrics`, but the global JWT guard protects it, so it answers `401` without a token.
-- Prometheus (`src/config/prometheus.yml`) scrapes `api:3003/metrics` every 10 seconds, and the collector's Prometheus exporter at `otel-collector-dev:8889`.
+- Prometheus (`src/config/prometheus.yml`) scrapes `api:3003/metrics` every 10 seconds, and the collector's Prometheus exporter at `otel-collector:8889` (the compose service name, so the target resolves in every stack).
 - The collector (`src/config/otel-collector-config.yml`) also scrapes `api:3003` every 60 seconds and accepts OTLP on ports 4317/4318, but the API does not send anything to it today.
 
 There are no custom business metrics yet (sign-ups, payments, queue size).
@@ -40,7 +40,6 @@ Data sources and dashboards are not provisioned from files yet, so they live onl
 
 ## Known limitations
 
-- `prometheus.yml` points to `otel-collector-dev:8889`, a container name that only exists in the development stack. In the test and production stacks that target is down.
 - The collector is not in the trace path (the API exports to Jaeger directly), so its pipelines are unused for traces.
 - Grafana has no provisioned data sources or dashboards.
 - Logs are plain `console`/Nest logger output with no correlation with traces.
