@@ -2,7 +2,7 @@
 
 Thank you for helping! This project is maintained by the [Fabriqueta de Software](https://github.com/FabriquetaDeSoftware) community, and contributions of every size are welcome: bug fixes, features, tests, documentation and reviews.
 
-Questions and ideas can be discussed on [Discord](https://discord.gg/YkubrFbtpG) or in a GitHub issue.
+Questions and ideas can be discussed on [Discord](https://discord.gg/W6sKEvXvtv) or in a GitHub issue.
 
 ## Where to start
 
