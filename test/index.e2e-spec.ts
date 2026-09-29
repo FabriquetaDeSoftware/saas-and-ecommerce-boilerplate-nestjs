@@ -18,3 +18,5 @@ import './cases/products/update.e2e-spec';
 import './cases/products/list-many.e2e-spec';
 import './cases/products/show-one.e2e-spec';
 import './cases/products/delete.e2e-spec';
+
+import './cases/auth/sign-up-default-cache-ttl.e2e-spec';
