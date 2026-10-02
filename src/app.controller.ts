@@ -3,7 +3,7 @@ import { IsPublicRoute } from './common/decorators/is_public_route.decorator';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Roles } from './common/decorators/roles.decorator';
 import { RolesEnum } from './shared/enum/roles.enum';
-import { register } from 'prom-client';
+import { register } from '@prometheus-io/client';
 import { FastifyReply } from 'fastify';
 
 @ApiTags('app')

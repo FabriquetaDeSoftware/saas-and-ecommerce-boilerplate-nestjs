@@ -14,9 +14,7 @@ import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { ActionEnum } from 'src/shared/enum/actions.enum';
 
 @Injectable()
-export class UpdateSingleProductInfoUseCase
-  implements IUpdateSingleProductInfoUseCase
-{
+export class UpdateSingleProductInfoUseCase implements IUpdateSingleProductInfoUseCase {
   @Inject('ISingleProductsRepository')
   private readonly _singleProductsRepository: ISingleProductsRepository;
 

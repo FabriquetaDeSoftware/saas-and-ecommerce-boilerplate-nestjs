@@ -1,3 +1,4 @@
+import handlebars from 'handlebars';
 import { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { RawServerDefault } from 'fastify';
 import { join } from 'node:path';
@@ -12,7 +13,7 @@ export function renderPageConfig(
 
   app.setViewEngine({
     engine: {
-      handlebars: require('handlebars'),
+      handlebars,
     },
     templates: join(__dirname, '../..', 'views'),
   });

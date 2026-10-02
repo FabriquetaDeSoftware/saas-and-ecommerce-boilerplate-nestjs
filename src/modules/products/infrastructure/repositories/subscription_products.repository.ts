@@ -8,9 +8,7 @@ import { UpdateProductInfoDto } from '../../application/dto/update_product_info.
 import { TablesEnum } from 'src/shared/enum/tables.enum';
 
 @Injectable()
-export class SubscriptionProductsRepository
-  implements ISubscriptionProductsRepository
-{
+export class SubscriptionProductsRepository implements ISubscriptionProductsRepository {
   @Inject('IDatabaseAdapter')
   private readonly _databaseAdapter: IDatabaseAdapter;
 

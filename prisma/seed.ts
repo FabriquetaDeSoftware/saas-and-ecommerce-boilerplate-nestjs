@@ -1,7 +1,13 @@
 import { PrismaClient } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
 import * as bcrypt from 'bcryptjs';
 
-const prisma = new PrismaClient();
+const connectionString = process.env.DATABASE_URL;
+const schema =
+  new URL(connectionString).searchParams.get('schema') ?? undefined;
+const prisma = new PrismaClient({
+  adapter: new PrismaPg({ connectionString }, { schema }),
+});
 
 async function generateHash(data: string): Promise<string> {
   const salt = await bcrypt.genSalt(12);

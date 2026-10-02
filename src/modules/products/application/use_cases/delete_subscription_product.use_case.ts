@@ -13,9 +13,7 @@ import { IPermissionManagerUtil } from 'src/shared/utils/interfaces/permission_m
 import { IDeleteSubscriptionProductUseCase } from '../../domain/interfaces/use_cases/delete_subscription_product.use_case.interface';
 
 @Injectable()
-export class DeleteSubscriptionProductUseCase
-  implements IDeleteSubscriptionProductUseCase
-{
+export class DeleteSubscriptionProductUseCase implements IDeleteSubscriptionProductUseCase {
   @Inject('ISubscriptionProductsRepository')
   private readonly _subscriptionProductsRepository: ISubscriptionProductsRepository;
 

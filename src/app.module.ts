@@ -10,7 +10,6 @@ import { BillingModule } from './modules/billing/billing.module';
 import { CaslModule } from './common/casl/casl.module';
 import { ProductsModule } from './modules/products/products.module';
 import { AppController } from './app.controller';
-import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { UserModule } from './modules/user/user.module';
 import { ServiceModule } from './common/modules/services/service.module';
@@ -20,12 +19,6 @@ import { ConfigModule } from '@nestjs/config';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-    }),
-    PrometheusModule.register({
-      defaultMetrics: {
-        enabled: true,
-      },
-      path: '/app/metrics',
     }),
     EventEmitterModule.forRoot(),
     BullModule.forRoot({

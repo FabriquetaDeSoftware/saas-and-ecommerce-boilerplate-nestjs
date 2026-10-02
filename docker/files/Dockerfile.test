@@ -1,4 +1,4 @@
-FROM node:22.14-bullseye-slim
+FROM node:24.21-bookworm-slim
 WORKDIR /home/api/nestjs/saas-and-ecommerce-boilerplate-nestjs
 
 # Keep in sync with "packageManager" in package.json
