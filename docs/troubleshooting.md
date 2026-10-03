@@ -90,12 +90,3 @@ If the token is valid, this is a known bug: recovery only works when `SECRET_REC
 - `No signatures found matching the expected signature`: `STRIPE_WEBHOOK_SECRET` does not match the endpoint. With the Stripe CLI, use the secret printed by `stripe listen`.
 - `PrismaClientValidationError` after `checkout.session.completed`: purchases cannot be saved yet. See [Billing](modules/billing.md#what-is-missing).
 
-### `pnpm run lint` fails
-
-The error says that ESLint could not find an `eslint.config.(js|mjs|cjs)` file. The project uses ESLint 9 with a legacy `.eslintrc.js`, which ESLint 9 no longer reads by default. Until the config is migrated to `eslint.config.mjs`, you can force the legacy format:
-
-```bash
-docker exec -e ESLINT_USE_FLAT_CONFIG=false api-dev pnpm exec eslint "{src,test}/**/*.ts"
-```
-
-With LF line endings, this currently reports 10 existing errors, mostly unused imports. Do not add new ones.

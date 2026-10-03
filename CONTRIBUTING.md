@@ -64,8 +64,10 @@ docker exec api-dev pnpm run format
 # type check and build
 docker exec api-dev pnpm run build
 
-# lint (legacy config, see the note below)
-docker exec -e ESLINT_USE_FLAT_CONFIG=false api-dev pnpm exec eslint "{src,test}/**/*.ts"
+# lint
+docker exec api-dev pnpm run lint
+# fix lint issues
+docker exec api-dev pnpm run lint:fix
 ```
 
 Then run the e2e suite on a fresh database, as described in [Testing](docs/testing.md):
@@ -75,8 +77,6 @@ make run_test_docker
 docker exec api-test pnpm run seed
 docker exec api-test pnpm run test:e2e
 ```
-
-`pnpm run lint` is currently broken because ESLint 9 does not read `.eslintrc.js` (see [Troubleshooting](docs/troubleshooting.md#pnpm-run-lint-fails)). The command above works around it and reports 10 existing errors: make sure your change does not add new ones. Migrating the config is a welcome contribution.
 
 ## Code conventions
 
