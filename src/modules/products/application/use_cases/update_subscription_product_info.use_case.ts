@@ -14,9 +14,7 @@ import { ICryptoUtil } from 'src/shared/utils/interfaces/crypto.util.interface';
 import { ISubscriptionProductsRepository } from '../../domain/interfaces/repositories/subscription_products.repository.interface';
 
 @Injectable()
-export class UpdateSubscriptionProductInfoUseCase
-  implements IUpdateSubscriptionProductInfoUseCase
-{
+export class UpdateSubscriptionProductInfoUseCase implements IUpdateSubscriptionProductInfoUseCase {
   @Inject('ISubscriptionProductsRepository')
   private readonly _subscriptionProductsRepository: ISubscriptionProductsRepository;
 

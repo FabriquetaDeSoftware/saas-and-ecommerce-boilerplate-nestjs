@@ -10,8 +10,11 @@ import { swaggerConfig } from './config/swagger.config';
 import { corsConfig } from './config/cors.config';
 import { renderPageConfig } from './config/render_page.config';
 import { EnvService } from './common/modules/services/env.service';
+import { collectDefaultMetrics } from '@prometheus-io/client';
 
 async function bootstrap() {
+  collectDefaultMetrics();
+
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter({

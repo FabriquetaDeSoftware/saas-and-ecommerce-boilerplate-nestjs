@@ -6,9 +6,7 @@ import { UserSubscriptionPurchases } from '../../domain/entities/user_purchases.
 import { TablesEnum } from 'src/shared/enum/tables.enum';
 
 @Injectable()
-export class SubscriptionPurchasesRepository
-  implements ISubscriptionPurchasesRepository
-{
+export class SubscriptionPurchasesRepository implements ISubscriptionPurchasesRepository {
   @Inject('IDatabaseAdapter')
   private readonly _databaseAdapter: IDatabaseAdapter;
 

@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
-import * as request from 'supertest';
+import request from 'supertest';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { AppModule } from 'src/app.module';
 import { SignUpDefaultDto } from 'src/modules/auth/application/dto/sign_up_default.dto';

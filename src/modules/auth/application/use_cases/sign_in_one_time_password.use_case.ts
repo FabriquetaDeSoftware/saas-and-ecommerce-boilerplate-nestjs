@@ -16,9 +16,7 @@ import { OneTimePassword } from '../../domain/entities/one_time_password.entity'
 import { IOneTimePasswordRepository } from '../../domain/interfaces/repositories/one_time_password.repository.interface';
 
 Injectable();
-export class SignInOneTimePasswordUseCase
-  implements ISignInOneTimePasswordUseCase
-{
+export class SignInOneTimePasswordUseCase implements ISignInOneTimePasswordUseCase {
   @Inject('IGenerateTokenHelper')
   private readonly _generateTokenUtil: IGenerateTokenHelper;
 

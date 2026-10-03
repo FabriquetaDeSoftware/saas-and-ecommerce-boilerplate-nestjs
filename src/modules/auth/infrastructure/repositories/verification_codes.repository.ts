@@ -5,9 +5,7 @@ import { VerificationCodes } from '../../domain/entities/verification_codes.enti
 import { TablesEnum } from 'src/shared/enum/tables.enum';
 
 @Injectable()
-export class VerificationCodesRepository
-  implements IVerificationCodesRepository
-{
+export class VerificationCodesRepository implements IVerificationCodesRepository {
   @Inject('IDatabaseAdapter')
   private readonly _databaseAdapter: IDatabaseAdapter;
 

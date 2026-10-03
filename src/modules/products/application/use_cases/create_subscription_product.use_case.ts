@@ -14,9 +14,7 @@ import { RolesEnum } from 'src/shared/enum/roles.enum';
 import { IPermissionManagerUtil } from 'src/shared/utils/interfaces/permission_manager.util.interface';
 
 @Injectable()
-export class CreateSubscriptionProductUseCase
-  implements ICreateSubscriptionProductUseCase
-{
+export class CreateSubscriptionProductUseCase implements ICreateSubscriptionProductUseCase {
   @Inject('ISubscriptionProductsRepository')
   private readonly _subscriptionProductsRepository: ISubscriptionProductsRepository;
 

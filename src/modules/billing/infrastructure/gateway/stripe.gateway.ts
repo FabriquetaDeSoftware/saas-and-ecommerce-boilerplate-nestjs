@@ -19,7 +19,7 @@ export class StripeGateway {
 
   constructor(private readonly envService: EnvService) {
     this._stripe = new Stripe(envService.stripeSecretKey, {
-      apiVersion: '2025-02-24.acacia',
+      apiVersion: '2026-09-30.endive',
     });
   }
 
@@ -30,7 +30,7 @@ export class StripeGateway {
     productId: string,
   ): Promise<{ url: string }> {
     const session = await this._stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
+      allowed_payment_method_types: ['card'],
       customer_email: customerEmail,
       line_items: [
         {
@@ -58,7 +58,7 @@ export class StripeGateway {
     productId: string,
   ): Promise<{ url: string }> {
     const session = await this._stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
+      allowed_payment_method_types: ['card'],
       customer_email: customerEmail,
       line_items: [
         {

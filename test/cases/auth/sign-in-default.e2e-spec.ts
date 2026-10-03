@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
+import request from 'supertest';
 import { AppModule } from 'src/app.module';
 import { SignInDefaultDto } from 'src/modules/auth/application/dto/sign_in_default.dto';
 import {

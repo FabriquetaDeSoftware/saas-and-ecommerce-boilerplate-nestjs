@@ -17,7 +17,7 @@ export function corsConfig(
       if (!origin || host.includes(origin)) {
         callback(null, true);
       } else {
-        callback(new ForbiddenException('Not allowed by CORS'));
+        callback(new ForbiddenException('Not allowed by CORS'), false);
       }
     },
   });

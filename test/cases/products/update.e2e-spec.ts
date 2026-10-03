@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
-import * as request from 'supertest';
+import request from 'supertest';
 import { AppModule } from 'src/app.module';
 import { UpdateProductInfoDto } from 'src/modules/products/application/dto/update_product_info.dto';
 import { tokensReturns } from '../../mocks/data/user.data';

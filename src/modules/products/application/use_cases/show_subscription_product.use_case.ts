@@ -4,9 +4,7 @@ import { Products } from '../../domain/entities/products.entity';
 import { ISubscriptionProductsRepository } from '../../domain/interfaces/repositories/subscription_products.repository.interface';
 
 @Injectable()
-export class ShowSubscriptionProductUseCase
-  implements IShowSubscriptionProductUseCase
-{
+export class ShowSubscriptionProductUseCase implements IShowSubscriptionProductUseCase {
   @Inject('ISubscriptionProductsRepository')
   private readonly _subscriptionProductsRepository: ISubscriptionProductsRepository;
 
