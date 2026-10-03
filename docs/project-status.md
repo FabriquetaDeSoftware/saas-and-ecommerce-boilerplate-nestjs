@@ -85,7 +85,6 @@ Confirmed problems, grouped by area, with the issue that tracks each one. Commen
 
 ### Repository and tooling
 
-- `pnpm run lint` fails: ESLint 9 does not read the legacy `.eslintrc.js`. [#22]
 - Without a `.gitattributes`, Windows checkouts get CRLF line endings, which break the shell scripts and make Prettier flag every file. [#23]
 - No CI: lint, build and tests are not run on pull requests. [#27]
 - No unit tests, so `pnpm test` fails with `No tests found`. [#28]

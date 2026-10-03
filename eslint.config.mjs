@@ -4,7 +4,7 @@ import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
 
 export default defineConfig(
-  { ignores: ['dist/**', 'eslint.config.mjs'] },
+  { ignores: ['dist/**', 'coverage/**', 'eslint.config.mjs'] },
   tseslint.configs.recommended,
   prettierRecommended,
   {
